@@ -9,7 +9,7 @@ pip install wholeslidedata
 ```python
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
 
-with WholeSlideImage.open(path_to_wsi) as wsi:
+with WholeSlideImage(path_to_wsi) as wsi:
     # print some properties
     print(f'available spacing in {wsi.path}:\n{wsi.spacings}\n')
     print(f'shapes in {wsi.path}:\n{wsi.shapes}\n')
@@ -21,12 +21,12 @@ with WholeSlideImage.open(path_to_wsi) as wsi:
     patch = wsi.get_patch(x, y, width, height, spacing)
 
 ## asap backend (default)
-with WholeSlideImage.open(path_to_wsi, backend='asap') as wsi:
+with WholeSlideImage(path_to_wsi, backend='asap') as wsi:
     print(f'Backend used: {wsi.__class__}\n')
 
 ## openslide backend
 print("opening wsi with 'openslide' backend")
-with WholeSlideImage.open(path_to_wsi, backend='openslide') as wsi:
+with WholeSlideImage(path_to_wsi, backend='openslide') as wsi:
     print(f'Backend used: {wsi.__class__}\n')
 
 
@@ -36,13 +36,14 @@ with WholeSlideImage.open(path_to_wsi, backend='openslide') as wsi:
 ### WholeSlideAnnotation
 ```python
 from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
+from wholeslidedata.annotation import utils as annotation_utils
 
 # opening annotation file
 wsa = WholeSlideAnnotation(annotation_path, labels=['tumor', 'stroma', 'til'])
 
 # print some properties
-print(f'\ncounts per label:  {wsa.counts_per_label}')
-print(f'\npixels per label:  {wsa.pixels_per_label}')
+print(f'\ncounts per label:  {annotation_utils.get_counts_in_annotations(wsa.annotations, wsa.labels)}')
+print(f'\npixels per label:  {annotation_utils.get_pixels_in_annotations(wsa.annotations, wsa.labels)}')
 
 # retrieving annotations
 print(wsa.annotations)
