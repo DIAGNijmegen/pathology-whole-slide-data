@@ -1,0 +1,6 @@
+training:
+    - wsi: 
+        path: /tmp/TCGA-21-5784-01Z-00-DX1.tif
+      wsa: 
+        path: /tmp/TCGA-21-5784-01Z-00-DX1.xml
+        

@@ -1,0 +1,5 @@
+module: wholeslidedata.annotation.parsers
+attribute: AsapAnnotationParser
+labels: ${wholeslidedata:labels}
+scaling: 1.0
+sample_annotation_types: ["polygon"]

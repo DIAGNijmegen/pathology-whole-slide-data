@@ -1,0 +1,8 @@
+module: wholeslidedata.source.utils
+attribute: sources_from_yaml_factory
+file_type: wsa
+annotation_parser: ${wholeslidedata:annotation_parser}
+mode: ${wholeslidedata:mode.name}
+yaml_source: ${wholeslidedata:yaml_source}
+filters: []
+excludes: []

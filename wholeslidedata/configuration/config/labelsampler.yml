@@ -1,0 +1,4 @@
+module: wholeslidedata.samplers.labelsampler
+attribute: BalancedLabelSampler
+labels: ${wholeslidedata:dataset.sample_labels.names}
+seed: ${wholeslidedata:seed}

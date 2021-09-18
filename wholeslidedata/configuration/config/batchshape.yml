@@ -1,0 +1,8 @@
+module: wholeslidedata.samplers.structures
+attribute: BatchShape
+batch_size: 1
+spacing: 0.5
+shape: 
+  - 256
+  - 256
+  - 3

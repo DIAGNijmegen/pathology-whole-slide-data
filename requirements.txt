@@ -1,0 +1,4 @@
+multifilelogger==0.0.1
+scipy
+cv2
+skimage

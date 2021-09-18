@@ -1,0 +1,4 @@
+module: wholeslidedata.samplers.annotationsampler
+attribute: BalancedAnnotationSampler
+counts_per_label: ${wholeslidedata:dataset.annotations_per_label}
+seed: ${wholeslidedata:seed}

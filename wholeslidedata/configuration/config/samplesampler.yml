@@ -1,0 +1,7 @@
+module: wholeslidedata.samplers.samplesampler
+attribute: SampleSampler
+point_sampler: ${wholeslidedata:point_sampler}
+patch_sampler: ${wholeslidedata:patch_sampler}
+patch_label_sampler: ${wholeslidedata:patch_label_sampler}
+batch_shape: ${wholeslidedata:batch_shape}
+sample_callbacks: ${wholeslidedata:sample_callbacks}

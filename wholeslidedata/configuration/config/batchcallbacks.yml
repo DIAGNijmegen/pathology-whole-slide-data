@@ -1,0 +1,8 @@
+- 
+    module: wholeslidedata.samplers.callbacks
+    attribute: BatchCallback
+    
+-   
+    module: wholeslidedata.samplers.callbacks
+    attribute: Resolver
+    return_dict: False

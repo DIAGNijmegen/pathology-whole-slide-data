@@ -1,0 +1,4 @@
+module: wholeslidedata.samplers.patchsampler
+attribute: PatchSampler
+center: True
+relative: False

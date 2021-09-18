@@ -1,0 +1,39 @@
+default: &default
+  seed: 123
+  mode: mode.yml
+  yaml_source@replace=true: yamlsource.yml
+  label_map@replace=true: labelmap.yml
+  labels@replace=true: labels.yml
+  image_backend: openslide
+  annotation_parser: annotationparser.yml
+  image_sources: imageyamlsource.yml
+  annotation_sources: annotationyamlsource.yml
+  associations: associations.yml
+  dataset: dataset.yml
+  batch_shape: batchshape.yml
+  sample_callbacks@replace=false: samplecallbacks.yml
+  batch_callbacks@replace=false: batchcallbacks.yml
+  label_sampler: labelsampler.yml
+  annotation_sampler: annotationsampler.yml
+  point_sampler: pointsampler.yml
+  patch_sampler: patchsampler.yml
+  patch_label_sampler: patchlabelsampler.yml
+  sample_sampler: samplesampler.yml
+  batch_sampler: batchsampler.yml
+
+
+training:
+  mode:
+    registrant_name: training
+
+validation:
+  mode:
+    registrant_name: validation
+
+test:
+  mode:
+    registrant_name: test
+
+inference:
+  mode:
+    registrant_name: inference

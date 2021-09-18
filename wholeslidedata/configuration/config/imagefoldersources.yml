@@ -1,0 +1,8 @@
+module: wholeslidedata.source.utils
+attribute: whole_slide_files_from_folder_factory
+file_type: wsi
+mode: ${wholeslidedata:mode.name}
+folder: /tmp/
+image_backend: ${wholeslidedata:image_backend}
+filters: []
+excludes: ['mask']

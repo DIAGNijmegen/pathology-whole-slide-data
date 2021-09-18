@@ -1,0 +1,20 @@
+default:
+  image_sources@replace=true:
+    module: wholeslidedata.datasource
+    attribute: sources_from_folder_factory
+    source_type: WholeSlideImageSource
+    mode: ${wholeslidedata:mode.name}
+    folder: /home/mart/Radboudumc/data/example_data/lymphocytes_data
+    backend: ${wholeslidedata:image_backend}
+    filters: []
+    excludes: []
+
+  annotation_sources@replace=true:
+    module: wholeslidedata.datasource
+    attribute: sources_from_folder_factory
+    source_type: WholeSlideAnnotationSource
+    mode: ${wholeslidedata:mode.name}
+    folder: /home/mart/Radboudumc/data/example_data/lymphocytes_data
+    backend: ${wholeslidedata:annotation_backend}
+    filters: []
+    excludes: []

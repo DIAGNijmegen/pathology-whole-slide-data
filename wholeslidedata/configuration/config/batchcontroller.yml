@@ -1,0 +1,6 @@
+module: batchgenerator.core.controllers
+attribute: BatchController
+dataset: ${wholeslidedata:dataset}
+batch_size: ${batchgenerator:inputs.batch_size}
+label_controller: ${batchgenerator:label_controller}
+index_controller: ${batchgenerator:index_controller}

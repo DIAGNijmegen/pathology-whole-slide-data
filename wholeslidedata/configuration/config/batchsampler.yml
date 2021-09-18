@@ -1,0 +1,5 @@
+module: wholeslidedata.samplers.batchsampler
+attribute: BatchSampler
+dataset: ${wholeslidedata:dataset}
+sampler: ${wholeslidedata:sample_sampler}
+batch_callbacks: ${wholeslidedata:batch_callbacks}

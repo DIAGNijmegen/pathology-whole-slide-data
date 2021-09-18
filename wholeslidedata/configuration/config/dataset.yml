@@ -1,0 +1,6 @@
+module: wholeslidedata.dataset
+attribute: WholeSlideDataSet
+mode: ${wholeslidedata:mode.name}
+associations: ${wholeslidedata:associations} 
+load_images: True
+copy_path: False
