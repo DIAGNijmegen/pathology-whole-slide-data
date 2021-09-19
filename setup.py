@@ -2,10 +2,11 @@ from setuptools import setup, find_packages
 
 setup(
     name="wholeslidedata",
-    version="0.0.3",
+    version="0.0.6",
     author="Mart van Rijthoven",
     author_email="mart.vanrijthoven@gmail.com",
-    packages=find_packages(exclude=("tests",'notebooks')),
+    package_data={"": ["*.yml"]},
+    packages=find_packages(exclude=("tests", "notebooks")),
     url="http://pypi.python.org/pypi/wholeslidedata/",
     license="LICENSE.txt",
     install_requires=[
@@ -17,7 +18,7 @@ setup(
         "scikit-image>=0.17.2",
         "shapely>=1.7.1",
         "openslide-python>=1.1.1",
-        "PyYAML>=5.4.1"
+        "PyYAML>=5.4.1",
     ],
     long_description="Package for working with whole slide images.",
 )
