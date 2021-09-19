@@ -1,6 +1,10 @@
 import numpy as np
 from concurrentbuffer.producer import Producer
-from wholeslidedata.samplers.utils import atleast_4d
+from wholeslidedata.buffer.batchcommander import (
+    MESSAGE_INDEX_IDENTIFIER,
+    MESSAGE_MODE_IDENTIFIER,
+    MESSAGE_SAMPLE_REFERENCES_IDENTIFIER,
+)
 
 
 class BatchProducer(Producer):
@@ -18,16 +22,13 @@ class BatchProducer(Producer):
         return self._batch_sampler
 
     def create_data(self, message: dict) -> np.ndarray:
-        index = message["index"]
-        if self._reset_index is not None and (
-            index // self._reset_index > self._resets
-        ):
-            self._batch_sampler.reset()
-            self._resets += 1
-        x_batch, y_batch = self._batch_sampler.batch(message["sample_references"])
-        x_batch = np.array(x_batch)
-        y_batch = atleast_4d(np.array(y_batch))
-        packed_data = np.zeros(((2,) + x_batch.shape[:-1]) + (10,))
-        packed_data[0][..., : x_batch.shape[-1]] = x_batch
-        packed_data[1][..., : y_batch.shape[-1]] = y_batch
-        return packed_data
+        index = message[MESSAGE_INDEX_IDENTIFIER]
+        sample_references = message[MESSAGE_SAMPLE_REFERENCES_IDENTIFIER]
+
+        if self._reset_index is not None:
+            if index // self._reset_index > self._resets:
+                self._batch_sampler.reset()
+                self._resets += 1
+
+        x_batch, y_batch = self._batch_sampler.batch(sample_references)
+        return np.array(x_batch, dtype=np.uint8), np.array(y_batch, dtype=np.uint8)

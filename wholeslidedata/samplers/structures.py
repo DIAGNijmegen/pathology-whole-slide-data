@@ -1,15 +1,19 @@
 import numpy as np
 from collections import UserDict, Iterable
 import pprint
+from wholeslidedata.labels import Labels
 
 class SpacingTypeError(Exception):
     pass
 
+
 class ShapeTypeError(Exception):
     pass
 
+
 class ShapeMismatchError(Exception):
     pass
+
 
 class Sample(np.ndarray):
     def __new__(
@@ -62,7 +66,7 @@ class Sample(np.ndarray):
         return (pickled_state[0], pickled_state[1], new_state)
 
     def __setstate__(self, state):
-        self.image_path = state[-6]  # Set the info attribute          self.image_path,
+        self.image_path = state[-6]  # Set the info attribute     
         self.annotation_label_name = state[-5]
         self.annotation_index = state[-4]
         self.center_coordinate = state[-3]
@@ -73,14 +77,13 @@ class Sample(np.ndarray):
         super(Sample, self).__setstate__(state[0:-6])
 
 
-
-
 class BatchShape(UserDict):
-    def __init__(self, batch_size, spacing=None, shape=None):
+    def __init__(self, batch_size, spacing=None, shape=None, y_shape=None):
         super().__init__(set())
         self._batch_size = batch_size
         self._spacing = spacing
         self._shape = shape
+        self._y_shape = y_shape
         self.data = self._set_inputs()
 
     @property
@@ -90,6 +93,12 @@ class BatchShape(UserDict):
     @property
     def shape(self):
         return tuple(self._shape)
+
+    @property
+    def y_shape(self):
+        if self._y_shape is None:
+            return self._y_shape
+        return tuple(self._y_shape)
 
     @property
     def spacing(self):
@@ -102,23 +111,29 @@ class BatchShape(UserDict):
         elif isinstance(self._spacing, Iterable):
             spacings = self._spacing
         else:
-            raise SpacingTypeError(f'Spacings :{self._spacing} with type: {type(self._spacing)} has not a valid type ')
-            
+            raise SpacingTypeError(
+                f"Spacings :{self._spacing} with type: {type(self._spacing)} has not a valid type "
+            )
+
         shapes = None
-       
+
         shapes_is_iterable = isinstance(self._shape, Iterable)
         if shapes_is_iterable and all(isinstance(s, (int, float)) for s in self._shape):
             shapes = [self._shape]
         elif shapes_is_iterable and all(isinstance(s, Iterable) for s in self._shape):
             shapes = self._shape
         else:
-            ShapeTypeError(f'Shapes :{self._shape} with type: {type(self._shape)} has not a valid type ')
+            ShapeTypeError(
+                f"Shapes :{self._shape} with type: {type(self._shape)} has not a valid type "
+            )
 
         inputs = {}
 
         # # TODO python has zip strict argument maybe use that instead
         if len(spacings) != len(shapes):
-            raise ShapeMismatchError(f'spacings {spacings} and shapes {shapes} does not have same lengts' )
+            raise ShapeMismatchError(
+                f"spacings {spacings} and shapes {shapes} does not have same lengts"
+            )
 
         for spacing, shape in zip(spacings, shapes):
             inputs.setdefault(spacing, []).append(shape)
@@ -127,7 +142,12 @@ class BatchShape(UserDict):
 
     def __str__(self):
         return pprint.pformat(
-            {"object": self, "batch_size": self._batch_size, "inputs": self.data}
+            {
+                "object": self,
+                "batch_size": self._batch_size,
+                "x_shape": self.data,
+                "y_shape": self._y_shape,
+            }
         )
 
 

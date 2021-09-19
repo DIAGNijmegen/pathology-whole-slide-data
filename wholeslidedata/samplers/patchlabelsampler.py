@@ -158,7 +158,7 @@ class ClassificationPatchLabelSampler(PatchLabelSampler):
         # get annotations
         annotations = wsa.select_annotations(center_x, center_y, 1, 1)
 
-        return annotations[-1].label.value
+        return (annotations[-1].label.value, )
 
 
 @PatchLabelSampler.register(("detection",))

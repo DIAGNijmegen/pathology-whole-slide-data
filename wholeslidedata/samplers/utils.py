@@ -25,13 +25,6 @@ def timeit(method):
 
     return timed
 
-def atleast_4d(x):
-    if x.ndim < 4:
-        y = np.expand_dims(np.atleast_3d(x), axis=3)
-    else:
-        y = x
-    return y
-
 def block_shaped(arr, nrows, ncols):
     if len(arr.shape) == 3:
         height, _, channels = arr.shape
@@ -124,7 +117,7 @@ def plot_batch(x_batch, y_batch, output_shape=None, axes=None):
         if axes is None:
             fig, axes = plt.subplots(1, 2, figsize=(10, 10))
         plot_patch(x_batch[batch_index], axes=axes[0])
-        plot_mask(y_batch[batch_index], axes=axes[1], output_shape=output_shape)
+        # plot_mask(y_batch[batch_index], axes=axes[1], output_shape=output_shape)
         if axes is None:
             plt.show()
 
@@ -191,15 +184,14 @@ def plot_mask(
         mask = fit_data(mask, output_shape)
 
     cmap = colors.ListedColormap(color_values)
-    norm = colors.BoundaryNorm(list(range(len(color_values))), cmap.N, clip=True)
-    masked = np.ma.masked_where(mask == 0, mask)
+    
 
     if axes is None:
         _, ax = plt.subplots(1, 1)
     else:
         ax = axes
 
-    ax.imshow(masked, cmap=cmap, norm=norm, alpha=alpha)
+    ax.imshow(mask, cmap=cmap, alpha=alpha)
     ax.set_title(title)
 
     if axes is None:

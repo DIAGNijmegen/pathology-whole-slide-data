@@ -4,8 +4,7 @@ from dataclasses import dataclass
 from pprint import pformat
 from typing import Dict, Tuple
 
-from multifilelogger import multifilelogging
-import yaml
+# from multifilelogger import multifilelogging
 
 from wholeslidedata.annotation import utils as annotation_utils
 from wholeslidedata.labels import Labels
@@ -99,21 +98,22 @@ class DataSet(UserDict):
             )
 
     def _log(self):
-        if multifilelogging._LoggingState.log_path:
-            logger = multifilelogging.create_logger(f"dataset-{self.mode.name}")
-            logger.info(
-                "\nTotal Annotations:\n" + pformat(self.annotation_counts) + "\n"
-            )
-            logger.info("\nAnnotations:\n" + pformat(self.annotations_per_label) + "\n")
-            logger.info("\nPixels:\n" + pformat(self.pixels_per_label) + "\n")
-            logger.info(
-                "\nAnnotations (per image):\n"
-                + pformat(self.annotations_per_label_per_key)
-                + "\n"
-            )
-            logger.info(
-                "\nPixels (per image):\n" + pformat(self.pixels_per_label_per_key)
-            )
+        pass
+    #     if multifilelogging._LoggingState.log_path:
+    #         logger = multifilelogging.create_logger(f"dataset-{self.mode.name}")
+    #         logger.info(
+    #             "\nTotal Annotations:\n" + pformat(self.annotation_counts) + "\n"
+    #         )
+    #         logger.info("\nAnnotations:\n" + pformat(self.annotations_per_label) + "\n")
+    #         logger.info("\nPixels:\n" + pformat(self.pixels_per_label) + "\n")
+    #         logger.info(
+    #             "\nAnnotations (per image):\n"
+    #             + pformat(self.annotations_per_label_per_key)
+    #             + "\n"
+    #         )
+    #         logger.info(
+    #             "\nPixels (per image):\n" + pformat(self.pixels_per_label_per_key)
+    #         )
 
 
 class WholeSlideDataSet(DataSet):

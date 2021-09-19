@@ -2,6 +2,9 @@ from collections import deque
 from wholeslidedata.samplers.batchreferencesampler import BatchReferenceSampler
 from concurrentbuffer.commander import Commander
 
+MESSAGE_MODE_IDENTIFIER = 'mode'
+MESSAGE_SAMPLE_REFERENCES_IDENTIFIER = 'sample_references'
+MESSAGE_INDEX_IDENTIFIER = 'index'
 
 class BatchCommander(Commander):
     def __init__(self, config_builder, mode, reset_index=None):
@@ -27,9 +30,9 @@ class BatchCommander(Commander):
             self._batch_reference_sampler.reset()
         sample_references = self._batch_reference_sampler.batch()
         message = {
-            "mode": self._mode,
-            "sample_references": sample_references,
-            "index": self._index,
+            MESSAGE_MODE_IDENTIFIER: self._mode,
+            MESSAGE_SAMPLE_REFERENCES_IDENTIFIER: sample_references,
+            MESSAGE_INDEX_IDENTIFIER: self._index,
         }
         self._index += 1  
         return message

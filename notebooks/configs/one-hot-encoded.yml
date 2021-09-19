@@ -1,0 +1,19 @@
+wholeslidedata:
+    default:
+        yaml_source: data.yml
+        
+        label_map:
+            stroma: 1
+            tumor: 2
+            lymphocytes: 3
+        
+        batch_shape:
+            batch_size: 8
+            spacing: 2.0
+            shape: [256, 256, 3]
+            y_shape: [256, 256, 3]
+
+        sample_callbacks:
+            - module: wholeslidedata.samplers.callbacks
+              attribute: OneHotEncoding
+              labels: ${wholeslidedata:labels}
