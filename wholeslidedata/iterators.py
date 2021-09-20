@@ -4,7 +4,7 @@ from wholeslidedata.buffer.batchcommander import BatchCommander
 from wholeslidedata.buffer.batchproducer import BatchProducer
 from wholeslidedata.buffer.utils import get_buffer_shape
 from wholeslidedata.configuration.config import WholeSlideDataConfiguration
-
+from multiprocessing import Queue
 
 class BatchIterator(BufferIterator):
     def __init__(self, batch_size, index=0, stop_index=None, *args, **kwargs):
@@ -43,6 +43,7 @@ def create_batch_iterator(
     user_config,
     mode,
     batches=None,
+    update=False,
     presets=(),
     cpus=1,
     context="fork",
@@ -52,12 +53,14 @@ def create_batch_iterator(
         user_config=user_config, modes=(mode,), build_instances=False, presets=presets
     )
 
+    update_queue = Queue() if update else None
+
     batch_commander = BatchCommander(
-        config_builder=config_builder, mode=mode, reset_index=batches
+        config_builder=config_builder, mode=mode, reset_index=batches, update_queue=update_queue,
     )
 
     batch_producer = BatchProducer(
-        config_builder=config_builder, mode=mode, reset_index=batches
+        config_builder=config_builder, mode=mode, reset_index=batches, update_queue=update_queue,
     )
     batch_size, buffer_shapes = get_buffer_shape(config_builder)
 

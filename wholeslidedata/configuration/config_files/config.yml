@@ -11,15 +11,16 @@ default: &default
   associations: associations.yml
   dataset: dataset.yml
   batch_shape: batchshape.yml
-  sample_callbacks@replace=false: samplecallbacks.yml
-  batch_callbacks@replace=false: batchcallbacks.yml
   label_sampler: labelsampler.yml
   annotation_sampler: annotationsampler.yml
   point_sampler: pointsampler.yml
   patch_sampler: patchsampler.yml
   patch_label_sampler: patchlabelsampler.yml
+  sample_callbacks@replace=false: samplecallbacks.yml
   sample_sampler: samplesampler.yml
+  batch_callbacks@replace=false: batchcallbacks.yml
   batch_sampler: batchsampler.yml
+  
 
 
 training:

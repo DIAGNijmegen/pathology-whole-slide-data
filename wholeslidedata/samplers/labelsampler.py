@@ -4,7 +4,8 @@ from typing import Iterator, List, Dict
 
 import numpy as np
 from wholeslidedata.samplers.sampler import Sampler
-
+from multiprocessing import Queue
+from queue import Empty
 
 class LabelSampler(Sampler, Iterator):
     def __init__(self, labels: List, seed: int):
@@ -143,7 +144,7 @@ class PixelCountedLabelSampler(LabelSampler):
         return np.random.choice(list(ratios.keys()), p=list(ratios.values()))
 
     def update(self, batch):
-        y_batch = batch["y"]
+        _, y_batch = batch
         for label, counts in self._one_hot_encoded_count(y_batch).items():
             self._pixel_count_per_label[label] += counts
 
