@@ -175,7 +175,7 @@ class Polygon(geometry.Polygon, Annotation):
 
 @Annotation.register(("point", "dot"))
 class Point(geometry.Point, Annotation):
-    def __init__(self, index, annotation_path, label, coordinates):
+    def __init__(self, index, annotation_path, label, coordinates, holes=None):
         Annotation.__init__(self, index, annotation_path, label)
         geometry.Point.__init__(self, coordinates[0])
         self._coordinates = coordinates

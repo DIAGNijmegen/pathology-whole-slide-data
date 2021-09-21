@@ -143,16 +143,16 @@ def plot_batch_detection(x_batch, y_batch, output_shape=None, color_map=plt.cm.P
         plt.show()
 
 
-def plot_boxes(boxes, axes=None, output_shape=None, color_map=plt.cm.Paired):
+def plot_boxes(boxes, axes=None, output_shape=None, color_map=plt.cm.prism):
     if axes is None:
         _, ax = plt.subplots(1, 1)
     else:
         ax = axes
 
     for box in boxes:
-        label, xc, yc, wc, hc = box
-        color = color_map(int(label))
-        rect = pltpatches.Rectangle((xc-wc//2, yc-hc//2), wc, hc, linewidth=1,
+        x1, y1, x2, y2,label_value, confidence = box
+        color = color_map(int(label_value))
+        rect = pltpatches.Rectangle((x1, y1), x2-x1, y2-y1, linewidth=2,
                                     edgecolor=color, facecolor='none')
         ax.add_patch(rect)
 

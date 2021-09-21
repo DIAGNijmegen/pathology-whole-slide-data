@@ -1,3 +1,4 @@
+from typing import List, Optional
 import cv2
 import numpy as np
 from skimage.transform import rescale
@@ -158,13 +159,17 @@ class ClassificationPatchLabelSampler(PatchLabelSampler):
         # get annotations
         annotations = wsa.select_annotations(center_x, center_y, 1, 1)
 
-        return (annotations[-1].label.value, )
+        return np.array([annotations[-1].label.value])
 
 
 @PatchLabelSampler.register(("detection",))
 class DetectionPatchLabelSampler(PatchLabelSampler):
-    def __init__(self):
-        super().__init__()
+
+    def __init__(self, max_number_objects: int, detection_labels: List[str], point_box_sizes: Optional[dict] = None):
+        self._max_number_objects = max_number_objects
+        self._point_box_sizes = point_box_sizes
+        self._detection_labels = detection_labels
+
 
     def sample(
         self,
@@ -172,9 +177,7 @@ class DetectionPatchLabelSampler(PatchLabelSampler):
         point,
         size,
         ratio,
-        label_name_to_bounding_box_map=None,
     ):
-
         center_x, center_y = point
         width, height = size
 
@@ -183,31 +186,53 @@ class DetectionPatchLabelSampler(PatchLabelSampler):
             center_x, center_y, (width * ratio) - 1, (height * ratio) - 1
         )
 
-        # Return object tuple of label, center coordinates, width/height
-        # for all points in region
-        objects = []
-        for annotation in annotations:
-            label = annotation.label.value
-            name = annotation.label.name
-
-            # If Point, create fixed width/height
-            if isinstance(annotation, Point):
-                center_x_anno, center_y_anno = annotation.coordinates()
-                if label_name_to_bounding_box_map is not None:
-                    width_anno, height_anno = label_name_to_bounding_box_map[name]
-                elif hasattr(annotation.label, "boundingbox"):
-                    width_anno, height_anno = annotation.label.boundingbox
-                else:
-                    raise ValueError(
-                        "No label to bounding box map or bounding box attribute in annotation"
-                    )
-
-            # If Polygon, use bounds
-            if isinstance(annotation, Polygon):
-                center_x_anno, center_y_anno = annotation.center
-                width_anno, height_anno = annotation.size
-
-            objects.append(
-                (label, center_x_anno, center_y_anno, width_anno, height_anno)
+        if len(annotations) > self._max_number_objects:
+            raise ValueError(
+                f"to many objects in ground truth: {len(annotations)} with possible max number of objects: {self._max_number_objects}"
             )
+
+        objects = np.zeros((self._max_number_objects, 6))
+        idx=0
+        for annotation in annotations:
+            if annotation.label.name not in self._detection_labels:
+                continue
+
+            if isinstance(annotation, Point):
+
+                coordinates = shift_coordinates(
+                    annotation.coordinates(), center_x, center_y, width, height, ratio
+                )
+
+                size = np.array(self._point_box_sizes[annotation.label.name])
+          
+                objects[idx][0] = max(0, coordinates[0] - (size // 2))
+                objects[idx][1] = max(0, coordinates[1] - (size // 2))
+                objects[idx][2] = max(0, coordinates[0] + (size // 2))
+                objects[idx][3] = max(0, coordinates[1] + (size // 2))
+
+            if isinstance(annotation, Polygon):
+                xy1_coordinates = shift_coordinates(
+                    np.array(annotation.bounds[:2], dtype='float64'),
+                    center_x,
+                    center_y,
+                    width,
+                    height,
+                    ratio,
+                )
+
+                xy2_coordinates = shift_coordinates(
+                    np.array(annotation.bounds[2:], dtype='float64'),
+                    center_x,
+                    center_y,
+                    width,
+                    height,
+                    ratio,
+                )
+
+                objects[idx][:2] = xy1_coordinates
+                objects[idx][2:4] = xy2_coordinates
+
+            objects[idx][4] = annotation.label.value
+            objects[idx][5] = 1  # confidence
+            idx += 1
         return objects

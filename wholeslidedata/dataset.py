@@ -38,7 +38,8 @@ class DataSet(UserDict):
         self._renamed_labels = renamed_labels
 
         self.data = self._open(self._associations)
-        self._sample_references = self._init_samples(self.data)
+        self._sample_references, self._all_sample_references = self._init_samples(self.data)
+        self._all_labels = Labels.create(list(self._all_sample_references.keys()))
         self._sample_labels = Labels.create(list(self._sample_references.keys()))
 
         self._check_samples()
@@ -163,6 +164,7 @@ class WholeSlideDataSet(DataSet):
 
     def _init_samples(self, data) -> Tuple:
         samples = {}
+        all_samples = {}
         for file_key, values in data.items():
             for wsa_index, wsa in values[
                 WholeSlideDataSet.ANNOTATIONS_IDENTIFIER
@@ -175,7 +177,16 @@ class WholeSlideDataSet(DataSet):
                             annotation_index=annotation_index,
                         )
                     )
-        return samples
+
+                for annotation_index, annotation in enumerate(wsa.annotations):
+                    all_samples.setdefault(annotation.label.name, []).append(
+                        WholeSlideSampleReference(
+                            file_key=file_key,
+                            wsa_index=wsa_index,
+                            annotation_index=annotation_index,
+                        )
+                    )
+        return samples, all_samples
 
     def close_images(self):
         for image in self._images.values():
@@ -195,11 +206,11 @@ class WholeSlideDataSet(DataSet):
 
     @property
     def annotations_per_label(self) -> Dict[str, int]:
-        counts_per_label_ = {label.name: 0 for label in self._sample_labels}
+        counts_per_label_ = {label.name: 0 for label in self._all_labels}
         for values in self.data.values():
             for wsa in values[WholeSlideDataSet.ANNOTATIONS_IDENTIFIER].values():
                 for label, count in annotation_utils.get_counts_in_annotations(
-                    wsa.annotations, labels=self._sample_labels
+                    wsa.annotations, labels=self._all_labels
                 ).items():
                     if label in counts_per_label_:
                         counts_per_label_[label] += count
@@ -223,7 +234,7 @@ class WholeSlideDataSet(DataSet):
             counts_per_label_per_key_[file_key] = {}
             for wsa in values[WholeSlideDataSet.ANNOTATIONS_IDENTIFIER].values():
                 for label, count in annotation_utils.get_counts_in_annotations(
-                    wsa.annotations, labels=self._sample_labels
+                    wsa.annotations, labels=self._all_labels
                 ).items():
                     if label not in counts_per_label_per_key_[file_key]:
                         counts_per_label_per_key_[file_key][label] = 0
@@ -242,12 +253,12 @@ class WholeSlideDataSet(DataSet):
 
     @property
     def pixels_per_label(self) -> Dict[str, int]:
-        counts_per_label_ = {label.name: 0 for label in self._sample_labels}
+        counts_per_label_ = {label.name: 0 for label in self._all_labels}
 
         for values in self.data.values():
             for wsa in values[WholeSlideDataSet.ANNOTATIONS_IDENTIFIER].values():
                 for label, count in annotation_utils.get_pixels_in_annotations(
-                    wsa.annotations, labels=self._sample_labels
+                    wsa.annotations, labels=self._all_labels
                 ).items():
                     if label in counts_per_label_:
                         counts_per_label_[label] += count
@@ -271,7 +282,7 @@ class WholeSlideDataSet(DataSet):
             counts_per_label_per_key_[file_key] = {}
             for wsa in values[WholeSlideDataSet.ANNOTATIONS_IDENTIFIER].values():
                 for label, pixels in annotation_utils.get_pixels_in_annotations(
-                    wsa.annotations, labels=self._sample_labels
+                    wsa.annotations, labels=self._all_labels
                 ).items():
                     if label not in counts_per_label_per_key_[file_key]:
                         counts_per_label_per_key_[file_key][label] = 0
