@@ -103,19 +103,14 @@ class Resolver(BatchCallback):
         return x, y
 
     def _resolve_samples(self, samples):
-        if len(samples.keys()) == 1:
-            key = list(samples.keys())[0]
-            if len(samples[key].keys()) == 1:
-                value = list(samples[key].keys())[0]
-                return samples[key][value]
-            return samples[key]
-
-        return {
-            key: samples[key][list(samples[key].keys())[0]]
-            if len(samples[key].keys()) == 1
-            else samples[key]
-            for key in samples.keys()
-        }
+        out_samples = []
+        for _, shapes in samples.items():
+            for _, shape in shapes.items():
+                out_samples.append(shape)
+                
+        if len(out_samples) == 1:
+            return out_samples[0]
+        return out_samples
 
 
 

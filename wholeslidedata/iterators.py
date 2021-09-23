@@ -1,3 +1,4 @@
+from copy import deepcopy
 from concurrentbuffer.iterator import BufferIterator, buffer_iterator_factory
 
 from wholeslidedata.buffer.batchcommander import BatchCommander
@@ -6,8 +7,10 @@ from wholeslidedata.buffer.utils import get_buffer_shape
 from wholeslidedata.configuration.config import WholeSlideDataConfiguration
 from multiprocessing import Queue
 
+
 class BatchIterator(BufferIterator):
-    def __init__(self, batch_size, index=0, stop_index=None, *args, **kwargs):
+    def __init__(self, builds, batch_size, index=0, stop_index=None, *args, **kwargs):
+        self._builds = builds
         self._batch_size = batch_size
         self._index = index
         self._stop_index = stop_index
@@ -48,23 +51,35 @@ def create_batch_iterator(
     cpus=1,
     context="fork",
     determinstic=True,
+    iterator_class=BatchIterator,
 ):
     config_builder = WholeSlideDataConfiguration.build(
         user_config=user_config, modes=(mode,), build_instances=False, presets=presets
     )
 
+    builds = WholeSlideDataConfiguration.build(
+        user_config=user_config, modes=(mode,), presets=presets
+    )
+
     update_queue = Queue() if update else None
 
     batch_commander = BatchCommander(
-        config_builder=config_builder, mode=mode, reset_index=batches, update_queue=update_queue,
+        config_builder=config_builder,
+        mode=mode,
+        reset_index=batches,
+        update_queue=update_queue,
     )
 
     batch_producer = BatchProducer(
-        config_builder=config_builder, mode=mode, reset_index=batches, update_queue=update_queue,
+        config_builder=config_builder,
+        mode=mode,
+        reset_index=batches,
+        update_queue=update_queue,
     )
-    batch_size, buffer_shapes = get_buffer_shape(config_builder)
+    batch_size, buffer_shapes = get_buffer_shape(builds['wholeslidedata'][mode])
 
     return buffer_iterator_factory(
+        builds=builds,
         batch_size=batch_size,
         stop_index=batches,
         cpus=cpus,
@@ -73,5 +88,5 @@ def create_batch_iterator(
         producer=batch_producer,
         context=context,
         deterministic=determinstic,
-        buffer_iterator_class=BatchIterator,
+        buffer_iterator_class=iterator_class,
     )

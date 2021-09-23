@@ -1,4 +1,5 @@
 from typing import List, Optional
+
 import cv2
 import numpy as np
 from skimage.transform import rescale
@@ -42,6 +43,9 @@ class PatchLabelSampler(Sampler):
         Returns:
             [type]: [description]
         """
+
+    def resolve_batch(y_batch):
+        pass
 
 
 @PatchLabelSampler.register(("mask",))
@@ -89,6 +93,9 @@ class MaskPatchLabelSampler(PatchLabelSampler):
             )
 
         return mask_patch.astype(np.uint8)
+
+    def resolve_batch(y_batch):
+        pass
 
 
 @PatchLabelSampler.register(("segmentation",))
@@ -164,12 +171,15 @@ class ClassificationPatchLabelSampler(PatchLabelSampler):
 
 @PatchLabelSampler.register(("detection",))
 class DetectionPatchLabelSampler(PatchLabelSampler):
-
-    def __init__(self, max_number_objects: int, detection_labels: List[str], point_box_sizes: Optional[dict] = None):
+    def __init__(
+        self,
+        max_number_objects: int = None,
+        detection_labels: List[str] = None,
+        point_box_sizes: Optional[dict] = None,
+    ):
         self._max_number_objects = max_number_objects
         self._point_box_sizes = point_box_sizes
         self._detection_labels = detection_labels
-
 
     def sample(
         self,
@@ -186,53 +196,62 @@ class DetectionPatchLabelSampler(PatchLabelSampler):
             center_x, center_y, (width * ratio) - 1, (height * ratio) - 1
         )
 
-        if len(annotations) > self._max_number_objects:
+        max_number_objects = self._max_number_objects or width * height
+        if len(annotations) > max_number_objects:
             raise ValueError(
-                f"to many objects in ground truth: {len(annotations)} with possible max number of objects: {self._max_number_objects}"
+                f"to many objects in ground truth: {len(annotations)} with possible max number of objects: {max_number_objects}"
             )
 
-        objects = np.zeros((self._max_number_objects, 6))
-        idx=0
+        objects = np.zeros((max_number_objects, 6))
+        idx = 0
         for annotation in annotations:
-            if annotation.label.name not in self._detection_labels:
-                continue
+            if self._detection_labels is not None:
+                if annotation.label.name not in self._detection_labels:
+                    continue
 
             if isinstance(annotation, Point):
-
-                coordinates = shift_coordinates(
-                    annotation.coordinates(), center_x, center_y, width, height, ratio
+                objects[idx][:4] = self._get_point_coordinates(
+                    annotation, center_x, center_y, width, height, ratio
                 )
-
-                size = np.array(self._point_box_sizes[annotation.label.name])
-          
-                objects[idx][0] = max(0, coordinates[0] - (size // 2))
-                objects[idx][1] = max(0, coordinates[1] - (size // 2))
-                objects[idx][2] = max(0, coordinates[0] + (size // 2))
-                objects[idx][3] = max(0, coordinates[1] + (size // 2))
 
             if isinstance(annotation, Polygon):
-                xy1_coordinates = shift_coordinates(
-                    np.array(annotation.bounds[:2], dtype='float64'),
-                    center_x,
-                    center_y,
-                    width,
-                    height,
-                    ratio,
+                objects[idx][:4] = self._get_polygon_coordinates(
+                    annotation, center_x, center_y, width, height, ratio
                 )
-
-                xy2_coordinates = shift_coordinates(
-                    np.array(annotation.bounds[2:], dtype='float64'),
-                    center_x,
-                    center_y,
-                    width,
-                    height,
-                    ratio,
-                )
-
-                objects[idx][:2] = xy1_coordinates
-                objects[idx][2:4] = xy2_coordinates
 
             objects[idx][4] = annotation.label.value
             objects[idx][5] = 1  # confidence
             idx += 1
         return objects
+
+    def _get_point_coordinates(
+        self, annotation, center_x, center_y, width, height, ratio
+    ):
+        coordinates = shift_coordinates(
+            annotation.coordinates(), center_x, center_y, width, height, ratio
+        )
+
+        size = 0
+        if self._point_box_sizes is not None:
+            size = np.array(self._point_box_sizes[annotation.label.name])
+
+        x1 = max(0, coordinates[0] - (size // 2))
+        y1 = max(0, coordinates[1] - (size // 2))
+        x2 = min(width, coordinates[0] + (size // 2))
+        y2 = max(height, coordinates[1] + (size // 2))
+        return x1, y1, x2, y2
+
+    def _get_polygon_coordinates(
+        self, annotation, center_x, center_y, width, height, ratio
+    ):
+        coordinates = [annotation.bounds[:2], annotation.bounds[2:]]
+        coordinates = np.array(coordinates, dtype="uint8")
+        coordinates = shift_coordinates(
+            coordinates, center_x, center_y, width, height, ratio
+        )
+        x1 = coordinates[0][0]
+        y1 = coordinates[0][1]
+        x2 = coordinates[1][0]
+        y2 = coordinates[1][1]
+
+        return x1, y1, x2, y2

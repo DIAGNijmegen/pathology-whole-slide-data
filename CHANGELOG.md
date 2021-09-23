@@ -1,15 +1,22 @@
 # Changelog
 ---
 
-### **Upcoming** (0.0.7)
+### **Upcoming** (0.0.8)
+
+
+### (0.0.7) (**Latests**)
 
 **new features:**
+ - detection support
  - pyvips image backend support
+ - multiple spacings support
  - update call from producers to commander
 
+**bug fixes:**
+ - fixed: copy data failed on first trial when using multiple cpus
 
 ---
-## 0.0.6 (**Latests**)
+## 0.0.6 
  - No change log or this version
 ---
 ### 0.0.5

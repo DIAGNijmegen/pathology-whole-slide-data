@@ -9,8 +9,6 @@ import numpy as np
 from matplotlib import colors
 
 
-
-
 def timeit(method):
     def timed(*args, **kw):
         ts = time.time()
@@ -24,6 +22,7 @@ def timeit(method):
         return result
 
     return timed
+
 
 def block_shaped(arr, nrows, ncols):
     if len(arr.shape) == 3:
@@ -106,12 +105,22 @@ def fit_data(data, output_shape):
         return data[:, :, cropx:-cropx, cropy:-cropy, :]
 
 
+def resolve_detection_batch(y_batch):
+    return y_batch[~np.all(y_batch == 0, axis=-1)]
+
+
+def resolve_classification_batch(y_batch):
+    return np.squeeze(y_batch)
+
+
 """Plotting"""
 
 
 def plot_batch(x_batch, y_batch, output_shape=None, axes=None):
-    if axes is not None and len(axes) != len(x_batch)*2:
-        raise ValueError(f'axes dims {len(axes)}  do not correspond to samples {len(x_batch)} in batch')
+    if axes is not None and len(axes) != len(x_batch) * 2:
+        raise ValueError(
+            f"axes dims {len(axes)}  do not correspond to samples {len(x_batch)} in batch"
+        )
 
     for batch_index in range(len(x_batch)):
         if axes is None:
@@ -138,8 +147,12 @@ def plot_batch_detection(x_batch, y_batch, output_shape=None, color_map=plt.cm.P
     for batch_index in range(len(x_batch)):
         fig, axes = plt.subplots(1, 1, figsize=(10, 10))
         plot_patch(x_batch[batch_index], axes=axes)
-        plot_boxes(y_batch[batch_index], axes=axes,
-                   output_shape=output_shape, color_map=color_map)
+        plot_boxes(
+            y_batch[batch_index],
+            axes=axes,
+            output_shape=output_shape,
+            color_map=color_map,
+        )
         plt.show()
 
 
@@ -150,10 +163,11 @@ def plot_boxes(boxes, axes=None, output_shape=None, color_map=plt.cm.prism):
         ax = axes
 
     for box in boxes:
-        x1, y1, x2, y2,label_value, confidence = box
+        x1, y1, x2, y2, label_value, confidence = box
         color = color_map(int(label_value))
-        rect = pltpatches.Rectangle((x1, y1), x2-x1, y2-y1, linewidth=2,
-                                    edgecolor=color, facecolor='none')
+        rect = pltpatches.Rectangle(
+            (x1, y1), x2 - x1, y2 - y1, linewidth=2, edgecolor=color, facecolor="none"
+        )
         ax.add_patch(rect)
 
     if axes is None:
@@ -173,7 +187,7 @@ def plot_patch(patch, axes=None, title="my_patch", output_size=None, alpha=1.0):
 
 def plot_mask(
     mask,
-    color_values=["black", "red", "blue", "green", 'orange'],
+    color_values=["black", "red", "blue", "green", "orange"],
     axes=None,
     title="",
     output_shape=None,
@@ -184,7 +198,6 @@ def plot_mask(
         mask = fit_data(mask, output_shape)
 
     cmap = colors.ListedColormap(color_values)
-    
 
     if axes is None:
         _, ax = plt.subplots(1, 1)

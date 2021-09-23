@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="wholeslidedata",
-    version="0.0.6",
+    version="0.0.7",
     author="Mart van Rijthoven",
     author_email="mart.vanrijthoven@gmail.com",
     package_data={"": ["*.yml"]},
@@ -13,7 +13,7 @@ setup(
         "concurrentbuffer>=0.0.3",
         "creationism>=0.0.3",
         "numpy>=1.18.1",
-        "opencv-python>=4.4.0",
+        "opencv-python-headless>=4.4.0",
         "scipy>=1.5.2",
         "scikit-image>=0.17.2",
         "shapely>=1.7.1",
