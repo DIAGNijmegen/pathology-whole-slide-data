@@ -24,7 +24,8 @@ class SourceFileTransferError(Exception):
 
 def _print_copy(orginal_path, destination_path):
     if destination_path.exists():
-        print(f"Destination path '{destination_path}' already exists")
+        pass
+        # print(f"Destination path '{destination_path}' already exists")
     else:
         print(
             f"Copied from '{orginal_path}'\nCopied to: '{destination_path.resolve()}'\n..."
