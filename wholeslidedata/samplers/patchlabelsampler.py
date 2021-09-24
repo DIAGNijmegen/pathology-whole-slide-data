@@ -238,7 +238,7 @@ class DetectionPatchLabelSampler(PatchLabelSampler):
         x1 = max(0, coordinates[0] - (size // 2))
         y1 = max(0, coordinates[1] - (size // 2))
         x2 = min(width, coordinates[0] + (size // 2))
-        y2 = max(height, coordinates[1] + (size // 2))
+        y2 = min(height, coordinates[1] + (size // 2))
         return x1, y1, x2, y2
 
     def _get_polygon_coordinates(
@@ -249,9 +249,9 @@ class DetectionPatchLabelSampler(PatchLabelSampler):
         coordinates = shift_coordinates(
             coordinates, center_x, center_y, width, height, ratio
         )
-        x1 = coordinates[0][0]
-        y1 = coordinates[0][1]
-        x2 = coordinates[1][0]
-        y2 = coordinates[1][1]
+        x1 = max(0, coordinates[0][0])
+        y1 = max(0, coordinates[0][1])
+        x2 = min(width, coordinates[1][0])
+        y2 = min(height, coordinates[1][1])
 
         return x1, y1, x2, y2
