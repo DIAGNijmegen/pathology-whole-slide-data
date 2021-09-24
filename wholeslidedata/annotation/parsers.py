@@ -22,6 +22,7 @@ class AnnotationParser(RegistrantFactory):
         labels=None,
         renamed_labels=None,
         scaling=1.0,
+        sample_label_names=(),
         sample_annotation_types=("polygon",),
     ):
         self._labels = labels
@@ -36,6 +37,8 @@ class AnnotationParser(RegistrantFactory):
             Annotation.get_registrant(annotation_type)
             for annotation_type in sample_annotation_types
         ]
+
+        self._sample_label_names = sample_label_names
 
     def read(self, annotation_path, labels=None, renamed_labels=None) -> List[Annotation]:
         if labels is None:
@@ -65,6 +68,10 @@ class AnnotationParser(RegistrantFactory):
     @property
     def sample_annotation_types(self):
         return self._sample_annotation_types
+
+    @property
+    def sample_label_names(self):
+        return self._sample_label_names
 
     def get_available_labels(self, path):
         labels = []

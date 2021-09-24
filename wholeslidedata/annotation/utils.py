@@ -36,6 +36,7 @@ def _counts_per_class(annotations, labels):
         cpc[annotation.label.name] += 1
     return cpc
 
+
 def _pixels_per_class(annotations, labels):
     ppc = {label_name: 0 for label_name in labels.names}
     for annotation in annotations:
@@ -43,34 +44,45 @@ def _pixels_per_class(annotations, labels):
     return ppc
 
 
-def plot_annotations(annotations: List[Annotation], ax=None, title="", use_base_coordinates=False):
+def plot_annotations(
+    annotations: List[Annotation],
+    ax=None,
+    color_map=None,
+    title="",
+    use_base_coordinates=False,
+    scale=1.0,
+):
     ax = ax or plt
 
     for annotation in annotations:
+        color = (
+            color_map[annotation.label.name]
+            if color_map is not None
+            else annotation.label.color
+        )
+
         if use_base_coordinates:
             coordinates = annotation.base_coordinates
         else:
-            coordinates = annotation.coordinates()
+            coordinates = annotation.coordinates() * scale
 
         if isinstance(annotation, Point):
             ax.scatter(*coordinates, color=annotation.label.color)
         elif isinstance(annotation, Polygon):
-            ax.plot(*list(zip(*coordinates)), color=annotation.label.color, linewidth=4)
+            ax.plot(*list(zip(*coordinates)), color=color, linewidth=2)
         else:
             raise ValueError(f"invalid annotation {type(annotation)}")
 
     if ax == plt:
-        plt.gca().invert_yaxis()
         plt.axis("equal")
         plt.show()
     else:
         ax.axis("equal")
-        ax.invert_yaxis()
         ax.set_title(title)
 
 
 def shift_coordinates(coordinates, center_x, center_y, width, height, ratio):
-    coordinates -= np.array([center_x, center_y])
+    coordinates -= np.array([int(center_x), int(center_y)])
     coordinates /= ratio
     coordinates += np.array([width // 2, height // 2])
     return coordinates

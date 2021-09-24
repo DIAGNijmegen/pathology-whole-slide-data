@@ -39,7 +39,7 @@ class WholeSlideAnnotation():
             annotation
             for annotation_type in self._annotation_parser.sample_annotation_types
             for annotation in self._annotations
-            if isinstance(annotation, annotation_type)
+            if isinstance(annotation, annotation_type) and annotation.label.name in self._annotation_parser.sample_label_names
         ]
 
         self._set_overlapping_annotations()
