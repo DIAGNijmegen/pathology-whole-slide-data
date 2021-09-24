@@ -245,7 +245,7 @@ class DetectionPatchLabelSampler(PatchLabelSampler):
         self, annotation, center_x, center_y, width, height, ratio
     ):
         coordinates = [annotation.bounds[:2], annotation.bounds[2:]]
-        coordinates = np.array(coordinates, dtype="uint8")
+        coordinates = np.array(coordinates, dtype="float")
         coordinates = shift_coordinates(
             coordinates, center_x, center_y, width, height, ratio
         )

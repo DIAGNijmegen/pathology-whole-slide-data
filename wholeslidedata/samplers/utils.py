@@ -68,9 +68,13 @@ def one_hot_decoding(mask, base=-1):
     new_mask[xs, ys] = lbl.astype(int) + 1
     return new_mask + base
 
+def clean_weights(masks):
+    return np.clip(np.sum(masks, axis=-1), 0, 1)
+
 
 def shift_coordinates(coordinates, center_x, center_y, width, height, ratio):
-    coordinates -= np.array([center_x, center_y])
+    coordinates = np.array(coordinates, dtype='float')
+    coordinates -= np.array([center_x, center_y], dtype='float')
     coordinates /= ratio
     coordinates += np.array([width // 2, height // 2])
     return coordinates
