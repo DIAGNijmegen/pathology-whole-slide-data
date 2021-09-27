@@ -1,8 +1,10 @@
 # Changelog
 ---
+### **Upcoming** (0.0.9)
 
-### **Upcoming** (0.0.8)
-
+### (0.0.8) (**Latests**)
+**bug fixes:**
+ - detection sampling bugs 
 
 ### (0.0.7) (**Latests**)
 
