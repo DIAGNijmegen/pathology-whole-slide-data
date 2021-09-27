@@ -1,7 +1,7 @@
 ### WholeSlideData
 -----
 
-This repository is under construction
+*This repository contains alpha software*
 
 
 ### Installation
