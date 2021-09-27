@@ -2,7 +2,7 @@
 ---
 ### **Upcoming** (0.0.9)
 
-### 0.0.8 (**Latests**)
+### 0.0.8 (**Latest**)
 **bug fixes:**
  - detection sampling bugs 
 
