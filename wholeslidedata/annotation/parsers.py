@@ -450,85 +450,85 @@ class AsapAnnotationParser(AnnotationParser):
 #         return []
 
 
-# @AnnotationParser.register(("mask",))
-# class MaskAnnotationParser(AnnotationParser):
-#     def __init__(
-#         self,
-#         shape=(1024, 1024),
-#         labels=("tissue",),
-#         out_labels=None,
-#         scaling=1.0,
-#         sample_annotation_types=("Polygon",),
-#         backend="asap",
-#     ):
-#         super().__init__(labels, out_labels, scaling, sample_annotation_types)
-#         self._shape = np.array(shape)
-#         self._backend = backend
+@AnnotationParser.register(("mask",))
+class MaskAnnotationParser(AnnotationParser):
+    def __init__(
+        self,
+        shape=(1024, 1024),
+        labels=("tissue",),
+        out_labels=None,
+        scaling=1.0,
+        sample_annotation_types=("Polygon",),
+        backend="asap",
+    ):
+        super().__init__(labels, out_labels, scaling, (), sample_annotation_types)
+        self._shape = np.array(shape)
+        self._backend = backend
 
-#     def _get_annotation_structures(self, path, labels):
-#         mask = WholeSlideImage(path, backend=self._backend)
-#         spacing = mask.spacings[0]
-#         x_dims, y_dims = mask.shapes[0]
+    def _get_annotation_structures(self, path, labels):
+        mask = WholeSlideImage(path, backend=self._backend)
+        spacing = mask.spacings[0]
+        x_dims, y_dims = mask.shapes[0]
 
-#         x_shift, y_shift = map(int, self._shape // self._scaling)
-#         annotation_index = 0
-#         for y_pos in range(0, y_dims, y_shift):
-#             for x_pos in range(0, x_dims, x_shift):
-#                 mask_patch = mask.get_patch(
-#                     x_pos,
-#                     y_pos,
-#                     x_shift,
-#                     y_shift,
-#                     spacing=spacing,
-#                     center=False,
-#                 )
-#                 labels, counts = self._check_mask(mask_patch)
-#                 if labels is not None and counts is not None:
-#                     for label, pixels in zip(labels, counts):
-#                         if label in self._labels.values:
-#                             coordinates = self._get_coordinates(
-#                                 x_pos, y_pos, x_shift, y_shift
-#                             )
-#                             annotation_structure = AnnotationStructure(
-#                                 annotation_path=path,
-#                                 index=annotation_index,
-#                                 type="polygon",
-#                                 label=self._labels.get_label_by_value(label).name,
-#                                 coordinates=coordinates,
-#                                 holes=[],
-#                             )
-#                             annotation_index += 1
-#                             yield annotation_structure
+        x_shift, y_shift = map(int, self._shape // self._scaling)
+        annotation_index = 0
+        for y_pos in range(0, y_dims, y_shift):
+            for x_pos in range(0, x_dims, x_shift):
+                mask_patch = mask.get_patch(
+                    x_pos,
+                    y_pos,
+                    x_shift,
+                    y_shift,
+                    spacing=spacing,
+                    center=False,
+                )
+                labels, counts = self._check_mask(mask_patch)
+                if labels is not None and counts is not None:
+                    for label, pixels in zip(labels, counts):
+                        if label in self._labels.values:
+                            coordinates = self._get_coordinates(
+                                x_pos, y_pos, x_shift, y_shift
+                            )
+                            annotation_structure = AnnotationStructure(
+                                annotation_path=path,
+                                index=annotation_index,
+                                type="polygon",
+                                label=self._labels.get_label_by_value(label).name,
+                                coordinates=coordinates,
+                                holes=[],
+                            )
+                            annotation_index += 1
+                            yield annotation_structure
 
-#         mask.close()
-#         mask = None
-#         del mask
+        mask.close()
+        mask = None
+        del mask
 
-#     def _get_coordinates(self, x_pos, y_pos, x_shift, y_shift) -> List:
+    def _get_coordinates(self, x_pos, y_pos, x_shift, y_shift) -> List:
 
-#         return [
-#             (x_pos, y_pos),
-#             (
-#                 x_pos,
-#                 y_pos + y_shift,
-#             ),
-#             (
-#                 x_pos + x_shift,
-#                 y_pos + y_shift,
-#             ),
-#             (
-#                 x_pos + x_shift,
-#                 y_pos,
-#             ),
-#         ]
+        return [
+            (x_pos, y_pos),
+            (
+                x_pos,
+                y_pos + y_shift,
+            ),
+            (
+                x_pos + x_shift,
+                y_pos + y_shift,
+            ),
+            (
+                x_pos + x_shift,
+                y_pos,
+            ),
+        ]
 
-#     def _check_mask(self, mask_patch):
-#         if np.any(mask_patch):
-#             return np.unique(mask_patch, return_counts=True)
-#         return None, None
+    def _check_mask(self, mask_patch):
+        if np.any(mask_patch):
+            return np.unique(mask_patch, return_counts=True)
+        return None, None
 
-#     def _get_annotation_type(self, structure) -> str:
-#         return "polygon"
+    def _get_annotation_type(self, structure) -> str:
+        return "polygon"
 
-#     def _get_label_name(self, structure) -> str:
-#         return "tissue"
+    def _get_label_name(self, structure) -> str:
+        return "tissue"
