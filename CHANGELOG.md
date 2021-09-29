@@ -1,10 +1,12 @@
 # Changelog
 ---
+### **Upcoming** (0.0.9)
 
-### **Upcoming** (0.0.8)
+### 0.0.8 (**Latest**)
+**bug fixes:**
+ - detection sampling bugs 
 
-
-### (0.0.7) (**Latests**)
+### 0.0.7
 
 **new features:**
  - detection support
@@ -16,7 +18,7 @@
  - fixed: copy data failed on first trial when using multiple cpus
 
 ---
-## 0.0.6 
+### 0.0.6 
  - No change log or this version
 ---
 ### 0.0.5
