@@ -191,7 +191,7 @@ def plot_patch(patch, axes=None, title="my_patch", output_size=None, alpha=1.0):
 
 def plot_mask(
     mask,
-    color_values=["black", "red", "blue", "green", "orange"],
+    color_values=["red", "blue", "green", "orange"],
     axes=None,
     title="",
     output_shape=None,
@@ -202,18 +202,19 @@ def plot_mask(
         mask = fit_data(mask, output_shape)
 
     cmap = colors.ListedColormap(color_values)
+    bounds=list(range(len(color_values)+1))
+    norm = colors.BoundaryNorm(bounds, cmap.N, clip=True)
 
     if axes is None:
         _, ax = plt.subplots(1, 1)
     else:
         ax = axes
 
-    ax.imshow(mask, cmap=cmap, alpha=alpha)
+    ax.imshow(mask, cmap=cmap, norm=norm, interpolation='nearest')
     ax.set_title(title)
 
     if axes is None:
         plt.show()
-
 
 def get_one_hot_label_name(label_map):
     def get_label(label):
