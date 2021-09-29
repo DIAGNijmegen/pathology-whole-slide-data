@@ -24,6 +24,7 @@ class WholeSlideAnnotation():
         renamed_labels=None,
         parser="asap",
         sort_by_overlay_index=False,
+        ignore_overlap=True
     ):
         self._annotation_path = Path(annotation_path)
         
@@ -34,18 +35,21 @@ class WholeSlideAnnotation():
         self._annotations = self._annotation_parser.read(annotation_path, labels, renamed_labels)
 
         self._sort_by_overlay_index = sort_by_overlay_index
+        self._labels = annotation_utils.get_labels_in_annotations(self.annotations)
+        sample_labels = self._annotation_parser.sample_label_names 
 
         self._sampling_annotations = [
             annotation
             for annotation_type in self._annotation_parser.sample_annotation_types
             for annotation in self._annotations
-            if isinstance(annotation, annotation_type) and annotation.label.name in self._annotation_parser.sample_label_names
+            if isinstance(annotation, annotation_type) and (not sample_labels or annotation.label.name in sample_labels)
         ]
+        
+        if not ignore_overlap:
+            self._set_overlapping_annotations()
 
-        self._set_overlapping_annotations()
         WholeSlideAnnotation.STREE[self] = STRtree(self._annotations)
 
-        self._labels = annotation_utils.get_labels_in_annotations(self.annotations)
 
     @property
     def path(self):

@@ -57,19 +57,17 @@ class TopLeftPointSampler(PointSampler):
 
 @PointSampler.register(('random', ))
 class RandomPointSampler(PointSampler):
-    """ samples points randomly within a polygon with a max limit of 100 otherwise it will return the centroid """
-
-    MAX_ITTERATION = 1000
-
-    def __init__(self, seed: int, strict_point_sampling: bool):
+    """ samples points randomly within a polygon with a max limit of 10 otherwise it will return the centroid """
+    def __init__(self, seed: int, strict_point_sampling: bool, max_search_iteration=10):
         super().__init__(seed=seed)
         self._strict_point_sampling = strict_point_sampling
+        self._max_search_iteration = max_search_iteration
 
     def sample(self, annotation: Annotation, width: int, height: int, ratio: float):
         if isinstance(annotation, Point):
             return annotation.xy[0][0], annotation.xy[1][0]
 
-        for _ in range(RandomPointSampler.MAX_ITTERATION):
+        for _ in range(self._max_search_iteration):
             x_min, y_min, x_max, y_max = annotation.bounds
             x_c, y_c = self._rng.uniform(x_min, x_max), self._rng.uniform(y_min, y_max)
             center_shape = (
@@ -87,7 +85,7 @@ class RandomPointSampler(PointSampler):
 
         if self._strict_point_sampling:
             warn(
-                f"\nCan not find valid point in annotation. \nstrict_point_sampling={self._strict_point_sampling}, \ndata_source={annotation.path}, \nindex={annotation.index} \ndownsampling={ratio}, \nshape=({width}, {height})., return centroid..."
+                f"\nCan not find valid point in annotation. \nstrict_point_sampling={self._strict_point_sampling}, \annotation_path={annotation.path}, \nindex={annotation.index} \ndownsampling={ratio}, \nshape=({width}, {height})., return centroid..."
             )
         return np.array(annotation.centroid)
 

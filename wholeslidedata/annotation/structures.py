@@ -99,7 +99,7 @@ class Polygon(geometry.Polygon, Annotation):
     def __init__(self, index, annotation_path, label, coordinates, holes=[]):
         Annotation.__init__(self, index, annotation_path, label)
         geometry.Polygon.__init__(self, coordinates, holes)
-        self._coordinates = coordinates
+        self._coordinates = np.array(self.exterior.xy).T 
         self._holes = holes
         self._overlapping_annotations = []
 
@@ -167,7 +167,7 @@ class Polygon(geometry.Polygon, Annotation):
         self._overlapping_annotations.extend(overlap_annotations)
 
     def coordinates(self):
-        return np.array(self.exterior.xy).T 
+        return self._coordinates
 
     def holes(self):
         return [np.array(interior.xy).T for interior in self.interiors]
