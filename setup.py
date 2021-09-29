@@ -2,11 +2,11 @@ from setuptools import setup, find_packages
 
 setup(
     name="wholeslidedata",
-    version="0.0.7",
+    version="0.0.9",
     author="Mart van Rijthoven",
     author_email="mart.vanrijthoven@gmail.com",
     package_data={"": ["*.yml"]},
-    packages=find_packages(exclude=("tests", "notebooks")),
+    packages=find_packages(exclude=("tests", "notebooks", "docs")),
     url="http://pypi.python.org/pypi/wholeslidedata/",
     license="LICENSE.txt",
     install_requires=[
