@@ -123,7 +123,7 @@ class SegmentationPatchLabelSampler(PatchLabelSampler):
         mask = np.zeros((height, width), dtype=np.int32)
         # set labels of all selected annotations
         for annotation in annotations:
-            coordinates = annotation.coordinates()
+            coordinates = np.copy(annotation.coordinates())
             coordinates = shift_coordinates(
                 coordinates, center_x, center_y, width, height, ratio
             )

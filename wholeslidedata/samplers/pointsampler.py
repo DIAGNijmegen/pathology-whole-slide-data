@@ -85,7 +85,7 @@ class RandomPointSampler(PointSampler):
 
         if self._strict_point_sampling:
             warn(
-                f"\nCan not find valid point in annotation. \nstrict_point_sampling={self._strict_point_sampling}, \annotation_path={annotation.path}, \nindex={annotation.index} \ndownsampling={ratio}, \nshape=({width}, {height})., return centroid..."
+                f"\nCan not find valid point in annotation returning centroid..."
             )
         return np.array(annotation.centroid)
 
