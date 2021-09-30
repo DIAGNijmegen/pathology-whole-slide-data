@@ -1,13 +1,23 @@
 # Changelog
 ---
-### **Upcoming** (0.0.9)
 
-### 0.0.8 (**Latest**)
+### **Upcoming** (0.0.11)
+
+
+### 0.0.10 (**Latest**)
 **bug fixes:**
- - detection sampling bugs 
+ - fixed sampling bugs
+
+### 0.0.9
+**new features:**
+ - increase speed sampling
+
+
+### 0.0.8 
+**bug fixes:**
+ - fixed detection sampling bugs 
 
 ### 0.0.7
-
 **new features:**
  - detection support
  - pyvips image backend support
