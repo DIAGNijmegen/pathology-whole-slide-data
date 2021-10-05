@@ -2,13 +2,13 @@ name: docs
 
 on:
   push:
-    branches: [master]
+    branches: [main]
     paths:
       - "wholeslidedata/**"
       - "docs/**"
       - .github/workflows/docs.yml
   pull_request:
-    branches: [master]
+    branches: [main]
     paths:
       - "wholeslidedata/**"
       - "docs/**"
