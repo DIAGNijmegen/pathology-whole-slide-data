@@ -47,7 +47,6 @@ extensions = [
     # 'IPython.sphinxext.ipython_console_highlighting'
 ]
 
-
 autosummary_generate = True  # Turn on sphinx.ext.autosummary
 autoclass_content = "both"  # Add __init__ doc (ie. params) to class summaries
 html_show_sourcelink = False  # Remove 'view source code' from top of page (for html, not python)
