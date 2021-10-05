@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>wholeslidedata.source.utils &#8212; wholeslidedata 0.0.10 documentation</title>
+    
+  <link href="../../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/blank.css" />
+    
+  <link rel="preload" as="script" href="../../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="../../../index.html">
+<p class="title">wholeslidedata</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../index.html">
+  Home page
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <h1>Source code for wholeslidedata.source.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">from</span> <span class="nn">wholeslidedata.mode</span> <span class="kn">import</span> <span class="n">WholeSlideMode</span>
+<span class="kn">from</span> <span class="nn">wholeslidedata.source.files</span> <span class="kn">import</span> <span class="n">WholeSlideFile</span>
+
+
+<div class="viewcode-block" id="NoSourceFilesInFolderError"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.source.utils.NoSourceFilesInFolderError.html#wholeslidedata.source.utils.NoSourceFilesInFolderError">[docs]</a><span class="k">class</span> <span class="nc">NoSourceFilesInFolderError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="o">...</span></div>
+
+
+<div class="viewcode-block" id="NonExistentModeInYamlSource"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.source.utils.NonExistentModeInYamlSource.html#wholeslidedata.source.utils.NonExistentModeInYamlSource">[docs]</a><span class="k">class</span> <span class="nc">NonExistentModeInYamlSource</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="o">...</span></div>
+
+
+<div class="viewcode-block" id="factory_sources_from_paths"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.source.utils.factory_sources_from_paths.html#wholeslidedata.source.utils.factory_sources_from_paths">[docs]</a><span class="k">def</span> <span class="nf">factory_sources_from_paths</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">],</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">WholeSlideMode</span><span class="p">],</span>
+    <span class="n">paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">filters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">excludes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">paths</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">paths</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="n">exclude</span> <span class="ow">in</span> <span class="n">path</span> <span class="k">for</span> <span class="n">exclude</span> <span class="ow">in</span> <span class="n">excludes</span><span class="p">]):</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">filters</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">([</span><span class="nb">filter</span> <span class="ow">in</span> <span class="n">path</span> <span class="k">for</span> <span class="nb">filter</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">]):</span>
+            <span class="k">continue</span>
+        <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">cls</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">files</span></div>
+
+
+<div class="viewcode-block" id="factory_sources_from_path"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.source.utils.factory_sources_from_path.html#wholeslidedata.source.utils.factory_sources_from_path">[docs]</a><span class="k">def</span> <span class="nf">factory_sources_from_path</span><span class="p">(</span><span class="n">file_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">class_type</span> <span class="o">=</span> <span class="n">WholeSlideFile</span><span class="o">.</span><span class="n">get_registrant</span><span class="p">(</span><span class="n">file_type</span><span class="p">)</span>
+    <span class="n">sources</span> <span class="o">=</span> <span class="n">factory_sources_from_paths</span><span class="p">(</span><span class="n">class_type</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="p">[</span><span class="n">path</span><span class="p">],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">sources</span> <span class="o">==</span> <span class="p">[]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;not a valid source </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sources</span></div>
+
+
+<div class="viewcode-block" id="whole_slide_files_from_folder_factory"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.source.utils.whole_slide_files_from_folder_factory.html#wholeslidedata.source.utils.whole_slide_files_from_folder_factory">[docs]</a><span class="k">def</span> <span class="nf">whole_slide_files_from_folder_factory</span><span class="p">(</span>
+    <span class="n">folder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
+    <span class="n">file_type</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">],</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+    <span class="n">filters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">excludes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+
+    <span class="n">class_type</span> <span class="o">=</span> <span class="n">WholeSlideFile</span><span class="o">.</span><span class="n">get_registrant</span><span class="p">(</span><span class="n">file_type</span><span class="p">)</span>
+    <span class="n">all_sources</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">extension</span> <span class="ow">in</span> <span class="n">class_type</span><span class="o">.</span><span class="n">EXTENSIONS</span><span class="o">.</span><span class="n">names</span><span class="p">():</span>
+        <span class="n">paths</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">folder</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">&quot;*.&quot;</span> <span class="o">+</span> <span class="n">extension</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">recursive</span>
+            <span class="k">else</span> <span class="n">folder</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span> <span class="o">+</span> <span class="n">extension</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">sources</span> <span class="o">=</span> <span class="n">factory_sources_from_paths</span><span class="p">(</span>
+            <span class="n">class_type</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">paths</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">excludes</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+        <span class="n">all_sources</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">sources</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">all_sources</span> <span class="o">==</span> <span class="p">[]:</span>
+        <span class="k">raise</span> <span class="n">NoSourceFilesInFolderError</span><span class="p">(</span><span class="n">class_type</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">excludes</span><span class="p">,</span> <span class="n">folder</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">all_sources</span></div>
+
+
+<div class="viewcode-block" id="sources_from_yaml_factory"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.source.utils.sources_from_yaml_factory.html#wholeslidedata.source.utils.sources_from_yaml_factory">[docs]</a><span class="k">def</span> <span class="nf">sources_from_yaml_factory</span><span class="p">(</span>
+    <span class="n">yaml_source</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
+    <span class="n">file_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+    <span class="n">filters</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">excludes</span><span class="o">=</span><span class="p">[],</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+
+    <span class="n">class_type</span> <span class="o">=</span> <span class="n">WholeSlideFile</span><span class="o">.</span><span class="n">get_registrant</span><span class="p">(</span><span class="n">file_type</span><span class="p">)</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">yaml_source</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">yaml_source</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">yaml_source</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">yaml_source</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">FullLoader</span><span class="p">)</span>
+
+    <span class="n">paths</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NonExistentModeInYamlSource</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;mode &#39;</span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s2">&#39; not in data </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2"> in: </span><span class="si">{</span><span class="n">yaml_source</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="n">mode</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">file_type</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+            <span class="n">paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="n">file_type</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;path&quot;</span><span class="p">))</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="n">file_type</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">factory_sources_from_paths</span><span class="p">(</span>
+        <span class="n">class_type</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">paths</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">excludes</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span></div>
+    
+
+
+<div class="viewcode-block" id="factory_sources_from_json"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.source.utils.factory_sources_from_json.html#wholeslidedata.source.utils.factory_sources_from_json">[docs]</a><span class="k">def</span> <span class="nf">factory_sources_from_json</span><span class="p">():</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="factory_sources_from_csv"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.source.utils.factory_sources_from_csv.html#wholeslidedata.source.utils.factory_sources_from_csv">[docs]</a><span class="k">def</span> <span class="nf">factory_sources_from_csv</span><span class="p">():</span>
+    <span class="k">pass</span></div>
+</pre></div>
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2021, Mart van Rijthoven.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

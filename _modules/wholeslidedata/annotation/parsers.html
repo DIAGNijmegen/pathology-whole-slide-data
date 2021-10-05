@@ -1,0 +1,695 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>wholeslidedata.annotation.parsers &#8212; wholeslidedata 0.0.10 documentation</title>
+    
+  <link href="../../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/blank.css" />
+    
+  <link rel="preload" as="script" href="../../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="../../../index.html">
+<p class="title">wholeslidedata</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../index.html">
+  Home page
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <h1>Source code for wholeslidedata.annotation.parsers</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">abc</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ET</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">creationism.registration.factory</span> <span class="kn">import</span> <span class="n">RegistrantFactory</span>
+<span class="kn">from</span> <span class="nn">shapely</span> <span class="kn">import</span> <span class="n">affinity</span><span class="p">,</span> <span class="n">geometry</span>
+<span class="kn">from</span> <span class="nn">wholeslidedata.annotation.structures</span> <span class="kn">import</span> <span class="n">Annotation</span><span class="p">,</span> <span class="n">AnnotationStructure</span>
+<span class="kn">from</span> <span class="nn">wholeslidedata.labels</span> <span class="kn">import</span> <span class="n">Label</span><span class="p">,</span> <span class="n">Labels</span>
+
+<span class="kn">from</span> <span class="nn">..image.wholeslideimage</span> <span class="kn">import</span> <span class="n">WholeSlideImage</span>
+
+
+<div class="viewcode-block" id="InvalidAnnotationParserError"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.parsers.InvalidAnnotationParserError.html#wholeslidedata.annotation.parsers.InvalidAnnotationParserError">[docs]</a><span class="k">class</span> <span class="nc">InvalidAnnotationParserError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="AnnotationParser"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.parsers.AnnotationParser.html#wholeslidedata.annotation.parsers.AnnotationParser">[docs]</a><span class="k">class</span> <span class="nc">AnnotationParser</span><span class="p">(</span><span class="n">RegistrantFactory</span><span class="p">):</span>
+<div class="viewcode-block" id="AnnotationParser.__init__"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.parsers.AnnotationParser.html#wholeslidedata.annotation.parsers.AnnotationParser.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">renamed_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">scaling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">sample_label_names</span><span class="o">=</span><span class="p">(),</span>
+        <span class="n">sample_annotation_types</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;polygon&quot;</span><span class="p">,),</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span> <span class="o">=</span> <span class="n">labels</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span> <span class="o">=</span> <span class="n">Labels</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_labels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_renamed_labels</span> <span class="o">=</span> <span class="n">renamed_labels</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renamed_labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_renamed_labels</span> <span class="o">=</span> <span class="n">Labels</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_renamed_labels</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scaling</span> <span class="o">=</span> <span class="n">scaling</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sample_annotation_types</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Annotation</span><span class="o">.</span><span class="n">get_registrant</span><span class="p">(</span><span class="n">annotation_type</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">annotation_type</span> <span class="ow">in</span> <span class="n">sample_annotation_types</span>
+        <span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sample_label_names</span> <span class="o">=</span> <span class="n">sample_label_names</span></div>
+
+    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">annotation_path</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">renamed_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Annotation</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_available_labels</span><span class="p">(</span><span class="n">annotation_path</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">labels</span> <span class="o">=</span> <span class="n">Labels</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">renamed_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">renamed_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renamed_labels</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">renamed_labels</span> <span class="o">=</span> <span class="n">Labels</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">renamed_labels</span><span class="p">)</span>
+
+        <span class="n">annotations</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">annotation_structure</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_annotation_structures</span><span class="p">(</span>
+            <span class="n">annotation_path</span><span class="p">,</span> <span class="n">labels</span>
+        <span class="p">):</span>
+            <span class="n">annotation</span> <span class="o">=</span> <span class="n">Annotation</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                <span class="n">annotation_structure</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">renamed_labels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scaling</span>
+            <span class="p">)</span>
+
+            <span class="n">annotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">annotation</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">annotations</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sample_annotation_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_annotation_types</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sample_label_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_label_names</span>
+
+    <span class="k">def</span> <span class="nf">get_available_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">annotation_structure</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_annotation_structures</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">annotation_structure</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Labels</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span>
+
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_get_annotation_structures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">structure</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">AnnotationStructure</span><span class="p">]:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_get_annotation_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">structure</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_get_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">structure</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_get_label_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">structure</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="AsapAnnotationParser"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.parsers.AsapAnnotationParser.html#wholeslidedata.annotation.parsers.AsapAnnotationParser">[docs]</a><span class="nd">@AnnotationParser</span><span class="o">.</span><span class="n">register</span><span class="p">((</span><span class="s2">&quot;asap&quot;</span><span class="p">,))</span>
+<span class="k">class</span> <span class="nc">AsapAnnotationParser</span><span class="p">(</span><span class="n">AnnotationParser</span><span class="p">):</span>
+
+    <span class="n">TYPES</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;polygon&quot;</span><span class="p">:</span> <span class="s2">&quot;polygon&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;rectangle&quot;</span><span class="p">:</span> <span class="s2">&quot;polygon&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dot&quot;</span><span class="p">:</span> <span class="s2">&quot;point&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;spline&quot;</span><span class="p">:</span> <span class="s2">&quot;polygon&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pointset&quot;</span><span class="p">:</span> <span class="s2">&quot;point&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">get_available_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">annotation_structure</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_annotation_structures</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">annotation_structure</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Labels</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_get_annotation_structures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">opened_annotation</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
+        <span class="n">annotation_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">opened_annotation</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">parent</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;Annotation&quot;</span><span class="p">:</span>
+                    <span class="n">annotation_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_annotation_type</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+                    <span class="n">annotation_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_label_name</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+                    <span class="n">annotation_coordinates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_coordinates</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+                    <span class="n">annotation_holes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_holes</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">annotation_label</span> <span class="ow">or</span> <span class="p">(</span>
+                        <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">annotation_label</span><span class="p">,</span> <span class="n">Label</span><span class="p">)</span>
+                        <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">Labels</span><span class="p">)</span>
+                        <span class="ow">and</span> <span class="n">annotation_label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">labels</span><span class="o">.</span><span class="n">names</span>
+                    <span class="p">):</span>
+                        <span class="k">continue</span>
+
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="nb">isinstance</span><span class="p">(</span><span class="n">annotation_label</span><span class="p">,</span> <span class="n">Label</span><span class="p">)</span>
+                        <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">Labels</span><span class="p">)</span>
+                        <span class="ow">and</span> <span class="n">annotation_label</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">labels</span><span class="o">.</span><span class="n">names</span>
+                    <span class="p">):</span>
+                        <span class="k">continue</span>
+
+                    <span class="k">if</span> <span class="n">annotation_type</span> <span class="o">==</span> <span class="s2">&quot;pointset&quot;</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">coordinate</span> <span class="ow">in</span> <span class="n">annotation_coordinates</span><span class="p">:</span>
+                            <span class="n">annotation_structure</span> <span class="o">=</span> <span class="n">AnnotationStructure</span><span class="p">(</span>
+                                <span class="n">annotation_path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span>
+                                <span class="n">index</span><span class="o">=</span><span class="n">annotation_index</span><span class="p">,</span>
+                                <span class="nb">type</span><span class="o">=</span><span class="n">AsapAnnotationParser</span><span class="o">.</span><span class="n">TYPES</span><span class="p">[</span><span class="n">annotation_type</span><span class="p">],</span>
+                                <span class="n">label</span><span class="o">=</span><span class="n">annotation_label</span><span class="p">,</span>
+                                <span class="n">coordinates</span><span class="o">=</span><span class="p">[</span><span class="n">coordinate</span><span class="p">],</span>
+                                <span class="n">holes</span><span class="o">=</span><span class="n">annotation_holes</span><span class="p">,</span>
+                            <span class="p">)</span>
+                            <span class="n">annotation_index</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="k">yield</span> <span class="n">annotation_structure</span>
+                        <span class="k">continue</span>
+                    <span class="n">annotation_structure</span> <span class="o">=</span> <span class="n">AnnotationStructure</span><span class="p">(</span>
+                        <span class="n">annotation_path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span>
+                        <span class="n">index</span><span class="o">=</span><span class="n">annotation_index</span><span class="p">,</span>
+                        <span class="nb">type</span><span class="o">=</span><span class="n">AsapAnnotationParser</span><span class="o">.</span><span class="n">TYPES</span><span class="p">[</span><span class="n">annotation_type</span><span class="p">],</span>
+                        <span class="n">label</span><span class="o">=</span><span class="n">annotation_label</span><span class="p">,</span>
+                        <span class="n">coordinates</span><span class="o">=</span><span class="n">annotation_coordinates</span><span class="p">,</span>
+                        <span class="n">holes</span><span class="o">=</span><span class="n">annotation_holes</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">annotation_index</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">yield</span> <span class="n">annotation_structure</span>
+
+    <span class="k">def</span> <span class="nf">_get_annotation_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">structure</span><span class="p">):</span>
+        <span class="n">annotation_type</span> <span class="o">=</span> <span class="n">structure</span><span class="o">.</span><span class="n">attrib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">annotation_type</span> <span class="ow">in</span> <span class="n">AsapAnnotationParser</span><span class="o">.</span><span class="n">TYPES</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">annotation_type</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unsupported annotation type in </span><span class="si">{</span><span class="n">structure</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_label_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">annotation_structure</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">Labels</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_annotation_type</span><span class="p">(</span><span class="n">annotation_structure</span><span class="p">)</span> <span class="ow">in</span> <span class="n">labels</span><span class="o">.</span><span class="n">names</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_annotation_type</span><span class="p">(</span><span class="n">annotation_structure</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">annotation_structure</span><span class="o">.</span><span class="n">attrib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PartOfGroup&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_get_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">annotation_structure</span><span class="p">):</span>
+        <span class="n">coordinates</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">coordinate_structure</span> <span class="o">=</span> <span class="n">annotation_structure</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">coordinate</span> <span class="ow">in</span> <span class="n">coordinate_structure</span><span class="p">:</span>
+            <span class="n">coordinates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="nb">float</span><span class="p">(</span><span class="n">coordinate</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">)),</span>
+                    <span class="nb">float</span><span class="p">(</span><span class="n">coordinate</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Y&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">)),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">coordinates</span>
+
+    <span class="k">def</span> <span class="nf">_get_holes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">annotation_structure</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<span class="c1"># @AnnotationParser.register((&quot;hnasap&quot;,))</span>
+<span class="c1"># class HnAsapAnnotationParser(AsapAnnotationParser):</span>
+<span class="c1">#     def _get_label_name(self, annotation_structure, labels) -&gt; str:</span>
+<span class="c1">#         if (</span>
+<span class="c1">#             isinstance(labels, Labels)</span>
+<span class="c1">#             and self._get_annotation_type(annotation_structure) in labels.names</span>
+<span class="c1">#         ):</span>
+<span class="c1">#             return self._get_annotation_type(annotation_structure).strip()</span>
+
+<span class="c1">#         label_name = annotation_structure.attrib.get(&quot;PartOfGroup&quot;).lower().strip()</span>
+<span class="c1">#         label_and_weight = label_name.split(&quot;-weight=&quot;)</span>
+<span class="c1">#         if len(label_and_weight) == 1:</span>
+<span class="c1">#             return label_and_weight[0]</span>
+
+<span class="c1">#         label_name, weight = label_and_weight</span>
+<span class="c1">#         return Label(label_name, labels.map[label_name], weight=float(weight))</span>
+
+
+<span class="c1"># @AnnotationParser.register((&quot;virtum&quot;,))</span>
+<span class="c1"># class VirtumAnnotationParser(AnnotationParser):</span>
+<span class="c1">#     def get_available_labels(self, path):</span>
+<span class="c1">#         labels = []</span>
+<span class="c1">#         for annotation_structure in self._get_annotation_structures(path, None):</span>
+<span class="c1">#             labels.append(annotation_structure.label)</span>
+<span class="c1">#         return Labels.create(set(labels))</span>
+
+<span class="c1">#     def _get_annotation_structures(self, path, labels):</span>
+<span class="c1">#         tree = ET.parse(path)</span>
+<span class="c1">#         vsannotations = []</span>
+<span class="c1">#         name_to_group = {}</span>
+<span class="c1">#         for parent in tree.getroot():</span>
+<span class="c1">#             for child in parent:</span>
+<span class="c1">#                 if child.tag == &quot;Annotation&quot;:</span>
+<span class="c1">#                     vsannotations.append(child)</span>
+<span class="c1">#                 if child.tag == &quot;Group&quot;:</span>
+<span class="c1">#                     group = child</span>
+<span class="c1">#                     name = group.attrib.get(&quot;Name&quot;)</span>
+<span class="c1">#                     if name and &quot;tissue&quot; not in name and &quot;holes&quot; not in name:</span>
+<span class="c1">#                         partofgroup = group.attrib.get(&quot;PartOfGroup&quot;)</span>
+<span class="c1">#                         if partofgroup != &quot;None&quot;:</span>
+<span class="c1">#                             name_to_group[group.attrib.get(&quot;Name&quot;)] = group.attrib.get(</span>
+<span class="c1">#                                 &quot;PartOfGroup&quot;</span>
+<span class="c1">#                             )</span>
+
+<span class="c1">#         opened_annotation = []</span>
+<span class="c1">#         for idx, annotation in enumerate(vsannotations):</span>
+<span class="c1">#             label_reference = &quot;_&quot;.join(</span>
+<span class="c1">#                 annotation.attrib.get(&quot;PartOfGroup&quot;).split(&quot;_&quot;)[:-1]</span>
+<span class="c1">#             )</span>
+<span class="c1">#             hole = annotation.attrib.get(&quot;PartOfGroup&quot;).split(&quot;_&quot;)[-1] == &quot;holes&quot;</span>
+<span class="c1">#             if hole:</span>
+<span class="c1">#                 label = &quot;hole&quot;</span>
+<span class="c1">#             elif label_reference:</span>
+<span class="c1">#                 label = name_to_group[label_reference].lower()</span>
+<span class="c1">#             else:</span>
+<span class="c1">#                 label = annotation.attrib.get(&quot;PartOfGroup&quot;).lower()</span>
+
+<span class="c1">#             coordinates = []</span>
+<span class="c1">#             for coords in annotation:</span>
+<span class="c1">#                 coordinates = [</span>
+<span class="c1">#                     (</span>
+<span class="c1">#                         float(coord.get(&quot;X&quot;).replace(&quot;,&quot;, &quot;.&quot;)),</span>
+<span class="c1">#                         float(coord.get(&quot;Y&quot;).replace(&quot;,&quot;, &quot;.&quot;)),</span>
+<span class="c1">#                     )</span>
+<span class="c1">#                     for coord in coords</span>
+<span class="c1">#                 ]</span>
+<span class="c1">#             annotation_type = self._get_annotation_type(annotation)</span>
+
+<span class="c1">#             if annotation_type != &quot;dot&quot; and label == &quot;hole&quot;:</span>
+<span class="c1">#                 opened_annotation[-1][&quot;holes&quot;].append(coordinates)</span>
+<span class="c1">#             else:</span>
+<span class="c1">#                 opened_annotation.append(</span>
+<span class="c1">#                     {</span>
+<span class="c1">#                         &quot;type&quot;: annotation_type,</span>
+<span class="c1">#                         &quot;label&quot;: label,</span>
+<span class="c1">#                         &quot;coordinates&quot;: coordinates,</span>
+<span class="c1">#                         &quot;holes&quot;: [],</span>
+<span class="c1">#                     }</span>
+<span class="c1">#                 )</span>
+
+<span class="c1">#         for annotation_index, annotation in enumerate(opened_annotation):</span>
+<span class="c1">#             annotation_label = annotation[&quot;label&quot;]</span>
+
+<span class="c1">#             if not annotation_label or (</span>
+<span class="c1">#                 not isinstance(annotation_label, Label)</span>
+<span class="c1">#                 and isinstance(labels, Labels)</span>
+<span class="c1">#                 and annotation_label not in labels.names</span>
+<span class="c1">#             ):</span>
+<span class="c1">#                 continue</span>
+<span class="c1">#             annotation_structure = AnnotationStructure(</span>
+<span class="c1">#                 annotation_path=path,</span>
+<span class="c1">#                 index=annotation_index,</span>
+<span class="c1">#                 type=AsapAnnotationParser.TYPES[annotation[&quot;type&quot;]],</span>
+<span class="c1">#                 label=annotation[&quot;label&quot;],</span>
+<span class="c1">#                 coordinates=annotation[&quot;coordinates&quot;],</span>
+<span class="c1">#                 holes=annotation[&quot;holes&quot;],</span>
+<span class="c1">#             )</span>
+
+<span class="c1">#             yield annotation_structure</span>
+
+<span class="c1">#     def _get_annotation_type(self, structure):</span>
+<span class="c1">#         annotation_type = structure.attrib.get(&quot;Type&quot;).lower()</span>
+<span class="c1">#         if annotation_type in AsapAnnotationParser.TYPES:</span>
+<span class="c1">#             return annotation_type</span>
+<span class="c1">#         raise ValueError(f&quot;unsupported annotation type in {structure}&quot;)</span>
+
+<span class="c1">#     def _get_label_name(self, annotation_structure, labels) -&gt; str:</span>
+<span class="c1">#         if (</span>
+<span class="c1">#             isinstance(labels, Labels)</span>
+<span class="c1">#             and self._get_annotation_type(annotation_structure) in labels.names</span>
+<span class="c1">#         ):</span>
+<span class="c1">#             return self._get_annotation_type(annotation_structure).strip()</span>
+<span class="c1">#         return annotation_structure.attrib.get(&quot;PartOfGroup&quot;).lower().strip()</span>
+
+<span class="c1">#     def _get_coordinates(self, annotation_structure) -&gt; List:</span>
+<span class="c1">#         return annotation_structure[&quot;coordinates&quot;]</span>
+
+<span class="c1">#     def _get_holes(self, annotation_structure):</span>
+<span class="c1">#         return annotation_structure[&quot;holes&quot;]</span>
+
+
+<span class="c1"># @AnnotationParser.register((&quot;qupath&quot;,))</span>
+<span class="c1"># class QuPathParser(AnnotationParser):</span>
+<span class="c1">#     def _get_annotation_structures(self, path, labels) -&gt; Iterator:</span>
+<span class="c1">#         with open(path) as json_file:</span>
+<span class="c1">#             json_annotations = json.load(json_file)</span>
+
+<span class="c1">#         annotation_index = 0</span>
+<span class="c1">#         for json_annotation in json_annotations:</span>
+
+<span class="c1">#             try:</span>
+<span class="c1">#                 label_name = json_annotation[&quot;properties&quot;][&quot;classification&quot;][</span>
+<span class="c1">#                     &quot;name&quot;</span>
+<span class="c1">#                 ].lower()</span>
+<span class="c1">#             except:</span>
+<span class="c1">#                 label_name = None</span>
+
+<span class="c1">#             if not label_name or (</span>
+<span class="c1">#                 not isinstance(label_name, Label)</span>
+<span class="c1">#                 and isinstance(labels, Labels)</span>
+<span class="c1">#                 and label_name not in labels.names</span>
+<span class="c1">#             ):</span>
+<span class="c1">#                 continue</span>
+
+<span class="c1">#             if json_annotation[&quot;geometry&quot;][&quot;type&quot;].lower() == &quot;polygon&quot;:</span>
+<span class="c1">#                 annotation_structure = AnnotationStructure(</span>
+<span class="c1">#                     annotation_path=path,</span>
+<span class="c1">#                     index=annotation_index,</span>
+<span class="c1">#                     type=&quot;polygon&quot;,</span>
+<span class="c1">#                     label=label_name,</span>
+<span class="c1">#                     coordinates=json_annotation[&quot;geometry&quot;][&quot;coordinates&quot;][0],</span>
+<span class="c1">#                     holes=[],</span>
+<span class="c1">#                 )</span>
+<span class="c1">#                 annotation_index += 1</span>
+<span class="c1">#                 yield annotation_structure</span>
+
+<span class="c1">#             if json_annotation[&quot;geometry&quot;][&quot;type&quot;].lower() == &quot;multipolygon&quot;:</span>
+<span class="c1">#                 for coords in json_annotation[&quot;geometry&quot;][&quot;coordinates&quot;]:</span>
+<span class="c1">#                     annotation_structure = AnnotationStructure(</span>
+<span class="c1">#                         annotation_path=path,</span>
+<span class="c1">#                         index=annotation_index,</span>
+<span class="c1">#                         type=&quot;polygon&quot;,</span>
+<span class="c1">#                         label=label_name,</span>
+<span class="c1">#                         coordinates=coords[0],</span>
+<span class="c1">#                         holes=[],</span>
+<span class="c1">#                     )</span>
+<span class="c1">#                     annotation_index += 1</span>
+<span class="c1">#                     yield annotation_structure</span>
+
+<span class="c1">#     def _get_annotation_type(self, annotation_structure) -&gt; str:</span>
+<span class="c1">#         return &quot;polygon&quot;</span>
+
+<span class="c1">#     def _get_coordinates(self, annotation_structure) -&gt; List:</span>
+<span class="c1">#         return annotation_structure[&quot;coordinates&quot;]</span>
+
+<span class="c1">#     def _get_label_name(self, annotation_structure) -&gt; str:</span>
+<span class="c1">#         return annotation_structure[&quot;label_name&quot;]</span>
+
+<span class="c1">#     def _get_holes(self, annotation_structure):</span>
+<span class="c1">#         return []</span>
+
+
+<span class="c1"># @AnnotationParser.register((&quot;htk&quot;,))</span>
+<span class="c1"># class HTKAnnotationParser(AnnotationParser):</span>
+<span class="c1">#     def _get_annotation_structures(self, path, labels) -&gt; Iterator:</span>
+<span class="c1">#         with open(path) as json_file:</span>
+<span class="c1">#             json_annotations = json.load(json_file)</span>
+
+<span class="c1">#         annotation_index = 0</span>
+<span class="c1">#         for json_annotation in json_annotations:</span>
+<span class="c1">#             for annotation_structure in json_annotation[&quot;annotation&quot;][&quot;elements&quot;]:</span>
+<span class="c1">#                 annotation_coordinates = self._get_coordinates(annotation_structure)</span>
+<span class="c1">#                 annotation_type = self._get_annotation_type(annotation_structure)</span>
+<span class="c1">#                 annotation_label = self._get_label_name(annotation_structure)</span>
+<span class="c1">#                 annotation_holes = self._get_holes(annotation_structure)</span>
+
+<span class="c1">#                 if not annotation_label or (</span>
+<span class="c1">#                     not isinstance(annotation_label, Label)</span>
+<span class="c1">#                     and isinstance(labels, Labels)</span>
+<span class="c1">#                     and annotation_label not in labels.names</span>
+<span class="c1">#                 ):</span>
+<span class="c1">#                     continue</span>
+
+<span class="c1">#                 annotation_structure = AnnotationStructure(</span>
+<span class="c1">#                     annotation_path=path,</span>
+<span class="c1">#                     index=annotation_index,</span>
+<span class="c1">#                     type=AsapAnnotationParser.TYPES[annotation_type],</span>
+<span class="c1">#                     label=annotation_label,</span>
+<span class="c1">#                     coordinates=annotation_coordinates,</span>
+<span class="c1">#                     holes=annotation_holes,</span>
+<span class="c1">#                 )</span>
+<span class="c1">#                 annotation_index += 1</span>
+<span class="c1">#                 yield annotation_structure</span>
+
+<span class="c1">#     def _get_annotation_type(self, annotation_structure) -&gt; str:</span>
+<span class="c1">#         return &quot;polygon&quot;</span>
+
+<span class="c1">#     def _get_coordinates(self, annotation_structure) -&gt; List:</span>
+<span class="c1">#         # parse rectangle</span>
+<span class="c1">#         if annotation_structure[&quot;type&quot;] == &quot;rectangle&quot;:</span>
+<span class="c1">#             center = annotation_structure[&quot;center&quot;]</span>
+<span class="c1">#             width = annotation_structure[&quot;width&quot;]</span>
+<span class="c1">#             height = annotation_structure[&quot;height&quot;]</span>
+
+<span class="c1">#             x1, y1 = (</span>
+<span class="c1">#                 center[0] - width // 2,</span>
+<span class="c1">#                 center[1] - height // 2,</span>
+<span class="c1">#             )</span>
+<span class="c1">#             x2, y2 = (</span>
+<span class="c1">#                 x1 + annotation_structure[&quot;width&quot;],</span>
+<span class="c1">#                 y1 + annotation_structure[&quot;height&quot;],</span>
+<span class="c1">#             )</span>
+<span class="c1">#             coordinates = [[x1, y1], [x1, y2], [x2, y2], [x2, y1]]</span>
+<span class="c1">#             if (</span>
+<span class="c1">#                 &quot;rotation&quot; in annotation_structure</span>
+<span class="c1">#                 and annotation_structure[&quot;rotation&quot;] != 0</span>
+<span class="c1">#             ):</span>
+<span class="c1">#                 rotation = annotation_structure[&quot;rotation&quot;]</span>
+<span class="c1">#                 p = geometry.Polygon(coordinates)</span>
+
+<span class="c1">#                 rotated = affinity.rotate(p, rotation, use_radians=True)</span>
+<span class="c1">#                 coordinates = list(rotated.exterior.coords)[:-1]  # first=last point</span>
+<span class="c1">#             return coordinates</span>
+
+<span class="c1">#         # parse polygon</span>
+<span class="c1">#         points = annotation_structure[&quot;points&quot;]</span>
+<span class="c1">#         coordinates = [point[:2] for point in points]</span>
+<span class="c1">#         return coordinates</span>
+
+<span class="c1">#     def _get_label_name(self, annotation_structure) -&gt; str:</span>
+<span class="c1">#         if &quot;label&quot; not in annotation_structure:</span>
+<span class="c1">#             return None</span>
+<span class="c1">#         return annotation_structure[&quot;label&quot;][&quot;value&quot;]</span>
+
+<span class="c1">#     def _get_holes(self, annotation_structure):</span>
+<span class="c1">#         return []</span>
+
+
+<div class="viewcode-block" id="MaskAnnotationParser"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.parsers.MaskAnnotationParser.html#wholeslidedata.annotation.parsers.MaskAnnotationParser">[docs]</a><span class="nd">@AnnotationParser</span><span class="o">.</span><span class="n">register</span><span class="p">((</span><span class="s2">&quot;mask&quot;</span><span class="p">,))</span>
+<span class="k">class</span> <span class="nc">MaskAnnotationParser</span><span class="p">(</span><span class="n">AnnotationParser</span><span class="p">):</span>
+<div class="viewcode-block" id="MaskAnnotationParser.__init__"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.parsers.MaskAnnotationParser.html#wholeslidedata.annotation.parsers.MaskAnnotationParser.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">1024</span><span class="p">),</span>
+        <span class="n">labels</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;tissue&quot;</span><span class="p">,),</span>
+        <span class="n">out_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">scaling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">sample_annotation_types</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Polygon&quot;</span><span class="p">,),</span>
+        <span class="n">backend</span><span class="o">=</span><span class="s2">&quot;asap&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">out_labels</span><span class="p">,</span> <span class="n">scaling</span><span class="p">,</span> <span class="p">(),</span> <span class="n">sample_annotation_types</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span> <span class="o">=</span> <span class="n">backend</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_annotation_structures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">WholeSlideImage</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="p">)</span>
+        <span class="n">spacing</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">spacings</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">x_dims</span><span class="p">,</span> <span class="n">y_dims</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">shapes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">x_shift</span><span class="p">,</span> <span class="n">y_shift</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scaling</span><span class="p">)</span>
+        <span class="n">annotation_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">y_pos</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y_dims</span><span class="p">,</span> <span class="n">y_shift</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">x_pos</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x_dims</span><span class="p">,</span> <span class="n">x_shift</span><span class="p">):</span>
+                <span class="n">mask_patch</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">get_patch</span><span class="p">(</span>
+                    <span class="n">x_pos</span><span class="p">,</span>
+                    <span class="n">y_pos</span><span class="p">,</span>
+                    <span class="n">x_shift</span><span class="p">,</span>
+                    <span class="n">y_shift</span><span class="p">,</span>
+                    <span class="n">spacing</span><span class="o">=</span><span class="n">spacing</span><span class="p">,</span>
+                    <span class="n">center</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">labels</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_mask</span><span class="p">(</span><span class="n">mask_patch</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">counts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">pixels</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">counts</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+                            <span class="n">coordinates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_coordinates</span><span class="p">(</span>
+                                <span class="n">x_pos</span><span class="p">,</span> <span class="n">y_pos</span><span class="p">,</span> <span class="n">x_shift</span><span class="p">,</span> <span class="n">y_shift</span>
+                            <span class="p">)</span>
+                            <span class="n">annotation_structure</span> <span class="o">=</span> <span class="n">AnnotationStructure</span><span class="p">(</span>
+                                <span class="n">annotation_path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span>
+                                <span class="n">index</span><span class="o">=</span><span class="n">annotation_index</span><span class="p">,</span>
+                                <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;polygon&quot;</span><span class="p">,</span>
+                                <span class="n">label</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_labels</span><span class="o">.</span><span class="n">get_label_by_value</span><span class="p">(</span><span class="n">label</span><span class="p">)</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                <span class="n">coordinates</span><span class="o">=</span><span class="n">coordinates</span><span class="p">,</span>
+                                <span class="n">holes</span><span class="o">=</span><span class="p">[],</span>
+                            <span class="p">)</span>
+                            <span class="n">annotation_index</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="k">yield</span> <span class="n">annotation_structure</span>
+
+        <span class="n">mask</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">del</span> <span class="n">mask</span>
+
+    <span class="k">def</span> <span class="nf">_get_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_pos</span><span class="p">,</span> <span class="n">y_pos</span><span class="p">,</span> <span class="n">x_shift</span><span class="p">,</span> <span class="n">y_shift</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">x_pos</span><span class="p">,</span> <span class="n">y_pos</span><span class="p">),</span>
+            <span class="p">(</span>
+                <span class="n">x_pos</span><span class="p">,</span>
+                <span class="n">y_pos</span> <span class="o">+</span> <span class="n">y_shift</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="n">x_pos</span> <span class="o">+</span> <span class="n">x_shift</span><span class="p">,</span>
+                <span class="n">y_pos</span> <span class="o">+</span> <span class="n">y_shift</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="p">(</span>
+                <span class="n">x_pos</span> <span class="o">+</span> <span class="n">x_shift</span><span class="p">,</span>
+                <span class="n">y_pos</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_check_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask_patch</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">mask_patch</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">mask_patch</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_get_annotation_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">structure</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;polygon&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_get_label_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">structure</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;tissue&quot;</span></div>
+</pre></div>
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2021, Mart van Rijthoven.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
