@@ -42,9 +42,9 @@ class CenterPointSampler(PointSampler):
         self,
         sample_reference,
     ):
-        return self._dataset.get_annotation_from_reference(
+        return ShapelyPoint(self._dataset.get_annotation_from_reference(
             sample_reference=sample_reference
-        ).center
+        ).center)
 
 
 @PointSampler.register(("centroid",))
@@ -114,68 +114,33 @@ class UniformPointSampler(PointSampler):
             return affine_transform(ShapelyPoint(1 - x, 1 - y), transform)
         return affine_transform(ShapelyPoint(x, y), transform)
 
-@PointSampler.register(("fastuniform",))
-class FastUniformPointSampler(PointSampler):
-    def __init__(self, seed: int, dataset: DataSet, size=10, simplify=2.0):
+
+# strict reduce polygon size into inner reverse dilate
+
+@PointSampler.register(('random', ))
+class RandomPointSampler(PointSampler):
+    """ samples points randomly within a polygon with a max limit of 10 otherwise it will return the centroid """
+    def __init__(self, seed: int, dataset, sample_size=100):
         super().__init__(seed=seed, dataset=dataset)
-        print('initializing fast uniform point sampler')
         self._sample_map = {}
         for sample_references in dataset.sample_references.values():
             for sample_reference in sample_references:
                 annotation = self._dataset.get_annotation_from_reference(
                     sample_reference=sample_reference
                 )
-                prepped = prep(annotation.buffer(0).simplify(simplify))
-                min_x, min_y, max_x, max_y = annotation.bounds
+                size = max(1, int(annotation.area/(100*100)))
+                self._sample_map[sample_reference]= (annotation.bounds, prep(annotation), size, annotation.representative_point())
 
-                points = []
-                for _ in range(int(annotation.buffer(0).simplify(simplify).area/(size*size))):
-                    points.append(ShapelyPoint([random.uniform(min_x, max_x), random.uniform(min_y, max_y)]))
-
-                filtered_points = list(filter(prepped.contains, points))
-                self._sample_map[sample_reference] = filtered_points
-        print('DONE (initializing fast uniform point sampler)')
     def sample(self, sample_reference):
-        filtered_points = self._sample_map[sample_reference]
-        return filtered_points[self._rng.randint(len(filtered_points))]
+        bounds, prepped_annotation, size, representative_point = self._sample_map[sample_reference]
+        x_min, y_min, x_max, y_max = bounds
 
-
-# strict reduce polygon size into inner reverse dilate
-
-# @PointSampler.register(('random', ))
-# class RandomPointSampler(PointSampler):
-#     """ samples points randomly within a polygon with a max limit of 10 otherwise it will return the centroid """
-#     def __init__(self, seed: int, strict_point_sampling: bool, max_search_iteration=10):
-#         super().__init__(seed=seed, dataset=None)
-#         self._strict_point_sampling = strict_point_sampling
-#         self._max_search_iteration = max_search_iteration
-
-#     def sample(self, annotation: Annotation, width: int, height: int, ratio: float):
-#         if isinstance(annotation, Point):
-#             return annotation.xy[0][0], annotation.xy[1][0]
-
-#         for _ in range(self._max_search_iteration):
-#             x_min, y_min, x_max, y_max = annotation.bounds
-#             x_c, y_c = self._rng.uniform(x_min, x_max), self._rng.uniform(y_min, y_max)
-#             center_shape = (
-#                 geometry.box(
-#                     x_c - (width * ratio) // 2,
-#                     y_c - (height * ratio) // 2,
-#                     x_c + (width * ratio) // 2,
-#                     y_c + (height * ratio) // 2,
-#                 )
-#                 if self._strict_point_sampling
-#                 else geometry.Point(x_c, y_c)
-#             )
-#             if annotation.contains(center_shape):
-#                 return x_c, y_c
-
-#         if self._strict_point_sampling:
-#             warn(
-#                 f"\nCan not find valid point in annotation. \nstrict_point_sampling={self._strict_point_sampling}, \annotation_path={annotation.path}, \nindex={annotation.index} \ndownsampling={ratio}, \nshape=({width}, {height})., return centroid..."
-#             )
-#         return np.array(annotation.centroid)
-
+        x_c, y_c = np.random.uniform(x_min, x_max, size=size), np.random.uniform(y_min, y_max, size=size)
+        points = [ShapelyPoint(x, y) for x, y in zip(x_c, y_c)]
+        fpoints = list(filter(prepped_annotation.contains, points))
+        if len(fpoints) == 0:
+            return representative_point
+        return fpoints[0]
 
 # @PointSampler.register(('point_density', ))
 # class PointDensityPointSampler(PointSampler):

@@ -54,7 +54,7 @@ def create_batch_iterator(
     mode,
     batches=None,
     update=False,
-    info=False,
+    info=True,
     presets=(),
     cpus=1,
     context="fork",
