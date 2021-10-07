@@ -24,16 +24,9 @@ class SampleSampler:
         self._patch_label_sampler = patch_label_sampler
         self._sample_callbacks = sample_callbacks
 
-    def sample(self, wsi: WholeSlideImage, wsa: WholeSlideAnnotation, annotation: Annotation):
+    def sample(self, wsi: WholeSlideImage, wsa: WholeSlideAnnotation, annotation: Annotation, point):
         x_samples = self._init_samples()
         y_samples = self._init_samples()
-
-        point = self._point_sampler.sample(
-            annotation,
-            list(self._batch_shape.values())[0][-1][0],
-            list(self._batch_shape.values())[0][-1][1],
-            wsi.get_downsampling_from_spacing(list(self._batch_shape.keys())[-1]),
-        )
 
         for pixel_spacing, shapes in self._batch_shape.items():
             for patch_shape in shapes:

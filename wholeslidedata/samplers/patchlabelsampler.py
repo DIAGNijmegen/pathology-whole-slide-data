@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 from skimage.transform import rescale
 from wholeslidedata.annotation.structures import Point, Polygon
-from wholeslidedata.annotation.utils import shift_coordinates
+from wholeslidedata.samplers.utils import shift_coordinates
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.samplers.sampler import Sampler
 
@@ -111,7 +111,7 @@ class SegmentationPatchLabelSampler(PatchLabelSampler):
         size,
         ratio,
     ):
-        center_x, center_y = point
+        center_x, center_y = point.x, point.y
         width, height = size
 
         # get annotations

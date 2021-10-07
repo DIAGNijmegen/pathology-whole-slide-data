@@ -24,9 +24,10 @@ class BatchCommander(Commander):
         self._batch_size=build["wholeslidedata"][mode]["batch_shape"].batch_size
         self._label_sampler=build["wholeslidedata"][mode]["label_sampler"]
         self._annotation_sampler=build["wholeslidedata"][mode]["annotation_sampler"]
+        self._point_sampler=build["wholeslidedata"][mode]["point_sampler"]
 
         self._batch_reference_sampler = BatchReferenceSampler(
-            self._dataset, self._batch_size, self._label_sampler, self._annotation_sampler
+            self._dataset, self._batch_size, self._label_sampler, self._annotation_sampler, self._point_sampler
         )
 
     def create_message(self) -> dict:

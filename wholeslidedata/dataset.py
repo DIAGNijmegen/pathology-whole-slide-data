@@ -15,6 +15,7 @@ from wholeslidedata.source.files import WholeSlideAnnotationFile, WholeSlideImag
 
 @dataclass(frozen=True)
 class WholeSlideSampleReference:
+    file_index: int
     file_key: str
     wsa_index: int
     annotation_index: int
@@ -38,7 +39,9 @@ class DataSet(UserDict):
         self._renamed_labels = renamed_labels
 
         self.data = self._open(self._associations)
-        self._sample_references, self._all_sample_references = self._init_samples(self.data)
+        self._sample_references, self._all_sample_references = self._init_samples(
+            self.data
+        )
         self._all_labels = Labels.create(list(self._all_sample_references.keys()))
         self._sample_labels = Labels.create(list(self._sample_references.keys()))
 
@@ -60,11 +63,16 @@ class DataSet(UserDict):
     def get_image_from_reference(self, sample_reference: WholeSlideSampleReference):
         return self[sample_reference.file_key]["images"][0]
 
+    def get_wsa_from_reference(self, sample_reference: WholeSlideSampleReference):
+        return self[sample_reference.file_key]["annotations"][
+            sample_reference.wsa_index
+        ]
+
     def get_annotation_from_reference(
         self, sample_reference: WholeSlideSampleReference
     ):
-        return self[sample_reference.file_key]["annotations"][
-            sample_reference.wsa_index
+        return self.get_wsa_from_reference(sample_reference=sample_reference).annotations[
+            sample_reference.annotation_index
         ]
 
     @abc.abstractmethod
@@ -100,6 +108,7 @@ class DataSet(UserDict):
 
     def _log(self):
         pass
+
     #     if multifilelogging._LoggingState.log_path:
     #         logger = multifilelogging.create_logger(f"dataset-{self.mode.name}")
     #         logger.info(
@@ -165,13 +174,14 @@ class WholeSlideDataSet(DataSet):
     def _init_samples(self, data) -> Tuple:
         samples = {}
         all_samples = {}
-        for file_key, values in data.items():
+        for file_index, (file_key, values) in enumerate(data.items()):
             for wsa_index, wsa in values[
                 WholeSlideDataSet.ANNOTATIONS_IDENTIFIER
             ].items():
                 for annotation_index, annotation in enumerate(wsa.sampling_annotations):
                     samples.setdefault(annotation.label.name, []).append(
                         WholeSlideSampleReference(
+                            file_index=file_index,
                             file_key=file_key,
                             wsa_index=wsa_index,
                             annotation_index=annotation_index,
@@ -181,6 +191,7 @@ class WholeSlideDataSet(DataSet):
                 for annotation_index, annotation in enumerate(wsa.annotations):
                     all_samples.setdefault(annotation.label.name, []).append(
                         WholeSlideSampleReference(
+                            file_index=file_index,
                             file_key=file_key,
                             wsa_index=wsa_index,
                             annotation_index=annotation_index,

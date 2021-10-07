@@ -18,7 +18,8 @@ class PatchSampler:
 
         patch = np.array(
             wsi.get_patch(
-                *point,
+                point.x,
+                point.y,
                 *size,
                 pixel_spacing,
                 center=self._center,

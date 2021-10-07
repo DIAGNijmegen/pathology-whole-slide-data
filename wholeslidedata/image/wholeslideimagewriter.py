@@ -112,7 +112,7 @@ class WholeSlideImageWriter(Writer, MultiResolutionImageWriter):
 
 
 class WholeSlideMaskWriter(WholeSlideImageWriter):
-    def __init__(self, callbacks=(PredictionTileCallback(),), suffix='.tif'):
+    def __init__(self, callbacks=(), suffix='.tif'):
         super().__init__(callbacks=callbacks)
         self._suffix = suffix
 

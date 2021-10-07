@@ -25,10 +25,11 @@ class BatchSampler:
         x_batch = []
         y_batch = []
         for sample_reference in batch_data:
-            wsi = self._dataset.get_image_from_reference(sample_reference)
-            wsa = self._dataset.get_annotation_from_reference(sample_reference)
-            annotation = wsa.sampling_annotations[sample_reference.annotation_index]
-            x_samples, y_samples = self._sampler.sample(wsi, wsa, annotation)
+            
+            wsi = self._dataset.get_image_from_reference(sample_reference['reference'])
+            wsa = self._dataset.get_wsa_from_reference(sample_reference['reference'])
+            annotation = wsa.sampling_annotations[sample_reference['reference'].annotation_index]
+            x_samples, y_samples = self._sampler.sample(wsi, wsa, annotation, sample_reference['point'])
 
             # append samples to batch
             x_batch.append(x_samples)
