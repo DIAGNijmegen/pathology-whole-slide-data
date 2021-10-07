@@ -5,6 +5,7 @@ from wholeslidedata.buffer.batchcommander import BatchCommander
 from wholeslidedata.buffer.batchproducer import BatchProducer
 from wholeslidedata.buffer.utils import get_buffer_shape
 from wholeslidedata.configuration.config import WholeSlideDataConfiguration
+from wholeslidedata.samplers.structures import BatchShape, Sample
 from multiprocessing import Queue
 
 
@@ -89,4 +90,17 @@ def create_batch_iterator(
         context=context,
         deterministic=determinstic,
         buffer_iterator_class=iterator_class,
+    )
+
+
+def create_sample(
+    self, sample_data, image_path, label_name, index, point, pixel_spacing
+):
+    return Sample(
+        sample_data,
+        image_path,
+        label_name,
+        index,
+        point,
+        pixel_spacing,
     )

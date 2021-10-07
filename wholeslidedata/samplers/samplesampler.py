@@ -5,7 +5,7 @@ from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.samplers.patchlabelsampler import PatchLabelSampler
 from wholeslidedata.samplers.patchsampler import PatchSampler
-from wholeslidedata.samplers.structures import BatchShape, Sample
+from wholeslidedata.samplers.structures import BatchShape
 
 
 class SampleSampler:
@@ -21,7 +21,7 @@ class SampleSampler:
         self._patch_label_sampler = patch_label_sampler
         self._sample_callbacks = sample_callbacks
 
-    def sample(self, wsi: WholeSlideImage, wsa: WholeSlideAnnotation, annotation: Annotation, point):
+    def sample(self, wsi: WholeSlideImage, wsa: WholeSlideAnnotation, point):
         x_samples = self._init_samples()
         y_samples = self._init_samples()
 
@@ -29,7 +29,7 @@ class SampleSampler:
             for patch_shape in shapes:
 
                 x_sample, y_sample = self._sample(
-                    point, wsi, wsa, annotation, patch_shape, pixel_spacing
+                    point, wsi, wsa, patch_shape, pixel_spacing
                 )
 
                 x_samples[pixel_spacing][tuple(patch_shape)] = x_sample
@@ -44,7 +44,6 @@ class SampleSampler:
         point: tuple,
         wsi: WholeSlideImage,
         wsa: WholeSlideAnnotation,
-        annotation: Annotation,
         patch_shape,
         pixel_spacing: float,
     ):
@@ -60,25 +59,7 @@ class SampleSampler:
         )
 
         patch, label = self._apply_sample_callbacks(patch, label)
-
-        x_sample = self._create_sample(
-            patch,
-            wsi.path,
-            annotation.label.name,
-            annotation.index,
-            point,
-            wsi.get_real_spacing(pixel_spacing),
-        )
-        y_sample = self._create_sample(
-            label,
-            wsi.path,
-            annotation.label.name,
-            annotation.index,
-            point,
-            wsi.get_real_spacing(pixel_spacing),
-        )
-
-        return x_sample, y_sample
+        return patch, label
 
     def _init_samples(self):
         return {
@@ -86,17 +67,6 @@ class SampleSampler:
             for spacing, sizes in self._batch_shape.items()
         }
 
-    def _create_sample(
-        self, sample_data, image_path, label_name, index, point, pixel_spacing
-    ):
-        return Sample(
-            sample_data,
-            image_path,
-            label_name,
-            index,
-            point,
-            pixel_spacing,
-        )
 
     def _reset_sample_callbacks(self):
         if self._sample_callbacks:
@@ -109,3 +79,6 @@ class SampleSampler:
                 patch, mask = callback(patch, mask)
 
         return patch, mask
+
+    def reset(self):
+        pass
