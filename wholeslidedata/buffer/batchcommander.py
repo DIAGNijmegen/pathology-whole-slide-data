@@ -7,13 +7,14 @@ MESSAGE_SAMPLE_REFERENCES_IDENTIFIER = 'sample_references'
 MESSAGE_INDEX_IDENTIFIER = 'index'
 
 class BatchCommander(Commander):
-    def __init__(self, config_builder, mode, reset_index=None, update_queue=None):
+    def __init__(self, config_builder, mode, reset_index=None, update_queue=None, info_queue=None):
         self._config_builder = config_builder
         self._mode = mode
         self._batch_reference_sampler = None
         self._reset_index = reset_index
         self._index = 0
         self._update_queue =update_queue
+        self._info_queue = info_queue
 
     def build(self):
         mode = self._mode

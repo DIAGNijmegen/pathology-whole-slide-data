@@ -126,7 +126,7 @@ class FastUniformPointSampler(PointSampler):
                     sample_reference=sample_reference
                 )
                 prepped = prep(annotation.buffer(0).simplify(simplify))
-                min_x, min_y, max_x, max_y = annotation.buffer(0).simplify(simplify).bounds
+                min_x, min_y, max_x, max_y = annotation.bounds
 
                 points = []
                 for _ in range(int(annotation.buffer(0).simplify(simplify).area/(size*size))):

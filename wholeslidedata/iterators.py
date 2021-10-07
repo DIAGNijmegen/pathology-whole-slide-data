@@ -10,11 +10,12 @@ from multiprocessing import Queue
 
 
 class BatchIterator(BufferIterator):
-    def __init__(self, builds, batch_size, index=0, stop_index=None, *args, **kwargs):
+    def __init__(self, builds, batch_size, index=0, stop_index=None, info_queue=None, *args, **kwargs):
         self._builds = builds
         self._batch_size = batch_size
         self._index = index
         self._stop_index = stop_index
+        self._info_queue = info_queue
         super().__init__(*args, **kwargs)
 
     @property
@@ -24,7 +25,12 @@ class BatchIterator(BufferIterator):
     def __next__(self):
         if self._stop():
             raise StopIteration()
-        return super().__next__()
+
+        x_batch, y_batch = super().__next__()
+        if self._info_queue is not None:
+            info = self._info_queue.get()
+            return x_batch, y_batch, info
+        return x_batch, y_batch
 
     def _stop(self) -> bool:
         if self._stop_index is None:
@@ -48,6 +54,7 @@ def create_batch_iterator(
     mode,
     batches=None,
     update=False,
+    info=False,
     presets=(),
     cpus=1,
     context="fork",
@@ -63,12 +70,14 @@ def create_batch_iterator(
     )
 
     update_queue = Queue() if update else None
+    info_queue = Queue() if info else None
 
     batch_commander = BatchCommander(
         config_builder=config_builder,
         mode=mode,
         reset_index=batches,
         update_queue=update_queue,
+        info_queue=info_queue,
     )
 
     batch_producer = BatchProducer(
@@ -83,6 +92,7 @@ def create_batch_iterator(
         builds=builds,
         batch_size=batch_size,
         stop_index=batches,
+        info_queue=info_queue,
         cpus=cpus,
         buffer_shapes=buffer_shapes,
         commander=batch_commander,
