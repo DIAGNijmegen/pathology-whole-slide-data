@@ -5,21 +5,18 @@ from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.samplers.patchlabelsampler import PatchLabelSampler
 from wholeslidedata.samplers.patchsampler import PatchSampler
-from wholeslidedata.samplers.pointsampler import PointSampler
 from wholeslidedata.samplers.structures import BatchShape, Sample
 
 
 class SampleSampler:
     def __init__(
         self,
-        point_sampler: PointSampler,
         patch_sampler: PatchSampler,
         patch_label_sampler: PatchLabelSampler,
         batch_shape: BatchShape,
         sample_callbacks=None,
     ):
         self._batch_shape = batch_shape
-        self._point_sampler = point_sampler
         self._patch_sampler = patch_sampler
         self._patch_label_sampler = patch_label_sampler
         self._sample_callbacks = sample_callbacks
@@ -112,6 +109,3 @@ class SampleSampler:
                 patch, mask = callback(patch, mask)
 
         return patch, mask
-
-    def reset(self):
-        self._point_sampler.reset()
