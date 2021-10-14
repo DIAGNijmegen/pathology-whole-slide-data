@@ -520,6 +520,7 @@ class MaskAnnotationParser(AnnotationParser):
                 x_pos + x_shift,
                 y_pos,
             ),
+            (x_pos, y_pos),
         ]
 
     def _check_mask(self, mask_patch):

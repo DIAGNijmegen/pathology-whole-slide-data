@@ -5,7 +5,8 @@ from queue import Empty
 MESSAGE_MODE_IDENTIFIER = 'mode'
 MESSAGE_SAMPLE_REFERENCES_IDENTIFIER = 'sample_references'
 MESSAGE_INDEX_IDENTIFIER = 'index'
-
+import time
+import copy
 class BatchCommander(Commander):
     def __init__(self, config_builder, mode, reset_index=None, update_queue=None, info_queue=None):
         self._config_builder = config_builder
@@ -41,7 +42,9 @@ class BatchCommander(Commander):
             MESSAGE_SAMPLE_REFERENCES_IDENTIFIER: sample_references,
             MESSAGE_INDEX_IDENTIFIER: self._index,
         }
-        self._index += 1  
+        if self._info_queue:
+            self._info_queue.put(copy.deepcopy(message))
+        self._index += 1 
         return message
 
     def _update(self):

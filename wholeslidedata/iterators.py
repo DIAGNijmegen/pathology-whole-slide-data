@@ -52,9 +52,9 @@ class BatchIterator(BufferIterator):
 def create_batch_iterator(
     user_config,
     mode,
-    batches=None,
-    update=False,
-    info=True,
+    number_of_batches=None,
+    update_samplers=False,
+    return_info=True,
     presets=(),
     cpus=1,
     context="fork",
@@ -69,13 +69,16 @@ def create_batch_iterator(
         user_config=user_config, modes=(mode,), presets=presets
     )
 
-    update_queue = Queue() if update else None
-    info_queue = Queue() if info else None
+    if number_of_batches == -1:
+        number_of_batches = builds['wholeslidedata'][mode]['dataset'].annotation_counts
+
+    update_queue = Queue() if update_samplers else None
+    info_queue = Queue() if return_info else None
 
     batch_commander = BatchCommander(
         config_builder=config_builder,
         mode=mode,
-        reset_index=batches,
+        reset_index=number_of_batches,
         update_queue=update_queue,
         info_queue=info_queue,
     )
@@ -83,7 +86,7 @@ def create_batch_iterator(
     batch_producer = BatchProducer(
         config_builder=config_builder,
         mode=mode,
-        reset_index=batches,
+        reset_index=number_of_batches,
         update_queue=update_queue,
     )
     batch_size, buffer_shapes = get_buffer_shape(builds['wholeslidedata'][mode])
@@ -91,7 +94,7 @@ def create_batch_iterator(
     return buffer_iterator_factory(
         builds=builds,
         batch_size=batch_size,
-        stop_index=batches,
+        stop_index=number_of_batches,
         info_queue=info_queue,
         cpus=cpus,
         buffer_shapes=buffer_shapes,

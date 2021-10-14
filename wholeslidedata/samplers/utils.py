@@ -191,7 +191,7 @@ def plot_patch(patch, axes=None, title="my_patch", output_size=None, alpha=1.0):
 
 def plot_mask(
     mask,
-    color_values=["white", "red", "blue", "green", "orange"],
+    color_values=["white", "red", "blue", "green", "orange", 'brown', 'yellow', 'purple', 'pink', 'grey'],
     axes=None,
     title="",
     output_shape=None,

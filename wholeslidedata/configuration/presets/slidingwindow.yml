@@ -1,0 +1,31 @@
+
+default:
+  seed: 123
+
+  annotation_parser: 
+      attribute: MaskAnnotationParser
+      scaling: 4.0
+      
+  label_map: 
+      tissue: 1
+      
+  annotation_sampler:
+      attribute: OrderedAnnotationSampler
+  
+  point_sampler:
+      attribute: TopLeftPointSampler
+
+  patch_sampler:
+      center: False
+      
+  patch_label_sampler:
+      attribute: MaskPatchLabelSampler
+      image_backend: 'asap'
+      ratio: 4.0
+      center: False
+      relative: False
+  
+  batch_shape:
+      batch_size: 1
+      shape: [1222, 1222, 3]
+      spacing: 2.0

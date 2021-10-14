@@ -81,11 +81,10 @@ class AnnotationCountedLabelSampler(LabelSampler):
 
 @LabelSampler.register(('balanced', ))
 class BalancedLabelSampler(LabelSampler):
-    def __init__(self, labels: List[str], seed: int = 123, weak_reset=False, random_reset=False):
+    def __init__(self, labels: List[str], seed: int = 123, random_reset=False):
         super().__init__(labels=labels, seed=seed)
         np.random.shuffle(self._labels)
         self._labels_cycle = iter(self._labels)
-        self._weak_reset = weak_reset
         self._random_reset = random_reset
         self.reset()
 
@@ -93,15 +92,12 @@ class BalancedLabelSampler(LabelSampler):
         try:
             return next(self._labels_cycle)
         except StopIteration:
-            if self._weak_reset:
-                self._reset_weak()
-            else:
-                self.reset()
+            self._reset_weak()
             return next(self._labels_cycle)
 
     def _reset_weak(self):
-        self._rng.shuffle(self._labels)
-        self._labels_cycle = iter(self._labels)
+        labels = self._rng.permutation(self._labels)
+        self._labels_cycle = iter(labels)
 
     def reset(self):
         self.set_seed(reseed=self._random_reset)

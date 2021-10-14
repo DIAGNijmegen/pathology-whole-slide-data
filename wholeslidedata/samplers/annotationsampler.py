@@ -21,23 +21,19 @@ class AnnotationSampler(Sampler, Iterator):
         pass
 
 
-@AnnotationSampler.register(('ordered', ))
+@AnnotationSampler.register(("ordered",))
 class OrderedAnnotationSampler(AnnotationSampler):
     def __init__(self, counts_per_label, seed):
         super().__init__(counts_per_label=counts_per_label, seed=seed)
         self._counters = {label: 0 for label in self._counts_per_label.keys()}
-        self._Annotationes = {
-            label: list(range(counts))
-            for label, counts in self._counts_per_label.items()
-        }
         self.reset()
 
     def _next(self, label):
-        Annotation = self._Annotationes[label][self._counters[label]]
+        annotation_index = self._counters[label]
         self._counters[label] += 1
         if self._counters[label] == self._counts_per_label[label]:
             self._reset_label(label)
-        return Annotation
+        return annotation_index
 
     def _reset_label(self, label):
         self._counters[label] = 0
@@ -50,44 +46,41 @@ class OrderedAnnotationSampler(AnnotationSampler):
         for label in self._counts_per_label.keys():
             self._reset_label(label)
 
-@AnnotationSampler.register(('balanced', ))
+
+@AnnotationSampler.register(("balanced",))
 class BalancedAnnotationSampler(AnnotationSampler):
     def __init__(self, counts_per_label, seed, random_reset=False):
         super().__init__(counts_per_label, seed=seed)
-        self._counters = {label: 0 for label in self._counts_per_label.keys()}
-        self._Annotationes = {
-            label: list(range(counts))
-            for label, counts in self._counts_per_label.items()
+        self._counters = {
+            label: self._random_index_iterator(label)
+            for label in self._counts_per_label.keys()
         }
         self._random_reset = random_reset
         self.reset()
 
     def _next(self, label):
-        Annotation = self._Annotationes[label][self._counters[label]]
-        self._counters[label] += 1
-        if self._counters[label] == self._counts_per_label[label]:
+        try:
+            return next(self._counters[label])
+        except StopIteration:
             self._reset_label(label)
-        return Annotation
+            return next(self._counters[label])
+
+    def _random_index_iterator(self, label):
+        return iter(self._rng.permutation(range(self._counts_per_label[label])))
 
     def update(self, data):
         pass
 
     def _reset_label(self, label):
-        self._counters[label] = 0
-        self._rng.shuffle(self._Annotationes[label])
+        self._counters[label] = self._random_index_iterator(label)
 
     def reset(self):
-        self._Annotationes = {
-            label: list(range(counts))
-            for label, counts in self._counts_per_label.items()
-        }
-
         self.set_seed(reseed=self._random_reset)
         for label in self._counts_per_label.keys():
             self._reset_label(label)
 
 
-@AnnotationSampler.register(('weighted', ))
+@AnnotationSampler.register(("weighted",))
 class WeightedAnnotationSampler(AnnotationSampler):
     def __init__(
         self,
@@ -128,7 +121,7 @@ class WeightedAnnotationSampler(AnnotationSampler):
         super().set_seed()
 
 
-@AnnotationSampler.register(('area', ))
+@AnnotationSampler.register(("area",))
 class AreaAnnotationSampler(AnnotationSampler):
     def __init__(self, counts_per_label, seed, samples, weight=1.0):
         super().__init__(counts_per_label, seed=seed)

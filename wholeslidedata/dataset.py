@@ -178,23 +178,23 @@ class WholeSlideDataSet(DataSet):
             for wsa_index, wsa in values[
                 WholeSlideDataSet.ANNOTATIONS_IDENTIFIER
             ].items():
-                for annotation_index, annotation in enumerate(wsa.sampling_annotations):
+                for annotation in wsa.sampling_annotations:
                     samples.setdefault(annotation.label.name, []).append(
                         WholeSlideSampleReference(
                             file_index=file_index,
                             file_key=file_key,
                             wsa_index=wsa_index,
-                            annotation_index=annotation_index,
+                            annotation_index=annotation.index,
                         )
                     )
 
-                for annotation_index, annotation in enumerate(wsa.annotations):
+                for annotation in wsa.annotations:
                     all_samples.setdefault(annotation.label.name, []).append(
                         WholeSlideSampleReference(
                             file_index=file_index,
                             file_key=file_key,
                             wsa_index=wsa_index,
-                            annotation_index=annotation_index,
+                            annotation_index=annotation.index,
                         )
                     )
         return samples, all_samples

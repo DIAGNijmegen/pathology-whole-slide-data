@@ -1,0 +1,3 @@
+wholeslidedata:
+    default:
+        yaml_source: slidingwindowdata.yml

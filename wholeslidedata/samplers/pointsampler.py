@@ -55,9 +55,9 @@ class CentroidPointSampler(PointSampler):
         super().__init__(seed=seed, dataset=dataset)
 
     def sample(self, sample_reference):
-        return self._dataset.get_annotation_from_reference(
+        return ShapelyPoint(self._dataset.get_annotation_from_reference(
             sample_reference=sample_reference
-        ).centroid
+        ).centroid)
 
 
 @PointSampler.register(("top_left",))
@@ -68,24 +68,25 @@ class TopLeftPointSampler(PointSampler):
         super().__init__(seed=seed, dataset=dataset)
 
     def sample(self, sample_reference):
-        return self._dataset.get_annotation_from_reference(
+        return ShapelyPoint(self._dataset.get_annotation_from_reference(
             sample_reference=sample_reference
-        ).bounds[:2]
+        ).bounds[:2])
 
 
 @PointSampler.register(("uniform",))
 class UniformPointSampler(PointSampler):
-    def __init__(self, seed: int, dataset: DataSet, simplify=2.0):
+    def __init__(self, seed: int, dataset: DataSet, buffer=0, simplify=2.0):
         super().__init__(seed=seed, dataset=dataset)
-        print('initializing uniform point sampler')
         self._sample_map = {}
+        
         for sample_references in dataset.sample_references.values():
             for sample_reference in sample_references:
                 annotation = self._dataset.get_annotation_from_reference(
                     sample_reference=sample_reference
                 )
-                prepped = prep(annotation.buffer(0).simplify(simplify))
-                triangles = triangulate(annotation.buffer(0).simplify(simplify))
+            
+                prepped = prep(annotation.buffer(buffer).simplify(simplify))
+                triangles = triangulate(annotation.buffer(buffer).simplify(simplify))
 
                 tmp = {
                     tuple(triangle.centroid.coords[0]): triangle
@@ -102,12 +103,14 @@ class UniformPointSampler(PointSampler):
                     (x0, y0), (x1, y1), (x2, y2) = t.exterior.coords[:3]
                     transforms.append([x1 - x0, x2 - x0, y1 - y0, y2 - y0, x0, y0])
 
-                record = {"transforms": transforms, "areas": areas}
+                record = {"transforms": transforms, "areas": areas, 'annotation': annotation}
                 self._sample_map[sample_reference] = record
-        print('DONE (initializing fast uniform point sampler)')
         
     def sample(self, sample_reference):
         record = self._sample_map[sample_reference]
+        if len(record['transforms']) == 0:
+            return record['annotation'].representative_point()
+
         transform = random.choices(record["transforms"], weights=record["areas"], k=1)[0]
         x, y = self._rng.random(2)
         if x + y > 1:
@@ -115,12 +118,9 @@ class UniformPointSampler(PointSampler):
         return affine_transform(ShapelyPoint(x, y), transform)
 
 
-# strict reduce polygon size into inner reverse dilate
-
 @PointSampler.register(('random', ))
 class RandomPointSampler(PointSampler):
-    """ samples points randomly within a polygon with a max limit of 10 otherwise it will return the centroid """
-    def __init__(self, seed: int, dataset, sample_size=100):
+    def __init__(self, seed: int, dataset, buffer=0, sample_size=100, max_points=50):
         super().__init__(seed=seed, dataset=dataset)
         self._sample_map = {}
         for sample_references in dataset.sample_references.values():
@@ -128,14 +128,18 @@ class RandomPointSampler(PointSampler):
                 annotation = self._dataset.get_annotation_from_reference(
                     sample_reference=sample_reference
                 )
-                size = max(1, int(annotation.area/(100*100)))
-                self._sample_map[sample_reference]= (annotation.bounds, prep(annotation), size, annotation.representative_point())
+                size = max(1, min(max_points, int(annotation.area/(sample_size*sample_size))))
+
+                self._sample_map[sample_reference]= (annotation.buffer(buffer).bounds, prep(annotation.buffer(buffer)), size, annotation.representative_point())
 
     def sample(self, sample_reference):
-        bounds, prepped_annotation, size, representative_point = self._sample_map[sample_reference]
-        x_min, y_min, x_max, y_max = bounds
 
-        x_c, y_c = np.random.uniform(x_min, x_max, size=size), np.random.uniform(y_min, y_max, size=size)
+        bounds, prepped_annotation, size, representative_point = self._sample_map[sample_reference]
+        if not bounds:
+            return representative_point
+
+        x_min, y_min, x_max, y_max = bounds
+        x_c, y_c = self._rng.uniform(x_min, x_max, size=size), self._rng.uniform(y_min, y_max, size=size)
         points = [ShapelyPoint(x, y) for x, y in zip(x_c, y_c)]
         fpoints = list(filter(prepped_annotation.contains, points))
         if len(fpoints) == 0:
