@@ -472,8 +472,8 @@ class MaskAnnotationParser(AnnotationParser):
 
         x_shift, y_shift = map(int, self._shape // self._scaling)
         annotation_index = 0
-        for y_pos in range(0, y_dims, y_shift):
-            for x_pos in range(0, x_dims, x_shift):
+        for y_pos in range(0, y_dims-y_shift, y_shift):
+            for x_pos in range(0, x_dims-x_shift, x_shift):
                 mask_patch = mask.get_patch(
                     x_pos,
                     y_pos,
