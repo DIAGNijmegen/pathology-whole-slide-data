@@ -7,15 +7,17 @@ from wholeslidedata.buffer.utils import get_buffer_shape
 from wholeslidedata.configuration.config import WholeSlideDataConfiguration
 from wholeslidedata.samplers.structures import BatchShape, Sample
 from multiprocessing import Queue
-
+import math
 
 class BatchIterator(BufferIterator):
-    def __init__(self, builds, batch_size, index=0, stop_index=None, info_queue=None, *args, **kwargs):
+    def __init__(self, builds, batch_size, redundant, index=0, stop_index=None, info_queue=None, *args, **kwargs):
         self._builds = builds
         self._batch_size = batch_size
+        self._redundant = redundant
         self._index = index
         self._stop_index = stop_index
         self._info_queue = info_queue
+
         super().__init__(*args, **kwargs)
 
     @property
@@ -27,6 +29,11 @@ class BatchIterator(BufferIterator):
             raise StopIteration()
 
         x_batch, y_batch = super().__next__()
+
+        if self._index == self._stop_index-1 and self._redundant > 0:
+            x_batch = x_batch[:self._redundant]
+            y_batch = y_batch[:self._redundant]
+
         if self._info_queue is not None:
             info = self._info_queue.get()
             return x_batch, y_batch, info
@@ -69,11 +76,20 @@ def create_batch_iterator(
         user_config=user_config, modes=(mode,), presets=presets
     )
 
-    if number_of_batches == -1:
-        number_of_batches = builds['wholeslidedata'][mode]['dataset'].annotation_counts
+ 
 
     update_queue = Queue() if update_samplers else None
     info_queue = Queue() if return_info else None
+
+   
+    batch_size, buffer_shapes = get_buffer_shape(builds['wholeslidedata'][mode])
+
+    total_annotations = builds['wholeslidedata'][mode]['dataset'].annotation_counts
+    if number_of_batches == -1:
+        number_of_batches = math.ceil(total_annotations / batch_size)
+        redundant = batch_size - (total_annotations % batch_size)
+    else:
+        redundant = 0
 
     batch_commander = BatchCommander(
         config_builder=config_builder,
@@ -89,11 +105,12 @@ def create_batch_iterator(
         reset_index=number_of_batches,
         update_queue=update_queue,
     )
-    batch_size, buffer_shapes = get_buffer_shape(builds['wholeslidedata'][mode])
+
 
     return buffer_iterator_factory(
         builds=builds,
         batch_size=batch_size,
+        redundant=redundant,
         stop_index=number_of_batches,
         info_queue=info_queue,
         cpus=cpus,
