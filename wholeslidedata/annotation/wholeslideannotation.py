@@ -96,7 +96,7 @@ class WholeSlideAnnotation():
         )
         sorted_annotations = sorted(
             sorted_annotations,
-            key=lambda item: annotation_utils.Within(item),
+            key=lambda item: item.area,
             reverse=True
         )
         return sorted_annotations
