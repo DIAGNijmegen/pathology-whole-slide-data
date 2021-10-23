@@ -458,7 +458,7 @@ class MaskAnnotationParser(AnnotationParser):
         labels=("tissue",),
         out_labels=None,
         scaling=1.0,
-        sample_annotation_types=("Polygon",),
+        sample_annotation_types=("polygon",),
         backend="asap",
     ):
         super().__init__(labels, out_labels, scaling, (), sample_annotation_types)
@@ -472,8 +472,8 @@ class MaskAnnotationParser(AnnotationParser):
 
         x_shift, y_shift = map(int, self._shape // self._scaling)
         annotation_index = 0
-        for y_pos in range(0, y_dims, y_shift):
-            for x_pos in range(0, x_dims, x_shift):
+        for y_pos in range(0, y_dims-y_shift, y_shift):
+            for x_pos in range(0, x_dims-x_shift, x_shift):
                 mask_patch = mask.get_patch(
                     x_pos,
                     y_pos,
@@ -520,6 +520,7 @@ class MaskAnnotationParser(AnnotationParser):
                 x_pos + x_shift,
                 y_pos,
             ),
+            (x_pos, y_pos),
         ]
 
     def _check_mask(self, mask_patch):

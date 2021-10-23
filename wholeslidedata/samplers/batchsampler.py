@@ -15,20 +15,18 @@ class BatchSampler:
 
     def batch(self, batch_data: List[WholeSlideSampleReference], i=None):
         batch_data = self._sample_batch(batch_data, i)
-        batch = Batch(*batch_data)
         batch_data = self._apply_batch_callbacks(batch_data)
-        batch.update(batch_data)
-        return batch.data
+        return batch_data
 
     def _sample_batch(self, batch_data: List[WholeSlideSampleReference], i):
         # decalare x_batch and y_batch
         x_batch = []
         y_batch = []
         for sample_reference in batch_data:
-            wsi = self._dataset.get_image_from_reference(sample_reference)
-            wsa = self._dataset.get_annotation_from_reference(sample_reference)
-            annotation = wsa.sampling_annotations[sample_reference.annotation_index]
-            x_samples, y_samples = self._sampler.sample(wsi, wsa, annotation)
+            wsi = self._dataset.get_image_from_reference(sample_reference['reference'])
+            wsa = self._dataset.get_wsa_from_reference(sample_reference['reference'])
+            point = sample_reference['point']
+            x_samples, y_samples = self._sampler.sample(wsi, wsa, point)
 
             # append samples to batch
             x_batch.append(x_samples)

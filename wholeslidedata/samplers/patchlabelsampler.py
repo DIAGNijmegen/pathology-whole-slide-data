@@ -2,9 +2,9 @@ from typing import List, Optional
 
 import cv2
 import numpy as np
-from skimage.transform import rescale
+from skimage.transform import resize
 from wholeslidedata.annotation.structures import Point, Polygon
-from wholeslidedata.annotation.utils import shift_coordinates
+from wholeslidedata.samplers.utils import shift_coordinates
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.samplers.sampler import Sampler
 
@@ -25,7 +25,7 @@ class PatchLabelSampler(Sampler):
     def sample(
         self,
         wsa,
-        point,
+        point: Point,
         size,
         ratio,
     ):
@@ -50,9 +50,11 @@ class PatchLabelSampler(Sampler):
 
 @PatchLabelSampler.register(("mask",))
 class MaskPatchLabelSampler(PatchLabelSampler):
-    def __init__(self, image_backend, ratio):
+    def __init__(self, image_backend, ratio, center, relative):
         self._image_backend = image_backend
         self._ratio = ratio
+        self._center =center
+        self._relative = relative
 
     # annotation should be coupled to image_annotation. how?
     def sample(
@@ -62,7 +64,7 @@ class MaskPatchLabelSampler(PatchLabelSampler):
         size,
         ratio,
     ):
-        x, y = point
+        x, y = point.x, point.y
         width, height = size
         mask = WholeSlideImage(wsa.path, backend=self._image_backend)
         spacing = mask.spacings[0]
@@ -74,8 +76,8 @@ class MaskPatchLabelSampler(PatchLabelSampler):
                 int(width // self._ratio),
                 int(height // self._ratio),
                 spacing=spacing,
-                center=True,
-                relative=True,
+                center=self._center,
+                relative=self._relative,
             )
         )[..., 0]
 
@@ -85,9 +87,9 @@ class MaskPatchLabelSampler(PatchLabelSampler):
 
         # upscale
         if self._ratio > 1:
-            mask_patch = rescale(
+            mask_patch = resize(
                 mask_patch.squeeze().astype("uint8"),
-                self._ratio,
+                size,                
                 order=0,
                 preserve_range=True,
             )
@@ -111,7 +113,7 @@ class SegmentationPatchLabelSampler(PatchLabelSampler):
         size,
         ratio,
     ):
-        center_x, center_y = point
+        center_x, center_y = point.x, point.y
         width, height = size
 
         # get annotations
@@ -188,7 +190,7 @@ class DetectionPatchLabelSampler(PatchLabelSampler):
         size,
         ratio,
     ):
-        center_x, center_y = point
+        center_x, center_y = point.x, point.y
         width, height = size
 
         # Get annotations
@@ -235,10 +237,11 @@ class DetectionPatchLabelSampler(PatchLabelSampler):
         if self._point_box_sizes is not None:
             size = np.array(self._point_box_sizes[annotation.label.name])
 
-        x1 = max(0, coordinates[0] - (size // 2))
-        y1 = max(0, coordinates[1] - (size // 2))
-        x2 = min(width, coordinates[0] + (size // 2))
-        y2 = min(height, coordinates[1] + (size // 2))
+        x1 = int(max(0, coordinates[0] - (size // 2)))
+        y1 = int(max(0, coordinates[1] - (size // 2)))
+        x2 = int(min(width-1, coordinates[0] + (size // 2)))
+        y2 = int(min(height-1, coordinates[1] + (size // 2)))
+
         return x1, y1, x2, y2
 
     def _get_polygon_coordinates(
@@ -251,7 +254,7 @@ class DetectionPatchLabelSampler(PatchLabelSampler):
         )
         x1 = max(0, coordinates[0][0])
         y1 = max(0, coordinates[0][1])
-        x2 = min(height, coordinates[1][0])
-        y2 = min(width, coordinates[1][1])
+        x2 = min(height-1, coordinates[1][0])
+        y2 = min(width-1, coordinates[1][1])
 
         return x1, y1, x2, y2

@@ -191,7 +191,7 @@ def plot_patch(patch, axes=None, title="my_patch", output_size=None, alpha=1.0):
 
 def plot_mask(
     mask,
-    color_values=["red", "blue", "green", "orange"],
+    color_values=["white", "red", "blue", "green", "orange", 'brown', 'yellow', 'purple', 'pink', 'grey'],
     axes=None,
     title="",
     output_shape=None,
@@ -202,7 +202,7 @@ def plot_mask(
         mask = fit_data(mask, output_shape)
 
     cmap = colors.ListedColormap(color_values)
-    bounds=list(range(len(color_values)+1))
+    bounds=list(range(len(color_values)))
     norm = colors.BoundaryNorm(bounds, cmap.N, clip=True)
 
     if axes is None:
@@ -210,7 +210,7 @@ def plot_mask(
     else:
         ax = axes
 
-    ax.imshow(mask, cmap=cmap, norm=norm, interpolation='nearest')
+    ax.imshow(mask, cmap=cmap, norm=norm, interpolation='nearest', alpha=alpha)
     ax.set_title(title)
 
     if axes is None:

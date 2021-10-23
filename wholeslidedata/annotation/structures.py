@@ -154,6 +154,7 @@ class Polygon(geometry.Polygon, Annotation):
         return polygon_intersection / polygon_union
 
     def contains(self, _annotation):
+        # use prep ?
         # check overlapping annotations because if within overlapping than it contains not
         return super().buffer(0).contains(_annotation) and np.all(
             [

@@ -32,8 +32,8 @@ class BatchProducer(Producer):
 
     def _create_batch(self, sample_references):
         x_batch, y_batch = self._batch_sampler.batch(sample_references)
-        x_batch = np.array(x_batch, dtype=np.uint8)
-        y_batch = np.array(y_batch, dtype=np.uint8)
+        x_batch = np.array(x_batch)
+        y_batch = np.array(y_batch)
         return x_batch, y_batch
 
     def _reset(self, index):

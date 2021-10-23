@@ -1,6 +1,7 @@
-
 class BatchReferenceSampler:
-    def __init__(self, dataset, batch_size, label_sampler, annotation_sampler):
+    def __init__(
+        self, dataset, batch_size, label_sampler, annotation_sampler, point_sampler
+    ):
 
         # set dataset
         self._dataset = dataset
@@ -9,6 +10,7 @@ class BatchReferenceSampler:
         # set controllers
         self._label_sampler = label_sampler
         self._annotation_sampler = annotation_sampler
+        self._point_sampler = point_sampler
 
     @property
     def dataset(self):
@@ -20,7 +22,8 @@ class BatchReferenceSampler:
 
     def reset(self):
         self._label_sampler.reset()
-        self._annotation_sampler.reset()    
+        self._annotation_sampler.reset()
+        self._point_sampler.reset()
 
     def update(self, batch):
         self._label_sampler.update(batch)
@@ -38,7 +41,9 @@ class BatchReferenceSampler:
             # get new sample to samples
             sample = self._dataset.sample_references[label][index]
 
+            point = self._point_sampler.sample(sample)
+
             # add new sample to samples
-            batch.append(sample)
+            batch.append({'reference': sample, 'point': point})
 
         return batch

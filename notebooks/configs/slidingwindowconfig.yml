@@ -1,0 +1,25 @@
+wholeslidedata:
+    default:
+        yaml_source: slidingwindowdata.yml
+        
+        batch_shape:
+            batch_size: 1
+            shape: [[1244, 1244, 3], [1244, 1244, 3]]
+            y_shape: [2, 1030, 1030]
+            spacing: [0.5, 4.0]
+            
+        point_sampler:
+            attribute: CenterPointSampler
+          
+        patch_sampler:
+            center: True
+          
+        patch_label_sampler:
+            center: True
+          
+        sample_callbacks:
+            - module: wholeslidedata.samplers.callbacks
+              attribute: FitOutput
+              output_shape: [1030, 1030]  
+              
+        

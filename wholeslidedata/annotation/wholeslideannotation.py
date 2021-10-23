@@ -2,12 +2,14 @@ from pathlib import Path
 
 from shapely import geometry
 from shapely.strtree import STRtree
-from wholeslidedata.labels import Labels
 from wholeslidedata.annotation.structures import Polygon
 from wholeslidedata.annotation.parsers import AnnotationParser
 from wholeslidedata.annotation import utils as annotation_utils
 
-
+def area_sort_with_roi(item):
+    if item.label.name == 'roi':
+        return 100000*100000
+    return item.area
 
 class WholeSlideAnnotation():
     """
@@ -92,7 +94,13 @@ class WholeSlideAnnotation():
                     item.label.name
                 ).overlay_index,
             )
-        return sorted(
+        sorted_annotations = sorted(
             annotations,
             key=lambda item: self.labels.get_label_by_name(item.label.name).value,
         )
+        sorted_annotations = sorted(
+            sorted_annotations,
+            key=lambda item: area_sort_with_roi(item),
+            reverse=True
+        )
+        return sorted_annotations

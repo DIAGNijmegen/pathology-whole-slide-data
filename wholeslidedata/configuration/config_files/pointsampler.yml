@@ -1,4 +1,4 @@
 module: wholeslidedata.samplers.pointsampler
-attribute: RandomPointSampler
+attribute: UniformPointSampler
 seed: ${wholeslidedata:seed}
-strict_point_sampling: False
+dataset: ${wholeslidedata:dataset}
