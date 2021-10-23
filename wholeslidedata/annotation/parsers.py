@@ -458,7 +458,7 @@ class MaskAnnotationParser(AnnotationParser):
         labels=("tissue",),
         out_labels=None,
         scaling=1.0,
-        sample_annotation_types=("Polygon",),
+        sample_annotation_types=("polygon",),
         backend="asap",
     ):
         super().__init__(labels, out_labels, scaling, (), sample_annotation_types)
