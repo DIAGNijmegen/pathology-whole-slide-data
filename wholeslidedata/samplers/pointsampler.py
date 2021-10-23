@@ -118,3 +118,30 @@ class UniformPointSampler(PointSampler):
         return affine_transform(ShapelyPoint(x, y), transform)
 
 
+@PointSampler.register(('random', ))
+class RandomPointSampler(PointSampler):
+    def __init__(self, seed: int, dataset, buffer=0, sample_size=100, max_points=50):
+        super().__init__(seed=seed, dataset=dataset)
+        self._sample_map = {}
+        for sample_references in dataset.sample_references.values():
+            for sample_reference in sample_references:
+                annotation = self._dataset.get_annotation_from_reference(
+                    sample_reference=sample_reference
+                )
+                size = max(1, min(max_points, int(annotation.area/(sample_size*sample_size))))
+                self._sample_map[sample_reference]= (annotation.buffer(buffer).bounds, prep(annotation.buffer(buffer)), size, annotation.representative_point())
+
+    def sample(self, sample_reference):
+
+        bounds, prepped_annotation, size, representative_point = self._sample_map[sample_reference]
+        if not bounds:
+            return representative_point
+
+        x_min, y_min, x_max, y_max = bounds
+        x_c, y_c = self._rng.uniform(x_min, x_max, size=size), self._rng.uniform(y_min, y_max, size=size)
+        points = [ShapelyPoint(x, y) for x, y in zip(x_c, y_c)]
+        fpoints = list(filter(prepped_annotation.contains, points))
+        if len(fpoints) == 0:
+            return representative_point
+        return fpoints[0]
+
