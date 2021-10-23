@@ -1,4 +1,4 @@
-wholeslidedata.dataset.WholeSlideDataSet
+﻿wholeslidedata.dataset.WholeSlideDataSet
 ========================================
 
 .. currentmodule:: wholeslidedata.dataset
@@ -24,6 +24,7 @@ wholeslidedata.dataset.WholeSlideDataSet
       ~WholeSlideDataSet.get
       ~WholeSlideDataSet.get_annotation_from_reference
       ~WholeSlideDataSet.get_image_from_reference
+      ~WholeSlideDataSet.get_wsa_from_reference
       ~WholeSlideDataSet.items
       ~WholeSlideDataSet.keys
       ~WholeSlideDataSet.pop

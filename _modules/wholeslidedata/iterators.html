@@ -131,15 +131,19 @@
 <span class="kn">from</span> <span class="nn">wholeslidedata.buffer.batchproducer</span> <span class="kn">import</span> <span class="n">BatchProducer</span>
 <span class="kn">from</span> <span class="nn">wholeslidedata.buffer.utils</span> <span class="kn">import</span> <span class="n">get_buffer_shape</span>
 <span class="kn">from</span> <span class="nn">wholeslidedata.configuration.config</span> <span class="kn">import</span> <span class="n">WholeSlideDataConfiguration</span>
+<span class="kn">from</span> <span class="nn">wholeslidedata.samplers.structures</span> <span class="kn">import</span> <span class="n">BatchShape</span><span class="p">,</span> <span class="n">Sample</span>
 <span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Queue</span>
-
+<span class="kn">import</span> <span class="nn">math</span>
 
 <div class="viewcode-block" id="BatchIterator"><a class="viewcode-back" href="../../_autosummary/wholeslidedata.iterators.BatchIterator.html#wholeslidedata.iterators.BatchIterator">[docs]</a><span class="k">class</span> <span class="nc">BatchIterator</span><span class="p">(</span><span class="n">BufferIterator</span><span class="p">):</span>
-<div class="viewcode-block" id="BatchIterator.__init__"><a class="viewcode-back" href="../../_autosummary/wholeslidedata.iterators.BatchIterator.html#wholeslidedata.iterators.BatchIterator.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">builds</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="BatchIterator.__init__"><a class="viewcode-back" href="../../_autosummary/wholeslidedata.iterators.BatchIterator.html#wholeslidedata.iterators.BatchIterator.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">builds</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">redundant</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">info_queue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_builds</span> <span class="o">=</span> <span class="n">builds</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_redundant</span> <span class="o">=</span> <span class="n">redundant</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">=</span> <span class="n">index</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_stop_index</span> <span class="o">=</span> <span class="n">stop_index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_info_queue</span> <span class="o">=</span> <span class="n">info_queue</span>
+
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
@@ -149,7 +153,17 @@
     <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">StopIteration</span><span class="p">()</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__next__</span><span class="p">()</span>
+
+        <span class="n">x_batch</span><span class="p">,</span> <span class="n">y_batch</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__next__</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stop_index</span><span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_redundant</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x_batch</span> <span class="o">=</span> <span class="n">x_batch</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">_redundant</span><span class="p">]</span>
+            <span class="n">y_batch</span> <span class="o">=</span> <span class="n">y_batch</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">_redundant</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info_queue</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info_queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">x_batch</span><span class="p">,</span> <span class="n">y_batch</span><span class="p">,</span> <span class="n">info</span>
+        <span class="k">return</span> <span class="n">x_batch</span><span class="p">,</span> <span class="n">y_batch</span>
 
     <span class="k">def</span> <span class="nf">_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stop_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -171,8 +185,9 @@
 <div class="viewcode-block" id="create_batch_iterator"><a class="viewcode-back" href="../../_autosummary/wholeslidedata.iterators.create_batch_iterator.html#wholeslidedata.iterators.create_batch_iterator">[docs]</a><span class="k">def</span> <span class="nf">create_batch_iterator</span><span class="p">(</span>
     <span class="n">user_config</span><span class="p">,</span>
     <span class="n">mode</span><span class="p">,</span>
-    <span class="n">batches</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">number_of_batches</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">update_samplers</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">return_info</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">presets</span><span class="o">=</span><span class="p">(),</span>
     <span class="n">cpus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">context</span><span class="o">=</span><span class="s2">&quot;fork&quot;</span><span class="p">,</span>
@@ -187,27 +202,43 @@
         <span class="n">user_config</span><span class="o">=</span><span class="n">user_config</span><span class="p">,</span> <span class="n">modes</span><span class="o">=</span><span class="p">(</span><span class="n">mode</span><span class="p">,),</span> <span class="n">presets</span><span class="o">=</span><span class="n">presets</span>
     <span class="p">)</span>
 
-    <span class="n">update_queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span> <span class="k">if</span> <span class="n">update</span> <span class="k">else</span> <span class="kc">None</span>
+ 
+
+    <span class="n">update_queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span> <span class="k">if</span> <span class="n">update_samplers</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">info_queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span> <span class="k">if</span> <span class="n">return_info</span> <span class="k">else</span> <span class="kc">None</span>
+
+   
+    <span class="n">batch_size</span><span class="p">,</span> <span class="n">buffer_shapes</span> <span class="o">=</span> <span class="n">get_buffer_shape</span><span class="p">(</span><span class="n">builds</span><span class="p">[</span><span class="s1">&#39;wholeslidedata&#39;</span><span class="p">][</span><span class="n">mode</span><span class="p">])</span>
+
+    <span class="n">total_annotations</span> <span class="o">=</span> <span class="n">builds</span><span class="p">[</span><span class="s1">&#39;wholeslidedata&#39;</span><span class="p">][</span><span class="n">mode</span><span class="p">][</span><span class="s1">&#39;dataset&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">annotation_counts</span>
+    <span class="k">if</span> <span class="n">number_of_batches</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">number_of_batches</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">total_annotations</span> <span class="o">/</span> <span class="n">batch_size</span><span class="p">)</span>
+        <span class="n">redundant</span> <span class="o">=</span> <span class="n">batch_size</span> <span class="o">-</span> <span class="p">(</span><span class="n">total_annotations</span> <span class="o">%</span> <span class="n">batch_size</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">redundant</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="n">batch_commander</span> <span class="o">=</span> <span class="n">BatchCommander</span><span class="p">(</span>
         <span class="n">config_builder</span><span class="o">=</span><span class="n">config_builder</span><span class="p">,</span>
         <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
-        <span class="n">reset_index</span><span class="o">=</span><span class="n">batches</span><span class="p">,</span>
+        <span class="n">reset_index</span><span class="o">=</span><span class="n">number_of_batches</span><span class="p">,</span>
         <span class="n">update_queue</span><span class="o">=</span><span class="n">update_queue</span><span class="p">,</span>
+        <span class="n">info_queue</span><span class="o">=</span><span class="n">info_queue</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">batch_producer</span> <span class="o">=</span> <span class="n">BatchProducer</span><span class="p">(</span>
         <span class="n">config_builder</span><span class="o">=</span><span class="n">config_builder</span><span class="p">,</span>
         <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
-        <span class="n">reset_index</span><span class="o">=</span><span class="n">batches</span><span class="p">,</span>
+        <span class="n">reset_index</span><span class="o">=</span><span class="n">number_of_batches</span><span class="p">,</span>
         <span class="n">update_queue</span><span class="o">=</span><span class="n">update_queue</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">batch_size</span><span class="p">,</span> <span class="n">buffer_shapes</span> <span class="o">=</span> <span class="n">get_buffer_shape</span><span class="p">(</span><span class="n">builds</span><span class="p">[</span><span class="s1">&#39;wholeslidedata&#39;</span><span class="p">][</span><span class="n">mode</span><span class="p">])</span>
+
 
     <span class="k">return</span> <span class="n">buffer_iterator_factory</span><span class="p">(</span>
         <span class="n">builds</span><span class="o">=</span><span class="n">builds</span><span class="p">,</span>
         <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
-        <span class="n">stop_index</span><span class="o">=</span><span class="n">batches</span><span class="p">,</span>
+        <span class="n">redundant</span><span class="o">=</span><span class="n">redundant</span><span class="p">,</span>
+        <span class="n">stop_index</span><span class="o">=</span><span class="n">number_of_batches</span><span class="p">,</span>
+        <span class="n">info_queue</span><span class="o">=</span><span class="n">info_queue</span><span class="p">,</span>
         <span class="n">cpus</span><span class="o">=</span><span class="n">cpus</span><span class="p">,</span>
         <span class="n">buffer_shapes</span><span class="o">=</span><span class="n">buffer_shapes</span><span class="p">,</span>
         <span class="n">commander</span><span class="o">=</span><span class="n">batch_commander</span><span class="p">,</span>
@@ -215,6 +246,19 @@
         <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
         <span class="n">deterministic</span><span class="o">=</span><span class="n">determinstic</span><span class="p">,</span>
         <span class="n">buffer_iterator_class</span><span class="o">=</span><span class="n">iterator_class</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="create_sample"><a class="viewcode-back" href="../../_autosummary/wholeslidedata.iterators.create_sample.html#wholeslidedata.iterators.create_sample">[docs]</a><span class="k">def</span> <span class="nf">create_sample</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">sample_data</span><span class="p">,</span> <span class="n">image_path</span><span class="p">,</span> <span class="n">label_name</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">pixel_spacing</span>
+<span class="p">):</span>
+    <span class="k">return</span> <span class="n">Sample</span><span class="p">(</span>
+        <span class="n">sample_data</span><span class="p">,</span>
+        <span class="n">image_path</span><span class="p">,</span>
+        <span class="n">label_name</span><span class="p">,</span>
+        <span class="n">index</span><span class="p">,</span>
+        <span class="n">point</span><span class="p">,</span>
+        <span class="n">pixel_spacing</span><span class="p">,</span>
     <span class="p">)</span></div>
 </pre></div>
 

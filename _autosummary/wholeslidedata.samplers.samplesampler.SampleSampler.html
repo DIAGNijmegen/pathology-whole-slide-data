@@ -236,6 +236,11 @@
     </label>
     <ul>
      <li class="toctree-l3">
+      <a class="reference internal" href="wholeslidedata.annotation.wholeslideannotation.area_sort_with_roi.html">
+       wholeslidedata.annotation.wholeslideannotation.area_sort_with_roi
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.html">
        wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation
       </a>
@@ -511,11 +516,6 @@
      </li>
     </ul>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="wholeslidedata.image.wholeslideimagewriter.html">
-     wholeslidedata.image.wholeslideimagewriter
-    </a>
-   </li>
   </ul>
  </li>
  <li class="toctree-l1 has-children">
@@ -531,6 +531,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="wholeslidedata.iterators.create_batch_iterator.html">
      wholeslidedata.iterators.create_batch_iterator
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="wholeslidedata.iterators.create_sample.html">
+     wholeslidedata.iterators.create_sample
     </a>
    </li>
    <li class="toctree-l2">
@@ -904,23 +909,18 @@
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="wholeslidedata.samplers.pointsampler.PointDensityPointSampler.html">
-       wholeslidedata.samplers.pointsampler.PointDensityPointSampler
-      </a>
-     </li>
-     <li class="toctree-l3">
       <a class="reference internal" href="wholeslidedata.samplers.pointsampler.PointSampler.html">
        wholeslidedata.samplers.pointsampler.PointSampler
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="wholeslidedata.samplers.pointsampler.RandomPointSampler.html">
-       wholeslidedata.samplers.pointsampler.RandomPointSampler
+      <a class="reference internal" href="wholeslidedata.samplers.pointsampler.TopLeftPointSampler.html">
+       wholeslidedata.samplers.pointsampler.TopLeftPointSampler
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="wholeslidedata.samplers.pointsampler.TopLeftPointSampler.html">
-       wholeslidedata.samplers.pointsampler.TopLeftPointSampler
+      <a class="reference internal" href="wholeslidedata.samplers.pointsampler.UniformPointSampler.html">
+       wholeslidedata.samplers.pointsampler.UniformPointSampler
       </a>
      </li>
     </ul>
@@ -1320,11 +1320,11 @@
 <h1>wholeslidedata.samplers.samplesampler.SampleSampler<a class="headerlink" href="#wholeslidedata-samplers-samplesampler-samplesampler" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="wholeslidedata.samplers.samplesampler.SampleSampler">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">SampleSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point_sampler</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="wholeslidedata.samplers.pointsampler.PointSampler.html#wholeslidedata.samplers.pointsampler.PointSampler" title="wholeslidedata.samplers.pointsampler.PointSampler"><span class="pre">wholeslidedata.samplers.pointsampler.PointSampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_sampler</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="wholeslidedata.samplers.patchsampler.PatchSampler.html#wholeslidedata.samplers.patchsampler.PatchSampler" title="wholeslidedata.samplers.patchsampler.PatchSampler"><span class="pre">wholeslidedata.samplers.patchsampler.PatchSampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_label_sampler</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="wholeslidedata.samplers.patchlabelsampler.PatchLabelSampler.html#wholeslidedata.samplers.patchlabelsampler.PatchLabelSampler" title="wholeslidedata.samplers.patchlabelsampler.PatchLabelSampler"><span class="pre">wholeslidedata.samplers.patchlabelsampler.PatchLabelSampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_shape</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="wholeslidedata.samplers.structures.BatchShape.html#wholeslidedata.samplers.structures.BatchShape" title="wholeslidedata.samplers.structures.BatchShape"><span class="pre">wholeslidedata.samplers.structures.BatchShape</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/samplers/samplesampler.html#SampleSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.samplers.samplesampler.SampleSampler" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">SampleSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patch_sampler</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="wholeslidedata.samplers.patchsampler.PatchSampler.html#wholeslidedata.samplers.patchsampler.PatchSampler" title="wholeslidedata.samplers.patchsampler.PatchSampler"><span class="pre">wholeslidedata.samplers.patchsampler.PatchSampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_label_sampler</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="wholeslidedata.samplers.patchlabelsampler.PatchLabelSampler.html#wholeslidedata.samplers.patchlabelsampler.PatchLabelSampler" title="wholeslidedata.samplers.patchlabelsampler.PatchLabelSampler"><span class="pre">wholeslidedata.samplers.patchlabelsampler.PatchLabelSampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_shape</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="wholeslidedata.samplers.structures.BatchShape.html#wholeslidedata.samplers.structures.BatchShape" title="wholeslidedata.samplers.structures.BatchShape"><span class="pre">wholeslidedata.samplers.structures.BatchShape</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/samplers/samplesampler.html#SampleSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.samplers.samplesampler.SampleSampler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.samplers.samplesampler.SampleSampler.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point_sampler</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="wholeslidedata.samplers.pointsampler.PointSampler.html#wholeslidedata.samplers.pointsampler.PointSampler" title="wholeslidedata.samplers.pointsampler.PointSampler"><span class="pre">wholeslidedata.samplers.pointsampler.PointSampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_sampler</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="wholeslidedata.samplers.patchsampler.PatchSampler.html#wholeslidedata.samplers.patchsampler.PatchSampler" title="wholeslidedata.samplers.patchsampler.PatchSampler"><span class="pre">wholeslidedata.samplers.patchsampler.PatchSampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_label_sampler</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="wholeslidedata.samplers.patchlabelsampler.PatchLabelSampler.html#wholeslidedata.samplers.patchlabelsampler.PatchLabelSampler" title="wholeslidedata.samplers.patchlabelsampler.PatchLabelSampler"><span class="pre">wholeslidedata.samplers.patchlabelsampler.PatchLabelSampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_shape</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="wholeslidedata.samplers.structures.BatchShape.html#wholeslidedata.samplers.structures.BatchShape" title="wholeslidedata.samplers.structures.BatchShape"><span class="pre">wholeslidedata.samplers.structures.BatchShape</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/samplers/samplesampler.html#SampleSampler.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.samplers.samplesampler.SampleSampler.__init__" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patch_sampler</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="wholeslidedata.samplers.patchsampler.PatchSampler.html#wholeslidedata.samplers.patchsampler.PatchSampler" title="wholeslidedata.samplers.patchsampler.PatchSampler"><span class="pre">wholeslidedata.samplers.patchsampler.PatchSampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_label_sampler</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="wholeslidedata.samplers.patchlabelsampler.PatchLabelSampler.html#wholeslidedata.samplers.patchlabelsampler.PatchLabelSampler" title="wholeslidedata.samplers.patchlabelsampler.PatchLabelSampler"><span class="pre">wholeslidedata.samplers.patchlabelsampler.PatchLabelSampler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_shape</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="wholeslidedata.samplers.structures.BatchShape.html#wholeslidedata.samplers.structures.BatchShape" title="wholeslidedata.samplers.structures.BatchShape"><span class="pre">wholeslidedata.samplers.structures.BatchShape</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_callbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/samplers/samplesampler.html#SampleSampler.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.samplers.samplesampler.SampleSampler.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p class="rubric">Methods</p>
@@ -1334,13 +1334,13 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.samplers.samplesampler.SampleSampler.__init__" title="wholeslidedata.samplers.samplesampler.SampleSampler.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(point_sampler, patch_sampler, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.samplers.samplesampler.SampleSampler.__init__" title="wholeslidedata.samplers.samplesampler.SampleSampler.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(patch_sampler, patch_label_sampler, ...)</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(wsi, wsa, annotation)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample</span></code>(wsi, wsa, point)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>

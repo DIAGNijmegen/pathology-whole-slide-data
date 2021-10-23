@@ -144,7 +144,8 @@
 
         <span class="n">patch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
             <span class="n">wsi</span><span class="o">.</span><span class="n">get_patch</span><span class="p">(</span>
-                <span class="o">*</span><span class="n">point</span><span class="p">,</span>
+                <span class="n">point</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                <span class="n">point</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
                 <span class="o">*</span><span class="n">size</span><span class="p">,</span>
                 <span class="n">pixel_spacing</span><span class="p">,</span>
                 <span class="n">center</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_center</span><span class="p">,</span>

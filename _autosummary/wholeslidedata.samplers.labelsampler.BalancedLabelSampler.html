@@ -236,6 +236,11 @@
     </label>
     <ul>
      <li class="toctree-l3">
+      <a class="reference internal" href="wholeslidedata.annotation.wholeslideannotation.area_sort_with_roi.html">
+       wholeslidedata.annotation.wholeslideannotation.area_sort_with_roi
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.html">
        wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation
       </a>
@@ -511,11 +516,6 @@
      </li>
     </ul>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="wholeslidedata.image.wholeslideimagewriter.html">
-     wholeslidedata.image.wholeslideimagewriter
-    </a>
-   </li>
   </ul>
  </li>
  <li class="toctree-l1 has-children">
@@ -531,6 +531,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="wholeslidedata.iterators.create_batch_iterator.html">
      wholeslidedata.iterators.create_batch_iterator
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="wholeslidedata.iterators.create_sample.html">
+     wholeslidedata.iterators.create_sample
     </a>
    </li>
    <li class="toctree-l2">
@@ -904,23 +909,18 @@
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="wholeslidedata.samplers.pointsampler.PointDensityPointSampler.html">
-       wholeslidedata.samplers.pointsampler.PointDensityPointSampler
-      </a>
-     </li>
-     <li class="toctree-l3">
       <a class="reference internal" href="wholeslidedata.samplers.pointsampler.PointSampler.html">
        wholeslidedata.samplers.pointsampler.PointSampler
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="wholeslidedata.samplers.pointsampler.RandomPointSampler.html">
-       wholeslidedata.samplers.pointsampler.RandomPointSampler
+      <a class="reference internal" href="wholeslidedata.samplers.pointsampler.TopLeftPointSampler.html">
+       wholeslidedata.samplers.pointsampler.TopLeftPointSampler
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="wholeslidedata.samplers.pointsampler.TopLeftPointSampler.html">
-       wholeslidedata.samplers.pointsampler.TopLeftPointSampler
+      <a class="reference internal" href="wholeslidedata.samplers.pointsampler.UniformPointSampler.html">
+       wholeslidedata.samplers.pointsampler.UniformPointSampler
       </a>
      </li>
     </ul>
@@ -1320,11 +1320,11 @@
 <h1>wholeslidedata.samplers.labelsampler.BalancedLabelSampler<a class="headerlink" href="#wholeslidedata-samplers-labelsampler-balancedlabelsampler" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="wholeslidedata.samplers.labelsampler.BalancedLabelSampler">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">BalancedLabelSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">123</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weak_reset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_reset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/samplers/labelsampler.html#BalancedLabelSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.samplers.labelsampler.BalancedLabelSampler" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">BalancedLabelSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">123</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_reset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/samplers/labelsampler.html#BalancedLabelSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.samplers.labelsampler.BalancedLabelSampler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="wholeslidedata.samplers.sampler.Sampler.html#wholeslidedata.samplers.sampler.Sampler" title="wholeslidedata.samplers.sampler.Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">wholeslidedata.samplers.sampler.Sampler</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.samplers.labelsampler.BalancedLabelSampler.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">123</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weak_reset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_reset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/samplers/labelsampler.html#BalancedLabelSampler.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.samplers.labelsampler.BalancedLabelSampler.__init__" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">123</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_reset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/samplers/labelsampler.html#BalancedLabelSampler.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.samplers.labelsampler.BalancedLabelSampler.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p class="rubric">Methods</p>
@@ -1334,7 +1334,7 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.samplers.labelsampler.BalancedLabelSampler.__init__" title="wholeslidedata.samplers.labelsampler.BalancedLabelSampler.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(labels[, seed, weak_reset, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.samplers.labelsampler.BalancedLabelSampler.__init__" title="wholeslidedata.samplers.labelsampler.BalancedLabelSampler.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(labels[, seed, random_reset])</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">class_name</span></code>()</p></td>

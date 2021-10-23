@@ -317,7 +317,7 @@
 
 <div class="viewcode-block" id="plot_mask"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.samplers.utils.plot_mask.html#wholeslidedata.samplers.utils.plot_mask">[docs]</a><span class="k">def</span> <span class="nf">plot_mask</span><span class="p">(</span>
     <span class="n">mask</span><span class="p">,</span>
-    <span class="n">color_values</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;orange&quot;</span><span class="p">],</span>
+    <span class="n">color_values</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="s1">&#39;brown&#39;</span><span class="p">,</span> <span class="s1">&#39;yellow&#39;</span><span class="p">,</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;pink&#39;</span><span class="p">,</span> <span class="s1">&#39;grey&#39;</span><span class="p">],</span>
     <span class="n">axes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">output_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -328,7 +328,7 @@
         <span class="n">mask</span> <span class="o">=</span> <span class="n">fit_data</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">output_shape</span><span class="p">)</span>
 
     <span class="n">cmap</span> <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">(</span><span class="n">color_values</span><span class="p">)</span>
-    <span class="n">bounds</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">color_values</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">bounds</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">color_values</span><span class="p">)))</span>
     <span class="n">norm</span> <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="n">BoundaryNorm</span><span class="p">(</span><span class="n">bounds</span><span class="p">,</span> <span class="n">cmap</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -336,7 +336,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

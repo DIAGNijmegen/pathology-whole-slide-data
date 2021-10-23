@@ -236,6 +236,11 @@
     </label>
     <ul>
      <li class="toctree-l3">
+      <a class="reference internal" href="wholeslidedata.annotation.wholeslideannotation.area_sort_with_roi.html">
+       wholeslidedata.annotation.wholeslideannotation.area_sort_with_roi
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.html">
        wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation
       </a>
@@ -511,11 +516,6 @@
      </li>
     </ul>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="wholeslidedata.image.wholeslideimagewriter.html">
-     wholeslidedata.image.wholeslideimagewriter
-    </a>
-   </li>
   </ul>
  </li>
  <li class="toctree-l1 has-children">
@@ -531,6 +531,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="wholeslidedata.iterators.create_batch_iterator.html">
      wholeslidedata.iterators.create_batch_iterator
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="wholeslidedata.iterators.create_sample.html">
+     wholeslidedata.iterators.create_sample
     </a>
    </li>
    <li class="toctree-l2">
@@ -904,23 +909,18 @@
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="wholeslidedata.samplers.pointsampler.PointDensityPointSampler.html">
-       wholeslidedata.samplers.pointsampler.PointDensityPointSampler
-      </a>
-     </li>
-     <li class="toctree-l3">
       <a class="reference internal" href="wholeslidedata.samplers.pointsampler.PointSampler.html">
        wholeslidedata.samplers.pointsampler.PointSampler
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="wholeslidedata.samplers.pointsampler.RandomPointSampler.html">
-       wholeslidedata.samplers.pointsampler.RandomPointSampler
+      <a class="reference internal" href="wholeslidedata.samplers.pointsampler.TopLeftPointSampler.html">
+       wholeslidedata.samplers.pointsampler.TopLeftPointSampler
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="wholeslidedata.samplers.pointsampler.TopLeftPointSampler.html">
-       wholeslidedata.samplers.pointsampler.TopLeftPointSampler
+      <a class="reference internal" href="wholeslidedata.samplers.pointsampler.UniformPointSampler.html">
+       wholeslidedata.samplers.pointsampler.UniformPointSampler
       </a>
      </li>
     </ul>
@@ -1325,23 +1325,20 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="wholeslidedata.samplers.pointsampler.CenterPointSampler.html#wholeslidedata.samplers.pointsampler.CenterPointSampler" title="wholeslidedata.samplers.pointsampler.CenterPointSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CenterPointSampler</span></code></a>(seed, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="wholeslidedata.samplers.pointsampler.CenterPointSampler.html#wholeslidedata.samplers.pointsampler.CenterPointSampler" title="wholeslidedata.samplers.pointsampler.CenterPointSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CenterPointSampler</span></code></a>(seed, dataset)</p></td>
 <td><p>samples center point</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="wholeslidedata.samplers.pointsampler.CentroidPointSampler.html#wholeslidedata.samplers.pointsampler.CentroidPointSampler" title="wholeslidedata.samplers.pointsampler.CentroidPointSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CentroidPointSampler</span></code></a>(seed, **kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="wholeslidedata.samplers.pointsampler.CentroidPointSampler.html#wholeslidedata.samplers.pointsampler.CentroidPointSampler" title="wholeslidedata.samplers.pointsampler.CentroidPointSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CentroidPointSampler</span></code></a>(seed, dataset)</p></td>
 <td><p>samples center point</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="wholeslidedata.samplers.pointsampler.PointDensityPointSampler.html#wholeslidedata.samplers.pointsampler.PointDensityPointSampler" title="wholeslidedata.samplers.pointsampler.PointDensityPointSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointDensityPointSampler</span></code></a>(dataset, seed[, ...])</p></td>
-<td><p>samples points based on the density map of the points within a polygon</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="wholeslidedata.samplers.pointsampler.PointSampler.html#wholeslidedata.samplers.pointsampler.PointSampler" title="wholeslidedata.samplers.pointsampler.PointSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointSampler</span></code></a>(seed)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="wholeslidedata.samplers.pointsampler.PointSampler.html#wholeslidedata.samplers.pointsampler.PointSampler" title="wholeslidedata.samplers.pointsampler.PointSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointSampler</span></code></a>(seed, dataset)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="wholeslidedata.samplers.pointsampler.RandomPointSampler.html#wholeslidedata.samplers.pointsampler.RandomPointSampler" title="wholeslidedata.samplers.pointsampler.RandomPointSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomPointSampler</span></code></a>(seed, strict_point_sampling)</p></td>
-<td><p>samples points randomly within a polygon with a max limit of 10 otherwise it will return the centroid</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="wholeslidedata.samplers.pointsampler.TopLeftPointSampler.html#wholeslidedata.samplers.pointsampler.TopLeftPointSampler" title="wholeslidedata.samplers.pointsampler.TopLeftPointSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TopLeftPointSampler</span></code></a>(seed, **kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="wholeslidedata.samplers.pointsampler.TopLeftPointSampler.html#wholeslidedata.samplers.pointsampler.TopLeftPointSampler" title="wholeslidedata.samplers.pointsampler.TopLeftPointSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TopLeftPointSampler</span></code></a>(seed, dataset)</p></td>
 <td><p>samples center point</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="wholeslidedata.samplers.pointsampler.UniformPointSampler.html#wholeslidedata.samplers.pointsampler.UniformPointSampler" title="wholeslidedata.samplers.pointsampler.UniformPointSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UniformPointSampler</span></code></a>(seed, dataset[, buffer, ...])</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>

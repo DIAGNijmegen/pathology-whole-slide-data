@@ -128,12 +128,14 @@
 
 <span class="kn">from</span> <span class="nn">shapely</span> <span class="kn">import</span> <span class="n">geometry</span>
 <span class="kn">from</span> <span class="nn">shapely.strtree</span> <span class="kn">import</span> <span class="n">STRtree</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.labels</span> <span class="kn">import</span> <span class="n">Labels</span>
 <span class="kn">from</span> <span class="nn">wholeslidedata.annotation.structures</span> <span class="kn">import</span> <span class="n">Polygon</span>
 <span class="kn">from</span> <span class="nn">wholeslidedata.annotation.parsers</span> <span class="kn">import</span> <span class="n">AnnotationParser</span>
 <span class="kn">from</span> <span class="nn">wholeslidedata.annotation</span> <span class="kn">import</span> <span class="n">utils</span> <span class="k">as</span> <span class="n">annotation_utils</span>
 
-
+<div class="viewcode-block" id="area_sort_with_roi"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.wholeslideannotation.area_sort_with_roi.html#wholeslidedata.annotation.wholeslideannotation.area_sort_with_roi">[docs]</a><span class="k">def</span> <span class="nf">area_sort_with_roi</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;roi&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">100000</span><span class="o">*</span><span class="mi">100000</span>
+    <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">area</span></div>
 
 <div class="viewcode-block" id="WholeSlideAnnotation"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.html#wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation">[docs]</a><span class="k">class</span> <span class="nc">WholeSlideAnnotation</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -218,10 +220,16 @@
                     <span class="n">item</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">name</span>
                 <span class="p">)</span><span class="o">.</span><span class="n">overlay_index</span><span class="p">,</span>
             <span class="p">)</span>
-        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span>
+        <span class="n">sorted_annotations</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
             <span class="n">annotations</span><span class="p">,</span>
             <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">get_label_by_name</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
-        <span class="p">)</span></div>
+        <span class="p">)</span>
+        <span class="n">sorted_annotations</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="n">sorted_annotations</span><span class="p">,</span>
+            <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">area_sort_with_roi</span><span class="p">(</span><span class="n">item</span><span class="p">),</span>
+            <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">sorted_annotations</span></div>
 </pre></div>
 
               </div>

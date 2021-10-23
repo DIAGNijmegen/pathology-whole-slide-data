@@ -1,0 +1,6 @@
+wholeslidedata.iterators.create\_sample
+=======================================
+
+.. currentmodule:: wholeslidedata.iterators
+
+.. autofunction:: create_sample

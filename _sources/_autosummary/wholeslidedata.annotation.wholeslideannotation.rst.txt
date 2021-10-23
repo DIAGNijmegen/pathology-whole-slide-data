@@ -1,4 +1,4 @@
-wholeslidedata.annotation.wholeslideannotation
+﻿wholeslidedata.annotation.wholeslideannotation
 ==============================================
 
 .. automodule:: wholeslidedata.annotation.wholeslideannotation
@@ -8,6 +8,13 @@ wholeslidedata.annotation.wholeslideannotation
    
 
    
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:                                          
+   
+      area_sort_with_roi
    
    
 

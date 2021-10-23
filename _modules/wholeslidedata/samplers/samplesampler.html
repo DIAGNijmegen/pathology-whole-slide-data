@@ -131,41 +131,31 @@
 <span class="kn">from</span> <span class="nn">wholeslidedata.image.wholeslideimage</span> <span class="kn">import</span> <span class="n">WholeSlideImage</span>
 <span class="kn">from</span> <span class="nn">wholeslidedata.samplers.patchlabelsampler</span> <span class="kn">import</span> <span class="n">PatchLabelSampler</span>
 <span class="kn">from</span> <span class="nn">wholeslidedata.samplers.patchsampler</span> <span class="kn">import</span> <span class="n">PatchSampler</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.samplers.pointsampler</span> <span class="kn">import</span> <span class="n">PointSampler</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.samplers.structures</span> <span class="kn">import</span> <span class="n">BatchShape</span><span class="p">,</span> <span class="n">Sample</span>
+<span class="kn">from</span> <span class="nn">wholeslidedata.samplers.structures</span> <span class="kn">import</span> <span class="n">BatchShape</span>
 
 
 <div class="viewcode-block" id="SampleSampler"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.samplers.samplesampler.SampleSampler.html#wholeslidedata.samplers.samplesampler.SampleSampler">[docs]</a><span class="k">class</span> <span class="nc">SampleSampler</span><span class="p">:</span>
 <div class="viewcode-block" id="SampleSampler.__init__"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.samplers.samplesampler.SampleSampler.html#wholeslidedata.samplers.samplesampler.SampleSampler.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">point_sampler</span><span class="p">:</span> <span class="n">PointSampler</span><span class="p">,</span>
         <span class="n">patch_sampler</span><span class="p">:</span> <span class="n">PatchSampler</span><span class="p">,</span>
         <span class="n">patch_label_sampler</span><span class="p">:</span> <span class="n">PatchLabelSampler</span><span class="p">,</span>
         <span class="n">batch_shape</span><span class="p">:</span> <span class="n">BatchShape</span><span class="p">,</span>
         <span class="n">sample_callbacks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_batch_shape</span> <span class="o">=</span> <span class="n">batch_shape</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_point_sampler</span> <span class="o">=</span> <span class="n">point_sampler</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_patch_sampler</span> <span class="o">=</span> <span class="n">patch_sampler</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_patch_label_sampler</span> <span class="o">=</span> <span class="n">patch_label_sampler</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sample_callbacks</span> <span class="o">=</span> <span class="n">sample_callbacks</span></div>
 
-    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wsi</span><span class="p">:</span> <span class="n">WholeSlideImage</span><span class="p">,</span> <span class="n">wsa</span><span class="p">:</span> <span class="n">WholeSlideAnnotation</span><span class="p">,</span> <span class="n">annotation</span><span class="p">:</span> <span class="n">Annotation</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wsi</span><span class="p">:</span> <span class="n">WholeSlideImage</span><span class="p">,</span> <span class="n">wsa</span><span class="p">:</span> <span class="n">WholeSlideAnnotation</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
         <span class="n">x_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_samples</span><span class="p">()</span>
         <span class="n">y_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_samples</span><span class="p">()</span>
-
-        <span class="n">point</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_point_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
-            <span class="n">annotation</span><span class="p">,</span>
-            <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_batch_shape</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-            <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_batch_shape</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
-            <span class="n">wsi</span><span class="o">.</span><span class="n">get_downsampling_from_spacing</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_batch_shape</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
-        <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">pixel_spacing</span><span class="p">,</span> <span class="n">shapes</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_batch_shape</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">patch_shape</span> <span class="ow">in</span> <span class="n">shapes</span><span class="p">:</span>
 
                 <span class="n">x_sample</span><span class="p">,</span> <span class="n">y_sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample</span><span class="p">(</span>
-                    <span class="n">point</span><span class="p">,</span> <span class="n">wsi</span><span class="p">,</span> <span class="n">wsa</span><span class="p">,</span> <span class="n">annotation</span><span class="p">,</span> <span class="n">patch_shape</span><span class="p">,</span> <span class="n">pixel_spacing</span>
+                    <span class="n">point</span><span class="p">,</span> <span class="n">wsi</span><span class="p">,</span> <span class="n">wsa</span><span class="p">,</span> <span class="n">patch_shape</span><span class="p">,</span> <span class="n">pixel_spacing</span>
                 <span class="p">)</span>
 
                 <span class="n">x_samples</span><span class="p">[</span><span class="n">pixel_spacing</span><span class="p">][</span><span class="nb">tuple</span><span class="p">(</span><span class="n">patch_shape</span><span class="p">)]</span> <span class="o">=</span> <span class="n">x_sample</span>
@@ -180,7 +170,6 @@
         <span class="n">point</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span>
         <span class="n">wsi</span><span class="p">:</span> <span class="n">WholeSlideImage</span><span class="p">,</span>
         <span class="n">wsa</span><span class="p">:</span> <span class="n">WholeSlideAnnotation</span><span class="p">,</span>
-        <span class="n">annotation</span><span class="p">:</span> <span class="n">Annotation</span><span class="p">,</span>
         <span class="n">patch_shape</span><span class="p">,</span>
         <span class="n">pixel_spacing</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="p">):</span>
@@ -196,25 +185,7 @@
         <span class="p">)</span>
 
         <span class="n">patch</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_sample_callbacks</span><span class="p">(</span><span class="n">patch</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
-
-        <span class="n">x_sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_sample</span><span class="p">(</span>
-            <span class="n">patch</span><span class="p">,</span>
-            <span class="n">wsi</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
-            <span class="n">annotation</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-            <span class="n">annotation</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
-            <span class="n">point</span><span class="p">,</span>
-            <span class="n">wsi</span><span class="o">.</span><span class="n">get_real_spacing</span><span class="p">(</span><span class="n">pixel_spacing</span><span class="p">),</span>
-        <span class="p">)</span>
-        <span class="n">y_sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_sample</span><span class="p">(</span>
-            <span class="n">label</span><span class="p">,</span>
-            <span class="n">wsi</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
-            <span class="n">annotation</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-            <span class="n">annotation</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
-            <span class="n">point</span><span class="p">,</span>
-            <span class="n">wsi</span><span class="o">.</span><span class="n">get_real_spacing</span><span class="p">(</span><span class="n">pixel_spacing</span><span class="p">),</span>
-        <span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">x_sample</span><span class="p">,</span> <span class="n">y_sample</span>
+        <span class="k">return</span> <span class="n">patch</span><span class="p">,</span> <span class="n">label</span>
 
     <span class="k">def</span> <span class="nf">_init_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span>
@@ -222,17 +193,6 @@
             <span class="k">for</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">sizes</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_batch_shape</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
         <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">_create_sample</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">sample_data</span><span class="p">,</span> <span class="n">image_path</span><span class="p">,</span> <span class="n">label_name</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">pixel_spacing</span>
-    <span class="p">):</span>
-        <span class="k">return</span> <span class="n">Sample</span><span class="p">(</span>
-            <span class="n">sample_data</span><span class="p">,</span>
-            <span class="n">image_path</span><span class="p">,</span>
-            <span class="n">label_name</span><span class="p">,</span>
-            <span class="n">index</span><span class="p">,</span>
-            <span class="n">point</span><span class="p">,</span>
-            <span class="n">pixel_spacing</span><span class="p">,</span>
-        <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_reset_sample_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_callbacks</span><span class="p">:</span>
@@ -247,7 +207,7 @@
         <span class="k">return</span> <span class="n">patch</span><span class="p">,</span> <span class="n">mask</span>
 
     <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_point_sampler</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
+        <span class="k">pass</span></div>
 </pre></div>
 
               </div>

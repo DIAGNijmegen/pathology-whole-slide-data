@@ -1,4 +1,4 @@
-wholeslidedata.dataset.WholeSlideSampleReference
+﻿wholeslidedata.dataset.WholeSlideSampleReference
 ================================================
 
 .. currentmodule:: wholeslidedata.dataset
@@ -26,6 +26,7 @@ wholeslidedata.dataset.WholeSlideSampleReference
 
    .. autosummary::
    
+      ~WholeSlideSampleReference.file_index
       ~WholeSlideSampleReference.file_key
       ~WholeSlideSampleReference.wsa_index
       ~WholeSlideSampleReference.annotation_index

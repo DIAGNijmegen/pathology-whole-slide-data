@@ -1,4 +1,4 @@
-wholeslidedata.iterators
+﻿wholeslidedata.iterators
 ========================
 
 .. automodule:: wholeslidedata.iterators
@@ -15,6 +15,7 @@ wholeslidedata.iterators
       :toctree:                                          
    
       create_batch_iterator
+      create_sample
    
    
 

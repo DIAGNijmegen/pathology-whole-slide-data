@@ -124,9 +124,10 @@
               <div>
                 
   <h1>Source code for wholeslidedata.samplers.batchreferencesampler</h1><div class="highlight"><pre>
-<span></span>
-<div class="viewcode-block" id="BatchReferenceSampler"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.samplers.batchreferencesampler.BatchReferenceSampler.html#wholeslidedata.samplers.batchreferencesampler.BatchReferenceSampler">[docs]</a><span class="k">class</span> <span class="nc">BatchReferenceSampler</span><span class="p">:</span>
-<div class="viewcode-block" id="BatchReferenceSampler.__init__"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.samplers.batchreferencesampler.BatchReferenceSampler.html#wholeslidedata.samplers.batchreferencesampler.BatchReferenceSampler.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">label_sampler</span><span class="p">,</span> <span class="n">annotation_sampler</span><span class="p">):</span>
+<div class="viewcode-block" id="BatchReferenceSampler"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.samplers.batchreferencesampler.BatchReferenceSampler.html#wholeslidedata.samplers.batchreferencesampler.BatchReferenceSampler">[docs]</a><span></span><span class="k">class</span> <span class="nc">BatchReferenceSampler</span><span class="p">:</span>
+<div class="viewcode-block" id="BatchReferenceSampler.__init__"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.samplers.batchreferencesampler.BatchReferenceSampler.html#wholeslidedata.samplers.batchreferencesampler.BatchReferenceSampler.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">label_sampler</span><span class="p">,</span> <span class="n">annotation_sampler</span><span class="p">,</span> <span class="n">point_sampler</span>
+    <span class="p">):</span>
 
         <span class="c1"># set dataset</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="o">=</span> <span class="n">dataset</span>
@@ -134,7 +135,8 @@
 
         <span class="c1"># set controllers</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_label_sampler</span> <span class="o">=</span> <span class="n">label_sampler</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_annotation_sampler</span> <span class="o">=</span> <span class="n">annotation_sampler</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_annotation_sampler</span> <span class="o">=</span> <span class="n">annotation_sampler</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_point_sampler</span> <span class="o">=</span> <span class="n">point_sampler</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -146,7 +148,8 @@
 
     <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_label_sampler</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_annotation_sampler</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>    
+        <span class="bp">self</span><span class="o">.</span><span class="n">_annotation_sampler</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_point_sampler</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_label_sampler</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
@@ -164,8 +167,10 @@
             <span class="c1"># get new sample to samples</span>
             <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="o">.</span><span class="n">sample_references</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
 
+            <span class="n">point</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_point_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+
             <span class="c1"># add new sample to samples</span>
-            <span class="n">batch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+            <span class="n">batch</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;reference&#39;</span><span class="p">:</span> <span class="n">sample</span><span class="p">,</span> <span class="s1">&#39;point&#39;</span><span class="p">:</span> <span class="n">point</span><span class="p">})</span>
 
         <span class="k">return</span> <span class="n">batch</span></div>
 </pre></div>

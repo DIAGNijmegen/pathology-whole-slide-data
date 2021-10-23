@@ -158,8 +158,8 @@
 
     <span class="k">def</span> <span class="nf">_create_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_references</span><span class="p">):</span>
         <span class="n">x_batch</span><span class="p">,</span> <span class="n">y_batch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_batch_sampler</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">sample_references</span><span class="p">)</span>
-        <span class="n">x_batch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_batch</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-        <span class="n">y_batch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_batch</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="n">x_batch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_batch</span><span class="p">)</span>
+        <span class="n">y_batch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_batch</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x_batch</span><span class="p">,</span> <span class="n">y_batch</span>
 
     <span class="k">def</span> <span class="nf">_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
