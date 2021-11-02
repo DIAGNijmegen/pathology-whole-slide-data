@@ -1,4 +1,4 @@
-wholeslidedata.annotation.structures.Polygon
+﻿wholeslidedata.annotation.structures.Polygon
 ============================================
 
 .. currentmodule:: wholeslidedata.annotation.structures
@@ -23,6 +23,7 @@ wholeslidedata.annotation.structures.Polygon
       ~Polygon.class_name
       ~Polygon.contains
       ~Polygon.coordinates
+      ~Polygon.covered_by
       ~Polygon.covers
       ~Polygon.create
       ~Polygon.crosses
@@ -42,6 +43,7 @@ wholeslidedata.annotation.structures.Polygon
       ~Polygon.intersects
       ~Polygon.iou
       ~Polygon.names
+      ~Polygon.normalize
       ~Polygon.overlaps
       ~Polygon.project
       ~Polygon.register
@@ -54,8 +56,6 @@ wholeslidedata.annotation.structures.Polygon
       ~Polygon.simplify
       ~Polygon.svg
       ~Polygon.symmetric_difference
-      ~Polygon.to_wkb
-      ~Polygon.to_wkt
       ~Polygon.touches
       ~Polygon.union
       ~Polygon.within

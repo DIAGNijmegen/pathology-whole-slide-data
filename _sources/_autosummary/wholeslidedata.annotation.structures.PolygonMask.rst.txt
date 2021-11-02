@@ -1,4 +1,4 @@
-wholeslidedata.annotation.structures.PolygonMask
+﻿wholeslidedata.annotation.structures.PolygonMask
 ================================================
 
 .. currentmodule:: wholeslidedata.annotation.structures
@@ -23,6 +23,7 @@ wholeslidedata.annotation.structures.PolygonMask
       ~PolygonMask.class_name
       ~PolygonMask.contains
       ~PolygonMask.coordinates
+      ~PolygonMask.covered_by
       ~PolygonMask.covers
       ~PolygonMask.create
       ~PolygonMask.crosses
@@ -42,6 +43,7 @@ wholeslidedata.annotation.structures.PolygonMask
       ~PolygonMask.intersects
       ~PolygonMask.iou
       ~PolygonMask.names
+      ~PolygonMask.normalize
       ~PolygonMask.overlaps
       ~PolygonMask.project
       ~PolygonMask.register
@@ -54,8 +56,6 @@ wholeslidedata.annotation.structures.PolygonMask
       ~PolygonMask.simplify
       ~PolygonMask.svg
       ~PolygonMask.symmetric_difference
-      ~PolygonMask.to_wkb
-      ~PolygonMask.to_wkt
       ~PolygonMask.touches
       ~PolygonMask.union
       ~PolygonMask.within

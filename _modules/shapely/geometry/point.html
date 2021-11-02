@@ -128,8 +128,10 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="n">c_double</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 
-<span class="kn">from</span> <span class="nn">shapely.errors</span> <span class="kn">import</span> <span class="n">DimensionError</span>
+<span class="kn">from</span> <span class="nn">shapely.coords</span> <span class="kn">import</span> <span class="n">CoordinateSequence</span>
+<span class="kn">from</span> <span class="nn">shapely.errors</span> <span class="kn">import</span> <span class="n">DimensionError</span><span class="p">,</span> <span class="n">ShapelyDeprecationWarning</span>
 <span class="kn">from</span> <span class="nn">shapely.geos</span> <span class="kn">import</span> <span class="n">lgeos</span>
 <span class="kn">from</span> <span class="nn">shapely.geometry.base</span> <span class="kn">import</span> <span class="n">BaseGeometry</span><span class="p">,</span> <span class="n">geos_geom_from_py</span>
 <span class="kn">from</span> <span class="nn">shapely.geometry.proxy</span> <span class="kn">import</span> <span class="n">CachingGeometryProxy</span>
@@ -152,7 +154,7 @@
 <span class="sd">    -------</span>
 <span class="sd">      &gt;&gt;&gt; p = Point(1.0, -1.0)</span>
 <span class="sd">      &gt;&gt;&gt; print(p)</span>
-<span class="sd">      POINT (1.0000000000000000 -1.0000000000000000)</span>
+<span class="sd">      POINT (1 -1)</span>
 <span class="sd">      &gt;&gt;&gt; p.y</span>
 <span class="sd">      -1.0</span>
 <span class="sd">      &gt;&gt;&gt; p.x</span>
@@ -171,7 +173,16 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">BaseGeometry</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_set_coords</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">geom</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">geos_point_from_py</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="s2">&quot;Point() takes at most 3 arguments (</span><span class="si">{}</span><span class="s2"> given)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">geom</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">geos_point_from_py</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_geom</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ndim</span> <span class="o">=</span> <span class="n">n</span>
 
     <span class="c1"># Coordinate getters and setters</span>
 
@@ -199,7 +210,7 @@
             <span class="s1">&#39;coordinates&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="p">}</span>
 
-<div class="viewcode-block" id="Point.svg"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.structures.Point.html#wholeslidedata.annotation.structures.Point.svg">[docs]</a>    <span class="k">def</span> <span class="nf">svg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale_factor</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">fill_color</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Point.svg"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.structures.Point.html#wholeslidedata.annotation.structures.Point.svg">[docs]</a>    <span class="k">def</span> <span class="nf">svg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale_factor</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">fill_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns SVG circle element for the Point geometry.</span>
 
 <span class="sd">        Parameters</span>
@@ -209,18 +220,22 @@
 <span class="sd">        fill_color : str, optional</span>
 <span class="sd">            Hex string for fill color. Default is to use &quot;#66cc99&quot; if</span>
 <span class="sd">            geometry is valid, and &quot;#ff3333&quot; if invalid.</span>
+<span class="sd">        opacity : float</span>
+<span class="sd">            Float number between 0 and 1 for color opacity. Defaul value is 0.6</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_empty</span><span class="p">:</span>
             <span class="k">return</span> <span class="s1">&#39;&lt;g /&gt;&#39;</span>
         <span class="k">if</span> <span class="n">fill_color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">fill_color</span> <span class="o">=</span> <span class="s2">&quot;#66cc99&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_valid</span> <span class="k">else</span> <span class="s2">&quot;#ff3333&quot;</span>
+        <span class="k">if</span> <span class="n">opacity</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">opacity</span> <span class="o">=</span> <span class="mf">0.6</span> 
         <span class="k">return</span> <span class="p">(</span>
             <span class="s1">&#39;&lt;circle cx=&quot;</span><span class="si">{0.x}</span><span class="s1">&quot; cy=&quot;</span><span class="si">{0.y}</span><span class="s1">&quot; r=&quot;</span><span class="si">{1}</span><span class="s1">&quot; &#39;</span>
-            <span class="s1">&#39;stroke=&quot;#555555&quot; stroke-width=&quot;</span><span class="si">{2}</span><span class="s1">&quot; fill=&quot;</span><span class="si">{3}</span><span class="s1">&quot; opacity=&quot;0.6&quot; /&gt;&#39;</span>
-            <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mf">3.</span> <span class="o">*</span> <span class="n">scale_factor</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">*</span> <span class="n">scale_factor</span><span class="p">,</span> <span class="n">fill_color</span><span class="p">)</span></div>
+            <span class="s1">&#39;stroke=&quot;#555555&quot; stroke-width=&quot;</span><span class="si">{2}</span><span class="s1">&quot; fill=&quot;</span><span class="si">{3}</span><span class="s1">&quot; opacity=&quot;</span><span class="si">{4}</span><span class="s1">&quot; /&gt;&#39;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mf">3.</span> <span class="o">*</span> <span class="n">scale_factor</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">*</span> <span class="n">scale_factor</span><span class="p">,</span> <span class="n">fill_color</span><span class="p">,</span> <span class="n">opacity</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">ctypes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_ctypes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ctypes_data</span><span class="p">:</span>
             <span class="n">array_type</span> <span class="o">=</span> <span class="n">c_double</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ndim</span>
             <span class="n">array</span> <span class="o">=</span> <span class="n">array_type</span><span class="p">()</span>
@@ -232,15 +247,30 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_ctypes_data</span> <span class="o">=</span> <span class="n">array</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ctypes_data</span>
 
-<div class="viewcode-block" id="Point.array_interface"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.structures.Point.html#wholeslidedata.annotation.structures.Point.array_interface">[docs]</a>    <span class="k">def</span> <span class="nf">array_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_array_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Provide the Numpy array protocol.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_empty</span><span class="p">:</span>
             <span class="n">ai</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;typestr&#39;</span><span class="p">:</span> <span class="s1">&#39;&lt;f8&#39;</span><span class="p">,</span> <span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,),</span> <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">c_double</span> <span class="o">*</span> <span class="mi">0</span><span class="p">)()}</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">ai</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">array_interface_base</span>
+            <span class="n">ai</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_array_interface_base</span>
             <span class="n">ai</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ndim</span><span class="p">,)})</span>
-        <span class="k">return</span> <span class="n">ai</span></div>
-    <span class="n">__array_interface__</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">array_interface</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ai</span>
+
+<div class="viewcode-block" id="Point.array_interface"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.structures.Point.html#wholeslidedata.annotation.structures.Point.array_interface">[docs]</a>    <span class="k">def</span> <span class="nf">array_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Provide the Numpy array protocol.&quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;The &#39;array_interface&#39; method is deprecated and will be removed &quot;</span>
+            <span class="s2">&quot;in Shapely 2.0.&quot;</span><span class="p">,</span>
+            <span class="n">ShapelyDeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_array_interface</span><span class="p">()</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">__array_interface__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;The array interface is deprecated and will no longer work in &quot;</span>
+            <span class="s2">&quot;Shapely 2.0. Convert the &#39;.coords&#39; to a numpy array instead.&quot;</span><span class="p">,</span>
+            <span class="n">ShapelyDeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_array_interface</span><span class="p">()</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -253,16 +283,26 @@
 
     <span class="c1"># Coordinate access</span>
 
+    <span class="k">def</span> <span class="nf">_get_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Access to geometry&#39;s coordinates (CoordinateSequence)&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">CoordinateSequence</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">_set_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Setting the &#39;coords&#39; to mutate a Geometry in place is deprecated,&quot;</span>
+            <span class="s2">&quot; and will not be possible any more in Shapely 2.0&quot;</span><span class="p">,</span>
+            <span class="n">ShapelyDeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_empty</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_geom</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ndim</span> <span class="o">=</span> <span class="n">geos_point_from_py</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">geom</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">geos_point_from_py</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Point() takes at most 3 arguments (</span><span class="si">{}</span><span class="s2"> given)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_geom</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ndim</span> <span class="o">=</span> <span class="n">geos_point_from_py</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+            <span class="n">geom</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">geos_point_from_py</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_geom</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ndim</span> <span class="o">=</span> <span class="n">n</span>
 
-    <span class="n">coords</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">BaseGeometry</span><span class="o">.</span><span class="n">_get_coords</span><span class="p">,</span> <span class="n">_set_coords</span><span class="p">)</span>
+    <span class="n">coords</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_coords</span><span class="p">,</span> <span class="n">_set_coords</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">xy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -283,6 +323,12 @@
     <span class="n">_other_owned</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;The proxy geometries (through the &#39;asShape()&#39;, &#39;asPoint()&#39; or &quot;</span>
+            <span class="s2">&quot;&#39;PointAdapter()&#39; constructors) are deprecated and will be &quot;</span>
+            <span class="s2">&quot;removed in Shapely 2.0. Use the &#39;shape()&#39; function or the &quot;</span>
+            <span class="s2">&quot;standard &#39;Point()&#39; constructor instead.&quot;</span><span class="p">,</span>
+            <span class="n">ShapelyDeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">factory</span> <span class="o">=</span> <span class="n">geos_point_from_py</span>
 
@@ -306,7 +352,9 @@
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">array_interface</span><span class="p">()</span>
 
-    <span class="n">_get_coords</span> <span class="o">=</span> <span class="n">BaseGeometry</span><span class="o">.</span><span class="n">_get_coords</span>
+    <span class="k">def</span> <span class="nf">_get_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Access to geometry&#39;s coordinates (CoordinateSequence)&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">CoordinateSequence</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_set_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ob</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Adapters can not modify their sources&quot;</span><span class="p">)</span>
@@ -329,7 +377,7 @@
         <span class="k">return</span> <span class="n">geos_geom_from_py</span><span class="p">(</span><span class="n">ob</span><span class="p">)</span>
 
     <span class="c1"># Accept either (x, y) or [(x, y)]</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ob</span><span class="p">,</span> <span class="s1">&#39;__getitem__&#39;</span><span class="p">):</span>  <span class="c1"># Iterators, e.g. Python 3 zip</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ob</span><span class="p">,</span> <span class="s1">&#39;__getitem__&#39;</span><span class="p">):</span>  <span class="c1"># generators</span>
         <span class="n">ob</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ob</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ob</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>

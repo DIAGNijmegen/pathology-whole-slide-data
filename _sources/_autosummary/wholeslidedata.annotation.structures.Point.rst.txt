@@ -1,4 +1,4 @@
-wholeslidedata.annotation.structures.Point
+﻿wholeslidedata.annotation.structures.Point
 ==========================================
 
 .. currentmodule:: wholeslidedata.annotation.structures
@@ -23,6 +23,7 @@ wholeslidedata.annotation.structures.Point
       ~Point.class_name
       ~Point.contains
       ~Point.coordinates
+      ~Point.covered_by
       ~Point.covers
       ~Point.create
       ~Point.crosses
@@ -39,6 +40,7 @@ wholeslidedata.annotation.structures.Point
       ~Point.intersection
       ~Point.intersects
       ~Point.names
+      ~Point.normalize
       ~Point.overlaps
       ~Point.project
       ~Point.register
@@ -51,8 +53,6 @@ wholeslidedata.annotation.structures.Point
       ~Point.simplify
       ~Point.svg
       ~Point.symmetric_difference
-      ~Point.to_wkb
-      ~Point.to_wkt
       ~Point.touches
       ~Point.union
       ~Point.within

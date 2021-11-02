@@ -128,20 +128,19 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
-
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
-    <span class="nb">range</span> <span class="o">=</span> <span class="n">xrange</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="n">c_void_p</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">POINTER</span>
 <span class="kn">import</span> <span class="nn">weakref</span>
 
 <span class="kn">from</span> <span class="nn">shapely.algorithms.cga</span> <span class="kn">import</span> <span class="n">signed_area</span>
+<span class="kn">from</span> <span class="nn">shapely.coords</span> <span class="kn">import</span> <span class="n">CoordinateSequence</span>
 <span class="kn">from</span> <span class="nn">shapely.geos</span> <span class="kn">import</span> <span class="n">lgeos</span>
 <span class="kn">from</span> <span class="nn">shapely.geometry.base</span> <span class="kn">import</span> <span class="n">BaseGeometry</span><span class="p">,</span> <span class="n">geos_geom_from_py</span>
 <span class="kn">from</span> <span class="nn">shapely.geometry.linestring</span> <span class="kn">import</span> <span class="n">LineString</span><span class="p">,</span> <span class="n">LineStringAdapter</span>
 <span class="kn">from</span> <span class="nn">shapely.geometry.point</span> <span class="kn">import</span> <span class="n">Point</span>
 <span class="kn">from</span> <span class="nn">shapely.geometry.proxy</span> <span class="kn">import</span> <span class="n">PolygonProxy</span>
-<span class="kn">from</span> <span class="nn">shapely.errors</span> <span class="kn">import</span> <span class="n">TopologicalError</span>
+<span class="kn">from</span> <span class="nn">shapely.errors</span> <span class="kn">import</span> <span class="n">TopologicalError</span><span class="p">,</span> <span class="n">ShapelyDeprecationWarning</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Polygon&#39;</span><span class="p">,</span> <span class="s1">&#39;asPolygon&#39;</span><span class="p">,</span> <span class="s1">&#39;LinearRing&#39;</span><span class="p">,</span> <span class="s1">&#39;asLinearRing&#39;</span><span class="p">]</span>
@@ -178,7 +177,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">BaseGeometry</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">coordinates</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_set_coords</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">geos_linearring_from_py</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ret</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">geom</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ret</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_set_geom</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_ndim</span> <span class="o">=</span> <span class="n">n</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">__geo_interface__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -189,20 +192,28 @@
 
     <span class="c1"># Coordinate access</span>
 
-    <span class="n">_get_coords</span> <span class="o">=</span> <span class="n">BaseGeometry</span><span class="o">.</span><span class="n">_get_coords</span>
+    <span class="k">def</span> <span class="nf">_get_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Access to geometry&#39;s coordinates (CoordinateSequence)&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">CoordinateSequence</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_set_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Setting the &#39;coords&#39; to mutate a Geometry in place is deprecated,&quot;</span>
+            <span class="s2">&quot; and will not be possible any more in Shapely 2.0&quot;</span><span class="p">,</span>
+            <span class="n">ShapelyDeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_empty</span><span class="p">()</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="n">geos_linearring_from_py</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">ret</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_geom</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ndim</span> <span class="o">=</span> <span class="n">ret</span>
+            <span class="n">geom</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ret</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_geom</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ndim</span> <span class="o">=</span> <span class="n">n</span>
 
     <span class="n">coords</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_coords</span><span class="p">,</span> <span class="n">_set_coords</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;WKB doesn&#39;t differentiate between LineString and LinearRing so we</span>
 <span class="sd">        need to move the coordinate sequence into the correct geometry type&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LinearRing</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__setstate__</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__setstate__</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
         <span class="n">cs</span> <span class="o">=</span> <span class="n">lgeos</span><span class="o">.</span><span class="n">GEOSGeom_getCoordSeq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__geom__</span><span class="p">)</span>
         <span class="n">cs_clone</span> <span class="o">=</span> <span class="n">lgeos</span><span class="o">.</span><span class="n">GEOSCoordSeq_clone</span><span class="p">(</span><span class="n">cs</span><span class="p">)</span>
         <span class="n">lgeos</span><span class="o">.</span><span class="n">GEOSGeom_destroy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__geom__</span><span class="p">)</span>
@@ -225,6 +236,12 @@
     <span class="n">__p__</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;The proxy geometries (through the &#39;asShape()&#39;, &#39;asLinearRing()&#39; or &quot;</span>
+            <span class="s2">&quot;&#39;LinearRingAdapter()&#39; constructors) are deprecated and will be &quot;</span>
+            <span class="s2">&quot;removed in Shapely 2.0. Use the &#39;shape()&#39; function or the &quot;</span>
+            <span class="s2">&quot;standard &#39;LinearRing()&#39; constructor instead.&quot;</span><span class="p">,</span>
+            <span class="n">ShapelyDeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">factory</span> <span class="o">=</span> <span class="n">geos_linearring_from_py</span>
 
@@ -235,7 +252,11 @@
             <span class="s1">&#39;coordinates&#39;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
             <span class="p">}</span>
 
-    <span class="n">coords</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">BaseGeometry</span><span class="o">.</span><span class="n">_get_coords</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_get_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Access to geometry&#39;s coordinates (CoordinateSequence)&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">CoordinateSequence</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="n">coords</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_coords</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">asLinearRing</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
@@ -243,7 +264,7 @@
     <span class="k">return</span> <span class="n">LinearRingAdapter</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">InteriorRingSequence</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">InteriorRingSequence</span><span class="p">:</span>
 
     <span class="n">_factory</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">_geom</span> <span class="o">=</span> <span class="kc">None</span>
@@ -271,9 +292,6 @@
             <span class="k">return</span> <span class="n">ring</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">StopIteration</span>
-
-    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="nb">next</span> <span class="o">=</span> <span class="fm">__next__</span>
 
     <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">lgeos</span><span class="o">.</span><span class="n">GEOSGetNumInteriorRings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_geom</span><span class="p">)</span>
@@ -315,7 +333,7 @@
         <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rings__</span><span class="p">:</span>
             <span class="n">g</span> <span class="o">=</span> <span class="n">lgeos</span><span class="o">.</span><span class="n">GEOSGetInteriorRingN</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_geom</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
             <span class="n">ring</span> <span class="o">=</span> <span class="n">LinearRing</span><span class="p">()</span>
-            <span class="n">ring</span><span class="o">.</span><span class="n">_geom</span> <span class="o">=</span> <span class="n">g</span>
+            <span class="n">ring</span><span class="o">.</span><span class="n">_set_geom</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
             <span class="n">ring</span><span class="o">.</span><span class="n">__p__</span> <span class="o">=</span> <span class="bp">self</span>
             <span class="n">ring</span><span class="o">.</span><span class="n">_other_owned</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">ring</span><span class="o">.</span><span class="n">_ndim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ndim</span>
@@ -368,9 +386,11 @@
         <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">ret</span> <span class="o">=</span> <span class="n">geos_polygon_from_py</span><span class="p">(</span><span class="n">shell</span><span class="p">,</span> <span class="n">holes</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">ret</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_geom</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ndim</span> <span class="o">=</span> <span class="n">ret</span>
+                <span class="n">geom</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">ret</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_set_geom</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_ndim</span> <span class="o">=</span> <span class="n">n</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_empty</span><span class="p">()</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">exterior</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -379,7 +399,7 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exterior</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exterior</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">g</span> <span class="o">=</span> <span class="n">lgeos</span><span class="o">.</span><span class="n">GEOSGetExteriorRing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_geom</span><span class="p">)</span>
             <span class="n">ring</span> <span class="o">=</span> <span class="n">LinearRing</span><span class="p">()</span>
-            <span class="n">ring</span><span class="o">.</span><span class="n">_geom</span> <span class="o">=</span> <span class="n">g</span>
+            <span class="n">ring</span><span class="o">.</span><span class="n">_set_geom</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
             <span class="n">ring</span><span class="o">.</span><span class="n">__p__</span> <span class="o">=</span> <span class="bp">self</span>
             <span class="n">ring</span><span class="o">.</span><span class="n">_other_owned</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">ring</span><span class="o">.</span><span class="n">_ndim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ndim</span>
@@ -416,14 +436,14 @@
     <span class="fm">__hash__</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">ctypes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_ctypes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ctypes_data</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_ctypes_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">ctypes</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ctypes_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">_ctypes</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ctypes_data</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">__array_interface__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
         <span class="s2">&quot;A polygon does not itself provide the array interface. Its rings do.&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -451,7 +471,7 @@
             <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;Polygon&#39;</span><span class="p">,</span>
             <span class="s1">&#39;coordinates&#39;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">coords</span><span class="p">)}</span>
 
-<div class="viewcode-block" id="Polygon.svg"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.structures.Polygon.html#wholeslidedata.annotation.structures.Polygon.svg">[docs]</a>    <span class="k">def</span> <span class="nf">svg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale_factor</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">fill_color</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Polygon.svg"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.structures.Polygon.html#wholeslidedata.annotation.structures.Polygon.svg">[docs]</a>    <span class="k">def</span> <span class="nf">svg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale_factor</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">fill_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns SVG path element for the Polygon geometry.</span>
 
 <span class="sd">        Parameters</span>
@@ -461,11 +481,15 @@
 <span class="sd">        fill_color : str, optional</span>
 <span class="sd">            Hex string for fill color. Default is to use &quot;#66cc99&quot; if</span>
 <span class="sd">            geometry is valid, and &quot;#ff3333&quot; if invalid.</span>
+<span class="sd">        opacity : float</span>
+<span class="sd">            Float number between 0 and 1 for color opacity. Defaul value is 0.6</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_empty</span><span class="p">:</span>
             <span class="k">return</span> <span class="s1">&#39;&lt;g /&gt;&#39;</span>
         <span class="k">if</span> <span class="n">fill_color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">fill_color</span> <span class="o">=</span> <span class="s2">&quot;#66cc99&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_valid</span> <span class="k">else</span> <span class="s2">&quot;#ff3333&quot;</span>
+        <span class="k">if</span> <span class="n">opacity</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">opacity</span> <span class="o">=</span> <span class="mf">0.6</span> 
         <span class="n">exterior_coords</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">[</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">,</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">coords</span><span class="p">]]</span>
         <span class="n">interior_coords</span> <span class="o">=</span> <span class="p">[</span>
@@ -476,8 +500,8 @@
             <span class="k">for</span> <span class="n">coords</span> <span class="ow">in</span> <span class="n">exterior_coords</span> <span class="o">+</span> <span class="n">interior_coords</span><span class="p">])</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="s1">&#39;&lt;path fill-rule=&quot;evenodd&quot; fill=&quot;</span><span class="si">{2}</span><span class="s1">&quot; stroke=&quot;#555555&quot; &#39;</span>
-            <span class="s1">&#39;stroke-width=&quot;</span><span class="si">{0}</span><span class="s1">&quot; opacity=&quot;0.6&quot; d=&quot;</span><span class="si">{1}</span><span class="s1">&quot; /&gt;&#39;</span>
-            <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">scale_factor</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">fill_color</span><span class="p">)</span></div>
+            <span class="s1">&#39;stroke-width=&quot;</span><span class="si">{0}</span><span class="s1">&quot; opacity=&quot;</span><span class="si">{3}</span><span class="s1">&quot; d=&quot;</span><span class="si">{1}</span><span class="s1">&quot; /&gt;&#39;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">scale_factor</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">fill_color</span><span class="p">,</span> <span class="n">opacity</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Polygon.from_bounds"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.structures.Polygon.html#wholeslidedata.annotation.structures.Polygon.from_bounds">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_bounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">):</span>
@@ -492,6 +516,12 @@
 <span class="k">class</span> <span class="nc">PolygonAdapter</span><span class="p">(</span><span class="n">PolygonProxy</span><span class="p">,</span> <span class="n">Polygon</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="p">,</span> <span class="n">holes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;The proxy geometries (through the &#39;asShape()&#39;, &#39;asPolygon()&#39; or &quot;</span>
+            <span class="s2">&quot;&#39;PolygonAdapter()&#39; constructors) are deprecated and will be &quot;</span>
+            <span class="s2">&quot;removed in Shapely 2.0. Use the &#39;shape()&#39; function or the &quot;</span>
+            <span class="s2">&quot;standard &#39;Polygon()&#39; constructor instead.&quot;</span><span class="p">,</span>
+            <span class="n">ShapelyDeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">holes</span> <span class="o">=</span> <span class="n">holes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="p">(</span><span class="n">shell</span><span class="p">,</span> <span class="n">holes</span><span class="p">)</span>
@@ -551,7 +581,7 @@
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ob</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>  <span class="c1"># Iterators, e.g. Python 3 zip</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>  <span class="c1"># generators</span>
         <span class="n">ob</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ob</span><span class="p">)</span>
         <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ob</span><span class="p">)</span>
 

@@ -1363,7 +1363,7 @@
 There are 2 cases:</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.almost_equals" title="wholeslidedata.annotation.structures.Point.almost_equals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">almost_equals</span></code></a>(other[, decimal])</p></td>
-<td><p>Returns True if geometries are equal at all coordinates to a specified decimal place</p></td>
+<td><p>True if geometries are equal at all coordinates to a specified decimal place.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.array_interface" title="wholeslidedata.annotation.structures.Point.array_interface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array_interface</span></code></a>()</p></td>
 <td><p>Provide the Numpy array protocol.</p></td>
@@ -1380,53 +1380,59 @@ There are 2 cases:</p></td>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">coordinates</span></code>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.covers" title="wholeslidedata.annotation.structures.Point.covers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">covers</span></code></a>(other)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.covered_by" title="wholeslidedata.annotation.structures.Point.covered_by"><code class="xref py py-obj docutils literal notranslate"><span class="pre">covered_by</span></code></a>(other)</p></td>
+<td><p>Returns True if the geometry is covered by the other, else False</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.covers" title="wholeslidedata.annotation.structures.Point.covers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">covers</span></code></a>(other)</p></td>
 <td><p>Returns True if the geometry covers the other, else False</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create</span></code>(annotation_structure, labels[, ...])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create</span></code>(annotation_structure, labels[, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.crosses" title="wholeslidedata.annotation.structures.Point.crosses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crosses</span></code></a>(other)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.crosses" title="wholeslidedata.annotation.structures.Point.crosses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crosses</span></code></a>(other)</p></td>
 <td><p>Returns True if the geometries cross, else False</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.difference" title="wholeslidedata.annotation.structures.Point.difference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">difference</span></code></a>(other)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.difference" title="wholeslidedata.annotation.structures.Point.difference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">difference</span></code></a>(other)</p></td>
 <td><p>Returns the difference of the geometries</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.disjoint" title="wholeslidedata.annotation.structures.Point.disjoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">disjoint</span></code></a>(other)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.disjoint" title="wholeslidedata.annotation.structures.Point.disjoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">disjoint</span></code></a>(other)</p></td>
 <td><p>Returns True if geometries are disjoint, else False</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.distance" title="wholeslidedata.annotation.structures.Point.distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distance</span></code></a>(other)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.distance" title="wholeslidedata.annotation.structures.Point.distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distance</span></code></a>(other)</p></td>
 <td><p>Unitless distance to other geometry (float)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">empty</span></code>([val])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">empty</span></code>([val])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.equals" title="wholeslidedata.annotation.structures.Point.equals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">equals</span></code></a>(other)</p></td>
-<td><p>Returns True if geometries are equal, else False</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.equals" title="wholeslidedata.annotation.structures.Point.equals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">equals</span></code></a>(other)</p></td>
+<td><p>Returns True if geometries are equal, else False.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.equals_exact" title="wholeslidedata.annotation.structures.Point.equals_exact"><code class="xref py py-obj docutils literal notranslate"><span class="pre">equals_exact</span></code></a>(other, tolerance)</p></td>
-<td><p>Returns True if geometries are equal to within a specified tolerance</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.equals_exact" title="wholeslidedata.annotation.structures.Point.equals_exact"><code class="xref py py-obj docutils literal notranslate"><span class="pre">equals_exact</span></code></a>(other, tolerance)</p></td>
+<td><p>True if geometries are equal to within a specified tolerance.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">geometryType</span></code>()</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">geometryType</span></code>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_registrant</span></code>(registrant_name)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_registrant</span></code>(registrant_name)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.hausdorff_distance" title="wholeslidedata.annotation.structures.Point.hausdorff_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hausdorff_distance</span></code></a>(other)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.hausdorff_distance" title="wholeslidedata.annotation.structures.Point.hausdorff_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hausdorff_distance</span></code></a>(other)</p></td>
 <td><p>Unitless hausdorff distance to other geometry (float)</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.interpolate" title="wholeslidedata.annotation.structures.Point.interpolate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolate</span></code></a>(distance[, normalized])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.interpolate" title="wholeslidedata.annotation.structures.Point.interpolate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolate</span></code></a>(distance[, normalized])</p></td>
 <td><p>Return a point at the specified distance along a linear geometry</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.intersection" title="wholeslidedata.annotation.structures.Point.intersection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersection</span></code></a>(other)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.intersection" title="wholeslidedata.annotation.structures.Point.intersection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersection</span></code></a>(other)</p></td>
 <td><p>Returns the intersection of the geometries</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.intersects" title="wholeslidedata.annotation.structures.Point.intersects"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersects</span></code></a>(other)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.intersects" title="wholeslidedata.annotation.structures.Point.intersects"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersects</span></code></a>(other)</p></td>
 <td><p>Returns True if geometries intersect, else False</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">names</span></code>()</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">names</span></code>()</p></td>
 <td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.normalize" title="wholeslidedata.annotation.structures.Point.normalize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize</span></code></a>()</p></td>
+<td><p>Converts geometry to normal form (or canonical form).</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.overlaps" title="wholeslidedata.annotation.structures.Point.overlaps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlaps</span></code></a>(other)</p></td>
 <td><p>Returns True if geometries overlap, else False</p></td>
@@ -1458,17 +1464,11 @@ There are 2 cases:</p></td>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.simplify" title="wholeslidedata.annotation.structures.Point.simplify"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simplify</span></code></a>(tolerance[, preserve_topology])</p></td>
 <td><p>Returns a simplified geometry produced by the Douglas-Peucker algorithm</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.svg" title="wholeslidedata.annotation.structures.Point.svg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">svg</span></code></a>([scale_factor, fill_color])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.svg" title="wholeslidedata.annotation.structures.Point.svg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">svg</span></code></a>([scale_factor, fill_color, opacity])</p></td>
 <td><p>Returns SVG circle element for the Point geometry.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.symmetric_difference" title="wholeslidedata.annotation.structures.Point.symmetric_difference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">symmetric_difference</span></code></a>(other)</p></td>
 <td><p>Returns the symmetric difference of the geometries (Shapely geometry)</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_wkb</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_wkt</span></code>()</p></td>
-<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.touches" title="wholeslidedata.annotation.structures.Point.touches"><code class="xref py py-obj docutils literal notranslate"><span class="pre">touches</span></code></a>(other)</p></td>
 <td><p>Returns True if geometries touch, else False</p></td>
@@ -1604,10 +1604,29 @@ There are 2 cases:</p></td>
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.Point.almost_equals">
 <span class="sig-name descname"><span class="pre">almost_equals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.annotation.structures.Point.almost_equals" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns True if geometries are equal at all coordinates to a
-specified decimal place</p>
-<p>Refers to approximate coordinate equality, which requires coordinates be
-approximately equal and in the same order for all components of a geometry.</p>
+<dd><p>True if geometries are equal at all coordinates to a
+specified decimal place.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 1.8.0: </span>The ‘almost_equals()’ method is deprecated
+and will be removed in Shapely 2.0 because the name is
+confusing. The ‘equals_exact()’ method should be used
+instead.</p>
+</div>
+<p>Refers to approximate coordinate equality, which requires
+coordinates to be approximately equal and in the same order for
+all components of a geometry.</p>
+<p>Because of this it is possible for “equals()” to be True for two
+geometries and “almost_equals()” to be False.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LineString</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">equals_exact</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">LineString</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]),</span>
+<span class="gp">... </span>    <span class="mf">1e-6</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>bool</p>
 </dd></dl>
 
 <dl class="py property">
@@ -1688,9 +1707,9 @@ Z coordinates of the original geometry will be ignored.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shapely.wkt</span> <span class="kn">import</span> <span class="n">loads</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">loads</span><span class="p">(</span><span class="s1">&#39;POINT (0.0 0.0)&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>        <span class="c1"># 16-gon approx of a unit radius circle</span>
-<span class="go">3.1365484905459389</span>
+<span class="go">3.1365484905459384</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>   <span class="c1"># 128-gon approximation</span>
-<span class="go">3.1415138011443009</span>
+<span class="go">3.141513801144299</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>     <span class="c1"># triangle approximation</span>
 <span class="go">3.0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">cap_style</span><span class="o">=</span><span class="n">CAP_STYLE</span><span class="o">.</span><span class="n">square</span><span class="p">)</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
@@ -1726,6 +1745,12 @@ triangular polygon.</p>
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.Point.coords">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">coords</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.Point.coords" title="Permalink to this definition">¶</a></dt>
 <dd><p>Access to geometry’s coordinates (CoordinateSequence)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wholeslidedata.annotation.structures.Point.covered_by">
+<span class="sig-name descname"><span class="pre">covered_by</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.annotation.structures.Point.covered_by" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the geometry is covered by the other, else False</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1773,18 +1798,47 @@ triangular polygon.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.Point.equals">
 <span class="sig-name descname"><span class="pre">equals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.annotation.structures.Point.equals" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns True if geometries are equal, else False</p>
-<p>Refers to point-set equality (or topological equality), and is equivalent to
-(self.within(other) &amp; self.contains(other))</p>
+<dd><p>Returns True if geometries are equal, else False.</p>
+<p>This method considers point-set equality (or topological
+equality), and is equivalent to (self.within(other) &amp;
+self.contains(other)).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LineString</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">LineString</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)])</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>bool</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.Point.equals_exact">
 <span class="sig-name descname"><span class="pre">equals_exact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.annotation.structures.Point.equals_exact" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns True if geometries are equal to within a specified
-tolerance</p>
-<p>Refers to coordinate equality, which requires coordinates to be equal
-and in the same order for all components of a geometry</p>
+<dd><p>True if geometries are equal to within a specified
+tolerance.</p>
+<dl class="simple">
+<dt>other<span class="classifier">BaseGeometry</span></dt><dd><p>The other geometry object in this comparison.</p>
+</dd>
+<dt>tolerance<span class="classifier">float</span></dt><dd><p>Absolute tolerance in the same units as coordinates.</p>
+</dd>
+</dl>
+<p>This method considers coordinate equality, which requires
+coordinates to be equal and in the same order for all components
+of a geometry.</p>
+<p>Because of this it is possible for “equals()” to be True for two
+geometries and “equals_exact()” to be False.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LineString</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">equals_exact</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">LineString</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]),</span>
+<span class="gp">... </span>    <span class="mf">1e-6</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>bool</p>
 </dd></dl>
 
 <dl class="py property">
@@ -1884,6 +1938,21 @@ is returned.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="wholeslidedata.annotation.structures.Point.normalize">
+<span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.annotation.structures.Point.normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts geometry to normal form (or canonical form).</p>
+<p>This method orders the coordinates, rings of a polygon and parts of
+multi geometries consistently. Typically useful for testing purposes
+(for example in combination with <cite>equals_exact</cite>).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shapely.wkt</span> <span class="kn">import</span> <span class="n">loads</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">loads</span><span class="p">(</span><span class="s2">&quot;MULTILINESTRING((0 0, 1 1), (3 3, 2 2))&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span><span class="o">.</span><span class="n">wkt</span>
+<span class="go">&#39;MULTILINESTRING ((2 2, 3 3), (0 0, 1 1))&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.Point.overlaps">
 <span class="sig-name descname"><span class="pre">overlaps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.annotation.structures.Point.overlaps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if geometries overlap, else False</p>
@@ -1931,13 +2000,15 @@ otherwise invalid geometries.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.Point.svg">
-<span class="sig-name descname"><span class="pre">svg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/shapely/geometry/point.html#Point.svg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.annotation.structures.Point.svg" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">svg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/shapely/geometry/point.html#Point.svg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.annotation.structures.Point.svg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns SVG circle element for the Point geometry.</p>
 <dl class="simple">
 <dt>scale_factor<span class="classifier">float</span></dt><dd><p>Multiplication factor for the SVG circle diameter.  Default is 1.</p>
 </dd>
 <dt>fill_color<span class="classifier">str, optional</span></dt><dd><p>Hex string for fill color. Default is to use “#66cc99” if
 geometry is valid, and “#ff3333” if invalid.</p>
+</dd>
+<dt>opacity<span class="classifier">float</span></dt><dd><p>Float number between 0 and 1 for color opacity. Defaul value is 0.6</p>
 </dd>
 </dl>
 </dd></dl>
