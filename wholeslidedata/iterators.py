@@ -30,7 +30,7 @@ class BatchIterator(BufferIterator):
 
         x_batch, y_batch = super().__next__()
 
-        if self._index == self._stop_index-1 and self._redundant > 0:
+        if self._stop_index is not None and self._index == self._stop_index-1 and self._redundant > 0:
             x_batch = x_batch[:self._redundant]
             y_batch = y_batch[:self._redundant]
 
