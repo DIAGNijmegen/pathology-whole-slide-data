@@ -4,7 +4,7 @@ default:
 
   annotation_parser: 
       attribute: MaskAnnotationParser
-      scaling: 1.0
+      processing_spacing: 4.0
       
   label_map: 
       tissue: 1

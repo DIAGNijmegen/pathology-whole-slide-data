@@ -512,17 +512,21 @@ class MaskAnnotationParser(AnnotationParser):
 
     def _get_annotation_structures(self, path, labels):
         mask = WholeSlideImage(path, backend=self._backend)
+        
         size = self._shape[0]
         ratio = self._processing_spacing/self._output_spacing
+        
         np_mask = mask.get_slide(self._processing_spacing).squeeze()
         shape = np.array(np_mask.shape)
+        
         new_shape = shape + size//ratio - shape%(size//ratio)
         new_mask = np.zeros(new_shape.astype('int'))
         new_mask[:shape[0], :shape[1]] = np_mask
+        
         blocks = block_shaped(new_mask, int(size//ratio), int(size//ratio))
+        
         region_index = -1
         annotation_index = 0
-        
         for y in range(new_mask.shape[0]//(int(size//ratio))):
             for x in range(new_mask.shape[1]//int((size//ratio))):
                 region_index += 1
