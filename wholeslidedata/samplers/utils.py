@@ -247,17 +247,17 @@ def plot_annotations(annotations, axes=None):
     for annotation in annotations:
         if axes == None:
             if annotation.type == "Point":
-                plt.scatter(*annotation.coordinates())
+                plt.scatter(*annotation.coordinates)
             else:
-                plt.plot(*list(zip(*annotation.coordinates())))
+                plt.plot(*list(zip(*annotation.coordinates)))
             plt.gca().invert_yax.datais()
             plt.axis("equal")
             plt.show()
         else:
             if annotation.type == "Point":
-                axes.scatter(*annotation.coordinates())
+                axes.scatter(*annotation.coordinates)
             else:
-                axes.plot(*list(zip(*annotation.coordinates())))
+                axes.plot(*list(zip(*annotation.coordinates)))
 
 
 def convert_image_annotation_to_xml(image_annotation, out_path, label_map, color_map):

@@ -6,14 +6,6 @@ from wholeslidedata.labels import Labels
 import numpy as np
 
 
-class Within(object):
-    def __init__(self, o):
-        self.o = o
-
-    def __lt__(self, other):
-        return self.o.buffer(0).within(other.o.buffer(0))
-
-
 def get_labels_in_annotations(annotations):
     return Labels(labels=[annotation.label for annotation in annotations])
 
@@ -64,7 +56,7 @@ def plot_annotations(
         if use_base_coordinates:
             coordinates = annotation.base_coordinates
         else:
-            coordinates = annotation.coordinates() * scale
+            coordinates = annotation.coordinates * scale
 
         if isinstance(annotation, Point):
             ax.scatter(*coordinates, color=annotation.label.color)

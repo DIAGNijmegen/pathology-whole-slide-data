@@ -26,7 +26,7 @@ class TestAnnotation:
         assert polygon.label == "square"
         assert polygon.iou(polygon2) == 0.25
         assert np.all(
-            polygon.coordinates() == np.array([[0, 0], [0, 2], [2, 2], [2, 0], [0, 0]])
+            polygon.coordinates == np.array([[0, 0], [0, 2], [2, 2], [2, 0], [0, 0]])
         )
         assert polygon2.contains(polygon)
         assert not polygon.contains(polygon2)

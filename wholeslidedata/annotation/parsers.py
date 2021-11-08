@@ -1,13 +1,16 @@
 import abc
 import json
 import xml.etree.ElementTree as ET
-from typing import Iterator, List
+from pathlib import Path
+from typing import Collection, Iterator, List, Optional, Union
 
 import numpy as np
 from creationism.registration.factory import RegistrantFactory
 from shapely import affinity, geometry
-from wholeslidedata.annotation.structures import Annotation, AnnotationStructure
+from wholeslidedata.annotation.structures import (Annotation,
+                                                  AnnotationStructure)
 from wholeslidedata.labels import Label, Labels
+from wholeslidedata.samplers.utils import block_shaped
 
 from ..image.wholeslideimage import WholeSlideImage
 
@@ -17,14 +20,26 @@ class InvalidAnnotationParserError(Exception):
 
 
 class AnnotationParser(RegistrantFactory):
+    """Base class for parsing annotations. Inherents from RegistrantFactory which allows to register subclasses"""
+
     def __init__(
         self,
-        labels=None,
-        renamed_labels=None,
-        scaling=1.0,
-        sample_label_names=(),
-        sample_annotation_types=("polygon",),
+        labels: Optional[Union[Labels, list, tuple, dict]] = None,
+        renamed_labels: Optional[Union[Labels, list, tuple, dict]] = None,
+        scaling: float = 1.0,
+        sample_label_names: Union[list, tuple] = (),
+        sample_annotation_types: Union[list, tuple] = ("polygon",),
     ):
+        """Init
+
+        Args:
+            labels (Optional[Union[Labels, list, tuple, dict]], optional): All labels that are used to parse annotations. Defaults to None.
+            renamed_labels (Optional[Union[Labels, list, tuple, dict]], optional): Automatic rename labels based on values. Defaults to None.
+            scaling (float, optional): scaling factor for annotations. Defaults to 1.0.
+            sample_label_names (Union[list, tuple], optional): label names that will be used for sampling. Defaults to ().
+            sample_annotation_types (Union[list, tuple], optional): annotation type that will be used for sampling . Defaults to ("polygon",).
+        """
+
         self._labels = labels
         if self._labels is not None:
             self._labels = Labels.create(self._labels)
@@ -40,10 +55,27 @@ class AnnotationParser(RegistrantFactory):
 
         self._sample_label_names = sample_label_names
 
-    def read(self, annotation_path, labels=None, renamed_labels=None) -> List[Annotation]:
+    def parse(
+        self,
+        annotation_path: Union[Path, str],
+        labels: Optional[Union[Labels, list, tuple, dict]] = None,
+        renamed_labels: Optional[Union[Labels, list, tuple, dict]] = None,
+    ) -> List[Annotation]:
+
+        """Parses annotation file into list of annotations
+
+        Args:
+            annotation_path (Union[Path, str]): path to annotation file
+            labels (Optional[Union[Labels, list, tuple, dict]], optional): overwrites object instance labels. Defaults to None.
+            renamed_labels (Optional[Union[Labels, list, tuple, dict]], optional): overwrites object instance renamed labels. Defaults to None.
+
+        Returns:
+            List[Annotation]: list of Annotations
+        """
+
         if labels is None:
             if self._labels is None:
-                labels = self.get_available_labels(annotation_path)
+                labels = self.get_available_labels(str(annotation_path))
             else:
                 labels = self._labels
         else:
@@ -73,14 +105,23 @@ class AnnotationParser(RegistrantFactory):
     def sample_label_names(self):
         return self._sample_label_names
 
-    def get_available_labels(self, path):
+    def get_available_labels(self, path: Union[Path, str]) -> Labels:
+        """Get all labels available from annotation path
+
+        Args:
+            path (Union[Path, str]): path to annotation
+
+        Returns:
+            Labels: labels found in annotation path
+        """
+
         labels = []
         for annotation_structure in self._get_annotation_structures(path, None):
             labels.append(annotation_structure.label)
         return Labels.create(set(labels))
 
     @abc.abstractmethod
-    def _get_annotation_structures(self, structure) -> Iterator[AnnotationStructure]:
+    def _get_annotation_structures(self, path: Union[Path, str], labels: Optional[Labels]) -> Iterator[AnnotationStructure]:
         pass
 
     @abc.abstractmethod
@@ -455,50 +496,50 @@ class MaskAnnotationParser(AnnotationParser):
     def __init__(
         self,
         shape=(1024, 1024),
+        processing_spacing=0.5,
+        output_spacing=0.5,
         labels=("tissue",),
         out_labels=None,
         scaling=1.0,
         sample_annotation_types=("polygon",),
         backend="asap",
     ):
+        self._processing_spacing = processing_spacing
+        self._output_spacing = output_spacing
         super().__init__(labels, out_labels, scaling, (), sample_annotation_types)
         self._shape = np.array(shape)
         self._backend = backend
 
     def _get_annotation_structures(self, path, labels):
         mask = WholeSlideImage(path, backend=self._backend)
-        spacing = mask.spacings[0]
-        x_dims, y_dims = mask.shapes[0]
-
-        x_shift, y_shift = map(int, self._shape // self._scaling)
+        size = self._shape[0]
+        ratio = self._processing_spacing/self._output_spacing
+        np_mask = mask.get_slide(self._processing_spacing).squeeze()
+        shape = np.array(np_mask.shape)
+        new_shape = shape + size//ratio - shape%(size//ratio)
+        new_mask = np.zeros(new_shape.astype('int'))
+        new_mask[:shape[0], :shape[1]] = np_mask
+        blocks = block_shaped(new_mask, int(size//ratio), int(size//ratio))
+        region_index = -1
         annotation_index = 0
-        for y_pos in range(0, y_dims-y_shift, y_shift):
-            for x_pos in range(0, x_dims-x_shift, x_shift):
-                mask_patch = mask.get_patch(
-                    x_pos,
-                    y_pos,
-                    x_shift,
-                    y_shift,
-                    spacing=spacing,
-                    center=False,
+        
+        for y in range(new_mask.shape[0]//(int(size//ratio))):
+            for x in range(new_mask.shape[1]//int((size//ratio))):
+                region_index += 1
+                if not np.any(blocks[region_index]):
+                    continue
+            
+                box = self._get_coordinates(x*size, y*size, size, size)
+                annotation_structure = AnnotationStructure(
+                    annotation_path=path,
+                    index=annotation_index,
+                    type=AsapAnnotationParser.TYPES['polygon'],
+                    label=Label('tissue', 1),
+                    coordinates=box,
                 )
-                labels, counts = self._check_mask(mask_patch)
-                if labels is not None and counts is not None:
-                    for label, pixels in zip(labels, counts):
-                        if label in self._labels.values:
-                            coordinates = self._get_coordinates(
-                                x_pos, y_pos, x_shift, y_shift
-                            )
-                            annotation_structure = AnnotationStructure(
-                                annotation_path=path,
-                                index=annotation_index,
-                                type="polygon",
-                                label=self._labels.get_label_by_value(label).name,
-                                coordinates=coordinates,
-                                holes=[],
-                            )
-                            annotation_index += 1
-                            yield annotation_structure
+                annotation_index += 1
+                yield annotation_structure
+            
 
         mask.close()
         mask = None

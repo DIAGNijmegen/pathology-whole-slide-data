@@ -1,4 +1,6 @@
-from typing import List
+from dataclasses import dataclass
+from typing import Any, List
+from warnings import warn
 
 from creationism.registration.factory import RegistrantFactory
 
@@ -11,10 +13,6 @@ class LabelValueError(Exception):
     pass
 
 
-from dataclasses import dataclass
-from warnings import warn
-
-
 @dataclass(frozen=True)
 class NegativeLabelValueWarning(Warning):
     ...
@@ -22,11 +20,17 @@ class NegativeLabelValueWarning(Warning):
 
 class Label(RegistrantFactory):
     @classmethod
-    def create(cls, label, *args, **kwargs):
+    def create(cls, label: Any, *args, **kwargs):
         return super().create(registrant_name=type(label), label=label, *args, **kwargs)
 
     def __init__(
-        self, name, value, overlay_index=1, weight=None, color="black", **kwargs
+        self,
+        name: str,
+        value: int,
+        overlay_index: int = 1,
+        weight: float = None,
+        color: str = "black",
+        **kwargs,
     ):
 
         self._name = str(name).lower()
@@ -86,7 +90,7 @@ def label_from_str(label: str, idx: int, *args, **kwargs):
 class Labels(RegistrantFactory):
     @classmethod
     def create(cls, labels):
-        return super().create(registrant_name=type(labels), labels=labels)
+        return super().create(registrant_name:=type(labels), labels=labels)
 
     def __init__(self, labels: List[Label]):
         self._labels = labels

@@ -125,14 +125,14 @@ class SegmentationPatchLabelSampler(PatchLabelSampler):
         mask = np.zeros((height, width), dtype=np.int32)
         # set labels of all selected annotations
         for annotation in annotations:
-            coordinates = np.copy(annotation.coordinates())
+            coordinates = np.copy(annotation.coordinates)
             coordinates = shift_coordinates(
                 coordinates, center_x, center_y, width, height, ratio
             )
 
             if isinstance(annotation, Polygon):
                 holemask = np.ones((width, height), dtype=np.int32) * -1
-                for hole in annotation.holes():
+                for hole in annotation.holes:
                     hcoordinates = shift_coordinates(
                         hole, center_x, center_y, width, height, ratio
                     )
@@ -230,7 +230,7 @@ class DetectionPatchLabelSampler(PatchLabelSampler):
         self, annotation, center_x, center_y, width, height, ratio
     ):
         coordinates = shift_coordinates(
-            annotation.coordinates(), center_x, center_y, width, height, ratio
+            annotation.coordinates, center_x, center_y, width, height, ratio
         )
 
         size = 0

@@ -98,7 +98,11 @@ class Annotation(RegistrantFactory):
 class Polygon(geometry.Polygon, Annotation):
     def __init__(self, index, annotation_path, label, coordinates, holes=[]):
         Annotation.__init__(self, index, annotation_path, label)
-        geometry.Polygon.__init__(self, coordinates, holes)
+        try:
+            geometry.Polygon.__init__(self, coordinates, holes)
+        except ValueError:
+            raise ValueError(f'error parsing {annotation_path}')
+
         self._coordinates = np.array(self.exterior.xy).T 
         self._holes = holes
         self._overlapping_annotations = []
@@ -116,8 +120,15 @@ class Polygon(geometry.Polygon, Annotation):
         )
 
     @property
+    def coordinates(self):
+        return self._coordinates
+    @property
+    def holes(self):
+        return [np.array(interior.xy).T for interior in self.interiors]
+
+    @property
     def base_coordinates(self):
-        return (self.coordinates() - self.bounds[:2])
+        return (self.coordinates - self.bounds[:2])
 
     @property
     def bounds(self):
@@ -167,13 +178,6 @@ class Polygon(geometry.Polygon, Annotation):
     def add_overlapping_annotations(self, overlap_annotations):
         self._overlapping_annotations.extend(overlap_annotations)
 
-    def coordinates(self):
-        return self._coordinates
-
-    def holes(self):
-        return [np.array(interior.xy).T for interior in self.interiors]
-
-
 @Annotation.register(("point", "dot"))
 class Point(geometry.Point, Annotation):
     def __init__(self, index, annotation_path, label, coordinates, holes=None):
@@ -191,9 +195,18 @@ class Point(geometry.Point, Annotation):
                 self._coordinates,
             ),
         )
-
+    
+    @property
     def coordinates(self):
         return np.array([self.x, self.y])
+    
+    @property
+    def center(self):
+        return self.x, self.y
+    
+    @property
+    def centroid(self):
+        return self.center
 
     @property
     def area(self):

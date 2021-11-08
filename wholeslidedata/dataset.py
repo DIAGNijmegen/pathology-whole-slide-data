@@ -4,8 +4,6 @@ from dataclasses import dataclass
 from pprint import pformat
 from typing import Dict, Tuple
 
-# from multifilelogger import multifilelogging
-
 from wholeslidedata.annotation import utils as annotation_utils
 from wholeslidedata.labels import Labels
 from wholeslidedata.mode import WholeSlideMode
@@ -108,23 +106,6 @@ class DataSet(UserDict):
 
     def _log(self):
         pass
-
-    #     if multifilelogging._LoggingState.log_path:
-    #         logger = multifilelogging.create_logger(f"dataset-{self.mode.name}")
-    #         logger.info(
-    #             "\nTotal Annotations:\n" + pformat(self.annotation_counts) + "\n"
-    #         )
-    #         logger.info("\nAnnotations:\n" + pformat(self.annotations_per_label) + "\n")
-    #         logger.info("\nPixels:\n" + pformat(self.pixels_per_label) + "\n")
-    #         logger.info(
-    #             "\nAnnotations (per image):\n"
-    #             + pformat(self.annotations_per_label_per_key)
-    #             + "\n"
-    #         )
-    #         logger.info(
-    #             "\nPixels (per image):\n" + pformat(self.pixels_per_label_per_key)
-    #         )
-
 
 class WholeSlideDataSet(DataSet):
     def __init__(
@@ -299,25 +280,3 @@ class WholeSlideDataSet(DataSet):
                         counts_per_label_per_key_[file_key][label] = 0
                     counts_per_label_per_key_[file_key][label] += pixels
         return counts_per_label_per_key_
-
-
-# def open_datasets_from_yaml(
-#     yaml_source,
-#     keys=("training", "validation", "test"),
-#     copy_path=None,
-#     image_backend="asap",
-#     annotation_backend="asap",
-#     open_images_ahead=True,
-# ):
-
-#     with open(yaml_source) as file:
-#         data = yaml.load(file, Loader=yaml.FullLoader)
-
-#     datasets = {}
-
-#     datasets[key] = WholeSlideDataSet(
-#         mode=Mode[key],
-#         data_sources=data_sources,
-#         open_images_ahead=open_images_ahead,
-#     )
-#     return datasets

@@ -64,19 +64,7 @@ class InvalidSpacingError(ValueError):
 
 
 class ImageBackend(RegistrantFactory):
-    """[summary]
-
-    Args:
-        RegistrantFactory ([type]): [description]
-
-    Raises:
-        UnsupportedVendorError: [description]
-        ValueError: [description]
-        ValueError: [description]
-        InvalidSpacingError: [description]
-
-    Returns:
-        [type]: [description]
+    """ Image backend abstract class
     """
 
 
@@ -127,26 +115,7 @@ class WholeSlideImageBackend(ImageBackend):
         center: bool = True,
         relative: bool = False,
     ) -> np.ndarray:
-        """[summary]
-
-        Args:
-            x ([type]): [description]
-            y ([type]): [description]
-            width ([type]): [description]
-            heigth ([type]): [description]
-            spacing (float): [description]
-            center (bool, optional): [description]. Defaults to True.
-            relative (bool, optional): [description]. Defaults to False.
-
-        Raises:
-            UnsupportedVendorError: [description]
-            ValueError: [description]
-            ValueError: [description]
-            InvalidSpacingError: [description]
-
-        Returns:
-            np.ndarray: [description]
-        """
+        """ """
 
 
 if LOAD_OPENSLIDE_BACKEND:
