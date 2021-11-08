@@ -218,11 +218,6 @@
        wholeslidedata.annotation.utils.shift_coordinates
       </a>
      </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="wholeslidedata.annotation.utils.Within.html">
-       wholeslidedata.annotation.utils.Within
-      </a>
-     </li>
     </ul>
    </li>
    <li class="toctree-l2 has-children">
@@ -1351,8 +1346,8 @@
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create</span></code>(registrant_name[, return_type])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.image.backend.WholeSlideImageBackend.get_patch" title="wholeslidedata.image.backend.WholeSlideImageBackend.get_patch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_patch</span></code></a>(x, y, width, heigth, spacing[, ...])</p></td>
-<td><p>[summary]</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_patch</span></code>(x, y, width, heigth, spacing[, ...])</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_registrant</span></code>(registrant_name)</p></td>
 <td><p></p></td>
@@ -1402,29 +1397,6 @@
 <dt class="sig sig-object py" id="wholeslidedata.image.backend.WholeSlideImageBackend.close">
 <em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/image/backend.html#WholeSlideImageBackend.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.image.backend.WholeSlideImageBackend.close" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="wholeslidedata.image.backend.WholeSlideImageBackend.get_patch">
-<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">get_patch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heigth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/wholeslidedata/image/backend.html#WholeSlideImageBackend.get_patch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.image.backend.WholeSlideImageBackend.get_patch" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>x ([type]): [description]
-y ([type]): [description]
-width ([type]): [description]
-heigth ([type]): [description]
-spacing (float): [description]
-center (bool, optional): [description]. Defaults to True.
-relative (bool, optional): [description]. Defaults to False.</p>
-</dd>
-<dt>Raises:</dt><dd><p>UnsupportedVendorError: [description]
-ValueError: [description]
-ValueError: [description]
-InvalidSpacingError: [description]</p>
-</dd>
-<dt>Returns:</dt><dd><p>np.ndarray: [description]</p>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>

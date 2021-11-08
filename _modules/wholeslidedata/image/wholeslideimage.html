@@ -127,23 +127,33 @@
 <span></span><span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span> <span class="nn">wholeslidedata.image.utils</span> <span class="kn">import</span> <span class="n">take_closest_level</span>
 <span class="kn">from</span> <span class="nn">wholeslidedata.image.backend</span> <span class="kn">import</span> <span class="n">WholeSlideImageBackend</span>
-
+<span class="kn">from</span> <span class="nn">wholeslidedata.extensions</span> <span class="kn">import</span> <span class="n">WholeSlideImageExtension</span>
+<span class="kn">from</span> <span class="nn">wholeslidedata.annotation.structures</span> <span class="kn">import</span> <span class="n">Annotation</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
 
 
 <div class="viewcode-block" id="WholeSlideImage"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.image.wholeslideimage.WholeSlideImage.html#wholeslidedata.image.wholeslideimage.WholeSlideImage">[docs]</a><span class="k">class</span> <span class="nc">WholeSlideImage</span><span class="p">:</span>
     <span class="n">SPACING_MARGIN</span> <span class="o">=</span> <span class="mf">0.3</span>
 
 <div class="viewcode-block" id="WholeSlideImage.__init__"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.image.wholeslideimage.WholeSlideImage.html#wholeslidedata.image.wholeslideimage.WholeSlideImage.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">backend</span><span class="p">:</span> <span class="n">WholeSlideImageBackend</span> <span class="o">=</span> <span class="s1">&#39;openslide&#39;</span><span class="p">,</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+        <span class="n">backend</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WholeSlideImageBackend</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;openslide&quot;</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="sd">&quot;&quot;&quot; WholeSlideImage that can open en sample from whole slide images</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            path (Union[Path, str]): path to whole slide image file</span>
+<span class="sd">            backend (Union[WholeSlideImageBackend, str], optional): image backend that opens and extracts regions from the whole slide image. Defaults to &#39;openslide&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span> <span class="o">=</span> <span class="n">WholeSlideImageBackend</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_extension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">suffix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_extension</span> <span class="o">=</span> <span class="n">WholeSlideImageExtension</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">suffix</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_shapes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_init_shapes</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_downsamplings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">_init_downsamplings</span><span class="p">()</span>
@@ -159,11 +169,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">extension</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">extension</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WholeSlideImageExtension</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extension</span>
 
     <span class="nd">@property</span>
@@ -205,11 +215,11 @@
         <span class="n">shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shapes</span><span class="p">[</span><span class="n">level</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_patch</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get_annotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">annotation</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_annotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">annotation</span><span class="p">:</span> <span class="n">Annotation</span><span class="p">,</span> <span class="n">spacing</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">margin</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="n">scaling</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spacings</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_real_spacing</span><span class="p">(</span><span class="n">spacing</span><span class="p">)</span>
         <span class="n">size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="o">+</span> <span class="n">margin</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_patch</span><span class="p">(</span>
-            <span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">center</span><span class="p">)</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">center</span><span class="p">),</span>
             <span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">,</span>
             <span class="n">spacing</span><span class="o">=</span><span class="n">spacing</span><span class="p">,</span>
         <span class="p">)</span>
@@ -218,7 +228,7 @@
         <span class="n">level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_level_from_spacing</span><span class="p">(</span><span class="n">spacing</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_downsampling_from_level</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get_patch</span><span class="p">(</span>
+<div class="viewcode-block" id="WholeSlideImage.get_patch"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.image.wholeslideimage.WholeSlideImage.html#wholeslidedata.image.wholeslideimage.WholeSlideImage.get_patch">[docs]</a>    <span class="k">def</span> <span class="nf">get_patch</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -228,6 +238,21 @@
         <span class="n">center</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">relative</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+
+        <span class="sd">&quot;&quot;&quot; Extracts a patch/region from the wholeslideimage</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (int): x value</span>
+<span class="sd">            y (int): y value</span>
+<span class="sd">            width (int): width of region</span>
+<span class="sd">            height (int): height of region</span>
+<span class="sd">            spacing (float): spacing/resolution of the patch</span>
+<span class="sd">            center (bool, optional): if x,y values are centres or top left coordinated. Defaults to True.</span>
+<span class="sd">            relative (bool, optional): if x,y values are a reference to the dimensions of the specified spacing. Defaults to False.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            np.ndarray: numpy patch</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
 
         <span class="k">if</span> <span class="n">relative</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">relative</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -243,8 +268,7 @@
         <span class="k">if</span> <span class="n">center</span><span class="p">:</span>
             <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">downsampling</span> <span class="o">*</span> <span class="p">(</span><span class="n">width</span> <span class="o">//</span> <span class="mi">2</span><span class="p">),</span> <span class="n">y</span> <span class="o">-</span> <span class="n">downsampling</span> <span class="o">*</span> <span class="p">(</span><span class="n">height</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
 
-        
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">get_patch</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">get_patch</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span></div></div>
 </pre></div>
 
               </div>

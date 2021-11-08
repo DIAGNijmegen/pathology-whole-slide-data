@@ -218,11 +218,6 @@
        wholeslidedata.annotation.utils.shift_coordinates
       </a>
      </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="wholeslidedata.annotation.utils.Within.html">
-       wholeslidedata.annotation.utils.Within
-      </a>
-     </li>
     </ul>
    </li>
    <li class="toctree-l2 has-children">
@@ -1325,12 +1320,24 @@
 <h1>wholeslidedata.image.wholeslideimage.WholeSlideImage<a class="headerlink" href="#wholeslidedata-image-wholeslideimage-wholeslideimage" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="wholeslidedata.image.wholeslideimage.WholeSlideImage">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">WholeSlideImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="wholeslidedata.image.backend.WholeSlideImageBackend.html#wholeslidedata.image.backend.WholeSlideImageBackend" title="wholeslidedata.image.backend.WholeSlideImageBackend"><span class="pre">wholeslidedata.image.backend.WholeSlideImageBackend</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'openslide'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/image/wholeslideimage.html#WholeSlideImage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.image.wholeslideimage.WholeSlideImage" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">WholeSlideImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="wholeslidedata.image.backend.WholeSlideImageBackend.html#wholeslidedata.image.backend.WholeSlideImageBackend" title="wholeslidedata.image.backend.WholeSlideImageBackend"><span class="pre">wholeslidedata.image.backend.WholeSlideImageBackend</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'openslide'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/image/wholeslideimage.html#WholeSlideImage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.image.wholeslideimage.WholeSlideImage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>WholeSlideImage that can open en sample from whole slide images</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>path (Union[Path, str]): path to whole slide image file
+backend (Union[WholeSlideImageBackend, str], optional): image backend that opens and extracts regions from the whole slide image. Defaults to ‘openslide’.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.image.wholeslideimage.WholeSlideImage.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="wholeslidedata.image.backend.WholeSlideImageBackend.html#wholeslidedata.image.backend.WholeSlideImageBackend" title="wholeslidedata.image.backend.WholeSlideImageBackend"><span class="pre">wholeslidedata.image.backend.WholeSlideImageBackend</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'openslide'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/wholeslidedata/image/wholeslideimage.html#WholeSlideImage.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.image.wholeslideimage.WholeSlideImage.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="wholeslidedata.image.backend.WholeSlideImageBackend.html#wholeslidedata.image.backend.WholeSlideImageBackend" title="wholeslidedata.image.backend.WholeSlideImageBackend"><span class="pre">wholeslidedata.image.backend.WholeSlideImageBackend</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'openslide'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/wholeslidedata/image/wholeslideimage.html#WholeSlideImage.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.image.wholeslideimage.WholeSlideImage.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>WholeSlideImage that can open en sample from whole slide images</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>path (Union[Path, str]): path to whole slide image file
+backend (Union[WholeSlideImageBackend, str], optional): image backend that opens and extracts regions from the whole slide image. Defaults to ‘openslide’.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <p class="rubric">Methods</p>
 <table class="longtable table autosummary">
@@ -1340,7 +1347,7 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.image.wholeslideimage.WholeSlideImage.__init__" title="wholeslidedata.image.wholeslideimage.WholeSlideImage.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(path[, backend])</p></td>
-<td><p></p></td>
+<td><p>WholeSlideImage that can open en sample from whole slide images</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">close</span></code>()</p></td>
 <td><p></p></td>
@@ -1357,8 +1364,8 @@
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_level_from_spacing</span></code>(spacing)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_patch</span></code>(x, y, width, height, spacing[, ...])</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.image.wholeslideimage.WholeSlideImage.get_patch" title="wholeslidedata.image.wholeslideimage.WholeSlideImage.get_patch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_patch</span></code></a>(x, y, width, height, spacing[, ...])</p></td>
+<td><p>Extracts a patch/region from the wholeslideimage</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_real_spacing</span></code>(spacing)</p></td>
 <td><p></p></td>
@@ -1398,6 +1405,24 @@
 </tr>
 </tbody>
 </table>
+<dl class="py method">
+<dt class="sig sig-object py" id="wholeslidedata.image.wholeslideimage.WholeSlideImage.get_patch">
+<span class="sig-name descname"><span class="pre">get_patch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/wholeslidedata/image/wholeslideimage.html#WholeSlideImage.get_patch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.image.wholeslideimage.WholeSlideImage.get_patch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts a patch/region from the wholeslideimage</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>x (int): x value
+y (int): y value
+width (int): width of region
+height (int): height of region
+spacing (float): spacing/resolution of the patch
+center (bool, optional): if x,y values are centres or top left coordinated. Defaults to True.
+relative (bool, optional): if x,y values are a reference to the dimensions of the specified spacing. Defaults to False.</p>
+</dd>
+<dt>Returns:</dt><dd><p>np.ndarray: numpy patch</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>

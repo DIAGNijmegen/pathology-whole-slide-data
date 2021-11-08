@@ -218,11 +218,6 @@
        wholeslidedata.annotation.utils.shift_coordinates
       </a>
      </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="wholeslidedata.annotation.utils.Within.html">
-       wholeslidedata.annotation.utils.Within
-      </a>
-     </li>
     </ul>
    </li>
    <li class="toctree-l2 current active has-children">
@@ -1325,13 +1320,37 @@
 <h1>wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation<a class="headerlink" href="#wholeslidedata-annotation-wholeslideannotation-wholeslideannotation" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">WholeSlideAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotation_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renamed_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parser</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'asap'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by_overlay_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_overlap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/annotation/wholeslideannotation.html#WholeSlideAnnotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">WholeSlideAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotation_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="wholeslidedata.labels.Labels.html#wholeslidedata.labels.Labels" title="wholeslidedata.labels.Labels"><span class="pre">wholeslidedata.labels.Labels</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">list</span><span class="p"><span class="pre">,</span> </span><span class="pre">tuple</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renamed_labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="wholeslidedata.labels.Labels.html#wholeslidedata.labels.Labels" title="wholeslidedata.labels.Labels"><span class="pre">wholeslidedata.labels.Labels</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">list</span><span class="p"><span class="pre">,</span> </span><span class="pre">tuple</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parser</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="wholeslidedata.annotation.parsers.AnnotationParser.html#wholeslidedata.annotation.parsers.AnnotationParser" title="wholeslidedata.annotation.parsers.AnnotationParser"><span class="pre">wholeslidedata.annotation.parsers.AnnotationParser</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'asap'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by_overlay_index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_overlap</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/annotation/wholeslideannotation.html#WholeSlideAnnotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class contains all annotations of an image.</p>
+<p>WholeSlideAnnotation contains all annotions of an whole slide image</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>annotation_path (Union[Path, str]): path to annotation file
+labels (Optional[Union[Labels, list, tuple, dict]], optional): labels to be used from annotation file. Defaults to None.
+renamed_labels (Optional[Union[Labels, list, tuple, dict]], optional): rename labels. Defaults to None.
+parser (AnnotationParser, optional): annotation parser. Defaults to “asap”.
+sort_by_overlay_index (bool, optional): if true, selecting annotions will be sorted by overlay index when . Defaults to False.
+ignore_overlap (bool, optional): if true overlapping annotations will be not set. Defaults to True.</p>
+</dd>
+<dt>Raises:</dt><dd><p>FileNotFoundError: if annotation file is not found</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotation_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renamed_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parser</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'asap'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by_overlay_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_overlap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/annotation/wholeslideannotation.html#WholeSlideAnnotation.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotation_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="wholeslidedata.labels.Labels.html#wholeslidedata.labels.Labels" title="wholeslidedata.labels.Labels"><span class="pre">wholeslidedata.labels.Labels</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">list</span><span class="p"><span class="pre">,</span> </span><span class="pre">tuple</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renamed_labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="wholeslidedata.labels.Labels.html#wholeslidedata.labels.Labels" title="wholeslidedata.labels.Labels"><span class="pre">wholeslidedata.labels.Labels</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">list</span><span class="p"><span class="pre">,</span> </span><span class="pre">tuple</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parser</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="wholeslidedata.annotation.parsers.AnnotationParser.html#wholeslidedata.annotation.parsers.AnnotationParser" title="wholeslidedata.annotation.parsers.AnnotationParser"><span class="pre">wholeslidedata.annotation.parsers.AnnotationParser</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'asap'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by_overlay_index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_overlap</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/annotation/wholeslideannotation.html#WholeSlideAnnotation.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>WholeSlideAnnotation contains all annotions of an whole slide image</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>annotation_path (Union[Path, str]): path to annotation file
+labels (Optional[Union[Labels, list, tuple, dict]], optional): labels to be used from annotation file. Defaults to None.
+renamed_labels (Optional[Union[Labels, list, tuple, dict]], optional): rename labels. Defaults to None.
+parser (AnnotationParser, optional): annotation parser. Defaults to “asap”.
+sort_by_overlay_index (bool, optional): if true, selecting annotions will be sorted by overlay index when . Defaults to False.
+ignore_overlap (bool, optional): if true overlapping annotations will be not set. Defaults to True.</p>
+</dd>
+<dt>Raises:</dt><dd><p>FileNotFoundError: if annotation file is not found</p>
+</dd>
+</dl>
+</dd></dl>
 
 <p class="rubric">Methods</p>
 <table class="longtable table autosummary">
@@ -1341,10 +1360,10 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.__init__" title="wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(annotation_path[, labels, ...])</p></td>
-<td><p></p></td>
+<td><p>WholeSlideAnnotation contains all annotions of an whole slide image</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_annotations</span></code>(center_x, center_y, ...)</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.select_annotations" title="wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.select_annotations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_annotations</span></code></a>(center_x, center_y, ...)</p></td>
+<td><p>Selects annotations within specific region and sorts accordingly</p></td>
 </tr>
 </tbody>
 </table>
@@ -1367,11 +1386,36 @@
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">path</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sampling_annotations</span></code></p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.sampling_annotations" title="wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.sampling_annotations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sampling_annotations</span></code></a></p></td>
+<td><p>Annotations that will be used for sampling</p></td>
 </tr>
 </tbody>
 </table>
+<dl class="py property">
+<dt class="sig sig-object py" id="wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.sampling_annotations">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">sampling_annotations</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="wholeslidedata.annotation.structures.Annotation.html#wholeslidedata.annotation.structures.Annotation" title="wholeslidedata.annotation.structures.Annotation"><span class="pre">wholeslidedata.annotation.structures.Annotation</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.sampling_annotations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Annotations that will be used for sampling</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List[Annotation]: list of annotations</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.select_annotations">
+<span class="sig-name descname"><span class="pre">select_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center_x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center_y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="wholeslidedata.annotation.structures.Annotation.html#wholeslidedata.annotation.structures.Annotation" title="wholeslidedata.annotation.structures.Annotation"><span class="pre">wholeslidedata.annotation.structures.Annotation</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/wholeslidedata/annotation/wholeslideannotation.html#WholeSlideAnnotation.select_annotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.select_annotations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selects annotations within specific region and sorts accordingly</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>center_x (int): x center of region
+center_y (int): y center of region
+width (int): width of region
+height (int): height of region</p>
+</dd>
+<dt>Returns:</dt><dd><p>List[Annotation]: all annotations that overlap with specified region</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>

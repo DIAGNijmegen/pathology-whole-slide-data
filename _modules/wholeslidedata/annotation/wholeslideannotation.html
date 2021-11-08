@@ -125,19 +125,23 @@
                 
   <h1>Source code for wholeslidedata.annotation.wholeslideannotation</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">shapely</span> <span class="kn">import</span> <span class="n">geometry</span>
 <span class="kn">from</span> <span class="nn">shapely.strtree</span> <span class="kn">import</span> <span class="n">STRtree</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.annotation.structures</span> <span class="kn">import</span> <span class="n">Polygon</span>
+<span class="kn">from</span> <span class="nn">wholeslidedata.annotation.structures</span> <span class="kn">import</span> <span class="n">Annotation</span><span class="p">,</span> <span class="n">Polygon</span>
 <span class="kn">from</span> <span class="nn">wholeslidedata.annotation.parsers</span> <span class="kn">import</span> <span class="n">AnnotationParser</span>
 <span class="kn">from</span> <span class="nn">wholeslidedata.annotation</span> <span class="kn">import</span> <span class="n">utils</span> <span class="k">as</span> <span class="n">annotation_utils</span>
+<span class="kn">from</span> <span class="nn">wholeslidedata.labels</span> <span class="kn">import</span> <span class="n">Labels</span>
+
 
 <div class="viewcode-block" id="area_sort_with_roi"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.wholeslideannotation.area_sort_with_roi.html#wholeslidedata.annotation.wholeslideannotation.area_sort_with_roi">[docs]</a><span class="k">def</span> <span class="nf">area_sort_with_roi</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;roi&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="mi">100000</span><span class="o">*</span><span class="mi">100000</span>
+    <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;roi&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">100000</span> <span class="o">*</span> <span class="mi">100000</span>
     <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">area</span></div>
 
-<div class="viewcode-block" id="WholeSlideAnnotation"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.html#wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation">[docs]</a><span class="k">class</span> <span class="nc">WholeSlideAnnotation</span><span class="p">():</span>
+
+<div class="viewcode-block" id="WholeSlideAnnotation"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.html#wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation">[docs]</a><span class="k">class</span> <span class="nc">WholeSlideAnnotation</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class contains all annotations of an image.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -147,37 +151,53 @@
 
 <div class="viewcode-block" id="WholeSlideAnnotation.__init__"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.html#wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">annotation_path</span><span class="p">,</span>
-        <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">renamed_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">parser</span><span class="o">=</span><span class="s2">&quot;asap&quot;</span><span class="p">,</span>
-        <span class="n">sort_by_overlay_index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">ignore_overlap</span><span class="o">=</span><span class="kc">True</span>
+        <span class="n">annotation_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+        <span class="n">labels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Labels</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">renamed_labels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Labels</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">parser</span><span class="p">:</span> <span class="n">AnnotationParser</span> <span class="o">=</span> <span class="s2">&quot;asap&quot;</span><span class="p">,</span>
+        <span class="n">sort_by_overlay_index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">ignore_overlap</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;WholeSlideAnnotation contains all annotions of an whole slide image</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            annotation_path (Union[Path, str]): path to annotation file</span>
+<span class="sd">            labels (Optional[Union[Labels, list, tuple, dict]], optional): labels to be used from annotation file. Defaults to None.</span>
+<span class="sd">            renamed_labels (Optional[Union[Labels, list, tuple, dict]], optional): rename labels. Defaults to None.</span>
+<span class="sd">            parser (AnnotationParser, optional): annotation parser. Defaults to &quot;asap&quot;.</span>
+<span class="sd">            sort_by_overlay_index (bool, optional): if true, selecting annotions will be sorted by overlay index when . Defaults to False.</span>
+<span class="sd">            ignore_overlap (bool, optional): if true overlapping annotations will be not set. Defaults to True.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            FileNotFoundError: if annotation file is not found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_annotation_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">annotation_path</span><span class="p">)</span>
-        
+
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_annotation_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_annotation_path</span><span class="p">)</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_annotation_parser</span> <span class="o">=</span> <span class="n">AnnotationParser</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_annotations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_annotation_parser</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">annotation_path</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">renamed_labels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_annotations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_annotation_parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span>
+            <span class="n">annotation_path</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">renamed_labels</span>
+        <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_sort_by_overlay_index</span> <span class="o">=</span> <span class="n">sort_by_overlay_index</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span> <span class="o">=</span> <span class="n">annotation_utils</span><span class="o">.</span><span class="n">get_labels_in_annotations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annotations</span><span class="p">)</span>
-        <span class="n">sample_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_annotation_parser</span><span class="o">.</span><span class="n">sample_label_names</span> 
+        <span class="n">sample_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_annotation_parser</span><span class="o">.</span><span class="n">sample_label_names</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_sampling_annotations</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">annotation</span>
             <span class="k">for</span> <span class="n">annotation_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_annotation_parser</span><span class="o">.</span><span class="n">sample_annotation_types</span>
             <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_annotations</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">annotation</span><span class="p">,</span> <span class="n">annotation_type</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">sample_labels</span> <span class="ow">or</span> <span class="n">annotation</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">sample_labels</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">annotation</span><span class="p">,</span> <span class="n">annotation_type</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">sample_labels</span> <span class="ow">or</span> <span class="n">annotation</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">sample_labels</span><span class="p">)</span>
         <span class="p">]</span>
-        
+
         <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_overlap</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_overlapping_annotations</span><span class="p">()</span>
 
         <span class="n">WholeSlideAnnotation</span><span class="o">.</span><span class="n">STREE</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span> <span class="o">=</span> <span class="n">STRtree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_annotations</span><span class="p">)</span></div>
-
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -192,7 +212,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">sampling_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">sampling_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Annotation</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Annotations that will be used for sampling</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Annotation]: list of annotations </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sampling_annotations</span>
 
     <span class="k">def</span> <span class="nf">_set_overlapping_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -205,7 +230,19 @@
 
                 <span class="n">annotation</span><span class="o">.</span><span class="n">add_overlapping_annotations</span><span class="p">(</span><span class="n">overlap_tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">annotation</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">select_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center_x</span><span class="p">,</span> <span class="n">center_y</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+<div class="viewcode-block" id="WholeSlideAnnotation.select_annotations"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.html#wholeslidedata.annotation.wholeslideannotation.WholeSlideAnnotation.select_annotations">[docs]</a>    <span class="k">def</span> <span class="nf">select_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center_x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">center_y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Annotation</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot; Selects annotations within specific region and sorts accordingly </span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            center_x (int): x center of region</span>
+<span class="sd">            center_y (int): y center of region</span>
+<span class="sd">            width (int): width of region</span>
+<span class="sd">            height (int): height of region</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Annotation]: all annotations that overlap with specified region</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
         <span class="n">box</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">box</span><span class="p">(</span>
             <span class="n">center_x</span> <span class="o">-</span> <span class="n">width</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span>
             <span class="n">center_y</span> <span class="o">-</span> <span class="n">height</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span>
@@ -225,11 +262,9 @@
             <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">get_label_by_name</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">sorted_annotations</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
-            <span class="n">sorted_annotations</span><span class="p">,</span>
-            <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">area_sort_with_roi</span><span class="p">(</span><span class="n">item</span><span class="p">),</span>
-            <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span>
+            <span class="n">sorted_annotations</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">area_sort_with_roi</span><span class="p">(</span><span class="n">item</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">sorted_annotations</span></div>
+        <span class="k">return</span> <span class="n">sorted_annotations</span></div></div>
 </pre></div>
 
               </div>

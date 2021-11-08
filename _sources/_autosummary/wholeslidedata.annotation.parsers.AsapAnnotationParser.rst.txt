@@ -1,4 +1,4 @@
-wholeslidedata.annotation.parsers.AsapAnnotationParser
+﻿wholeslidedata.annotation.parsers.AsapAnnotationParser
 ======================================================
 
 .. currentmodule:: wholeslidedata.annotation.parsers
@@ -22,7 +22,7 @@ wholeslidedata.annotation.parsers.AsapAnnotationParser
       ~AsapAnnotationParser.get_available_labels
       ~AsapAnnotationParser.get_registrant
       ~AsapAnnotationParser.names
-      ~AsapAnnotationParser.read
+      ~AsapAnnotationParser.parse
       ~AsapAnnotationParser.register
       ~AsapAnnotationParser.register_func
       ~AsapAnnotationParser.registered

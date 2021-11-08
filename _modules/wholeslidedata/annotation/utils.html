@@ -132,14 +132,6 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="Within"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.utils.Within.html#wholeslidedata.annotation.utils.Within">[docs]</a><span class="k">class</span> <span class="nc">Within</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<div class="viewcode-block" id="Within.__init__"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.utils.Within.html#wholeslidedata.annotation.utils.Within.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">o</span> <span class="o">=</span> <span class="n">o</span></div>
-
-    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">o</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">within</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">o</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span></div>
-
-
 <div class="viewcode-block" id="get_labels_in_annotations"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.utils.get_labels_in_annotations.html#wholeslidedata.annotation.utils.get_labels_in_annotations">[docs]</a><span class="k">def</span> <span class="nf">get_labels_in_annotations</span><span class="p">(</span><span class="n">annotations</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">Labels</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="n">annotation</span><span class="o">.</span><span class="n">label</span> <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">])</span></div>
 
@@ -190,7 +182,7 @@
         <span class="k">if</span> <span class="n">use_base_coordinates</span><span class="p">:</span>
             <span class="n">coordinates</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="n">base_coordinates</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">coordinates</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="n">coordinates</span><span class="p">()</span> <span class="o">*</span> <span class="n">scale</span>
+            <span class="n">coordinates</span> <span class="o">=</span> <span class="n">annotation</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">*</span> <span class="n">scale</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">annotation</span><span class="p">,</span> <span class="n">Point</span><span class="p">):</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">annotation</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">color</span><span class="p">)</span>

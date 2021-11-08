@@ -130,8 +130,6 @@
 <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pformat</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="c1"># from multifilelogger import multifilelogging</span>
-
 <span class="kn">from</span> <span class="nn">wholeslidedata.annotation</span> <span class="kn">import</span> <span class="n">utils</span> <span class="k">as</span> <span class="n">annotation_utils</span>
 <span class="kn">from</span> <span class="nn">wholeslidedata.labels</span> <span class="kn">import</span> <span class="n">Labels</span>
 <span class="kn">from</span> <span class="nn">wholeslidedata.mode</span> <span class="kn">import</span> <span class="n">WholeSlideMode</span>
@@ -234,23 +232,6 @@
 
     <span class="k">def</span> <span class="nf">_log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div>
-
-    <span class="c1">#     if multifilelogging._LoggingState.log_path:</span>
-    <span class="c1">#         logger = multifilelogging.create_logger(f&quot;dataset-{self.mode.name}&quot;)</span>
-    <span class="c1">#         logger.info(</span>
-    <span class="c1">#             &quot;\nTotal Annotations:\n&quot; + pformat(self.annotation_counts) + &quot;\n&quot;</span>
-    <span class="c1">#         )</span>
-    <span class="c1">#         logger.info(&quot;\nAnnotations:\n&quot; + pformat(self.annotations_per_label) + &quot;\n&quot;)</span>
-    <span class="c1">#         logger.info(&quot;\nPixels:\n&quot; + pformat(self.pixels_per_label) + &quot;\n&quot;)</span>
-    <span class="c1">#         logger.info(</span>
-    <span class="c1">#             &quot;\nAnnotations (per image):\n&quot;</span>
-    <span class="c1">#             + pformat(self.annotations_per_label_per_key)</span>
-    <span class="c1">#             + &quot;\n&quot;</span>
-    <span class="c1">#         )</span>
-    <span class="c1">#         logger.info(</span>
-    <span class="c1">#             &quot;\nPixels (per image):\n&quot; + pformat(self.pixels_per_label_per_key)</span>
-    <span class="c1">#         )</span>
-
 
 <div class="viewcode-block" id="WholeSlideDataSet"><a class="viewcode-back" href="../../_autosummary/wholeslidedata.dataset.WholeSlideDataSet.html#wholeslidedata.dataset.WholeSlideDataSet">[docs]</a><span class="k">class</span> <span class="nc">WholeSlideDataSet</span><span class="p">(</span><span class="n">DataSet</span><span class="p">):</span>
 <div class="viewcode-block" id="WholeSlideDataSet.__init__"><a class="viewcode-back" href="../../_autosummary/wholeslidedata.dataset.WholeSlideDataSet.html#wholeslidedata.dataset.WholeSlideDataSet.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -425,28 +406,6 @@
                         <span class="n">counts_per_label_per_key_</span><span class="p">[</span><span class="n">file_key</span><span class="p">][</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
                     <span class="n">counts_per_label_per_key_</span><span class="p">[</span><span class="n">file_key</span><span class="p">][</span><span class="n">label</span><span class="p">]</span> <span class="o">+=</span> <span class="n">pixels</span>
         <span class="k">return</span> <span class="n">counts_per_label_per_key_</span></div>
-
-
-<span class="c1"># def open_datasets_from_yaml(</span>
-<span class="c1">#     yaml_source,</span>
-<span class="c1">#     keys=(&quot;training&quot;, &quot;validation&quot;, &quot;test&quot;),</span>
-<span class="c1">#     copy_path=None,</span>
-<span class="c1">#     image_backend=&quot;asap&quot;,</span>
-<span class="c1">#     annotation_backend=&quot;asap&quot;,</span>
-<span class="c1">#     open_images_ahead=True,</span>
-<span class="c1"># ):</span>
-
-<span class="c1">#     with open(yaml_source) as file:</span>
-<span class="c1">#         data = yaml.load(file, Loader=yaml.FullLoader)</span>
-
-<span class="c1">#     datasets = {}</span>
-
-<span class="c1">#     datasets[key] = WholeSlideDataSet(</span>
-<span class="c1">#         mode=Mode[key],</span>
-<span class="c1">#         data_sources=data_sources,</span>
-<span class="c1">#         open_images_ahead=open_images_ahead,</span>
-<span class="c1">#     )</span>
-<span class="c1">#     return datasets</span>
 </pre></div>
 
               </div>

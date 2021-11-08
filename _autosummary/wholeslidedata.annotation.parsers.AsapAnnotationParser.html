@@ -218,11 +218,6 @@
        wholeslidedata.annotation.utils.shift_coordinates
       </a>
      </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="wholeslidedata.annotation.utils.Within.html">
-       wholeslidedata.annotation.utils.Within
-      </a>
-     </li>
     </ul>
    </li>
    <li class="toctree-l2 has-children">
@@ -1325,12 +1320,30 @@
 <h1>wholeslidedata.annotation.parsers.AsapAnnotationParser<a class="headerlink" href="#wholeslidedata-annotation-parsers-asapannotationparser" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.parsers.AsapAnnotationParser">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">AsapAnnotationParser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renamed_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_label_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_annotation_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('polygon',)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/annotation/parsers.html#AsapAnnotationParser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.annotation.parsers.AsapAnnotationParser" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">AsapAnnotationParser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="wholeslidedata.labels.Labels.html#wholeslidedata.labels.Labels" title="wholeslidedata.labels.Labels"><span class="pre">wholeslidedata.labels.Labels</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">list</span><span class="p"><span class="pre">,</span> </span><span class="pre">tuple</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renamed_labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="wholeslidedata.labels.Labels.html#wholeslidedata.labels.Labels" title="wholeslidedata.labels.Labels"><span class="pre">wholeslidedata.labels.Labels</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">list</span><span class="p"><span class="pre">,</span> </span><span class="pre">tuple</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_label_names</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">,</span> </span><span class="pre">tuple</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_annotation_types</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">,</span> </span><span class="pre">tuple</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">('polygon',)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/annotation/parsers.html#AsapAnnotationParser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.annotation.parsers.AsapAnnotationParser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="wholeslidedata.annotation.parsers.AnnotationParser.html#wholeslidedata.annotation.parsers.AnnotationParser" title="wholeslidedata.annotation.parsers.AnnotationParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">wholeslidedata.annotation.parsers.AnnotationParser</span></code></a></p>
+<p>Init</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>labels (Optional[Union[Labels, list, tuple, dict]], optional): All labels that are used to parse annotations. Defaults to None.
+renamed_labels (Optional[Union[Labels, list, tuple, dict]], optional): Automatic rename labels based on values. Defaults to None.
+scaling (float, optional): scaling factor for annotations. Defaults to 1.0.
+sample_label_names (Union[list, tuple], optional): label names that will be used for sampling. Defaults to ().
+sample_annotation_types (Union[list, tuple], optional): annotation type that will be used for sampling . Defaults to (“polygon”,).</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.parsers.AsapAnnotationParser.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renamed_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_label_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_annotation_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('polygon',)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.annotation.parsers.AsapAnnotationParser.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="wholeslidedata.labels.Labels.html#wholeslidedata.labels.Labels" title="wholeslidedata.labels.Labels"><span class="pre">wholeslidedata.labels.Labels</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">list</span><span class="p"><span class="pre">,</span> </span><span class="pre">tuple</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renamed_labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="wholeslidedata.labels.Labels.html#wholeslidedata.labels.Labels" title="wholeslidedata.labels.Labels"><span class="pre">wholeslidedata.labels.Labels</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">list</span><span class="p"><span class="pre">,</span> </span><span class="pre">tuple</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_label_names</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">,</span> </span><span class="pre">tuple</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_annotation_types</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">,</span> </span><span class="pre">tuple</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">('polygon',)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.annotation.parsers.AsapAnnotationParser.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>labels (Optional[Union[Labels, list, tuple, dict]], optional): All labels that are used to parse annotations. Defaults to None.
+renamed_labels (Optional[Union[Labels, list, tuple, dict]], optional): Automatic rename labels based on values. Defaults to None.
+scaling (float, optional): scaling factor for annotations. Defaults to 1.0.
+sample_label_names (Union[list, tuple], optional): label names that will be used for sampling. Defaults to ().
+sample_annotation_types (Union[list, tuple], optional): annotation type that will be used for sampling . Defaults to (“polygon”,).</p>
+</dd>
+</dl>
+</dd></dl>
 
 <p class="rubric">Methods</p>
 <table class="longtable table autosummary">
@@ -1340,7 +1353,7 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.parsers.AsapAnnotationParser.__init__" title="wholeslidedata.annotation.parsers.AsapAnnotationParser.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([labels, renamed_labels, scaling, ...])</p></td>
-<td><p></p></td>
+<td><p>Init</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">class_name</span></code>()</p></td>
 <td><p></p></td>
@@ -1348,8 +1361,8 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create</span></code>(registrant_name[, return_type])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_available_labels</span></code>(path)</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.parsers.AsapAnnotationParser.get_available_labels" title="wholeslidedata.annotation.parsers.AsapAnnotationParser.get_available_labels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_available_labels</span></code></a>(path)</p></td>
+<td><p>Get all labels available from annotation path</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_registrant</span></code>(registrant_name)</p></td>
 <td><p></p></td>
@@ -1357,8 +1370,8 @@
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">names</span></code>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">read</span></code>(annotation_path[, labels, renamed_labels])</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.parsers.AsapAnnotationParser.parse" title="wholeslidedata.annotation.parsers.AsapAnnotationParser.parse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse</span></code></a>(annotation_path[, labels, renamed_labels])</p></td>
+<td><p>Parses annotation file into list of annotations</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register</span></code>(registrant_names[, replace, recursive])</p></td>
 <td><p></p></td>
@@ -1407,6 +1420,32 @@
 </tr>
 </tbody>
 </table>
+<dl class="py method">
+<dt class="sig sig-object py" id="wholeslidedata.annotation.parsers.AsapAnnotationParser.get_available_labels">
+<span class="sig-name descname"><span class="pre">get_available_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/annotation/parsers.html#AsapAnnotationParser.get_available_labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.annotation.parsers.AsapAnnotationParser.get_available_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all labels available from annotation path</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>path (Union[Path, str]): path to annotation</p>
+</dd>
+<dt>Returns:</dt><dd><p>Labels: labels found in annotation path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wholeslidedata.annotation.parsers.AsapAnnotationParser.parse">
+<span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotation_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="wholeslidedata.labels.Labels.html#wholeslidedata.labels.Labels" title="wholeslidedata.labels.Labels"><span class="pre">wholeslidedata.labels.Labels</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">list</span><span class="p"><span class="pre">,</span> </span><span class="pre">tuple</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renamed_labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="wholeslidedata.labels.Labels.html#wholeslidedata.labels.Labels" title="wholeslidedata.labels.Labels"><span class="pre">wholeslidedata.labels.Labels</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">list</span><span class="p"><span class="pre">,</span> </span><span class="pre">tuple</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="wholeslidedata.annotation.structures.Annotation.html#wholeslidedata.annotation.structures.Annotation" title="wholeslidedata.annotation.structures.Annotation"><span class="pre">wholeslidedata.annotation.structures.Annotation</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#wholeslidedata.annotation.parsers.AsapAnnotationParser.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses annotation file into list of annotations</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>annotation_path (Union[Path, str]): path to annotation file
+labels (Optional[Union[Labels, list, tuple, dict]], optional): overwrites object instance labels. Defaults to None.
+renamed_labels (Optional[Union[Labels, list, tuple, dict]], optional): overwrites object instance renamed labels. Defaults to None.</p>
+</dd>
+<dt>Returns:</dt><dd><p>List[Annotation]: list of Annotations</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>

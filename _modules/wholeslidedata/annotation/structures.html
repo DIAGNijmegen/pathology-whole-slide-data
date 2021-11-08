@@ -224,7 +224,11 @@
 <span class="k">class</span> <span class="nc">Polygon</span><span class="p">(</span><span class="n">geometry</span><span class="o">.</span><span class="n">Polygon</span><span class="p">,</span> <span class="n">Annotation</span><span class="p">):</span>
 <div class="viewcode-block" id="Polygon.__init__"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.structures.Polygon.html#wholeslidedata.annotation.structures.Polygon.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">annotation_path</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="n">holes</span><span class="o">=</span><span class="p">[]):</span>
         <span class="n">Annotation</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">annotation_path</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
-        <span class="n">geometry</span><span class="o">.</span><span class="n">Polygon</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="n">holes</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">geometry</span><span class="o">.</span><span class="n">Polygon</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="n">holes</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;error parsing </span><span class="si">{</span><span class="n">annotation_path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_coordinates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> 
         <span class="bp">self</span><span class="o">.</span><span class="n">_holes</span> <span class="o">=</span> <span class="n">holes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_overlapping_annotations</span> <span class="o">=</span> <span class="p">[]</span></div>
@@ -242,8 +246,15 @@
         <span class="p">)</span>
 
     <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coordinates</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">holes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">interior</span><span class="o">.</span><span class="n">xy</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> <span class="k">for</span> <span class="n">interior</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interiors</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">base_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -291,14 +302,7 @@
         <span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">add_overlapping_annotations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">overlap_annotations</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_overlapping_annotations</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">overlap_annotations</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coordinates</span>
-
-    <span class="k">def</span> <span class="nf">holes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">interior</span><span class="o">.</span><span class="n">xy</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> <span class="k">for</span> <span class="n">interior</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interiors</span><span class="p">]</span></div>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">_overlapping_annotations</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">overlap_annotations</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Point"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.structures.Point.html#wholeslidedata.annotation.structures.Point">[docs]</a><span class="nd">@Annotation</span><span class="o">.</span><span class="n">register</span><span class="p">((</span><span class="s2">&quot;point&quot;</span><span class="p">,</span> <span class="s2">&quot;dot&quot;</span><span class="p">))</span>
 <span class="k">class</span> <span class="nc">Point</span><span class="p">(</span><span class="n">geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">,</span> <span class="n">Annotation</span><span class="p">):</span>
@@ -317,9 +321,18 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_coordinates</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">)</span>
-
+    
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">])</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">center</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">centroid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">center</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">area</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

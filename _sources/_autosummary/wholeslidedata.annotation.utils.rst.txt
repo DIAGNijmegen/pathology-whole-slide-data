@@ -1,4 +1,4 @@
-wholeslidedata.annotation.utils
+﻿wholeslidedata.annotation.utils
 ===============================
 
 .. automodule:: wholeslidedata.annotation.utils
@@ -23,14 +23,6 @@ wholeslidedata.annotation.utils
    
 
    
-   
-   .. rubric:: Classes
-
-   .. autosummary::
-      :toctree:                                         
-      :template: custom-class-template.rst               
-   
-      Within
    
    
 

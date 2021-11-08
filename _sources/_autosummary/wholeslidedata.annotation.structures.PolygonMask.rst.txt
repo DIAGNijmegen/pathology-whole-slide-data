@@ -22,7 +22,6 @@
       ~PolygonMask.buffer
       ~PolygonMask.class_name
       ~PolygonMask.contains
-      ~PolygonMask.coordinates
       ~PolygonMask.covered_by
       ~PolygonMask.covers
       ~PolygonMask.create
@@ -37,7 +36,6 @@
       ~PolygonMask.geometryType
       ~PolygonMask.get_registrant
       ~PolygonMask.hausdorff_distance
-      ~PolygonMask.holes
       ~PolygonMask.interpolate
       ~PolygonMask.intersection
       ~PolygonMask.intersects
@@ -82,6 +80,7 @@
       ~PolygonMask.center
       ~PolygonMask.centroid
       ~PolygonMask.convex_hull
+      ~PolygonMask.coordinates
       ~PolygonMask.coords
       ~PolygonMask.ctypes
       ~PolygonMask.downsampling_ratio
@@ -89,6 +88,7 @@
       ~PolygonMask.exterior
       ~PolygonMask.geom_type
       ~PolygonMask.has_z
+      ~PolygonMask.holes
       ~PolygonMask.image
       ~PolygonMask.impl
       ~PolygonMask.index

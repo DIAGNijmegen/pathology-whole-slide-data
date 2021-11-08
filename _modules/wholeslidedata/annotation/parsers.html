@@ -127,13 +127,16 @@
 <span></span><span class="kn">import</span> <span class="nn">abc</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ET</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">creationism.registration.factory</span> <span class="kn">import</span> <span class="n">RegistrantFactory</span>
 <span class="kn">from</span> <span class="nn">shapely</span> <span class="kn">import</span> <span class="n">affinity</span><span class="p">,</span> <span class="n">geometry</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.annotation.structures</span> <span class="kn">import</span> <span class="n">Annotation</span><span class="p">,</span> <span class="n">AnnotationStructure</span>
+<span class="kn">from</span> <span class="nn">wholeslidedata.annotation.structures</span> <span class="kn">import</span> <span class="p">(</span><span class="n">Annotation</span><span class="p">,</span>
+                                                  <span class="n">AnnotationStructure</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">wholeslidedata.labels</span> <span class="kn">import</span> <span class="n">Label</span><span class="p">,</span> <span class="n">Labels</span>
+<span class="kn">from</span> <span class="nn">wholeslidedata.samplers.utils</span> <span class="kn">import</span> <span class="n">block_shaped</span>
 
 <span class="kn">from</span> <span class="nn">..image.wholeslideimage</span> <span class="kn">import</span> <span class="n">WholeSlideImage</span>
 
@@ -143,14 +146,26 @@
 
 
 <div class="viewcode-block" id="AnnotationParser"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.parsers.AnnotationParser.html#wholeslidedata.annotation.parsers.AnnotationParser">[docs]</a><span class="k">class</span> <span class="nc">AnnotationParser</span><span class="p">(</span><span class="n">RegistrantFactory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for parsing annotations. Inherents from RegistrantFactory which allows to register subclasses&quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="AnnotationParser.__init__"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.parsers.AnnotationParser.html#wholeslidedata.annotation.parsers.AnnotationParser.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">renamed_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">scaling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">sample_label_names</span><span class="o">=</span><span class="p">(),</span>
-        <span class="n">sample_annotation_types</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;polygon&quot;</span><span class="p">,),</span>
+        <span class="n">labels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Labels</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">renamed_labels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Labels</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">sample_label_names</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+        <span class="n">sample_annotation_types</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;polygon&quot;</span><span class="p">,),</span>
     <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            labels (Optional[Union[Labels, list, tuple, dict]], optional): All labels that are used to parse annotations. Defaults to None.</span>
+<span class="sd">            renamed_labels (Optional[Union[Labels, list, tuple, dict]], optional): Automatic rename labels based on values. Defaults to None.</span>
+<span class="sd">            scaling (float, optional): scaling factor for annotations. Defaults to 1.0.</span>
+<span class="sd">            sample_label_names (Union[list, tuple], optional): label names that will be used for sampling. Defaults to ().</span>
+<span class="sd">            sample_annotation_types (Union[list, tuple], optional): annotation type that will be used for sampling . Defaults to (&quot;polygon&quot;,).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span> <span class="o">=</span> <span class="n">labels</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span> <span class="o">=</span> <span class="n">Labels</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_labels</span><span class="p">)</span>
@@ -166,10 +181,27 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_sample_label_names</span> <span class="o">=</span> <span class="n">sample_label_names</span></div>
 
-    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">annotation_path</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">renamed_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Annotation</span><span class="p">]:</span>
+<div class="viewcode-block" id="AnnotationParser.parse"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.parsers.AnnotationParser.html#wholeslidedata.annotation.parsers.AnnotationParser.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">annotation_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+        <span class="n">labels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Labels</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">renamed_labels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Labels</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Annotation</span><span class="p">]:</span>
+
+        <span class="sd">&quot;&quot;&quot;Parses annotation file into list of annotations</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            annotation_path (Union[Path, str]): path to annotation file</span>
+<span class="sd">            labels (Optional[Union[Labels, list, tuple, dict]], optional): overwrites object instance labels. Defaults to None.</span>
+<span class="sd">            renamed_labels (Optional[Union[Labels, list, tuple, dict]], optional): overwrites object instance renamed labels. Defaults to None.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Annotation]: list of Annotations</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_available_labels</span><span class="p">(</span><span class="n">annotation_path</span><span class="p">)</span>
+                <span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_available_labels</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">annotation_path</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span>
         <span class="k">else</span><span class="p">:</span>
@@ -189,7 +221,7 @@
             <span class="p">)</span>
 
             <span class="n">annotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">annotation</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">annotations</span>
+        <span class="k">return</span> <span class="n">annotations</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">sample_annotation_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -199,14 +231,23 @@
     <span class="k">def</span> <span class="nf">sample_label_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_label_names</span>
 
-    <span class="k">def</span> <span class="nf">get_available_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<div class="viewcode-block" id="AnnotationParser.get_available_labels"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.parsers.AnnotationParser.html#wholeslidedata.annotation.parsers.AnnotationParser.get_available_labels">[docs]</a>    <span class="k">def</span> <span class="nf">get_available_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Labels</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get all labels available from annotation path</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            path (Union[Path, str]): path to annotation</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Labels: labels found in annotation path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">annotation_structure</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_annotation_structures</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
             <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">annotation_structure</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Labels</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">Labels</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span></div>
 
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">_get_annotation_structures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">structure</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">AnnotationStructure</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">_get_annotation_structures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">labels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Labels</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">AnnotationStructure</span><span class="p">]:</span>
         <span class="k">pass</span>
 
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
@@ -233,11 +274,11 @@
         <span class="s2">&quot;pointset&quot;</span><span class="p">:</span> <span class="s2">&quot;point&quot;</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">get_available_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<div class="viewcode-block" id="AsapAnnotationParser.get_available_labels"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.parsers.AsapAnnotationParser.html#wholeslidedata.annotation.parsers.AsapAnnotationParser.get_available_labels">[docs]</a>    <span class="k">def</span> <span class="nf">get_available_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
         <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">annotation_structure</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_annotation_structures</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
             <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">annotation_structure</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Labels</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">Labels</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span></div>
 
     <span class="k">def</span> <span class="nf">_get_annotation_structures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
         <span class="n">tree</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
@@ -581,50 +622,50 @@
 <div class="viewcode-block" id="MaskAnnotationParser.__init__"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.parsers.MaskAnnotationParser.html#wholeslidedata.annotation.parsers.MaskAnnotationParser.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">1024</span><span class="p">),</span>
+        <span class="n">processing_spacing</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">output_spacing</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
         <span class="n">labels</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;tissue&quot;</span><span class="p">,),</span>
         <span class="n">out_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">scaling</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
         <span class="n">sample_annotation_types</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;polygon&quot;</span><span class="p">,),</span>
         <span class="n">backend</span><span class="o">=</span><span class="s2">&quot;asap&quot;</span><span class="p">,</span>
     <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_processing_spacing</span> <span class="o">=</span> <span class="n">processing_spacing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output_spacing</span> <span class="o">=</span> <span class="n">output_spacing</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">out_labels</span><span class="p">,</span> <span class="n">scaling</span><span class="p">,</span> <span class="p">(),</span> <span class="n">sample_annotation_types</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span> <span class="o">=</span> <span class="n">backend</span></div>
 
     <span class="k">def</span> <span class="nf">_get_annotation_structures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">WholeSlideImage</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="p">)</span>
-        <span class="n">spacing</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">spacings</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">x_dims</span><span class="p">,</span> <span class="n">y_dims</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">shapes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-        <span class="n">x_shift</span><span class="p">,</span> <span class="n">y_shift</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scaling</span><span class="p">)</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_processing_spacing</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_spacing</span>
+        <span class="n">np_mask</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">get_slide</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_processing_spacing</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np_mask</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">new_shape</span> <span class="o">=</span> <span class="n">shape</span> <span class="o">+</span> <span class="n">size</span><span class="o">//</span><span class="n">ratio</span> <span class="o">-</span> <span class="n">shape</span><span class="o">%</span><span class="p">(</span><span class="n">size</span><span class="o">//</span><span class="n">ratio</span><span class="p">)</span>
+        <span class="n">new_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">new_shape</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">))</span>
+        <span class="n">new_mask</span><span class="p">[:</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">:</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">np_mask</span>
+        <span class="n">blocks</span> <span class="o">=</span> <span class="n">block_shaped</span><span class="p">(</span><span class="n">new_mask</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">size</span><span class="o">//</span><span class="n">ratio</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">size</span><span class="o">//</span><span class="n">ratio</span><span class="p">))</span>
+        <span class="n">region_index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="n">annotation_index</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">y_pos</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y_dims</span><span class="o">-</span><span class="n">y_shift</span><span class="p">,</span> <span class="n">y_shift</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">x_pos</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x_dims</span><span class="o">-</span><span class="n">x_shift</span><span class="p">,</span> <span class="n">x_shift</span><span class="p">):</span>
-                <span class="n">mask_patch</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">get_patch</span><span class="p">(</span>
-                    <span class="n">x_pos</span><span class="p">,</span>
-                    <span class="n">y_pos</span><span class="p">,</span>
-                    <span class="n">x_shift</span><span class="p">,</span>
-                    <span class="n">y_shift</span><span class="p">,</span>
-                    <span class="n">spacing</span><span class="o">=</span><span class="n">spacing</span><span class="p">,</span>
-                    <span class="n">center</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">new_mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">size</span><span class="o">//</span><span class="n">ratio</span><span class="p">))):</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">new_mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">//</span><span class="nb">int</span><span class="p">((</span><span class="n">size</span><span class="o">//</span><span class="n">ratio</span><span class="p">))):</span>
+                <span class="n">region_index</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">blocks</span><span class="p">[</span><span class="n">region_index</span><span class="p">]):</span>
+                    <span class="k">continue</span>
+            
+                <span class="n">box</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_coordinates</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">size</span><span class="p">,</span> <span class="n">y</span><span class="o">*</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+                <span class="n">annotation_structure</span> <span class="o">=</span> <span class="n">AnnotationStructure</span><span class="p">(</span>
+                    <span class="n">annotation_path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span>
+                    <span class="n">index</span><span class="o">=</span><span class="n">annotation_index</span><span class="p">,</span>
+                    <span class="nb">type</span><span class="o">=</span><span class="n">AsapAnnotationParser</span><span class="o">.</span><span class="n">TYPES</span><span class="p">[</span><span class="s1">&#39;polygon&#39;</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="n">Label</span><span class="p">(</span><span class="s1">&#39;tissue&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                    <span class="n">coordinates</span><span class="o">=</span><span class="n">box</span><span class="p">,</span>
                 <span class="p">)</span>
-                <span class="n">labels</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_mask</span><span class="p">(</span><span class="n">mask_patch</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">counts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">pixels</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">counts</span><span class="p">):</span>
-                        <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
-                            <span class="n">coordinates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_coordinates</span><span class="p">(</span>
-                                <span class="n">x_pos</span><span class="p">,</span> <span class="n">y_pos</span><span class="p">,</span> <span class="n">x_shift</span><span class="p">,</span> <span class="n">y_shift</span>
-                            <span class="p">)</span>
-                            <span class="n">annotation_structure</span> <span class="o">=</span> <span class="n">AnnotationStructure</span><span class="p">(</span>
-                                <span class="n">annotation_path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span>
-                                <span class="n">index</span><span class="o">=</span><span class="n">annotation_index</span><span class="p">,</span>
-                                <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;polygon&quot;</span><span class="p">,</span>
-                                <span class="n">label</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_labels</span><span class="o">.</span><span class="n">get_label_by_value</span><span class="p">(</span><span class="n">label</span><span class="p">)</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-                                <span class="n">coordinates</span><span class="o">=</span><span class="n">coordinates</span><span class="p">,</span>
-                                <span class="n">holes</span><span class="o">=</span><span class="p">[],</span>
-                            <span class="p">)</span>
-                            <span class="n">annotation_index</span> <span class="o">+=</span> <span class="mi">1</span>
-                            <span class="k">yield</span> <span class="n">annotation_structure</span>
+                <span class="n">annotation_index</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">yield</span> <span class="n">annotation_structure</span>
+            
 
         <span class="n">mask</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="kc">None</span>

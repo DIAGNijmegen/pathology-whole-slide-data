@@ -22,7 +22,6 @@
       ~Point.buffer
       ~Point.class_name
       ~Point.contains
-      ~Point.coordinates
       ~Point.covered_by
       ~Point.covers
       ~Point.create
@@ -75,8 +74,10 @@
       ~Point.array_interface_base
       ~Point.boundary
       ~Point.bounds
+      ~Point.center
       ~Point.centroid
       ~Point.convex_hull
+      ~Point.coordinates
       ~Point.coords
       ~Point.ctypes
       ~Point.envelope

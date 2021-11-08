@@ -22,7 +22,6 @@
       ~Polygon.buffer
       ~Polygon.class_name
       ~Polygon.contains
-      ~Polygon.coordinates
       ~Polygon.covered_by
       ~Polygon.covers
       ~Polygon.create
@@ -37,7 +36,6 @@
       ~Polygon.geometryType
       ~Polygon.get_registrant
       ~Polygon.hausdorff_distance
-      ~Polygon.holes
       ~Polygon.interpolate
       ~Polygon.intersection
       ~Polygon.intersects
@@ -82,12 +80,14 @@
       ~Polygon.center
       ~Polygon.centroid
       ~Polygon.convex_hull
+      ~Polygon.coordinates
       ~Polygon.coords
       ~Polygon.ctypes
       ~Polygon.envelope
       ~Polygon.exterior
       ~Polygon.geom_type
       ~Polygon.has_z
+      ~Polygon.holes
       ~Polygon.impl
       ~Polygon.index
       ~Polygon.interiors

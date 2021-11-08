@@ -190,19 +190,7 @@
 
 
 <div class="viewcode-block" id="ImageBackend"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.image.backend.ImageBackend.html#wholeslidedata.image.backend.ImageBackend">[docs]</a><span class="k">class</span> <span class="nc">ImageBackend</span><span class="p">(</span><span class="n">RegistrantFactory</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;[summary]</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        RegistrantFactory ([type]): [description]</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        UnsupportedVendorError: [description]</span>
-<span class="sd">        ValueError: [description]</span>
-<span class="sd">        ValueError: [description]</span>
-<span class="sd">        InvalidSpacingError: [description]</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        [type]: [description]</span>
+    <span class="sd">&quot;&quot;&quot; Image backend abstract class</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
@@ -242,7 +230,7 @@
         <span class="sd">&quot;&quot;&quot;[summary]</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
-<div class="viewcode-block" id="WholeSlideImageBackend.get_patch"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.image.backend.WholeSlideImageBackend.html#wholeslidedata.image.backend.WholeSlideImageBackend.get_patch">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">get_patch</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">x</span><span class="p">,</span>
@@ -253,26 +241,7 @@
         <span class="n">center</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">relative</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;[summary]</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            x ([type]): [description]</span>
-<span class="sd">            y ([type]): [description]</span>
-<span class="sd">            width ([type]): [description]</span>
-<span class="sd">            heigth ([type]): [description]</span>
-<span class="sd">            spacing (float): [description]</span>
-<span class="sd">            center (bool, optional): [description]. Defaults to True.</span>
-<span class="sd">            relative (bool, optional): [description]. Defaults to False.</span>
-
-<span class="sd">        Raises:</span>
-<span class="sd">            UnsupportedVendorError: [description]</span>
-<span class="sd">            ValueError: [description]</span>
-<span class="sd">            ValueError: [description]</span>
-<span class="sd">            InvalidSpacingError: [description]</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            np.ndarray: [description]</span>
-<span class="sd">        &quot;&quot;&quot;</span></div></div>
+        <span class="sd">&quot;&quot;&quot; &quot;&quot;&quot;</span></div>
 
 
 <span class="k">if</span> <span class="n">LOAD_OPENSLIDE_BACKEND</span><span class="p">:</span>
@@ -283,7 +252,7 @@
             <span class="n">OpenSlide</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
             <span class="n">WholeSlideImageBackend</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="OpenSlideWholeSlideImageBackend.get_patch"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.image.backend.OpenSlideWholeSlideImageBackend.html#wholeslidedata.image.backend.OpenSlideWholeSlideImageBackend.get_patch">[docs]</a>        <span class="k">def</span> <span class="nf">get_patch</span><span class="p">(</span>
+        <span class="k">def</span> <span class="nf">get_patch</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
             <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -296,7 +265,7 @@
                 <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">read_region</span><span class="p">(</span>
                     <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="n">level</span><span class="p">),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">width</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">height</span><span class="p">))</span>
                 <span class="p">)</span>
-            <span class="p">)[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span></div>
+            <span class="p">)[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
 
         <span class="k">def</span> <span class="nf">_init_shapes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">level_dimensions</span>
