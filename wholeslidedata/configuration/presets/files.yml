@@ -4,11 +4,13 @@ default:
         attribute: factory_sources_from_path
         file_type: wsi
         mode: ${wholeslidedata:mode.name} 
-        path: ${wholeslidedata:image_path}
+        path: 'not set.tif'
+        image_backend: 'asap'
 
     annotation_sources@replace=true:
         module: wholeslidedata.source.utils
-        attribute: whole_slide_files_from_folder_factory
+        attribute: factory_sources_from_path
         file_type: wsa
         mode: ${wholeslidedata:mode.name} 
-        path:  ${wholeslidedata:annotation_path}
+        path: 'not set.tif'
+        annotation_parser: ${wholeslidedata:annotation_parser} 
