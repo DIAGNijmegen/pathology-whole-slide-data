@@ -1320,8 +1320,8 @@
 <h1>wholeslidedata.samplers.annotationsampler.OrderedAnnotationSampler<a class="headerlink" href="#wholeslidedata-samplers-annotationsampler-orderedannotationsampler" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="wholeslidedata.samplers.annotationsampler.OrderedAnnotationSampler">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">OrderedAnnotationSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">counts_per_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/samplers/annotationsampler.html#OrderedAnnotationSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.samplers.annotationsampler.OrderedAnnotationSampler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="wholeslidedata.samplers.sampler.Sampler.html#wholeslidedata.samplers.sampler.Sampler" title="wholeslidedata.samplers.sampler.Sampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">wholeslidedata.samplers.sampler.Sampler</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">OrderedAnnotationSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">counts_per_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/samplers/annotationsampler.html#OrderedAnnotationSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.samplers.annotationsampler.OrderedAnnotationSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="wholeslidedata.samplers.annotationsampler.AnnotationSampler.html#wholeslidedata.samplers.annotationsampler.AnnotationSampler" title="wholeslidedata.samplers.annotationsampler.AnnotationSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">wholeslidedata.samplers.annotationsampler.AnnotationSampler</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.samplers.annotationsampler.OrderedAnnotationSampler.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">counts_per_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/samplers/annotationsampler.html#OrderedAnnotationSampler.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.samplers.annotationsampler.OrderedAnnotationSampler.__init__" title="Permalink to this definition">¶</a></dt>
@@ -1349,8 +1349,8 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">names</span></code>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register</span></code>(registrant_names[, replace, recursive])</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.samplers.annotationsampler.OrderedAnnotationSampler.register" title="wholeslidedata.samplers.annotationsampler.OrderedAnnotationSampler.register"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register</span></code></a>(registrant_names[, replace, recursive])</p></td>
+<td><p>Register a virtual subclass of an ABC.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_func</span></code>(registrant_names[, replace])</p></td>
 <td><p></p></td>
@@ -1396,6 +1396,13 @@
 </tr>
 </tbody>
 </table>
+<dl class="py method">
+<dt class="sig sig-object py" id="wholeslidedata.samplers.annotationsampler.OrderedAnnotationSampler.register">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registrant_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.samplers.annotationsampler.OrderedAnnotationSampler.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a virtual subclass of an ABC.</p>
+<p>Returns the subclass, to allow usage as a class decorator.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.samplers.annotationsampler.OrderedAnnotationSampler.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/samplers/annotationsampler.html#OrderedAnnotationSampler.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.samplers.annotationsampler.OrderedAnnotationSampler.reset" title="Permalink to this definition">¶</a></dt>
@@ -1446,7 +1453,7 @@
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.3.0.<br>
 </p>
     </div>
     

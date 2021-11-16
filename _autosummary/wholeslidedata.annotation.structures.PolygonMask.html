@@ -1320,7 +1320,7 @@
 <h1>wholeslidedata.annotation.structures.PolygonMask<a class="headerlink" href="#wholeslidedata-annotation-structures-polygonmask" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">PolygonMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotation_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downsampling_ratio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">holes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/annotation/structures.html#PolygonMask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PolygonMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotation_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downsampling_ratio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">holes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/annotation/structures.html#PolygonMask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="wholeslidedata.annotation.structures.Polygon.html#wholeslidedata.annotation.structures.Polygon" title="wholeslidedata.annotation.structures.Polygon"><code class="xref py py-class docutils literal notranslate"><span class="pre">wholeslidedata.annotation.structures.Polygon</span></code></a></p>
 <dl class="simple">
 <dt>shell<span class="classifier">sequence</span></dt><dd><p>A sequence of (x, y [,z]) numeric coordinate pairs or triples.
@@ -1462,8 +1462,8 @@ shell parameters above</p></td>
 <tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.PolygonMask.project" title="wholeslidedata.annotation.structures.PolygonMask.project"><code class="xref py py-obj docutils literal notranslate"><span class="pre">project</span></code></a>(other[, normalized])</p></td>
 <td><p>Returns the distance along this geometry to a point nearest the specified point</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register</span></code>(registrant_names[, replace, recursive])</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.PolygonMask.register" title="wholeslidedata.annotation.structures.PolygonMask.register"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register</span></code></a>(registrant_names[, replace, recursive])</p></td>
+<td><p>Register a virtual subclass of an ABC.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_func</span></code>(registrant_names[, replace])</p></td>
 <td><p></p></td>
@@ -1677,13 +1677,13 @@ geometries and “almost_equals()” to be False.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.area">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">area</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.area" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">area</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.area" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unitless area of the geometry (float)</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.boundary">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">boundary</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.boundary" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">boundary</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.boundary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a lower dimension geometry that bounds the object</p>
 <p>The boundary of a polygon is a line, the boundary of a line is a
 collection of points. The boundary of a point is an empty (null)
@@ -1692,7 +1692,7 @@ collection.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.bounds">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">bounds</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.bounds" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bounds</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.bounds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns minimum bounding region (minx, miny, maxx, maxy)</p>
 </dd></dl>
 
@@ -1762,7 +1762,7 @@ Z coordinates of the original geometry will be ignored.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.centroid">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">centroid</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.centroid" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">centroid</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.centroid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the geometric center of the object</p>
 </dd></dl>
 
@@ -1774,7 +1774,7 @@ Z coordinates of the original geometry will be ignored.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.convex_hull">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">convex_hull</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.convex_hull" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">convex_hull</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.convex_hull" title="Permalink to this definition">¶</a></dt>
 <dd><p>Imagine an elastic band stretched around the geometry: that’s a
 convex hull, more or less</p>
 <p>The convex hull of a three member multipoint, for example, is a
@@ -1783,7 +1783,7 @@ triangular polygon.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.coords">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">coords</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.coords" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">coords</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.coords" title="Permalink to this definition">¶</a></dt>
 <dd><p>Access to geometry’s coordinates (CoordinateSequence)</p>
 </dd></dl>
 
@@ -1807,7 +1807,7 @@ triangular polygon.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.ctypes">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">ctypes</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.ctypes" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ctypes</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.ctypes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return ctypes buffer</p>
 </dd></dl>
 
@@ -1831,7 +1831,7 @@ triangular polygon.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.envelope">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">envelope</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.envelope" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">envelope</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.envelope" title="Permalink to this definition">¶</a></dt>
 <dd><p>A figure that envelopes the geometry</p>
 </dd></dl>
 
@@ -1883,19 +1883,19 @@ geometries and “equals_exact()” to be False.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.from_bounds">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymax</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.from_bounds" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymax</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.from_bounds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct a <cite>Polygon()</cite> from spatial bounds.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.geom_type">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">geom_type</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.geom_type" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">geom_type</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.geom_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the geometry’s type, such as ‘Point’</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.has_z">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">has_z</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.has_z" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">has_z</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.has_z" title="Permalink to this definition">¶</a></dt>
 <dd><p>True if the geometry’s coordinate sequence(s) have z values (are
 3-dimensional)</p>
 </dd></dl>
@@ -1931,52 +1931,52 @@ fraction of the geometry’s length.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.is_closed">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_closed</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.is_closed" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_closed</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.is_closed" title="Permalink to this definition">¶</a></dt>
 <dd><p>True if the geometry is closed, else False</p>
 <p>Applicable only to 1-D geometries.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.is_empty">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_empty</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.is_empty" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_empty</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.is_empty" title="Permalink to this definition">¶</a></dt>
 <dd><p>True if the set of points in this geometry is empty, else False</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.is_ring">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_ring</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.is_ring" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_ring</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.is_ring" title="Permalink to this definition">¶</a></dt>
 <dd><p>True if the geometry is a closed ring, else False</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.is_simple">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_simple</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.is_simple" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_simple</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.is_simple" title="Permalink to this definition">¶</a></dt>
 <dd><p>True if the geometry is simple, meaning that any self-intersections
 are only at boundary points, else False</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.is_valid">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_valid</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.is_valid" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_valid</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.is_valid" title="Permalink to this definition">¶</a></dt>
 <dd><p>True if the geometry is valid (definition depends on sub-class),
 else False</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.length">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">length</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.length" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">length</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.length" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unitless length of the geometry (float)</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.minimum_clearance">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">minimum_clearance</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.minimum_clearance" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">minimum_clearance</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.minimum_clearance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unitless distance by which a node could be moved to produce an invalid geometry (float)</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.minimum_rotated_rectangle">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">minimum_rotated_rectangle</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.minimum_rotated_rectangle" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">minimum_rotated_rectangle</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.minimum_rotated_rectangle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the general minimum bounding rectangle of
 the geometry. Can possibly be rotated. If the convex hull
 of the object is a degenerate (line or point) this same degenerate
@@ -2011,6 +2011,13 @@ multi geometries consistently. Typically useful for testing purposes
 specified point</p>
 <p>If the normalized arg is True, return the distance normalized to the
 length of the linear geometry.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.register">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registrant_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a virtual subclass of an ABC.</p>
+<p>Returns the subclass, to allow usage as a class decorator.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -2086,25 +2093,25 @@ geometry is valid, and “#ff3333” if invalid.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.wkb">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">wkb</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.wkb" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wkb</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.wkb" title="Permalink to this definition">¶</a></dt>
 <dd><p>WKB representation of the geometry</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.wkb_hex">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">wkb_hex</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.wkb_hex" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wkb_hex</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.wkb_hex" title="Permalink to this definition">¶</a></dt>
 <dd><p>WKB hex representation of the geometry</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.wkt">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">wkt</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.wkt" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wkt</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.wkt" title="Permalink to this definition">¶</a></dt>
 <dd><p>WKT representation of the geometry</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.PolygonMask.xy">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">xy</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.xy" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">xy</span></span><a class="headerlink" href="#wholeslidedata.annotation.structures.PolygonMask.xy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Separate arrays of X and Y coordinate values</p>
 </dd></dl>
 
@@ -2138,7 +2145,7 @@ geometry is valid, and “#ff3333” if invalid.</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.3.0.<br>
 </p>
     </div>
     
