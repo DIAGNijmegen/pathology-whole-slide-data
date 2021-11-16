@@ -3,18 +3,18 @@ wholeslidedata:
         yaml_source: data.yml
         seed: 2
 
-        label_map: rumc_label_map-new.yml
+        label_map:
+            stroma: 1
+            tumor: 2
+            lymphocytes: 3
 
         annotation_sources: 
             filters: ['xml']
             
-        annotation_parser:
-            renamed_labels: label_out.yml
-
         batch_shape:
             batch_size: 8
             spacing: 0.5
-            shape: [8, 8, 3]
+            shape: [64, 64, 3]
             
         label_sampler:
             attribute: OrderedLabelSampler

@@ -1,5 +1,5 @@
 training:
     - wsi: 
-        path: /home/mart/Downloads/T11-22236-I-2-1.tif
+        path: /tmp/TCGA-21-5784-01Z-00-DX1.tif
       wsa: 
-        path: /home/mart/Downloads/T11-22236-I-2-1.xml        
+        path: /tmp/TCGA-21-5784-01Z-00-DX1.xml       
