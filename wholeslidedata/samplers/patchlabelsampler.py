@@ -163,7 +163,7 @@ class ClassificationPatchLabelSampler(PatchLabelSampler):
         size,
         ratio,
     ):
-        center_x, center_y = point
+        center_x, center_y = point.x, point.y
 
         # get annotations
         annotations = wsa.select_annotations(center_x, center_y, 1, 1)
