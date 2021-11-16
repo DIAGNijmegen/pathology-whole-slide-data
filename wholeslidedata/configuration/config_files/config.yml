@@ -3,7 +3,8 @@ default: &default
   mode: mode.yml
   yaml_source@replace=true: yamlsource.yml
   label_map@replace=true: labelmap.yml
-  labels@replace=true: labels.yml
+  label_list@replace=true: []
+  labels: labels.yml
   image_backend: openslide
   annotation_parser: annotationparser.yml
   image_sources: imageyamlsource.yml
