@@ -72,7 +72,8 @@ class WholeSlideImageWriter(Writer, MultiResolutionImageWriter):
     def _write_tile_to_image(self, tile, coordinates):
         if coordinates:
             col, row = self._get_col_row(coordinates)
-            self.writeBaseImagePartToLocation(tile.flatten().astype('uint8'), col, row)
+            if col and row:
+                self.writeBaseImagePartToLocation(tile.flatten().astype('uint8'), col, row)
         else:
             self.writeBaseImagePart(tile.flatten().astype('uint8'))
 
@@ -81,6 +82,7 @@ class WholeSlideImageWriter(Writer, MultiResolutionImageWriter):
         if x < self._dimensions[0] and x >= 0 and y < self._dimensions[1] and y >= 0:
             return x, y
 
+        return None, None
         raise CoordinateError(
             f"Invalid coordinate x,y={x, y} with dimension setting {self._dimensions}"
         )
