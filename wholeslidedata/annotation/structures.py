@@ -96,6 +96,11 @@ class Annotation(RegistrantFactory):
 
 @Annotation.register(("polygon", "rectangle", "box", 'bounding-box'))
 class Polygon(geometry.Polygon, Annotation):
+
+    def __setattr__(self, name, value):
+        object.__setattr__(self, name, value)
+
+
     def __init__(self, index, annotation_path, label, coordinates, holes=[]):
         Annotation.__init__(self, index, annotation_path, label)
         try:
@@ -180,9 +185,14 @@ class Polygon(geometry.Polygon, Annotation):
 
 @Annotation.register(("point", "dot"))
 class Point(geometry.Point, Annotation):
+
+    def __setattr__(self, name, value):
+        object.__setattr__(self, name, value)
+
+
     def __init__(self, index, annotation_path, label, coordinates, holes=None):
-        Annotation.__init__(self, index, annotation_path, label)
         geometry.Point.__init__(self, coordinates[0])
+        Annotation.__init__(self, index, annotation_path, label)
         self._coordinates = coordinates
 
     def __reduce__(self):
