@@ -5,6 +5,8 @@
 
 
 ### Installation
+*latest code (recommend)*: pip install git+https://github.com/DIAGNijmegen/pathology-whole-slide-data@main
+
 *latest release:* pip install wholeslidedata 
 
 ### Main Features
