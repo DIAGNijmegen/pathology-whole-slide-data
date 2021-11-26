@@ -1,4 +1,4 @@
-﻿wholeslidedata.annotation.utils
+wholeslidedata.annotation.utils
 ===============================
 
 .. automodule:: wholeslidedata.annotation.utils

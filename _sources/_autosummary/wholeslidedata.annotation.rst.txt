@@ -1,4 +1,4 @@
-wholeslidedata.annotation
+﻿wholeslidedata.annotation
 =========================
 
 .. automodule:: wholeslidedata.annotation
@@ -32,4 +32,5 @@ wholeslidedata.annotation
    wholeslidedata.annotation.structures
    wholeslidedata.annotation.utils
    wholeslidedata.annotation.wholeslideannotation
+   wholeslidedata.annotation.write_mask
 
