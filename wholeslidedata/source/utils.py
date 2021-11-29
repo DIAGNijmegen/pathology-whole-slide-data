@@ -58,7 +58,7 @@ def whole_slide_files_from_folder_factory(
     folder = Path(folder)
     for extension in class_type.EXTENSIONS.names():
         paths = (
-            folder.rglob("*." + extension)
+            folder.rglob("*" + extension)
             if recursive
             else folder.glob("*" + extension)
         )
