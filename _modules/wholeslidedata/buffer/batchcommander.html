@@ -124,39 +124,33 @@
               <div>
                 
   <h1>Source code for wholeslidedata.buffer.batchcommander</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.samplers.batchreferencesampler</span> <span class="kn">import</span> <span class="n">BatchReferenceSampler</span>
-<span class="kn">from</span> <span class="nn">concurrentbuffer.commander</span> <span class="kn">import</span> <span class="n">Commander</span>
+<span></span><span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">Empty</span>
-<span class="n">MESSAGE_MODE_IDENTIFIER</span> <span class="o">=</span> <span class="s1">&#39;mode&#39;</span>
-<span class="n">MESSAGE_SAMPLE_REFERENCES_IDENTIFIER</span> <span class="o">=</span> <span class="s1">&#39;sample_references&#39;</span>
-<span class="n">MESSAGE_INDEX_IDENTIFIER</span> <span class="o">=</span> <span class="s1">&#39;index&#39;</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="kn">from</span> <span class="nn">concurrentbuffer.commander</span> <span class="kn">import</span> <span class="n">Commander</span>
+
+<span class="n">MESSAGE_MODE_IDENTIFIER</span> <span class="o">=</span> <span class="s2">&quot;mode&quot;</span>
+<span class="n">MESSAGE_SAMPLE_REFERENCES_IDENTIFIER</span> <span class="o">=</span> <span class="s2">&quot;sample_references&quot;</span>
+<span class="n">MESSAGE_INDEX_IDENTIFIER</span> <span class="o">=</span> <span class="s2">&quot;index&quot;</span>
+
+
 <div class="viewcode-block" id="BatchCommander"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.buffer.batchcommander.BatchCommander.html#wholeslidedata.buffer.batchcommander.BatchCommander">[docs]</a><span class="k">class</span> <span class="nc">BatchCommander</span><span class="p">(</span><span class="n">Commander</span><span class="p">):</span>
-<div class="viewcode-block" id="BatchCommander.__init__"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.buffer.batchcommander.BatchCommander.html#wholeslidedata.buffer.batchcommander.BatchCommander.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_builder</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">reset_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">update_queue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">info_queue</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BatchCommander.__init__"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.buffer.batchcommander.BatchCommander.html#wholeslidedata.buffer.batchcommander.BatchCommander.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">config_builder</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">reset_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">update_queue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">info_queue</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_config_builder</span> <span class="o">=</span> <span class="n">config_builder</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="n">mode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_batch_reference_sampler</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_reset_index</span> <span class="o">=</span> <span class="n">reset_index</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_update_queue</span> <span class="o">=</span><span class="n">update_queue</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_queue</span> <span class="o">=</span> <span class="n">update_queue</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_info_queue</span> <span class="o">=</span> <span class="n">info_queue</span></div>
 
 <div class="viewcode-block" id="BatchCommander.build"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.buffer.batchcommander.BatchCommander.html#wholeslidedata.buffer.batchcommander.BatchCommander.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">build</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config_builder</span><span class="o">.</span><span class="n">build_instances</span><span class="p">()</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="o">=</span><span class="n">build</span><span class="p">[</span><span class="s2">&quot;wholeslidedata&quot;</span><span class="p">][</span><span class="n">mode</span><span class="p">][</span><span class="s2">&quot;dataset&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_batch_size</span><span class="o">=</span><span class="n">build</span><span class="p">[</span><span class="s2">&quot;wholeslidedata&quot;</span><span class="p">][</span><span class="n">mode</span><span class="p">][</span><span class="s2">&quot;batch_shape&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">batch_size</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_label_sampler</span><span class="o">=</span><span class="n">build</span><span class="p">[</span><span class="s2">&quot;wholeslidedata&quot;</span><span class="p">][</span><span class="n">mode</span><span class="p">][</span><span class="s2">&quot;label_sampler&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_annotation_sampler</span><span class="o">=</span><span class="n">build</span><span class="p">[</span><span class="s2">&quot;wholeslidedata&quot;</span><span class="p">][</span><span class="n">mode</span><span class="p">][</span><span class="s2">&quot;annotation_sampler&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_point_sampler</span><span class="o">=</span><span class="n">build</span><span class="p">[</span><span class="s2">&quot;wholeslidedata&quot;</span><span class="p">][</span><span class="n">mode</span><span class="p">][</span><span class="s2">&quot;point_sampler&quot;</span><span class="p">]</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_batch_reference_sampler</span> <span class="o">=</span> <span class="n">BatchReferenceSampler</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_sampler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_annotation_sampler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_point_sampler</span>
-        <span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_batch_reference_sampler</span> <span class="o">=</span> <span class="n">build</span><span class="p">[</span><span class="s2">&quot;wholeslidedata&quot;</span><span class="p">][</span><span class="n">mode</span><span class="p">][</span><span class="s2">&quot;batch_reference_sampler&quot;</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="BatchCommander.create_message"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.buffer.batchcommander.BatchCommander.html#wholeslidedata.buffer.batchcommander.BatchCommander.create_message">[docs]</a>    <span class="k">def</span> <span class="nf">create_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">()</span>
@@ -170,7 +164,7 @@
         <span class="p">}</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info_queue</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_info_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">message</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">+=</span> <span class="mi">1</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="n">message</span></div>
 
     <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -186,7 +180,7 @@
     <span class="k">def</span> <span class="nf">_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reset_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
-        
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reset_index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_batch_reference_sampler</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
 </pre></div>
