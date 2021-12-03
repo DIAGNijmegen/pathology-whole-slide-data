@@ -9,13 +9,6 @@ wholeslidedata.annotation.wholeslideannotation
 
    
    
-   .. rubric:: Functions
-
-   .. autosummary::
-      :toctree:                                          
-   
-      area_sort_with_roi
-   
    
 
    

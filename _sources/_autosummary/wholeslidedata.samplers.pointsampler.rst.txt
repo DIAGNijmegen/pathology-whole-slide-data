@@ -1,4 +1,4 @@
-﻿wholeslidedata.samplers.pointsampler
+wholeslidedata.samplers.pointsampler
 ====================================
 
 .. automodule:: wholeslidedata.samplers.pointsampler
@@ -21,10 +21,10 @@
    
       CenterPointSampler
       CentroidPointSampler
+      PointDensityPointSampler
       PointSampler
       RandomPointSampler
       TopLeftPointSampler
-      UniformPointSampler
    
    
 

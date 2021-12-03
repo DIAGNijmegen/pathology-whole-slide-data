@@ -1,4 +1,4 @@
-﻿wholeslidedata.dataset.DataSet
+wholeslidedata.dataset.DataSet
 ==============================
 
 .. currentmodule:: wholeslidedata.dataset
@@ -23,7 +23,6 @@
       ~DataSet.get
       ~DataSet.get_annotation_from_reference
       ~DataSet.get_image_from_reference
-      ~DataSet.get_wsa_from_reference
       ~DataSet.items
       ~DataSet.keys
       ~DataSet.pop

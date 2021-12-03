@@ -1,6 +1,0 @@
-wholeslidedata.annotation.wholeslideannotation.area\_sort\_with\_roi
-====================================================================
-
-.. currentmodule:: wholeslidedata.annotation.wholeslideannotation
-
-.. autofunction:: area_sort_with_roi

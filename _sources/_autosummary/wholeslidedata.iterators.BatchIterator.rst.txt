@@ -28,5 +28,6 @@ wholeslidedata.iterators.BatchIterator
    .. autosummary::
    
       ~BatchIterator.batch_size
+      ~BatchIterator.dataset
    
    

@@ -1,4 +1,4 @@
-﻿wholeslidedata.annotation.parsers.MaskAnnotationParser
+wholeslidedata.annotation.parsers.MaskAnnotationParser
 ======================================================
 
 .. currentmodule:: wholeslidedata.annotation.parsers
@@ -22,7 +22,7 @@
       ~MaskAnnotationParser.get_available_labels
       ~MaskAnnotationParser.get_registrant
       ~MaskAnnotationParser.names
-      ~MaskAnnotationParser.parse
+      ~MaskAnnotationParser.read
       ~MaskAnnotationParser.register
       ~MaskAnnotationParser.register_func
       ~MaskAnnotationParser.registered
