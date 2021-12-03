@@ -10,7 +10,8 @@ from multiprocessing import Queue
 import math
 
 class BatchIterator(BufferIterator):
-    def __init__(self, builds, batch_size, redundant, index=0, stop_index=None, info_queue=None, *args, **kwargs):
+    def __init__(self, mode, builds, batch_size, redundant, index=0, stop_index=None, info_queue=None, *args, **kwargs):
+        self._mode = mode
         self._builds = builds
         self._batch_size = batch_size
         self._redundant = redundant
@@ -23,7 +24,12 @@ class BatchIterator(BufferIterator):
     @property
     def batch_size(self):
         return self._batch_size
-
+    
+    @property
+    def dataset(self):
+        return self._builds['wholeslidedata'][self._mode]['dataset']
+    
+    
     def __next__(self):
         if self._stop():
             raise StopIteration()
@@ -108,6 +114,7 @@ def create_batch_iterator(
 
 
     return buffer_iterator_factory(
+        mode=mode,
         builds=builds,
         batch_size=batch_size,
         redundant=redundant,
