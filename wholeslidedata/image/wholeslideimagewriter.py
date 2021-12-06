@@ -162,7 +162,7 @@ class WholeSlideImageWriter(WholeSlideImageWriterBase):
         self.openFile(self._path)
         self.setTileSize(self._tile_shape[0])
         self.setJPEGQuality(jpeg_quality)
-        self.setDataType(mir.UInt16)
+        self.setDataType(mir.UChar)
         self.setColorType(mir.RGB)
 
         # set writing spacing
