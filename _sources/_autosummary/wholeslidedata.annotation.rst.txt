@@ -32,5 +32,6 @@
    wholeslidedata.annotation.structures
    wholeslidedata.annotation.utils
    wholeslidedata.annotation.wholeslideannotation
+   wholeslidedata.annotation.wholeslideannotationwriter
    wholeslidedata.annotation.write_mask
 

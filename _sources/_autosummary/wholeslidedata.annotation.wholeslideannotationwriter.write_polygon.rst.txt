@@ -1,0 +1,6 @@
+wholeslidedata.annotation.wholeslideannotationwriter.write\_polygon
+===================================================================
+
+.. currentmodule:: wholeslidedata.annotation.wholeslideannotationwriter
+
+.. autofunction:: write_polygon
