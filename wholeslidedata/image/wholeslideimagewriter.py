@@ -58,7 +58,7 @@ class Writer(abc.ABC):
         self._callbacks = callbacks
 
 
-class WholeSlideImageWriter(Writer, MultiResolutionImageWriter):
+class WholeSlideImageWriterBase(Writer, MultiResolutionImageWriter):
     def __init__(self, callbacks=()):
         Writer.__init__(self, callbacks)
         MultiResolutionImageWriter.__init__(self)
@@ -113,7 +113,7 @@ class WholeSlideImageWriter(Writer, MultiResolutionImageWriter):
         self.finishImage()
 
 
-class WholeSlideMaskWriter(WholeSlideImageWriter):
+class WholeSlideMaskWriter(WholeSlideImageWriterBase):
     def __init__(self, callbacks=(), suffix='.tif'):
         super().__init__(callbacks=callbacks)
         self._suffix = suffix
@@ -142,3 +142,35 @@ class WholeSlideMaskWriter(WholeSlideImageWriter):
         pixel_size_vec.push_back(self._spacing)
         self.setSpacing(pixel_size_vec)
         self.writeImageInformation(self._dimensions[0], self._dimensions[1])
+
+class WholeSlideImageWriter(WholeSlideImageWriterBase):
+    def __init__(self, callbacks=(), suffix='.tif'):
+        super().__init__(callbacks=callbacks)
+        self._suffix = suffix
+
+    def write(self, path, spacing, dimensions, tile_shape, jpeg_quality=80):
+        self._path = str(path).replace(Path(path).suffix, self._suffix)
+        self._spacing = spacing
+        self._dimensions = dimensions
+        self._tile_shape = tile_shape
+
+        print(f"Creating: {self._path}....")
+        print(f"Spacing: {self._spacing}")
+        print(f"Dimensions: {self._dimensions}")
+        print(f"Tile_shape: {self._tile_shape}")
+
+        self.openFile(self._path)
+        self.setTileSize(self._tile_shape[0])
+        self.setJPEGQuality(jpeg_quality)
+        self.setDataType(mir.UInt16)
+        self.setColorType(mir.RGB)
+
+        # set writing spacing
+        pixel_size_vec = mir.vector_double()
+        pixel_size_vec.push_back(self._spacing)
+        pixel_size_vec.push_back(self._spacing)
+        self.setSpacing(pixel_size_vec)
+        self.writeImageInformation(self._dimensions[0], self._dimensions[1])
+
+
+  
