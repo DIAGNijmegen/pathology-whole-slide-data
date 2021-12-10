@@ -114,3 +114,33 @@ def factory_sources_from_json():
 
 def factory_sources_from_csv():
     pass
+
+
+import os
+import shutil
+import yaml
+
+
+def copy(path, destination_folder):
+    out_path = os.path.join(destination_folder, os.path.basename(path))
+    exists = os.path.exists(out_path)
+    if exists:
+        pass
+    elif os.path.exists(path) and os.path.isdir(destination_folder):
+        print(f"copy from: {path}\ncopy to: {destination_folder}\n...")
+        shutil.copy2(path, destination_folder.rstrip("/"))
+    else:
+        raise ValueError(f"error copying source {path}, {destination_folder}")
+
+
+def copy_from_yml(yaml_path, output_path):
+    with open(yaml_path) as file:
+        content = yaml.full_load(file)
+
+    for mode, collection in content.items():
+        print(f"copying {mode} files...")
+        for item in collection:
+            for source_type, source in item.items():
+                print(f"copying {source_type}...")
+                print(source, source['path'])
+                copy(source['path'], output_path)
