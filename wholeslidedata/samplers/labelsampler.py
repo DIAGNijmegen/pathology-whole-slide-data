@@ -4,8 +4,7 @@ from typing import Iterator, List, Dict
 
 import numpy as np
 from wholeslidedata.samplers.sampler import Sampler
-from multiprocessing import Queue
-from queue import Empty
+
 
 class LabelSampler(Sampler, Iterator):
     def __init__(self, labels: List, seed: int):
@@ -13,7 +12,8 @@ class LabelSampler(Sampler, Iterator):
         self._labels = labels
         self._size = len(self._labels)
 
-@LabelSampler.register(('random', ))
+
+@LabelSampler.register(("random",))
 class RandomLabelSampler(LabelSampler):
     def __init__(self, labels, seed: int = 123):
         super().__init__(labels, seed=seed)
@@ -25,7 +25,7 @@ class RandomLabelSampler(LabelSampler):
         self.set_seed()
 
 
-@LabelSampler.register(('ordered', ))
+@LabelSampler.register(("ordered",))
 class OrderedLabelSampler(LabelSampler):
     def __init__(self, labels: List[str], seed: int = 123):
         super().__init__(labels, seed=seed)
@@ -41,7 +41,8 @@ class OrderedLabelSampler(LabelSampler):
     def update(self, batch):
         pass
 
-@LabelSampler.register(('annotation_counted', ))
+
+@LabelSampler.register(("annotation_counted",))
 class AnnotationCountedLabelSampler(LabelSampler):
     def __init__(
         self,
@@ -79,7 +80,8 @@ class AnnotationCountedLabelSampler(LabelSampler):
     def update(self, batch):
         pass
 
-@LabelSampler.register(('balanced', ))
+
+@LabelSampler.register(("balanced",))
 class BalancedLabelSampler(LabelSampler):
     def __init__(self, labels: List[str], seed: int = 123, random_reset=False):
         super().__init__(labels=labels, seed=seed)
@@ -106,7 +108,8 @@ class BalancedLabelSampler(LabelSampler):
     def update(self, batch):
         pass
 
-@LabelSampler.register(('weighted', ))
+
+@LabelSampler.register(("weighted",))
 class WeightedLabelSampler(LabelSampler):
     def __init__(
         self, labels: List[str], weights: List[int], replace=True, seed: int = 123
@@ -121,7 +124,8 @@ class WeightedLabelSampler(LabelSampler):
     def update(self, batch):
         pass
 
-@LabelSampler.register(('pixel_counted', ))
+
+@LabelSampler.register(("pixel_counted",))
 class PixelCountedLabelSampler(LabelSampler):
     def __init__(self, labels: List[str], seed: int = 123):
         super().__init__(labels=labels, seed=seed)

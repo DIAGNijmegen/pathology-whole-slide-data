@@ -4,6 +4,7 @@ from typing import Dict, Tuple
 
 
 class SampleCallback:
+    """Pass through callback on samples"""
     def __init__(self):
         pass
 
@@ -17,6 +18,7 @@ class SampleCallback:
 
 
 class BatchCallback:
+    """Pass through callback on batches"""
     def __init__(self, *args, **kwargs):
         pass
 
@@ -30,6 +32,8 @@ class BatchCallback:
 
 
 class BlockShaped(SampleCallback):
+    """Reshapes samples into blocks"""
+
     def __init__(self, nrows, ncols):
         self._nrows = nrows
         self._ncols = ncols
@@ -41,6 +45,8 @@ class BlockShaped(SampleCallback):
 
 
 class OneHotEncoding(SampleCallback):
+    """One-hot encodes y sample"""
+
     def __init__(self, labels):
         self._label_map = {label.name: label.value for label in labels}
 
@@ -50,6 +56,8 @@ class OneHotEncoding(SampleCallback):
 
 
 class Reshape(SampleCallback):
+    """Flattens first and second dimension in y sample"""
+
     def __call__(self, x_patch, y_patch):
         shape = y_patch.shape
         y_patch = y_patch.reshape(shape[0] * shape[1], -1).squeeze()
@@ -57,11 +65,15 @@ class Reshape(SampleCallback):
 
 
 class ChannelsFirst(SampleCallback):
+    """Tranposes x sample from channels last to channels first"""
+
     def __call__(self, x_patch, y_patch):
         x_patch = x_patch.transpose(2,0,1)
         return x_patch, y_patch
 
 class FitOutput(SampleCallback):
+    """Crops y patch to fit output shape"""
+
     def __init__(self, output_shape):
         self._output_shape = output_shape
 
@@ -78,6 +90,7 @@ class FitOutput(SampleCallback):
 
 
 class DataAugmentation(BatchCallback):
+    """Applies data augmentation on batch"""
     def __init__(self, data_augmentation_config):
         self._data_augmentation_config = data_augmentation_config
 
@@ -89,6 +102,8 @@ class DataAugmentation(BatchCallback):
 
 
 class Resolver(BatchCallback):
+    """Resolves shape of batch"""
+    
     def __init__(self, return_dict=False):
         self._return_dict = return_dict
 

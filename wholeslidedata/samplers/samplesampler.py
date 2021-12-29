@@ -1,6 +1,5 @@
-from typing import List
+from typing import List, Union
 
-from wholeslidedata.annotation.structures import Annotation
 from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.samplers.patchlabelsampler import PatchLabelSampler
@@ -44,7 +43,7 @@ class SampleSampler:
         point: tuple,
         wsi: WholeSlideImage,
         wsa: WholeSlideAnnotation,
-        patch_shape,
+        patch_shape: Union[tuple, list],
         pixel_spacing: float,
     ):
 
@@ -66,7 +65,6 @@ class SampleSampler:
             spacing: {tuple(input_size): [] for input_size in sizes}
             for spacing, sizes in self._batch_shape.items()
         }
-
 
     def _reset_sample_callbacks(self):
         if self._sample_callbacks:

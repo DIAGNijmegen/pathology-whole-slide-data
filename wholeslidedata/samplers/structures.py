@@ -26,21 +26,17 @@ class Sample(np.ndarray):
         pixel_spacing,
         info={},
     ):
-        # Input array is an already formed ndarray instance
-        # We first cast to be our class type
         obj = np.asarray(input_array).view(cls)
-        # add the new attribute to the created instance
         obj.image_path = image_path
         obj.annotation_label_name = annotation_label_name
         obj.annotation_index = annotation_index
         obj.center_coordinate = center_coordinate
         obj.pixel_spacing = pixel_spacing
         obj.info = info
-        # Finally, we must return the newly created object:
         return obj
 
     def __array_finalize__(self, obj):
-        # see InfoArray.__array_finalize__ for comments
+
         if obj is None:
             return
         self.image_path = getattr(obj, "image_path", None)
@@ -51,9 +47,7 @@ class Sample(np.ndarray):
         self.info = getattr(obj, "info", None)
 
     def __reduce__(self):
-        # Get the parent's __reduce__ tuple
         pickled_state = super(Sample, self).__reduce__()
-        # Create our own tuple to pass to __setstate__
         new_state = pickled_state[2] + (
             self.image_path,
             self.annotation_label_name,
@@ -62,7 +56,6 @@ class Sample(np.ndarray):
             self.pixel_spacing,
             self.info,
         )
-        # Return a tuple that replaces the parent's __setstate__ tuple with our own
         return (pickled_state[0], pickled_state[1], new_state)
 
     def __setstate__(self, state):
@@ -72,8 +65,6 @@ class Sample(np.ndarray):
         self.center_coordinate = state[-3]
         self.pixel_spacing = state[-2]
         self.info = state[-1]
-
-        # Call the parent's __setstate__ with the other tuple elements.
         super(Sample, self).__setstate__(state[0:-6])
 
 

@@ -3,11 +3,8 @@ class BatchReferenceSampler:
         self, dataset, batch_size, label_sampler, annotation_sampler, point_sampler
     ):
 
-        # set dataset
         self._dataset = dataset
         self._batch_size = batch_size
-
-        # set controllers
         self._label_sampler = label_sampler
         self._annotation_sampler = annotation_sampler
         self._point_sampler = point_sampler

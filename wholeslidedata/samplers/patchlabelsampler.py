@@ -252,9 +252,9 @@ class DetectionPatchLabelSampler(PatchLabelSampler):
         coordinates = shift_coordinates(
             coordinates, center_x, center_y, width, height, ratio
         )
-        x1 = max(0, coordinates[0][0])
-        y1 = max(0, coordinates[0][1])
-        x2 = min(height-1, coordinates[1][0])
-        y2 = min(width-1, coordinates[1][1])
+        x1 = coordinates[0][0]
+        y1 = coordinates[0][1]
+        x2 = coordinates[1][0]
+        y2 = coordinates[1][1]
 
         return x1, y1, x2, y2
