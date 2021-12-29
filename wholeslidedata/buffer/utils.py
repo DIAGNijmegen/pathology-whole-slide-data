@@ -1,19 +1,33 @@
-from copy import deepcopy
-from typing import Iterable
-import numpy as np
+import multiprocessing
+from concurrentbuffer.factory import BufferFactory
+from concurrentbuffer.info import BufferInfo
+from concurrentbuffer.state import BufferState
+from concurrentbuffer.system import BufferSystem
 
-def get_buffer_shape(builds):
-    batch_shape = builds['batch_shape']
 
-    if isinstance(batch_shape._spacing, Iterable) and len(batch_shape._spacing) > 1:
-        x_shape = (batch_shape.batch_size, len(batch_shape._spacing)) + tuple(batch_shape.shape[0])
-    else:
-        x_shape = (batch_shape.batch_size,) + tuple(batch_shape.shape)
+# move to buffer lib
+def create_buffer_factory(
+    cpus,
+    batch_commander,
+    batch_producer,
+    context,
+    deterministic,
+    buffer_shapes,
+    buffer_dtype,
+):
 
-    if batch_shape.y_shape is None:
-        y_shape = x_shape[:-1]
-        return batch_shape.batch_size, (x_shape, y_shape)
+    count = cpus * len(BufferState)
 
-    y_shape = (batch_shape.batch_size,) + batch_shape.y_shape
+    mp_context = multiprocessing.get_context(context)
+    buffer_system = BufferSystem(
+        cpus=cpus, context=mp_context, deterministic=deterministic
+    )
 
-    return batch_shape.batch_size, (x_shape, y_shape)
+    buffer_info = BufferInfo(count=count, shapes=buffer_shapes, dtype=buffer_dtype)
+
+    return BufferFactory(
+        buffer_system=buffer_system,
+        buffer_info=buffer_info,
+        commander=batch_commander,
+        producer=batch_producer,
+    )
