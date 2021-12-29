@@ -1,0 +1,32 @@
+wholeslidedata.source.configuration
+===================================
+
+.. automodule:: wholeslidedata.source.configuration
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst                 
+   :recursive:
+
+   wholeslidedata.source.configuration.config
+

@@ -1,4 +1,4 @@
-wholeslidedata.source
+﻿wholeslidedata.source
 =====================
 
 .. automodule:: wholeslidedata.source
@@ -29,6 +29,7 @@ wholeslidedata.source
    :recursive:
 
    wholeslidedata.source.associations
+   wholeslidedata.source.configuration
    wholeslidedata.source.copy
    wholeslidedata.source.files
    wholeslidedata.source.utils
