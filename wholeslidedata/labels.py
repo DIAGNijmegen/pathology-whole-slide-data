@@ -55,6 +55,12 @@ class Label(RegistrantFactory):
     def name(self):
         return self._name
 
+    def set_name(self, name):
+        self._name = str(name).lower()
+
+    def set_color(self, color):
+        self._color = color
+
     @property
     def value(self):
         return self._value
@@ -90,7 +96,7 @@ def label_from_str(label: str, idx: int, *args, **kwargs):
 class Labels(RegistrantFactory):
     @classmethod
     def create(cls, labels):
-        return super().create(registrant_name:=type(labels), labels=labels)
+        return super().create(registrant_name=type(labels), labels=labels)
 
     def __init__(self, labels: List[Label]):
         self._labels = labels
