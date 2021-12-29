@@ -152,21 +152,17 @@
         <span class="n">pixel_spacing</span><span class="p">,</span>
         <span class="n">info</span><span class="o">=</span><span class="p">{},</span>
     <span class="p">):</span>
-        <span class="c1"># Input array is an already formed ndarray instance</span>
-        <span class="c1"># We first cast to be our class type</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">input_array</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
-        <span class="c1"># add the new attribute to the created instance</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">image_path</span> <span class="o">=</span> <span class="n">image_path</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">annotation_label_name</span> <span class="o">=</span> <span class="n">annotation_label_name</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">annotation_index</span> <span class="o">=</span> <span class="n">annotation_index</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">center_coordinate</span> <span class="o">=</span> <span class="n">center_coordinate</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">pixel_spacing</span> <span class="o">=</span> <span class="n">pixel_spacing</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="n">info</span>
-        <span class="c1"># Finally, we must return the newly created object:</span>
         <span class="k">return</span> <span class="n">obj</span>
 
     <span class="k">def</span> <span class="nf">__array_finalize__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-        <span class="c1"># see InfoArray.__array_finalize__ for comments</span>
+
         <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">image_path</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;image_path&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -177,9 +173,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__reduce__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># Get the parent&#39;s __reduce__ tuple</span>
         <span class="n">pickled_state</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Sample</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__reduce__</span><span class="p">()</span>
-        <span class="c1"># Create our own tuple to pass to __setstate__</span>
         <span class="n">new_state</span> <span class="o">=</span> <span class="n">pickled_state</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">image_path</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">annotation_label_name</span><span class="p">,</span>
@@ -188,7 +182,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">pixel_spacing</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="c1"># Return a tuple that replaces the parent&#39;s __setstate__ tuple with our own</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">pickled_state</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pickled_state</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">new_state</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
@@ -198,8 +191,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">center_coordinate</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pixel_spacing</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-        <span class="c1"># Call the parent&#39;s __setstate__ with the other tuple elements.</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Sample</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__setstate__</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">6</span><span class="p">])</span></div>
 
 
