@@ -1,0 +1,11 @@
+default: &default
+  seed: 123
+  yaml_source@replace=true:
+    _: _
+  image_sources: 
+    _: _
+  annotation_sources: 
+    _: _
+  associations: associations.yml
+
+  

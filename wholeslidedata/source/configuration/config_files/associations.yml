@@ -1,0 +1,4 @@
+module: wholeslidedata.source.associations
+attribute: associate_files
+files1: ${source:image_sources}
+files2: ${source:annotation_sources}
