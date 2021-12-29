@@ -54,4 +54,13 @@ def associate_files(
     for file2 in files2:
         association.add_file(file=file2, associater=associator, required=False)
 
+    # remove images without annotations
+    remove_keys = []
+    for file_key, files in association.items():
+        if len(list(files.keys())) == 1:
+            remove_keys.append(file_key)
+            
+    for remove_key in remove_keys:
+        del association[remove_key]
+
     return association
