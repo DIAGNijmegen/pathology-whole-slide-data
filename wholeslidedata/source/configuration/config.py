@@ -44,7 +44,7 @@ def get_paths(user_config, preset):
         yield image_file.path, mask_file.path
         
 def insert_paths_into_config(user_config, image_path, annotation_path):
-    user_config = open_yaml(user_config)
-    user_config['wholeslidedata']['default']['image_sources']['path'] = str(image_path)
-    user_config['wholeslidedata']['default']['annotation_sources']['path'] = str(annotation_path)
-    return user_config
+    user_config_dict = open_yaml(user_config)
+    user_config_dict['wholeslidedata']['default']['image_sources']['path'] = str(image_path)
+    user_config_dict['wholeslidedata']['default']['annotation_sources']['path'] = str(annotation_path)
+    return user_config_dict
