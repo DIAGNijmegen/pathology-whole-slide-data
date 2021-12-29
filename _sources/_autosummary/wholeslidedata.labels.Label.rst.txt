@@ -1,4 +1,4 @@
-wholeslidedata.labels.Label
+﻿wholeslidedata.labels.Label
 ===========================
 
 .. currentmodule:: wholeslidedata.labels
@@ -24,6 +24,8 @@ wholeslidedata.labels.Label
       ~Label.register
       ~Label.register_func
       ~Label.registered
+      ~Label.set_color
+      ~Label.set_name
    
    
 
