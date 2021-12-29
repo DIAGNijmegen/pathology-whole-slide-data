@@ -8,7 +8,7 @@ import numpy as np
 
 
 
-class AsapNotFoundError(Exception):
+class AsapNotFoundError(ImportError):
     ...
 
 
@@ -72,7 +72,7 @@ class WholeSlideImageWriterBase(Writer, MultiResolutionImageWriter):
     def _write_tile_to_image(self, tile, coordinates):
         if coordinates:
             col, row = self._get_col_row(coordinates)
-            if col and row:
+            if col is not None and row is not None:
                 self.writeBaseImagePartToLocation(tile.flatten().astype('uint8'), col, row)
         else:
             self.writeBaseImagePart(tile.flatten().astype('uint8'))
