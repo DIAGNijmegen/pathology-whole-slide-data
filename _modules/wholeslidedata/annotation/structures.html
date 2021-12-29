@@ -347,41 +347,6 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">area</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="mi">1</span></div>
-
-
-<div class="viewcode-block" id="PolygonMask"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.structures.PolygonMask.html#wholeslidedata.annotation.structures.PolygonMask">[docs]</a><span class="nd">@Annotation</span><span class="o">.</span><span class="n">register</span><span class="p">((</span><span class="s2">&quot;polygonmask&quot;</span><span class="p">,</span> <span class="s2">&quot;polygon-mask&quot;</span><span class="p">))</span>
-<span class="k">class</span> <span class="nc">PolygonMask</span><span class="p">(</span><span class="n">Polygon</span><span class="p">):</span>
-<div class="viewcode-block" id="PolygonMask.__init__"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.annotation.structures.PolygonMask.html#wholeslidedata.annotation.structures.PolygonMask.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">index</span><span class="p">,</span>
-        <span class="n">annotation_path</span><span class="p">,</span>
-        <span class="n">label</span><span class="p">,</span>
-        <span class="n">coordinates</span><span class="p">,</span>
-        <span class="n">pixels</span><span class="p">,</span>
-        <span class="n">spacing</span><span class="p">,</span>
-        <span class="n">downsampling_ratio</span><span class="p">,</span>
-        <span class="n">holes</span><span class="o">=</span><span class="p">[],</span>
-    <span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">annotation_path</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="n">holes</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_pixels</span> <span class="o">=</span> <span class="n">pixels</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span> <span class="o">=</span> <span class="n">spacing</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_downsampling_ratio</span> <span class="o">=</span> <span class="n">downsampling_ratio</span></div>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">area</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pixels</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotation_path</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">spacing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">downsampling_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_downsampling_ratio</span></div>
 </pre></div>
 
               </div>

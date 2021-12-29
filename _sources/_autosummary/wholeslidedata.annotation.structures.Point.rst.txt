@@ -1,4 +1,4 @@
-﻿wholeslidedata.annotation.structures.Point
+wholeslidedata.annotation.structures.Point
 ==========================================
 
 .. currentmodule:: wholeslidedata.annotation.structures

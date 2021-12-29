@@ -1,4 +1,4 @@
-﻿wholeslidedata.annotation.structures.Polygon
+wholeslidedata.annotation.structures.Polygon
 ============================================
 
 .. currentmodule:: wholeslidedata.annotation.structures

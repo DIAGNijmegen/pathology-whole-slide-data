@@ -23,7 +23,6 @@ wholeslidedata.annotation.structures
       AnnotationStructure
       Point
       Polygon
-      PolygonMask
    
    
 
