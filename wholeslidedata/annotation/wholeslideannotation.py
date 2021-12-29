@@ -16,10 +16,6 @@ def area_sort_with_roi(item):
 
 
 class WholeSlideAnnotation:
-    """
-    This class contains all annotations of an image.
-    """
-
     # fix for strtree segmentation fault bug
     STREE = {}
 

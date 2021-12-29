@@ -164,6 +164,9 @@ class AsapAnnotationParser(AnnotationParser):
                     annotation_type = self._get_annotation_type(child)
                     annotation_label = self._get_label_name(child, labels)
                     annotation_coordinates = self._get_coordinates(child)
+                    if AsapAnnotationParser.TYPES[annotation_type] == 'polygon' and len(annotation_coordinates) < 3:
+                        print('error annotation')
+                        continue
                     annotation_holes = self._get_holes(child)
                     if not annotation_label or (
                         not isinstance(annotation_label, Label)
@@ -192,6 +195,7 @@ class AsapAnnotationParser(AnnotationParser):
                             annotation_index += 1
                             yield annotation_structure
                         continue
+                
                     annotation_structure = AnnotationStructure(
                         annotation_path=path,
                         index=annotation_index,
@@ -227,6 +231,7 @@ class AsapAnnotationParser(AnnotationParser):
                     float(coordinate.get("Y").replace(",", ".")),
                 )
             )
+        
         return coordinates
 
     def _get_holes(self, annotation_structure):

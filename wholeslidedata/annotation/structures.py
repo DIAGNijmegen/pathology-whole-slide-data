@@ -221,38 +221,3 @@ class Point(geometry.Point, Annotation):
     @property
     def area(self):
         return 1
-
-
-@Annotation.register(("polygonmask", "polygon-mask"))
-class PolygonMask(Polygon):
-    def __init__(
-        self,
-        index,
-        annotation_path,
-        label,
-        coordinates,
-        pixels,
-        spacing,
-        downsampling_ratio,
-        holes=[],
-    ):
-        super().__init__(index, annotation_path, label, coordinates, holes)
-        self._pixels = pixels
-        self._spacing = spacing
-        self._downsampling_ratio = downsampling_ratio
-
-    @property
-    def area(self):
-        return self._pixels
-
-    @property
-    def image(self):
-        return self.annotation_path
-
-    @property
-    def spacing(self):
-        return self._spacing
-
-    @property
-    def downsampling_ratio(self):
-        return self._downsampling_ratio
