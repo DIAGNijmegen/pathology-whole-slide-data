@@ -124,25 +124,39 @@
               <div>
                 
   <h1>Source code for wholeslidedata.buffer.utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="kn">from</span> <span class="nn">concurrentbuffer.factory</span> <span class="kn">import</span> <span class="n">BufferFactory</span>
+<span class="kn">from</span> <span class="nn">concurrentbuffer.info</span> <span class="kn">import</span> <span class="n">BufferInfo</span>
+<span class="kn">from</span> <span class="nn">concurrentbuffer.state</span> <span class="kn">import</span> <span class="n">BufferState</span>
+<span class="kn">from</span> <span class="nn">concurrentbuffer.system</span> <span class="kn">import</span> <span class="n">BufferSystem</span>
 
-<div class="viewcode-block" id="get_buffer_shape"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.buffer.utils.get_buffer_shape.html#wholeslidedata.buffer.utils.get_buffer_shape">[docs]</a><span class="k">def</span> <span class="nf">get_buffer_shape</span><span class="p">(</span><span class="n">builds</span><span class="p">):</span>
-    <span class="n">batch_shape</span> <span class="o">=</span> <span class="n">builds</span><span class="p">[</span><span class="s1">&#39;batch_shape&#39;</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">batch_shape</span><span class="o">.</span><span class="n">_spacing</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch_shape</span><span class="o">.</span><span class="n">_spacing</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">x_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">batch_shape</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch_shape</span><span class="o">.</span><span class="n">_spacing</span><span class="p">))</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">batch_shape</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">x_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">batch_shape</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">batch_shape</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="c1"># move to buffer lib</span>
+<div class="viewcode-block" id="create_buffer_factory"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.buffer.utils.create_buffer_factory.html#wholeslidedata.buffer.utils.create_buffer_factory">[docs]</a><span class="k">def</span> <span class="nf">create_buffer_factory</span><span class="p">(</span>
+    <span class="n">cpus</span><span class="p">,</span>
+    <span class="n">batch_commander</span><span class="p">,</span>
+    <span class="n">batch_producer</span><span class="p">,</span>
+    <span class="n">context</span><span class="p">,</span>
+    <span class="n">deterministic</span><span class="p">,</span>
+    <span class="n">buffer_shapes</span><span class="p">,</span>
+    <span class="n">buffer_dtype</span><span class="p">,</span>
+<span class="p">):</span>
 
-    <span class="k">if</span> <span class="n">batch_shape</span><span class="o">.</span><span class="n">y_shape</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">y_shape</span> <span class="o">=</span> <span class="n">x_shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">batch_shape</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="p">(</span><span class="n">x_shape</span><span class="p">,</span> <span class="n">y_shape</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">cpus</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">BufferState</span><span class="p">)</span>
 
-    <span class="n">y_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">batch_shape</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,)</span> <span class="o">+</span> <span class="n">batch_shape</span><span class="o">.</span><span class="n">y_shape</span>
+    <span class="n">mp_context</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">get_context</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+    <span class="n">buffer_system</span> <span class="o">=</span> <span class="n">BufferSystem</span><span class="p">(</span>
+        <span class="n">cpus</span><span class="o">=</span><span class="n">cpus</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">mp_context</span><span class="p">,</span> <span class="n">deterministic</span><span class="o">=</span><span class="n">deterministic</span>
+    <span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">batch_shape</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="p">(</span><span class="n">x_shape</span><span class="p">,</span> <span class="n">y_shape</span><span class="p">)</span></div>
+    <span class="n">buffer_info</span> <span class="o">=</span> <span class="n">BufferInfo</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="n">count</span><span class="p">,</span> <span class="n">shapes</span><span class="o">=</span><span class="n">buffer_shapes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">buffer_dtype</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">BufferFactory</span><span class="p">(</span>
+        <span class="n">buffer_system</span><span class="o">=</span><span class="n">buffer_system</span><span class="p">,</span>
+        <span class="n">buffer_info</span><span class="o">=</span><span class="n">buffer_info</span><span class="p">,</span>
+        <span class="n">commander</span><span class="o">=</span><span class="n">batch_commander</span><span class="p">,</span>
+        <span class="n">producer</span><span class="o">=</span><span class="n">batch_producer</span><span class="p">,</span>
+    <span class="p">)</span></div>
 </pre></div>
 
               </div>

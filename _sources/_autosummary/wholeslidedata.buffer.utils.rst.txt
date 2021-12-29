@@ -1,4 +1,4 @@
-wholeslidedata.buffer.utils
+﻿wholeslidedata.buffer.utils
 ===========================
 
 .. automodule:: wholeslidedata.buffer.utils
@@ -14,7 +14,7 @@ wholeslidedata.buffer.utils
    .. autosummary::
       :toctree:                                          
    
-      get_buffer_shape
+      create_buffer_factory
    
    
 
