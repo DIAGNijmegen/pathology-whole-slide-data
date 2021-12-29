@@ -26,6 +26,8 @@ class WholeSlideImage:
         """
 
         self._path = Path(path)
+        if not self._path.exists():
+            raise ValueError(f'path {self._path} does not exists.')
         self._backend = WholeSlideImageBackend.create(backend, path=self._path)
         self._extension = WholeSlideImageExtension.create(self._path.suffix)
 
