@@ -5,7 +5,7 @@ default:
         file_type: wsi
         mode: ${wholeslidedata:mode.name} 
         path: 'not set.tif'
-        image_backend: 'asap'
+        image_backend: ${wholeslidedata:image_backend} 
 
     annotation_sources@replace=true:
         module: wholeslidedata.source.utils
