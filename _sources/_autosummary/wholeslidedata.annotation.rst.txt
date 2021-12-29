@@ -28,6 +28,7 @@
    :template: custom-module-template.rst                 
    :recursive:
 
+   wholeslidedata.annotation.generate_polygons
    wholeslidedata.annotation.parsers
    wholeslidedata.annotation.structures
    wholeslidedata.annotation.utils

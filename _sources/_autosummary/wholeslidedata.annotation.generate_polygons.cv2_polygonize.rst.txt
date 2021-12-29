@@ -1,0 +1,6 @@
+wholeslidedata.annotation.generate\_polygons.cv2\_polygonize
+============================================================
+
+.. currentmodule:: wholeslidedata.annotation.generate_polygons
+
+.. autofunction:: cv2_polygonize
