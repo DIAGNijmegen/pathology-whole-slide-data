@@ -1,4 +1,4 @@
-wholeslidedata.configuration
+﻿wholeslidedata.configuration
 ============================
 
 .. automodule:: wholeslidedata.configuration
@@ -31,4 +31,5 @@ wholeslidedata.configuration
    wholeslidedata.configuration.config
    wholeslidedata.configuration.config_files
    wholeslidedata.configuration.presets
+   wholeslidedata.configuration.utils
 
