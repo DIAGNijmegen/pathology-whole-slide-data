@@ -1,18 +1,17 @@
 from abc import abstractmethod
 from copy import copy
-from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Union
-from wholeslidedata.image.wholeslideimage import WholeSlideImage
-from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
 
 from creationism.extension import Extension
 from creationism.registration.factory import RegistrantFactory
+from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
 from wholeslidedata.extensions import (
     FolderCoupledExtension,
     WholeSlideAnnotationExtension,
     WholeSlideImageExtension,
 )
+from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.mode import Mode, WholeSlideMode
 from wholeslidedata.source.copy import copy as copy_source
 
@@ -21,7 +20,7 @@ class File(RegistrantFactory):
 
     EXTENSIONS = Extension
     MODES = Mode
-    
+
     def __init__(
         self,
         mode: Union[str, Mode],
@@ -45,6 +44,7 @@ class File(RegistrantFactory):
 
     def __str__(self):
         return "Mode: " + str(self.mode.name) + " | Path: " + str(self.path)
+
 
 class ImageFile(File):
     def __init__(self, mode, path, image_backend):
@@ -95,4 +95,6 @@ class WholeSlideAnnotationFile(WholeSlideFile, AnnotationFile):
         super().__init__(mode, path, annotation_parser)
 
     def open(self, labels=None, renamed_labels=None):
-        return WholeSlideAnnotation(self.path, labels, renamed_labels, self._annotation_parser)
+        return WholeSlideAnnotation(
+            self.path, labels, renamed_labels, self._annotation_parser
+        )
