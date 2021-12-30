@@ -29,4 +29,6 @@ wholeslidedata.source.configuration
    :recursive:
 
    wholeslidedata.source.configuration.config
+   wholeslidedata.source.configuration.config_files
+   wholeslidedata.source.configuration.presets
 

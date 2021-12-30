@@ -1,0 +1,23 @@
+wholeslidedata.source.configuration.presets
+===========================================
+
+.. automodule:: wholeslidedata.source.configuration.presets
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

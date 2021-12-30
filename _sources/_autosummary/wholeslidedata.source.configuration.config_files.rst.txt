@@ -1,0 +1,23 @@
+wholeslidedata.source.configuration.config\_files
+=================================================
+
+.. automodule:: wholeslidedata.source.configuration.config_files
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
