@@ -879,8 +879,8 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.samplers.structures.Sample.diagonal" title="wholeslidedata.samplers.structures.Sample.diagonal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">diagonal</span></code></a>([offset, axis1, axis2])</p></td>
 <td><p>Return specified diagonals.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.samplers.structures.Sample.dot" title="wholeslidedata.samplers.structures.Sample.dot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dot</span></code></a>(b[, out])</p></td>
-<td><p>Dot product of two arrays.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dot</span></code></p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.samplers.structures.Sample.dump" title="wholeslidedata.samplers.structures.Sample.dump"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dump</span></code></a>(file)</p></td>
 <td><p>Dump a pickle of the array to the specified file.</p></td>
@@ -1385,10 +1385,10 @@ pointer to a deallocated array, and should be spelt
 <span class="sig-prename descclassname"><span class="pre">_ctypes.</span></span><span class="sig-name descname"><span class="pre">shape</span></span></dt>
 <dd><p>(c_intp*self.ndim): A ctypes array of length self.ndim where
 the basetype is the C-integer corresponding to <code class="docutils literal notranslate"><span class="pre">dtype('p')</span></code> on this
-platform. This base-type could be <cite>ctypes.c_int</cite>, <cite>ctypes.c_long</cite>, or
-<cite>ctypes.c_longlong</cite> depending on the platform.
-The c_intp type is defined accordingly in <cite>numpy.ctypeslib</cite>.
-The ctypes array contains the shape of the underlying array.</p>
+platform (see <cite>~numpy.ctypeslib.c_intp</cite>). This base-type could be
+<cite>ctypes.c_int</cite>, <cite>ctypes.c_long</cite>, or <cite>ctypes.c_longlong</cite> depending on
+the platform. The ctypes array contains the shape of
+the underlying array.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1484,27 +1484,6 @@ a future version the read-only restriction will be removed.</p>
 <p>numpy.diagonal : equivalent function</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="wholeslidedata.samplers.structures.Sample.dot">
-<span class="sig-name descname"><span class="pre">dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.samplers.structures.Sample.dot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dot product of two arrays.</p>
-<p>Refer to <cite>numpy.dot</cite> for full documentation.</p>
-<p>numpy.dot : equivalent function</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="mi">2</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-<span class="go">array([[2.,  2.],</span>
-<span class="go">       [2.,  2.]])</span>
-</pre></div>
-</div>
-<p>This array method can be conveniently chained:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-<span class="go">array([[8.,  8.],</span>
-<span class="go">       [8.,  8.]])</span>
-</pre></div>
-</div>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="wholeslidedata.samplers.structures.Sample.dtype">
 <span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#wholeslidedata.samplers.structures.Sample.dtype" title="Permalink to this definition">¶</a></dt>
@@ -1541,7 +1520,7 @@ The array can be read back with pickle.load or numpy.load.</p>
 <dt class="sig sig-object py" id="wholeslidedata.samplers.structures.Sample.dumps">
 <span class="sig-name descname"><span class="pre">dumps</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.samplers.structures.Sample.dumps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the pickle of the array as a string.
-pickle.loads or numpy.loads will convert the string back to an array.</p>
+pickle.loads will convert the string back to an array.</p>
 <p>None</p>
 </dd></dl>
 
@@ -1918,7 +1897,7 @@ below. <cite>new_order</cite> codes can be any of:</p>
 <li><p>‘S’ - swap dtype from current to opposite endian</p></li>
 <li><p>{‘&lt;’, ‘little’} - little endian</p></li>
 <li><p>{‘&gt;’, ‘big’} - big endian</p></li>
-<li><p>‘=’ - native order, equivalent to <cite>sys.byteorder</cite></p></li>
+<li><p>{‘=’, ‘native’} - native order, equivalent to <cite>sys.byteorder</cite></p></li>
 <li><p>{‘|’, ‘I’} - ignore (no change to byte order)</p></li>
 </ul>
 <p>The default value (‘S’) results in swapping the current
@@ -1951,13 +1930,16 @@ the two partitions is undefined.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 1.8.0.</span></p>
 </div>
-<dl class="simple">
+<dl>
 <dt>kth<span class="classifier">int or sequence of ints</span></dt><dd><p>Element index to partition by. The kth element value will be in its
 final sorted position and all smaller elements will be moved before it
 and all equal or greater elements behind it.
 The order of all elements in the partitions is undefined.
 If provided with a sequence of kth it will partition all elements
 indexed by kth of them into their sorted position at once.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 1.22.0: </span>Passing booleans as index is deprecated.</p>
+</div>
 </dd>
 <dt>axis<span class="classifier">int, optional</span></dt><dd><p>Axis along which to sort. Default is -1, which means sort along the
 last axis.</p>
