@@ -73,7 +73,7 @@ class WholeSlideImageFile(WholeSlideFile, ImageFile):
         super().__init__(mode, path, image_backend)
 
     def copy(self, destination_folder) -> None:
-        destination_folder = Path(destination_folder)
+        destination_folder = Path(destination_folder) / 'images'
         extension_name = self.path.suffix
         if WholeSlideImageExtension.is_extension(
             extension_name, FolderCoupledExtension
@@ -98,3 +98,7 @@ class WholeSlideAnnotationFile(WholeSlideFile, AnnotationFile):
         return WholeSlideAnnotation(
             self.path, labels, renamed_labels, self._annotation_parser
         )
+
+    def copy(self, destination_folder) -> None:
+        destination_folder = Path(destination_folder) / 'annotations'
+        super().copy(destination_folder=destination_folder)
