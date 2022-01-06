@@ -1,5 +1,6 @@
 default: &default
   seed: 123
+  mode: mode.yml
   yaml_source@replace=true:
     _: _
   image_sources: 
@@ -9,3 +10,18 @@ default: &default
   associations: associations.yml
 
   
+training:
+  mode:
+    registrant_name: training
+
+validation:
+  mode:
+    registrant_name: validation
+
+test:
+  mode:
+    registrant_name: test
+
+inference:
+  mode:
+    registrant_name: inference

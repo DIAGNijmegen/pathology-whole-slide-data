@@ -3,7 +3,7 @@ default:
         module: wholeslidedata.source.utils
         attribute: factory_sources_from_path
         file_type: wsi
-        mode: default
+        mode: ${source:mode.name}
         path: 'not set.tif'
         image_backend: None
 
@@ -11,6 +11,6 @@ default:
         module: wholeslidedata.source.utils
         attribute: factory_sources_from_path
         file_type: wsa
-        mode: default 
+        mode: ${source:mode.name}
         path: 'not set.tif'
         annotation_parser: None
