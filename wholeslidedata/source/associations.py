@@ -5,7 +5,7 @@ from wholeslidedata.source.files import File
 from dataclasses import dataclass
 
 def stem_file_associater(file: File):
-    return file.path.stem.split('.')[0].split('_')[0]
+    return file.path.stem
 
 class AssociatedFiles(UserDict):
     def __init__(self, file_key):
