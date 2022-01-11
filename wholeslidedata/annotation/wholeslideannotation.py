@@ -10,7 +10,7 @@ from wholeslidedata.labels import Labels
 
 
 def area_sort_with_roi(item):
-    if item.label.name == "roi":
+    if item.label.name == "roi" or item.label.name == "rois":
         return 100000 * 100000
     return item.area
 
