@@ -131,7 +131,7 @@ class SegmentationPatchLabelSampler(PatchLabelSampler):
             )
 
             if isinstance(annotation, Polygon):
-                holemask = np.ones((width, height), dtype=np.int32) * -1
+                holemask = np.ones((height, width), dtype=np.int32) * -1
                 for hole in annotation.holes:
                     hcoordinates = shift_coordinates(
                         hole, center_x, center_y, width, height, ratio
