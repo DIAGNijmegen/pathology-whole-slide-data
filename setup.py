@@ -12,7 +12,7 @@ setup(
     install_requires=[
         "concurrentbuffer>=0.0.3",
         "creationism>=0.0.3",
-        "numpy>=1.18.1",
+        "numpy>=1.20.2",
         "opencv-python-headless>=4.4.0",
         "scipy>=1.5.2",
         "scikit-image>=0.17.2",
