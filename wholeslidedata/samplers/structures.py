@@ -69,12 +69,13 @@ class Sample(np.ndarray):
 
 
 class BatchShape(UserDict):
-    def __init__(self, batch_size, spacing=None, shape=None, y_shape=None):
+    def __init__(self, batch_size, spacing=None, shape=None, y_shape=None, labels=None):
         super().__init__(set())
         self._batch_size = batch_size
         self._spacing = spacing
         self._shape = shape
         self._y_shape = y_shape
+        self._labels = labels
         self.data = self._set_inputs()
 
     @property
@@ -87,10 +88,10 @@ class BatchShape(UserDict):
 
     @property
     def y_shape(self):
+        if self._labels is not None:
+            return tuple(self._shape[:2]+[len(self._labels)])
         if self._y_shape is None:
             return self._y_shape
-        if self._y_shape == -1:
-            return tuple(self._shape[:2])
         return tuple(self._y_shape)
 
     @property
