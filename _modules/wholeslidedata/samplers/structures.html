@@ -216,7 +216,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_shape</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_shape</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_shape</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
         <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_y_shape</span><span class="p">)</span>
 
     <span class="nd">@property</span>
