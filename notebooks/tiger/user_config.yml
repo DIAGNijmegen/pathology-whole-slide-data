@@ -1,0 +1,27 @@
+wholeslidedata:
+    default:
+        seed: 123
+        yaml_source: tigerdatasubset.yml
+        
+        label_map:
+            roi: 0
+            invasive tumor: 1
+            tumor-associated stroma: 2
+            in-situ tumor: 3 
+            healthy glands: 4
+            necrosis not in-situ: 5
+            inflamed stroma: 6
+            rest: 7
+            
+        annotation_parser:
+            sample_label_names: ['roi']
+            
+        batch_shape:
+            batch_size: 10
+            spacing: 0.5
+            shape: [256, 256, 3]
+
+        point_sampler:
+            attribute: RandomPointSampler
+            buffer: -128
+            
