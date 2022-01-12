@@ -89,7 +89,10 @@ class BatchShape(UserDict):
     @property
     def y_shape(self):
         if self._labels is not None:
-            return tuple(self._shape[:2]+[len(self._labels)])
+            count = len(self._labels)
+            if 0 in self._labels.values:
+                count = len(self._labels) - 1
+            return tuple(self._shape[:2]+[count])
         if self._y_shape is None:
             return self._y_shape
         return tuple(self._y_shape)
