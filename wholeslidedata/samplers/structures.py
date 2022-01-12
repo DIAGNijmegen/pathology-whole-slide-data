@@ -90,7 +90,7 @@ class BatchShape(UserDict):
         if self._y_shape is None:
             return self._y_shape
         if self._y_shape == -1:
-            return self._y_shape[:2]
+            return self._shape[:2]
         return tuple(self._y_shape)
 
     @property
