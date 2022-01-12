@@ -37,10 +37,9 @@ class DataSet(UserDict):
         self._renamed_labels = renamed_labels
 
         self.data = self._open(self._associations)
-        self._sample_references, self._all_sample_references = self._init_samples(
+        self._sample_references, self._all_sample_references, self._all_labels = self._init_samples(
             self.data
         )
-        self._all_labels = Labels.create(list(self._all_sample_references.keys()))
         self._sample_labels = Labels.create(list(self._sample_references.keys()))
 
         self._check_samples()
@@ -155,6 +154,7 @@ class WholeSlideDataSet(DataSet):
     def _init_samples(self, data) -> Tuple:
         samples = {}
         all_samples = {}
+        _all_labels = set()
         for file_index, (file_key, values) in enumerate(data.items()):
             for wsa_index, wsa in values[
                 WholeSlideDataSet.ANNOTATIONS_IDENTIFIER
@@ -170,6 +170,7 @@ class WholeSlideDataSet(DataSet):
                     )
 
                 for annotation in wsa.annotations:
+                    _all_labels.add(annotation.label)
                     all_samples.setdefault(annotation.label.name, []).append(
                         WholeSlideSampleReference(
                             file_index=file_index,
@@ -178,7 +179,7 @@ class WholeSlideDataSet(DataSet):
                             annotation_index=annotation.index,
                         )
                     )
-        return samples, all_samples
+        return samples, all_samples, Labels.create(_all_labels)
 
     def close_images(self):
         for image in self._images.values():
