@@ -1,0 +1,5 @@
+default:
+  sample_callbacks:
+      - module: wholeslidedata.samplers.callbacks
+        attribute: OneHotEncoding
+        labels: ${wholeslidedata:labels}
