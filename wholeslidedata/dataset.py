@@ -155,6 +155,7 @@ class WholeSlideDataSet(DataSet):
         samples = {}
         all_samples = {}
         _all_labels = set()
+        data = dict(sorted(data.items()))
         for file_index, (file_key, values) in enumerate(data.items()):
             for wsa_index, wsa in values[
                 WholeSlideDataSet.ANNOTATIONS_IDENTIFIER
