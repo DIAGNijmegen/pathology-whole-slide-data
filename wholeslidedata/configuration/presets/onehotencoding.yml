@@ -1,6 +1,6 @@
 default:
   batch_shape:
-    y_shape: -1
+    labels: ${wholeslidedata:labels}
 
   sample_callbacks:
       - module: wholeslidedata.samplers.callbacks
