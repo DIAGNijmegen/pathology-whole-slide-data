@@ -1,13 +1,12 @@
 ### WholeSlideData
 -----
 
-*This repository contains alpha software*
+***This repository contains alpha software***
 
 
 ### Installation
-*latest code (recommend)*: pip install git+https://github.com/DIAGNijmegen/pathology-whole-slide-data@main
+pip install git+https://github.com/DIAGNijmegen/pathology-whole-slide-data@main
 
-*latest release:* pip install wholeslidedata 
 
 ### Main Features
 
