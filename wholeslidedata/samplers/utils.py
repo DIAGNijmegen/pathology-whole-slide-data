@@ -50,13 +50,13 @@ def unblockshaped(arr, h, w):
     )
 
 
-def one_hot_encoding(mask, label_map):
+def one_hot_encoding(mask, label_map, ignore_zero=True):
     """Encodes mask into one hot encoding."""
     ncols = max(label_map.values()) + 1
     out = np.zeros((mask.size, ncols), dtype=np.uint8)
     out[np.arange(mask.size), mask.ravel()] = 1
     out.shape = mask.shape + (ncols,)
-    if 0 in label_map.values():
+    if 0 in label_map.values() and not ignore_zero:
         return out
     return out[..., 1:]
 

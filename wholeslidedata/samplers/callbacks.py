@@ -47,11 +47,12 @@ class BlockShaped(SampleCallback):
 class OneHotEncoding(SampleCallback):
     """One-hot encodes y sample"""
 
-    def __init__(self, labels):
+    def __init__(self, labels, ignore_zero=True):
+        self._ignore_zero = ignore_zero
         self._label_map = {label.name: label.value for label in labels}
 
     def __call__(self, x_patch, y_patch):
-        y_patch = one_hot_encoding(y_patch, self._label_map)
+        y_patch = one_hot_encoding(y_patch, self._label_map, self._ignore_zero)
         return x_patch, y_patch
 
 
