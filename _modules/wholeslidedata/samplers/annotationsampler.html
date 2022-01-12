@@ -133,7 +133,7 @@
 <div class="viewcode-block" id="AnnotationSampler"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.samplers.annotationsampler.AnnotationSampler.html#wholeslidedata.samplers.annotationsampler.AnnotationSampler">[docs]</a><span class="k">class</span> <span class="nc">AnnotationSampler</span><span class="p">(</span><span class="n">Sampler</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">):</span>
 <div class="viewcode-block" id="AnnotationSampler.__init__"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.samplers.annotationsampler.AnnotationSampler.html#wholeslidedata.samplers.annotationsampler.AnnotationSampler.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">counts_per_label</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_counts_per_label</span> <span class="o">=</span> <span class="n">counts_per_label</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_counts_per_label</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">counts_per_label</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span></div>
 
     <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next</span>
@@ -179,10 +179,9 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">counts_per_label</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_counters</span> <span class="o">=</span> <span class="p">{</span>
             <span class="n">label</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_random_index_iterator</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_counts_per_label</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_counts_per_label</span>
         <span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_random_reset</span> <span class="o">=</span> <span class="n">random_reset</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_random_reset</span> <span class="o">=</span> <span class="n">random_reset</span></div>
 
     <span class="k">def</span> <span class="nf">_next</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
