@@ -7,7 +7,7 @@ from wholeslidedata.samplers.sampler import Sampler
 class AnnotationSampler(Sampler, Iterator):
     def __init__(self, counts_per_label: Dict, seed: int):
         super().__init__(seed=seed)
-        self._counts_per_label = counts_per_label
+        self._counts_per_label = dict(sorted(counts_per_label.items()))
 
     def __next__(self) -> Callable:
         return self._next
@@ -53,10 +53,9 @@ class BalancedAnnotationSampler(AnnotationSampler):
         super().__init__(counts_per_label, seed=seed)
         self._counters = {
             label: self._random_index_iterator(label)
-            for label in self._counts_per_label.keys()
+            for label in self._counts_per_label
         }
         self._random_reset = random_reset
-        self.reset()
 
     def _next(self, label):
         try:
