@@ -14,12 +14,10 @@ class PointSampler(Sampler):
     def __init__(self, seed: int, dataset):
         self._seed = seed
         self._dataset = dataset
-        self._rng = np.random.RandomState(seed=self._seed)
-        random.seed(self._seed)
+        super().__init__(seed=seed)
 
     def reset(self):
-        self._rng = np.random.RandomState(seed=self._seed)
-        random.seed(self._seed)
+        super().set_seed()
 
     @abc.abstractmethod
     def sample(self, sample_reference):
