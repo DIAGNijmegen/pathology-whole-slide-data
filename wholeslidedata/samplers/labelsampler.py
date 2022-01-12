@@ -9,7 +9,7 @@ from wholeslidedata.samplers.sampler import Sampler
 class LabelSampler(Sampler, Iterator):
     def __init__(self, labels: List, seed: int):
         super().__init__(seed=seed)
-        self._labels = labels
+        self._labels = sorted(labels)
         self._size = len(self._labels)
 
 
