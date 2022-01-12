@@ -112,11 +112,13 @@ def create_batch_iterator(
     batch_size, buffer_shapes = get_buffer_shape(builds, mode)
     dataset = get_dataset(builds, mode)
 
-    number_of_batches, redundant = get_number_of_batches(
-        number_of_batches=number_of_batches,
-        total_annotations=dataset.annotation_counts,
-        batch_size=batch_size,
-    )
+    redundant = 0
+    if number_of_batches is not None:
+        number_of_batches, redundant = get_number_of_batches(
+            number_of_batches=number_of_batches,
+            total_annotations=dataset.annotation_counts,
+            batch_size=batch_size,
+        )
 
     update_queue = Queue() if update_samplers else None
     info_queue = Queue() if return_info else None
