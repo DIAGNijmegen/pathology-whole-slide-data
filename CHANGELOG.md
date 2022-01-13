@@ -1,10 +1,22 @@
 # Changelog
 ---
 
-### **Upcoming** (0.0.11)
+### **Upcoming** (0.0.12)
+
+### (0.0.11)  (**Latest**)
+
+**new features:**
+ - image/annotations are now copied to separate folders
+ - added source configuration 
+ - added one-hot-encoding preset
+ - dataset and labels are now sorted such that the generator will produce the same output when the seed is set
+ - minor refactoring
+
+**requirements:**
+ - increased NumPy version to make it compatible with ASAP2.0
 
 
-### 0.0.10 (**Latest**)
+### 0.0.10
 **bug fixes:**
  - fixed sampling bugs
 
@@ -24,7 +36,6 @@
  - multiple spacings support
  - update call from producers to commander
 
-**bug fixes:**
  - fixed: copy data failed on first trial when using multiple cpus
 
 ---
