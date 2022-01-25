@@ -1,0 +1,26 @@
+--- 
+training: 
+  - 
+    wsa: 
+      path: /home/user/training/wsirois/wsi-level-annotations/annotations-tissue-cells-xmls/100B.xml
+    wsi: 
+      path: /home/user/training/wsirois/wsi-level-annotations/images/100B.tif
+
+
+--- 
+training: 
+  - 
+    wsa: 
+      path: /home/user/training/wsirois/wsi-level-annotations/annotations-tissue-cells-xmls/100B.xml
+    wsi: 
+      path: /home/user/training/wsirois/wsi-level-annotations/images/100B.tif
+#   - 
+#     wsa: 
+#       path: /home/user/training/wsirois/wsi-level-annotations/annotations-tissue-cells-xmls/TC_S01_P000003_C0001_B104.xml
+#     wsi: 
+#       path: /home/user/training/wsirois/wsi-level-annotations/images/TC_S01_P000003_C0001_B104.tif
+#   - 
+#     wsa: 
+#       path: /home/user/training/wsirois/wsi-level-annotations/annotations-tissue-cells-xmls/TCGA-A1-A0SP-01Z-00-DX1.20D689C6-EFA5-4694-BE76-24475A89ACC0.xml
+#     wsi: 
+#       path: /home/user/training/wsirois/wsi-level-annotations/images/TCGA-A1-A0SP-01Z-00-DX1.20D689C6-EFA5-4694-BE76-24475A89ACC0.tif

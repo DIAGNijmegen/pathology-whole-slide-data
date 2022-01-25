@@ -1,0 +1,26 @@
+wholeslidedata:
+    default:
+        seed: 123
+        yaml_source: tigerdatasubsetdetection.yml
+        
+        label_map:
+            roi: 0
+            lymphocytes and plasma cells: 1
+
+        annotation_parser:
+            sample_label_names: ['roi']
+            
+        batch_shape:
+            batch_size: 10
+            spacing: 0.5
+            shape: [256, 256, 3]
+            y_shape: [1000, 6]
+            
+        point_sampler:
+            attribute: RandomPointSampler
+            buffer: -128
+
+        patch_label_sampler:
+            attribute: DetectionPatchLabelSampler
+            max_number_objects: 1000
+            detection_labels: ['lymphocytes and plasma cells']
