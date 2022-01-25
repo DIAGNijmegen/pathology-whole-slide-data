@@ -147,20 +147,21 @@ def plot_batch_detection(x_batch, y_batch, output_shape=None, color_map=plt.cm.P
     """
     Plot batch function for ground truth labels provided by DetectionLabelSampler class.
     """
-
+    fig, axes = plt.subplots(1,x_batch.shape[0], figsize=(20, 5))
     for batch_index in range(len(x_batch)):
-        fig, axes = plt.subplots(1, 1, figsize=(10, 10))
-        plot_patch(x_batch[batch_index], axes=axes)
+        plot_patch(x_batch[batch_index], axes=axes[batch_index])
         plot_boxes(
             y_batch[batch_index],
-            axes=axes,
+            axes=axes[batch_index],
             output_shape=output_shape,
             color_map=color_map,
+            max_width=x_batch[batch_index].shape[1],
+            max_height=x_batch[batch_index].shape[0],
         )
-        plt.show()
+    plt.show()
 
 
-def plot_boxes(boxes, axes=None, output_shape=None, color_map=plt.cm.prism):
+def plot_boxes(boxes,max_width, max_height, axes=None, output_shape=None, color_map=plt.cm.prism):
     if axes is None:
         _, ax = plt.subplots(1, 1)
     else:
@@ -169,10 +170,12 @@ def plot_boxes(boxes, axes=None, output_shape=None, color_map=plt.cm.prism):
     for box in boxes:
         x1, y1, x2, y2, label_value, confidence = box
         color = color_map(int(label_value))
-        rect = pltpatches.Rectangle(
-            (x1, y1), x2 - x1, y2 - y1, linewidth=2, edgecolor=color, facecolor="none"
-        )
-        ax.add_patch(rect)
+
+        if (x1,y1,x2,y2) != (0,0,0,0):
+            rect = pltpatches.Rectangle(
+                (x1, y1), min(max_width, max(0, x2 - x1)), min(max_height, max(0, y2 - y1)), linewidth=2, edgecolor='red', facecolor="none"
+            )
+            ax.add_patch(rect)
 
     if axes is None:
         plt.show()
