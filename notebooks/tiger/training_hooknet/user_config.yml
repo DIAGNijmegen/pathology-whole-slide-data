@@ -1,0 +1,77 @@
+wholeslidedata:
+    default:
+        seed: 123
+        yaml_source: tigerdatasubset.yml
+        
+        label_map:
+            roi: 0
+            invasive tumor: 1
+            tumor-associated stroma: 2
+            in-situ tumor: 3
+            healthy glands: 4
+            necrosis not in-situ: 5
+            inflamed stroma: 6
+            rest: 7
+            
+        annotation_parser:
+            sample_label_names: ['roi']
+    
+    training:
+        batch_shape:
+            batch_size: 12
+            shape: [[284, 284, 3], [284, 284, 3]]
+            y_shape: [2, 70, 70, 7]
+            spacing: [0.5, 8.0]
+
+        point_sampler:
+            attribute: RandomPointSampler
+            buffer: -142
+
+        sample_callbacks:
+            - module: wholeslidedata.samplers.callbacks
+              attribute: FitOutput
+              output_shape: [70, 70]
+              
+            - module: wholeslidedata.samplers.callbacks
+              attribute: OneHotEncoding
+              labels: ${wholeslidedata:labels}
+
+
+    inference:
+        batch_shape:
+            batch_size: 1
+            shape: [[1244, 1244, 3], [1244, 1244, 3]]
+            y_shape: [2, 1030, 1030]
+            spacing: [0.5, 8.0]
+
+        annotation_sampler:
+            attribute: OrderedAnnotationSampler
+        
+        point_sampler:
+            attribute: CenterPointSampler
+            
+        sample_callbacks:
+            - module: wholeslidedata.samplers.callbacks
+              attribute: FitOutput
+              output_shape: [1030, 1030]
+
+hooknet:
+    default:
+        model:
+            input_shape@replace=true: [[284,284,3], [284,284,3]]
+            n_classes: 7
+            hook_indices@replace=true: [0, 4]
+            depth: 4
+            n_convs: 2
+            filter_size: 3
+            n_filters: 32
+            padding: valid
+            batch_norm: True
+            learning_rate: 0.0005
+            activation: relu
+            loss_weights: [0.75, 0.25]
+            merge_type: concat
+    inference:
+        model:
+            input_shape@replace=true: [[1244,1244,3], [1244,1244,3]]
+            model_weights: /home/user/pathology-whole-slide-data/notebooks/tiger/training_hooknet/hooknet_weights.h5
