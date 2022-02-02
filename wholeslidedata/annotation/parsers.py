@@ -525,7 +525,7 @@ class MaskAnnotationParser(AnnotationParser):
         shape = np.array(np_mask.shape)
         
         new_shape = shape + size//ratio - shape%(size//ratio)
-        new_mask = np.zeros(new_shape.astype('int'))
+        new_mask = np.zeros(new_shape.astype('int'),  dtype='uint8')
         new_mask[:shape[0], :shape[1]] = np_mask
         
         blocks = block_shaped(new_mask, int(size//ratio), int(size//ratio))
