@@ -22,3 +22,6 @@ pip install git+https://github.com/DIAGNijmegen/pathology-whole-slide-data@main
 Please see [notebook examples](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/notebooks) on how to use this code:
 
 
+### Video Tutorials
+Please see [video tutorials](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/tutorials) 
+
