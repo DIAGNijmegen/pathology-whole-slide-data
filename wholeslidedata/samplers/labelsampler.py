@@ -112,15 +112,18 @@ class BalancedLabelSampler(LabelSampler):
 @LabelSampler.register(("weighted",))
 class WeightedLabelSampler(LabelSampler):
     def __init__(
-        self, labels: List[str], weights: List[int], replace=True, seed: int = 123
+        self, labels: dict, replace=True, seed: int = 123
     ):
-        super().__init__(labels=labels, seed=seed)
-        self._weights = weights
-        self._replace = replace
-
+        labels = dict(sorted(labels.items()))
+        self._weights= list(labels.values())
+        super().__init__(labels=list(labels.keys()), seed=seed)
+        
     def __next__(self):
         return self._rng.choice(self._labels, 1, p=self._weights)[0]
 
+    def reset(self):
+        self.set_seed()
+    
     def update(self, batch):
         pass
 
