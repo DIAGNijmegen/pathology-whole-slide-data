@@ -115,10 +115,11 @@ class UniformPointSampler(PointSampler):
         record = self._sample_map[sample_reference]
         if len(record["transforms"]) == 0:
             return record["annotation"].representative_point()
-
-        transform = random.choices(record["transforms"], weights=record["areas"], k=1)[
+        
+        transform_idx = self._rng.choice(range(len(record["transforms"])), p=np.array(record["areas"])/sum(record["areas"]), size=1)[
             0
         ]
+        transform = record["transforms"][transform_idx]
         x, y = self._rng.random(2)
         if x + y > 1:
             return affine_transform(Point(1 - x, 1 - y), transform)
