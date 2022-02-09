@@ -1,8 +1,9 @@
 import xml.etree.cElementTree as ET
 from xml.dom import minidom
+from pathlib import Path
 
 from wholeslidedata.annotation.structures import Point, Polygon
-
+from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
 
 def write_polygon(annos, coordinates, index, label_name, label_color):
     anno = ET.SubElement(annos, "Annotation")
@@ -116,10 +117,10 @@ def write_asap_annotation(annotations, output_path, scaling=1.0):
         label_color = annotation.label.color if annotation.label.color else "black"
         index = annotation.index
         if isinstance(annotation, Polygon):
-            coordinates = annotation.coordinates / scaling
+            coordinates = annotation.coordinates * scaling
             write_polygon(annos, coordinates, index, label_name, label_color)
         elif isinstance(annotation, Point):
-            coordinates = annotation.coordinates / scaling
+            coordinates = annotation.coordinates * scaling
             write_point(annos, [coordinates], index, label_name, label_color)
         else:
             raise ValueError("unsupported geometry", annotation)
@@ -137,3 +138,14 @@ def write_asap_annotation(annotations, output_path, scaling=1.0):
     xmlstr = minidom.parseString(ET.tostring(root)).toprettyxml(indent="    ")
     with open(output_path, "w") as f:
         f.write(xmlstr)
+        
+def convert_annotations(input_folder, output_folder, scaling, suffix=''):
+    input_folder = Path(input_folder)
+    output_folder = Path(output_folder)
+    output_folder.mkdir(parents=True, exist_ok=True)
+    xml_paths = input_folder.glob('*.xml')
+    for xml_path in xml_paths:
+        wsa = WholeSlideAnnotation(xml_path)
+        output_path = output_folder/ xml_path.name.replace('.xml', f'{suffix}.xml')
+        print(f'Creating: {output_path}')
+        write_asap_annotation(wsa.annotations, output_path, scaling)
