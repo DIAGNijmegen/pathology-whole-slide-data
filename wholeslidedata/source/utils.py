@@ -29,7 +29,7 @@ def factory_sources_from_paths(
         path = str(path)
         if any([exclude in path for exclude in excludes]):
             continue
-        if filters and not any([filter in path for filter in filters]):
+        if filters and not all([filter in path for filter in filters]):
             continue
         files.append(cls(mode=mode, path=path, **kwargs))
     return files
