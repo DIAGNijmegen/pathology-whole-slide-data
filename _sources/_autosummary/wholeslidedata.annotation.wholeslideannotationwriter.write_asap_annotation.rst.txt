@@ -1,6 +1,0 @@
-wholeslidedata.annotation.wholeslideannotationwriter.write\_asap\_annotation
-============================================================================
-
-.. currentmodule:: wholeslidedata.annotation.wholeslideannotationwriter
-
-.. autofunction:: write_asap_annotation

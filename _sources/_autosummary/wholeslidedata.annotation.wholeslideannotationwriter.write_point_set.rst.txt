@@ -1,6 +1,0 @@
-wholeslidedata.annotation.wholeslideannotationwriter.write\_point\_set
-======================================================================
-
-.. currentmodule:: wholeslidedata.annotation.wholeslideannotationwriter
-
-.. autofunction:: write_point_set
