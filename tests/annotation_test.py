@@ -1,9 +1,19 @@
-from wholeslidedata.annotation.factory import Polygon, Point
+import os
+import shutil
+import tempfile
+import unittest
+from pathlib import Path
+
+from tests.testdata import download_wsa, download_wsi
+from wholeslidedata.annotation.structures import Polygon, Point
 import pickle
 import numpy as np
 
+from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
+from wholeslidedata.annotation.wholeslideannotationwriter import convert_annotations
 
-class TestAnnotation:
+
+class TestAnnotation(unittest.TestCase):
     def test_polygon_properties(self):
         polygon = Polygon(
             index=0,
@@ -82,7 +92,6 @@ class TestAnnotation:
         polygon.add_overlapping_annotations([polygon2])
         assert not polygon.contains(point)
 
-
     def test_parse_colour_from_annotation(self):
         xml_string = """<?xml version="1.0"?>
         <ASAP_Annotations>
@@ -119,12 +128,12 @@ class TestAnnotation:
         self.assertRegex(wsa.annotations[0].label.color, r"^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$")
         shutil.rmtree(dir_path)
 
-    def test_convert_annotations(self):
+    def test_convert_annotations_colors(self):
         dir_path = tempfile.mkdtemp()
         annotation_path = download_wsa(dir_path)
         wsa = WholeSlideAnnotation(annotation_path)
-        coordinates = wsa.annotations[0].coordinates[0]
+        color = wsa.annotations[0].label.color
         self.assertIsNotNone(wsa)
-        convert_annotations(Path(annotation_path).parent, Path(annotation_path).parent, scaling=2.0)
+        convert_annotations(Path(annotation_path).parent, Path(annotation_path).parent, scaling=1.0)
         wsa_changed = WholeSlideAnnotation(annotation_path)
-        self.assertTrue(np.allclose(coordinates, wsa_changed.annotations[0].coordinates[0] / 2.0, rtol=1e-1))
+        self.assertTrue(color, wsa_changed.annotations[0].label.color)

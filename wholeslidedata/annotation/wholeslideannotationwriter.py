@@ -132,6 +132,7 @@ def write_asap_annotation(old_xml, annotations, output_path, scaling=1.0):
         group.set("Name", elem.attrib.get("Name"))
         group.set("PartOfGroup", elem.attrib.get("PartOfGroup"))
         group.set("Color", elem.attrib.get("Color"))
+        ET.SubElement(group, "Attributes")
 
     # writing to the xml file with indentation
     xmlstr = minidom.parseString(ET.tostring(root)).toprettyxml(indent="    ")
