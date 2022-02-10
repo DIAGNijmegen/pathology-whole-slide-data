@@ -5,6 +5,7 @@ from pathlib import Path
 from wholeslidedata.annotation.structures import Point, Polygon
 from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
 
+
 def write_polygon(annos, coordinates, index, label_name, label_color):
     anno = ET.SubElement(annos, "Annotation")
     anno.set("Name", "Annotation " + str(index))
@@ -63,8 +64,7 @@ def write_point_set(annotations, output_path, label_name='tils', label_color='ye
     # writing the last groups part
     anno_groups = ET.SubElement(root, "AnnotationGroups")
 
-
-    index= 0
+    index = 0
     anno = ET.SubElement(annos, "Annotation")
     anno.set("Name", "Annotation " + str(index))
     anno.set("Type", "PointSet")
@@ -85,7 +85,6 @@ def write_point_set(annotations, output_path, label_name='tils', label_color='ye
         coord.set("X", str(x))
         coord.set("Y", str(y))
         ridx += 1
-    
 
     group = ET.SubElement(anno_groups, "Group")
     group.set("Name", label_name)
@@ -98,7 +97,8 @@ def write_point_set(annotations, output_path, label_name='tils', label_color='ye
     with open(output_path, "w") as f:
         f.write(xmlstr)
 
-def write_asap_annotation(annotations, output_path, scaling=1.0):
+
+def write_asap_annotation(old_xml, annotations, output_path, scaling=1.0):
     # the root of the xml file.
     root = ET.Element("ASAP_Annotations")
 
@@ -127,25 +127,27 @@ def write_asap_annotation(annotations, output_path, scaling=1.0):
 
         labels.add((label_name, label_color))
 
-    for label, color in labels:
+    for elem in list(old_xml.getroot()[1]):
         group = ET.SubElement(anno_groups, "Group")
-        group.set("Name", label)
-        group.set("PartOfGroup", "None")
-        group.set("Color", color)
-        attr = ET.SubElement(group, "Attributes")
+        group.set("Name", elem.attrib.get("Name"))
+        group.set("PartOfGroup", elem.attrib.get("PartOfGroup"))
+        group.set("Color", elem.attrib.get("Color"))
+        ET.SubElement(group, "Attributes")
 
     # writing to the xml file with indentation
     xmlstr = minidom.parseString(ET.tostring(root)).toprettyxml(indent="    ")
     with open(output_path, "w") as f:
         f.write(xmlstr)
-        
+
+
 def convert_annotations(input_folder, output_folder, scaling, suffix=''):
     input_folder = Path(input_folder)
     output_folder = Path(output_folder)
     output_folder.mkdir(parents=True, exist_ok=True)
     xml_paths = input_folder.glob('*.xml')
     for xml_path in xml_paths:
+        old_xml = ET.parse(xml_path)
         wsa = WholeSlideAnnotation(xml_path)
-        output_path = output_folder/ xml_path.name.replace('.xml', f'{suffix}.xml')
+        output_path = output_folder / xml_path.name.replace('.xml', f'{suffix}.xml')
         print(f'Creating: {output_path}')
-        write_asap_annotation(wsa.annotations, output_path, scaling)
+        write_asap_annotation(old_xml, wsa.annotations, output_path, scaling)

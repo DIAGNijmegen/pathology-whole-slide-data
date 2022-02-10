@@ -1,5 +1,6 @@
 import abc
 import json
+import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Collection, Iterator, List, Optional, Union
@@ -23,12 +24,12 @@ class AnnotationParser(RegistrantFactory):
     """Base class for parsing annotations. Inherents from RegistrantFactory which allows to register subclasses"""
 
     def __init__(
-        self,
-        labels: Optional[Union[Labels, list, tuple, dict]] = None,
-        renamed_labels: Optional[Union[Labels, list, tuple, dict]] = None,
-        scaling: float = 1.0,
-        sample_label_names: Union[list, tuple] = (),
-        sample_annotation_types: Union[list, tuple] = ("polygon",),
+            self,
+            labels: Optional[Union[Labels, list, tuple, dict]] = None,
+            renamed_labels: Optional[Union[Labels, list, tuple, dict]] = None,
+            scaling: float = 1.0,
+            sample_label_names: Union[list, tuple] = (),
+            sample_annotation_types: Union[list, tuple] = ("polygon",),
     ):
         """Init
 
@@ -56,10 +57,10 @@ class AnnotationParser(RegistrantFactory):
         self._sample_label_names = sample_label_names
 
     def parse(
-        self,
-        annotation_path: Union[Path, str],
-        labels: Optional[Union[Labels, list, tuple, dict]] = None,
-        renamed_labels: Optional[Union[Labels, list, tuple, dict]] = None,
+            self,
+            annotation_path: Union[Path, str],
+            labels: Optional[Union[Labels, list, tuple, dict]] = None,
+            renamed_labels: Optional[Union[Labels, list, tuple, dict]] = None,
     ) -> List[Annotation]:
 
         """Parses annotation file into list of annotations
@@ -88,7 +89,7 @@ class AnnotationParser(RegistrantFactory):
 
         annotations = []
         for annotation_structure in self._get_annotation_structures(
-            annotation_path, labels
+                annotation_path, labels
         ):
             annotation = Annotation.create(
                 annotation_structure, labels, renamed_labels, self._scaling
@@ -121,7 +122,8 @@ class AnnotationParser(RegistrantFactory):
         return Labels.create(set(labels))
 
     @abc.abstractmethod
-    def _get_annotation_structures(self, path: Union[Path, str], labels: Optional[Labels]) -> Iterator[AnnotationStructure]:
+    def _get_annotation_structures(self, path: Union[Path, str], labels: Optional[Labels]) -> Iterator[
+        AnnotationStructure]:
         pass
 
     @abc.abstractmethod
@@ -139,7 +141,6 @@ class AnnotationParser(RegistrantFactory):
 
 @AnnotationParser.register(("asap",))
 class AsapAnnotationParser(AnnotationParser):
-
     TYPES = {
         "polygon": "polygon",
         "rectangle": "polygon",
@@ -150,35 +151,49 @@ class AsapAnnotationParser(AnnotationParser):
 
     def get_available_labels(self, path):
         labels = []
-        for annotation_structure in self._get_annotation_structures(path, None):
-            labels.append(annotation_structure.label)
+        tree = ET.parse(path)
+        opened_annotation = tree.getroot()
+        for parent in opened_annotation:
+                for child in parent:
+                    if child.tag == "Annotation":
+                        labels.append(child.attrib.get("PartOfGroup").lower().strip())
         return Labels.create(set(labels))
 
     def _get_annotation_structures(self, path, labels):
         tree = ET.parse(path)
         opened_annotation = tree.getroot()
         annotation_index = 0
+        
+        if labels is None:
+            labels = get_available_labels(path)
+        
         for parent in opened_annotation:
             for child in parent:
                 if child.tag == "Annotation":
                     annotation_type = self._get_annotation_type(child)
-                    annotation_label = self._get_label_name(child, labels)
+                    annotation_color = self._get_annotation_color(child)
+                    annotation_name = self._get_label_name(child, labels)
+                    if annotation_name not in labels.names:
+                        continue
+                    annotation_value = labels.get_label_by_name(annotation_name).value
+                    annotation_label = Label(name=annotation_name, value=annotation_value, color=annotation_color)
                     annotation_coordinates = self._get_coordinates(child)
+                    
                     if AsapAnnotationParser.TYPES[annotation_type] == 'polygon' and len(annotation_coordinates) < 3:
                         print('error annotation')
                         continue
                     annotation_holes = self._get_holes(child)
                     if not annotation_label or (
-                        not isinstance(annotation_label, Label)
-                        and isinstance(labels, Labels)
-                        and annotation_label not in labels.names
+                            not isinstance(annotation_label, Label)
+                            and isinstance(labels, Labels)
+                            and annotation_label not in labels.names
                     ):
                         continue
 
                     if (
-                        isinstance(annotation_label, Label)
-                        and isinstance(labels, Labels)
-                        and annotation_label.name not in labels.names
+                            isinstance(annotation_label, Label)
+                            and isinstance(labels, Labels)
+                            and annotation_label.name not in labels.names
                     ):
                         continue
 
@@ -195,7 +210,7 @@ class AsapAnnotationParser(AnnotationParser):
                             annotation_index += 1
                             yield annotation_structure
                         continue
-                
+
                     annotation_structure = AnnotationStructure(
                         annotation_path=path,
                         index=annotation_index,
@@ -215,11 +230,18 @@ class AsapAnnotationParser(AnnotationParser):
 
     def _get_label_name(self, annotation_structure, labels) -> str:
         if (
-            isinstance(labels, Labels)
-            and self._get_annotation_type(annotation_structure) in labels.names
+                isinstance(labels, Labels)
+                and self._get_annotation_type(annotation_structure) in labels.names
         ):
             return self._get_annotation_type(annotation_structure).strip()
         return annotation_structure.attrib.get("PartOfGroup").lower().strip()
+
+    @staticmethod
+    def _get_annotation_color(structure) -> str:
+        color = structure.attrib.get("Color")
+        if re.match(r"^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$", color):
+            return color
+        raise ValueError(f"Unsupported color format. Expected hex color code.")
 
     def _get_coordinates(self, annotation_structure):
         coordinates = []
@@ -231,7 +253,7 @@ class AsapAnnotationParser(AnnotationParser):
                     float(coordinate.get("Y").replace(",", ".")),
                 )
             )
-        
+
         return coordinates
 
     def _get_holes(self, annotation_structure):
@@ -499,15 +521,15 @@ class AsapAnnotationParser(AnnotationParser):
 @AnnotationParser.register(("mask",))
 class MaskAnnotationParser(AnnotationParser):
     def __init__(
-        self,
-        shape=(1024, 1024),
-        processing_spacing=0.5,
-        output_spacing=0.5,
-        labels=("tissue",),
-        out_labels=None,
-        scaling=1.0,
-        sample_annotation_types=("polygon",),
-        backend="asap",
+            self,
+            shape=(1024, 1024),
+            processing_spacing=0.5,
+            output_spacing=0.5,
+            labels=("tissue",),
+            out_labels=None,
+            scaling=1.0,
+            sample_annotation_types=("polygon",),
+            backend="asap",
     ):
         self._processing_spacing = processing_spacing
         self._output_spacing = output_spacing
@@ -517,28 +539,28 @@ class MaskAnnotationParser(AnnotationParser):
 
     def _get_annotation_structures(self, path, labels):
         mask = WholeSlideImage(path, backend=self._backend)
-        
+
         size = self._shape[0]
-        ratio = self._processing_spacing/self._output_spacing
-        
+        ratio = self._processing_spacing / self._output_spacing
+
         np_mask = mask.get_slide(self._processing_spacing).squeeze()
         shape = np.array(np_mask.shape)
-        
-        new_shape = shape + size//ratio - shape%(size//ratio)
-        new_mask = np.zeros(new_shape.astype('int'),  dtype='uint8')
+
+        new_shape = shape + size // ratio - shape % (size // ratio)
+        new_mask = np.zeros(new_shape.astype('int'), dtype='uint8')
         new_mask[:shape[0], :shape[1]] = np_mask
-        
-        blocks = block_shaped(new_mask, int(size//ratio), int(size//ratio))
-        
+
+        blocks = block_shaped(new_mask, int(size // ratio), int(size // ratio))
+
         region_index = -1
         annotation_index = 0
-        for y in range(new_mask.shape[0]//(int(size//ratio))):
-            for x in range(new_mask.shape[1]//int((size//ratio))):
+        for y in range(new_mask.shape[0] // (int(size // ratio))):
+            for x in range(new_mask.shape[1] // int((size // ratio))):
                 region_index += 1
                 if not np.any(blocks[region_index]):
                     continue
 
-                box = self._get_coordinates(x*size, y*size, size, size)
+                box = self._get_coordinates(x * size, y * size, size, size)
                 annotation_structure = AnnotationStructure(
                     annotation_path=path,
                     index=annotation_index,
@@ -548,7 +570,6 @@ class MaskAnnotationParser(AnnotationParser):
                 )
                 annotation_index += 1
                 yield annotation_structure
-            
 
         mask.close()
         mask = None
