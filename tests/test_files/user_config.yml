@@ -1,0 +1,36 @@
+wholeslidedata:
+  default:
+    seed: 123
+    yaml_source: data.yml
+
+    label_map:
+      tumor: 1
+      lymphocytes: 2
+      stroma: 3
+
+    label_sampler:
+      attribute: OrderedLabelSampler
+
+    annotation_sampler:
+      attribute: OrderedAnnotationSampler
+
+    point_sampler:
+      attribute: RandomPointSampler
+      buffer: -142
+
+    batch_shape:
+      batch_size: 12
+      shape: [ [ 284,284,3 ],[ 284,284,3 ] ]
+      spacing: [ 0.5, 8.0 ]
+      y_shape: [ 2, 70, 70 ]
+
+    sample_callbacks:
+      - module: wholeslidedata.samplers.callbacks
+        attribute: AlbumentationsAugmentationsCallback
+        augmentations:
+          - Flip:
+              p: 0.5
+
+      - module: wholeslidedata.samplers.callbacks
+        attribute: FitOutput
+        output_shape: [ 70, 70 ]

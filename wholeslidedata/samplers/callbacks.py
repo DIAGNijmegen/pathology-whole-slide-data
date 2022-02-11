@@ -1,15 +1,17 @@
 from wholeslidedata.samplers.utils import one_hot_encoding, fit_data, block_shaped
 import numpy as np
 from typing import Dict, Tuple
+import albumentations as A
 
 
 class SampleCallback:
     """Pass through callback on samples"""
+
     def __init__(self):
         pass
 
     def __call__(
-        self, x_patch: np.ndarray, y_patch: np.ndarray
+            self, x_patch: np.ndarray, y_patch: np.ndarray
     ) -> Tuple[np.ndarray, np.ndarray]:
         return x_patch, y_patch
 
@@ -17,13 +19,33 @@ class SampleCallback:
         pass
 
 
+class AlbumentationsAugmentationsCallback(SampleCallback):
+
+    def __init__(self, augmentations):
+        super().__init__()
+        self._augmentations = A.Compose(
+            [getattr(A, class_name)(**params) for augmentation in augmentations for class_name, params in
+             augmentation.items()]
+        )
+
+    def __call__(
+            self, x_patch: np.ndarray, y_patch: np.ndarray
+    ) -> Tuple[np.ndarray, np.ndarray]:
+        augmented = self._augmentations(image=x_patch, mask=y_patch)
+        return augmented["image"], augmented["mask"]
+
+    def reset(self):
+        pass
+
+
 class BatchCallback:
     """Pass through callback on batches"""
+
     def __init__(self, *args, **kwargs):
         pass
 
     def __call__(
-        self, x_batch: np.ndarray, y_batch: np.ndarray
+            self, x_batch: np.ndarray, y_batch: np.ndarray
     ) -> Tuple[np.ndarray, np.ndarray]:
         return x_batch, y_batch
 
@@ -69,8 +91,9 @@ class ChannelsFirst(SampleCallback):
     """Tranposes x sample from channels last to channels first"""
 
     def __call__(self, x_patch, y_patch):
-        x_patch = x_patch.transpose(2,0,1)
+        x_patch = x_patch.transpose(2, 0, 1)
         return x_patch, y_patch
+
 
 class FitOutput(SampleCallback):
     """Crops y patch to fit output shape"""
@@ -92,19 +115,19 @@ class FitOutput(SampleCallback):
 
 class DataAugmentation(BatchCallback):
     """Applies data augmentation on batch"""
+
     def __init__(self, data_augmentation_config):
         self._data_augmentation_config = data_augmentation_config
 
     def __call__(
-        self, x_batch: np.ndarray, y_batch: np.ndarray
+            self, x_batch: np.ndarray, y_batch: np.ndarray
     ) -> Tuple[np.ndarray, np.ndarray]:
-
         return x_batch, y_batch
 
 
 class Resolver(BatchCallback):
     """Resolves shape of batch"""
-    
+
     def __init__(self, return_dict=False):
         self._return_dict = return_dict
 
@@ -123,10 +146,7 @@ class Resolver(BatchCallback):
         for _, shapes in samples.items():
             for _, shape in shapes.items():
                 out_samples.append(shape)
-                
+
         if len(out_samples) == 1:
             return out_samples[0]
         return out_samples
-
-
-
