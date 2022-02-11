@@ -112,6 +112,8 @@ def write_asap_annotation(old_xml, annotations, output_path, scaling=1.0):
 
     for annotation in annotations:
         label_name = annotation.label.name
+        if label_name == 'none':
+            label_name = 'None'
         if annotation.label.weight is not None and annotation.label.weight > 0:
             label_name = label_name + "-weight=" + str(annotation.label.weight)
         label_color = annotation.label.color if annotation.label.color else "black"
@@ -129,9 +131,9 @@ def write_asap_annotation(old_xml, annotations, output_path, scaling=1.0):
 
     for elem in list(old_xml.getroot()[1]):
         group = ET.SubElement(anno_groups, "Group")
-        group.set("Name", elem.attrib.get("Name"))
-        group.set("PartOfGroup", elem.attrib.get("PartOfGroup"))
-        group.set("Color", elem.attrib.get("Color"))
+        group.set("Name", elem.attrib.get("Name").strip())
+        group.set("PartOfGroup", elem.attrib.get("PartOfGroup").strip())
+        group.set("Color", elem.attrib.get("Color").strip())
         ET.SubElement(group, "Attributes")
 
     # writing to the xml file with indentation
