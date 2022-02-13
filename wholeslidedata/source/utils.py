@@ -72,15 +72,40 @@ def whole_slide_files_from_folder_factory(
     return all_sources
 
 
-def sources_from_yaml_factory(
-    yaml_source: Union[str, dict],
-    file_type: str,
-    mode: str = "default",
-    filters=[],
-    excludes=[],
-    **kwargs,
-):
+def yaml_from_sources_factory(root_folder: str, class_folders: List[str], wsa_filetype: str, wsi_filetype: str,
+                              output_path: str = "data.yml", excludes: List[str] = None, percentage: float = 0.3,
+                              train_split=1.0):
+    """
+    Creates a yaml file to be used in the user_config.yaml as yaml_source. Allows for easy testing by using only a
+    percentage of the original dataset.
+    """
+    folder = Path(root_folder)
+    yaml_file = {"training": [], "validation": []}
+    for class_folder in class_folders:
+        wsis = list(folder.rglob(f"{class_folder}/*." + wsi_filetype))
+        for i in range(int(len(wsis) * percentage)):
+            wsi = str(wsis[i])
+            wsa = str(wsi).strip(wsi_filetype) + f"{wsa_filetype}"
+            if any(ex in wsi for ex in excludes or []) or not os.path.isfile(wsa):
+                continue
 
+            mode = np.random.choice(["training", "validation"], p=[train_split, 1 - train_split])
+            yaml_file[mode].append({"wsi": {"path": wsi}, "wsa": {"path": wsa}})
+
+    with open(output_path, 'w') as outfile:
+        yaml = YAML()
+        yaml.indent(sequence=4, offset=2)
+        yaml.dump(yaml_file, outfile)
+
+
+def sources_from_yaml_factory(
+        yaml_source: Union[str, dict],
+        file_type: str,
+        mode: str = "default",
+        filters=[],
+        excludes=[],
+        **kwargs,
+):
     class_type = WholeSlideFile.get_registrant(file_type)
 
     data = {}
