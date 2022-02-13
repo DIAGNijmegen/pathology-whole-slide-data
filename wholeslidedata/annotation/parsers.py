@@ -165,7 +165,7 @@ class AsapAnnotationParser(AnnotationParser):
         annotation_index = 0
         
         if labels is None:
-            labels = get_available_labels(path)
+            labels = self.get_available_labels(path)
         
         for parent in opened_annotation:
             for child in parent:
