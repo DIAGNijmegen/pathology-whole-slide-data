@@ -154,16 +154,16 @@ class AsapAnnotationParser(AnnotationParser):
         tree = ET.parse(path)
         opened_annotation = tree.getroot()
         for parent in opened_annotation:
-                for child in parent:
-                    if child.tag == "Annotation":
-                        labels.append(child.attrib.get("PartOfGroup").lower().strip())
+            for child in parent:
+                if child.tag == "Annotation":
+                    labels.append(child.attrib.get("PartOfGroup").lower().strip())
         return Labels.create(set(labels))
 
     def _get_annotation_structures(self, path, labels):
         tree = ET.parse(path)
         opened_annotation = tree.getroot()
         annotation_index = 0
-        
+
         if labels is None:
             labels = self.get_available_labels(path)
         
@@ -178,7 +178,7 @@ class AsapAnnotationParser(AnnotationParser):
                     annotation_value = labels.get_label_by_name(annotation_name).value
                     annotation_label = Label(name=annotation_name, value=annotation_value, color=annotation_color)
                     annotation_coordinates = self._get_coordinates(child)
-                    
+
                     if AsapAnnotationParser.TYPES[annotation_type] == 'polygon' and len(annotation_coordinates) < 3:
                         print('error annotation')
                         continue

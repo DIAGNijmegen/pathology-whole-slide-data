@@ -9,16 +9,6 @@ setup(
     packages=find_packages(exclude=("tests", "notebooks", "docs")),
     url="http://pypi.python.org/pypi/wholeslidedata/",
     license="LICENSE.txt",
-    install_requires=[
-        "concurrentbuffer>=0.0.3",
-        "creationism>=0.0.3",
-        "numpy>=1.20.2",
-        "opencv-python-headless>=4.4.0",
-        "scipy>=1.5.2",
-        "scikit-image>=0.17.2",
-        "shapely>=1.7.1",
-        "openslide-python>=1.1.1",
-        "PyYAML>=5.4.1",
-    ],
+    install_requires=[package.strip() for package in open("./requirements.txt").readlines()],
     long_description="Package for working with whole slide images.",
 )
