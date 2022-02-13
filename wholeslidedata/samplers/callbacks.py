@@ -1,3 +1,5 @@
+import random
+
 from wholeslidedata.samplers.utils import one_hot_encoding, fit_data, block_shaped
 import numpy as np
 from typing import Dict, Tuple
@@ -22,6 +24,7 @@ class SampleCallback:
 class AlbumentationsAugmentationsCallback(SampleCallback):
 
     def __init__(self, augmentations):
+        random.seed()
         super().__init__()
         self._augmentations = A.Compose(
             [getattr(A, class_name)(**params) for augmentation in augmentations for class_name, params in
