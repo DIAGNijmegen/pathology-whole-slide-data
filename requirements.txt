@@ -7,3 +7,4 @@ scikit-image>=0.17.2
 shapely==1.7.1
 openslide-python>=1.1.1
 PyYAML>=5.4.1
+albumentations>=1.1.0

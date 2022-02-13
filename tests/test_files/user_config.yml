@@ -28,9 +28,27 @@ wholeslidedata:
       - module: wholeslidedata.samplers.callbacks
         attribute: AlbumentationsAugmentationsCallback
         augmentations:
+          - RandomRotate90:
+              p: 0.5
           - Flip:
               p: 0.5
+          - RandomSizedCrop:
+              p: 1
+              min_max_height: [ 100, 200 ]
+              height: 284
+              width: 284
+          - ElasticTransform:
+              p: 0.5
+              alpha: 45
+              sigma: 6
+              alpha_affine: 4
+          - HueSaturationValue:
+              hue_shift_limit: 0.2
+              sat_shift_limit: 0.3
+              val_shift_limit: 0.2
+              p: 0.5
+          - GridDistortion:
+              p: 0.5
+          - RandomBrightnessContrast:
+              p: 0.4
 
-      - module: wholeslidedata.samplers.callbacks
-        attribute: FitOutput
-        output_shape: [ 70, 70 ]
