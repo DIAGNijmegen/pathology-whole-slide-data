@@ -35,4 +35,5 @@
    wholeslidedata.annotation.wholeslideannotation
    wholeslidedata.annotation.wholeslideannotationwriter
    wholeslidedata.annotation.write_mask
+   wholeslidedata.annotation.write_mask2
 
