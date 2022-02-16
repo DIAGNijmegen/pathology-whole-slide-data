@@ -98,7 +98,57 @@ def write_point_set(annotations, output_path, label_name='tils', label_color='ye
         f.write(xmlstr)
 
 
-def write_asap_annotation(old_xml, annotations, output_path, scaling=1.0):
+
+
+
+
+
+
+
+def write_asap_annotation(annotations, output_path, scaling=1.0):
+    # the root of the xml file.
+    root = ET.Element("ASAP_Annotations")
+
+    # writing each anno one by one.
+    annos = ET.SubElement(root, "Annotations")
+
+    # writing the last groups part
+    anno_groups = ET.SubElement(root, "AnnotationGroups")
+
+    labels = set()
+
+    for annotation in annotations:
+        label_name = annotation.label.name
+        if annotation.label.weight is not None and annotation.label.weight > 0:
+            label_name = label_name + "-weight=" + str(annotation.label.weight)
+        label_color = annotation.label.color if annotation.label.color else "black"
+        index = annotation.index
+        if isinstance(annotation, Polygon):
+            coordinates = annotation.coordinates / scaling
+            write_polygon(annos, coordinates, index, label_name, label_color)
+        elif isinstance(annotation, Point):
+            coordinates = annotation.coordinates / scaling
+            write_point(annos, [coordinates], index, label_name, label_color)
+        else:
+            raise ValueError("unsupported geometry", annotation)
+
+        labels.add((label_name, label_color))
+
+    for label, color in labels:
+        group = ET.SubElement(anno_groups, "Group")
+        group.set("Name", label)
+        group.set("PartOfGroup", "None")
+        group.set("Color", color)
+        attr = ET.SubElement(group, "Attributes")
+
+    # writing to the xml file with indentation
+    xmlstr = minidom.parseString(ET.tostring(root)).toprettyxml(indent="    ")
+    with open(output_path, "w") as f:
+        f.write(xmlstr)
+
+
+
+def write_asap_annotation2(old_xml, annotations, output_path, scaling=1.0):
     # the root of the xml file.
     root = ET.Element("ASAP_Annotations")
 
@@ -152,4 +202,4 @@ def convert_annotations(input_folder, output_folder, scaling, suffix=''):
         wsa = WholeSlideAnnotation(xml_path)
         output_path = output_folder / xml_path.name.replace('.xml', f'{suffix}.xml')
         print(f'Creating: {output_path}')
-        write_asap_annotation(old_xml, wsa.annotations, output_path, scaling)
+        write_asap_annotation2(old_xml, wsa.annotations, output_path, scaling)
