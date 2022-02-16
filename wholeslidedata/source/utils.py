@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Union
+import numpy as np
 
 import yaml
 from wholeslidedata.mode import WholeSlideMode
@@ -142,30 +143,13 @@ def factory_sources_from_csv():
 
 
 import os
-import shutil
 import yaml
 
 
-def copy(path, destination_folder):
-    out_path = os.path.join(destination_folder, os.path.basename(path))
-    exists = os.path.exists(out_path)
-    if exists:
-        pass
-    elif os.path.exists(path) and os.path.isdir(destination_folder):
-        print(f"copy from: {path}\ncopy to: {destination_folder}\n...")
-        shutil.copy2(path, destination_folder.rstrip("/"))
-    else:
-        raise ValueError(f"error copying source {path}, {destination_folder}")
-
-
-def copy_from_yml(yaml_path, output_path):
-    with open(yaml_path) as file:
-        content = yaml.full_load(file)
-
-    for mode, collection in content.items():
-        print(f"copying {mode} files...")
-        for item in collection:
-            for source_type, source in item.items():
-                print(f"copying {source_type}...")
-                print(source, source['path'])
-                copy(source['path'], output_path)
+def copy_from_yml(data_config, copy_path, modes=('training', 'validation'), file_types=('wsi', 'wsa')):
+    data = []
+    for mode in modes:
+        for file_type in file_types:
+            data.extend(sources_from_yaml_factory(data_config, file_type, mode=mode))
+    for d in data:
+        d.copy(copy_path)
