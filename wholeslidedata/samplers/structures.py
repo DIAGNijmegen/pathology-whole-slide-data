@@ -109,7 +109,7 @@ class BatchShape(UserDict):
             spacings = self._spacing
         else:
             raise SpacingTypeError(
-                f"Spacings :{self._spacing} with type: {type(self._spacing)} has not a valid type "
+                f"Spacings :{self._spacing} with type: {type(self._spacing)} has invalid type "
             )
 
         shapes = None
@@ -121,7 +121,7 @@ class BatchShape(UserDict):
             shapes = self._shape
         else:
             ShapeTypeError(
-                f"Shapes :{self._shape} with type: {type(self._shape)} has not a valid type "
+                f"Shapes :{self._shape} with type: {type(self._shape)} has invalid type "
             )
 
         inputs = {}
@@ -129,7 +129,7 @@ class BatchShape(UserDict):
         # # TODO python has zip strict argument maybe use that instead
         if len(spacings) != len(shapes):
             raise ShapeMismatchError(
-                f"spacings {spacings} and shapes {shapes} does not have same lengts"
+                f"spacings {spacings} and shapes {shapes} do not have same lengths"
             )
 
         for spacing, shape in zip(spacings, shapes):
