@@ -239,7 +239,7 @@
             <span class="n">spacings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">SpacingTypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Spacings :</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span><span class="si">}</span><span class="s2"> with type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span><span class="p">)</span><span class="si">}</span><span class="s2"> has not a valid type &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Spacings :</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span><span class="si">}</span><span class="s2"> with type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_spacing</span><span class="p">)</span><span class="si">}</span><span class="s2"> has invalid type &quot;</span>
             <span class="p">)</span>
 
         <span class="n">shapes</span> <span class="o">=</span> <span class="kc">None</span>
@@ -251,7 +251,7 @@
             <span class="n">shapes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ShapeTypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Shapes :</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="si">}</span><span class="s2"> with type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">)</span><span class="si">}</span><span class="s2"> has not a valid type &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Shapes :</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="si">}</span><span class="s2"> with type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">)</span><span class="si">}</span><span class="s2"> has invalid type &quot;</span>
             <span class="p">)</span>
 
         <span class="n">inputs</span> <span class="o">=</span> <span class="p">{}</span>
@@ -259,7 +259,7 @@
         <span class="c1"># # TODO python has zip strict argument maybe use that instead</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">spacings</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">shapes</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">ShapeMismatchError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;spacings </span><span class="si">{</span><span class="n">spacings</span><span class="si">}</span><span class="s2"> and shapes </span><span class="si">{</span><span class="n">shapes</span><span class="si">}</span><span class="s2"> does not have same lengts&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;spacings </span><span class="si">{</span><span class="n">spacings</span><span class="si">}</span><span class="s2"> and shapes </span><span class="si">{</span><span class="n">shapes</span><span class="si">}</span><span class="s2"> do not have same lengths&quot;</span>
             <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">shape</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">spacings</span><span class="p">,</span> <span class="n">shapes</span><span class="p">):</span>

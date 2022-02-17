@@ -1168,10 +1168,10 @@ Z coordinates of the original geometry will be ignored.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shapely.wkt</span> <span class="kn">import</span> <span class="n">loads</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">loads</span><span class="p">(</span><span class="s1">&#39;POINT (0.0 0.0)&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>        <span class="c1"># 16-gon approx of a unit radius circle</span>
-<span class="go">3.1365484905459384</span>
+<span class="go">3.1365484905459...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>   <span class="c1"># 128-gon approximation</span>
-<span class="go">3.141513801144299</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>     <span class="c1"># triangle approximation</span>
+<span class="go">3.141513801144...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">area</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>  <span class="c1"># triangle approximation</span>
 <span class="go">3.0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">cap_style</span><span class="o">=</span><span class="n">CAP_STYLE</span><span class="o">.</span><span class="n">square</span><span class="p">)</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
 <span class="go">[(1.0, 1.0), (1.0, -1.0), (-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0)]</span>
@@ -1476,7 +1476,7 @@ otherwise invalid geometries.</p>
 <dt>fill_color<span class="classifier">str, optional</span></dt><dd><p>Hex string for fill color. Default is to use “#66cc99” if
 geometry is valid, and “#ff3333” if invalid.</p>
 </dd>
-<dt>opacity<span class="classifier">float</span></dt><dd><p>Float number between 0 and 1 for color opacity. Defaul value is 0.6</p>
+<dt>opacity<span class="classifier">float</span></dt><dd><p>Float number between 0 and 1 for color opacity. Default value is 0.6</p>
 </dd>
 </dl>
 </dd></dl>
