@@ -100,6 +100,7 @@ def create_batch_iterator(
     context="fork",
     determinstic=True,
     buffer_dtype=np.uint16,
+    iterator_class=BatchIterator
 ):
     config_builder = WholeSlideDataConfiguration.build(
         user_config=user_config, modes=(mode,), build_instances=False, presets=presets, search_paths=search_paths,
@@ -148,7 +149,7 @@ def create_batch_iterator(
         buffer_dtype=buffer_dtype,
     )
 
-    return BatchIterator(
+    return iterator_class(
         buffer_factory=buffer_factory,
         dataset=dataset,
         batch_size=batch_size,
