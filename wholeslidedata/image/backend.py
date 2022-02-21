@@ -8,7 +8,7 @@ try:
     from openslide import OpenSlide
 
     LOAD_OPENSLIDE_BACKEND = True
-except ImportError:
+except (ImportError, OSError):
     pass
 
 LOAD_ASAP_BACKEND = False
@@ -19,14 +19,14 @@ try:
     )
 
     LOAD_ASAP_BACKEND = True
-except ImportError:
+except (ImportError, OSError):
     pass
 
 LOAD_PYVIPS_BACKEND = False
 try:
     import pyvips
     LOAD_PYVIPS_BACKEND = True
-except ImportError:
+except (ImportError, OSError):
     pass
 
 
