@@ -40,13 +40,10 @@ def write_point(annos, coordinates, index, label_name, label_color):
     coords = ET.SubElement(anno, "Coordinates")
     coords_mem = []
     ridx = 0
-    for _, r in enumerate(coordinates):
-        x = int(r[0])
-        y = int(r[1])
-        if (x, y) in coords_mem:
-            continue
+    for r in coordinates:
+        x = r[0]
+        y = r[1]
         coords_mem.append((x, y))
-
         coord = ET.SubElement(coords, "Coordinate")
         coord.set("Order", str(ridx))
         coord.set("X", str(x))
