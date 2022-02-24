@@ -1,9 +1,11 @@
 from typing import List
 
+import numpy as np
 from matplotlib import pyplot as plt
+from shapely import geometry
+from shapely.strtree import STRtree
 from wholeslidedata.annotation.structures import Annotation, Point, Polygon
 from wholeslidedata.labels import Labels
-import numpy as np
 
 
 def get_labels_in_annotations(annotations):
@@ -78,3 +80,37 @@ def shift_coordinates(coordinates, center_x, center_y, width, height, ratio):
     coordinates /= ratio
     coordinates += np.array([width // 2, height // 2])
     return coordinates
+
+
+def create_shapely_points(points: List[tuple]) -> List[geometry.Point]:
+    return [geometry.Point(point) for point in points]
+
+
+class GeometrySelector:
+    def __init__(self, geometries: List[geometry.base.BaseGeometry]):
+        self._geometries = geometries
+        self._tree = STRtree(geometries)
+
+    def select_annotations(
+        self, center_x: int, center_y: int, width: int, height: int
+    ) -> List[geometry.base.BaseGeometry]:
+
+        """Selects annotations within specific region
+
+        Args:
+            center_x (int): x center of region
+            center_y (int): y center of region
+            width (int): width of region
+            height (int): height of region
+
+        Returns:
+            List[geometry.base.BaseGeometry]: all geometries that overlap with specified region
+        """
+
+        box = geometry.box(
+            center_x - width // 2,
+            center_y - height // 2,
+            center_x + width // 2,
+            center_y + height // 2,
+        )
+        return self._tree.query(box)
