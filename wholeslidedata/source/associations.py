@@ -7,7 +7,7 @@ from dataclasses import dataclass
 def stem_file_associater(file: File):
     return file.path.stem
 
-def StemSplitterAssociater():
+class StemSplitterAssociater:
     def __init__(self, split_symbols: tuple):
         self._split_symbols = split_symbols
 
@@ -17,7 +17,7 @@ def StemSplitterAssociater():
             association_name = association_name.split(split_symbol)[0]
         return association_name
 
-def AnyOneAssociater():
+class AnyOneAssociater:
     def __call__(self, file: File):
         return 'AnyOneAssociater'
         
