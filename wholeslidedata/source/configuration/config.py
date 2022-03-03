@@ -33,12 +33,13 @@ class SourceConfiguration(Configuration):
             search_paths=search_paths,
         )
 
-def get_paths(user_config, preset):
+def get_paths(user_config, mode='default', preset=None):
+    presets = (preset, ) if preset is not None else ()
     search_path = str(pathlib.Path(user_config).parent)
     builds = SourceConfiguration.build(
-        user_config=user_config, modes=('default',), presets=(preset,), search_paths=(search_path, ),
+        user_config=user_config, modes=(mode,), presets=presets, search_paths=(search_path, ),
     )
-    for key, association in builds['source']['default']['associations'].items():
+    for key, association in builds['source'][mode]['associations'].items():
         image_file = association[WholeSlideImageFile][0]
         mask_file=  association[WholeSlideAnnotationFile][0]
         yield image_file.path, mask_file.path
