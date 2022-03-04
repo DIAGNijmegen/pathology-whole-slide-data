@@ -254,6 +254,6 @@ class DetectionPatchLabelSampler(PatchLabelSampler):
         )
         x1 = int(max(0, coordinates[0][0]))
         y1 = int(max(0, coordinates[0][1]))
-        x2 = coordinates[1][0]
-        y2 = coordinates[1][1]
+        x2 = int(min(width-1, coordinates[1][0]))
+        y2 = int(min(height-1, coordinates[1][1]))
         return x1, y1, x2, y2
