@@ -4,7 +4,7 @@ from wholeslidedata.samplers.utils import one_hot_encoding, fit_data, block_shap
 import numpy as np
 from typing import Dict, Tuple
 import albumentations as A
-
+import skimage.color
 
 class SampleCallback:
     """Pass through callback on samples"""
@@ -19,6 +19,28 @@ class SampleCallback:
 
     def reset(self):
         pass
+
+    
+class AlbumentationsDetectionAugmentationsCallback(SampleCallback):
+
+    def __init__(self, augmentations):
+        random.seed()
+        super().__init__()
+        self._augmentations = A.Compose(
+            [getattr(A, class_name)(**params) for augmentation in augmentations for class_name, params in
+             augmentation.items()], bbox_params=A.BboxParams(format='pascal_voc'),
+        )
+
+    def __call__(
+            self, x_patch: np.ndarray, y_patch: np.ndarray
+    ) -> Tuple[np.ndarray, np.ndarray]:
+        y_boxes = y_patch[~np.all(y_patch == 0, axis=-1)]
+        augmented = self._augmentations(image=x_patch, bboxes=y_boxes)
+        y_patch[~np.all(y_patch == 0, axis=-1)] = augmented["bboxes"]
+        return augmented["image"], y_patch
+
+    def reset(self):
+        pass    
 
 
 class AlbumentationsAugmentationsCallback(SampleCallback):
@@ -116,17 +138,39 @@ class FitOutput(SampleCallback):
         return y_patch
 
 
-class DataAugmentation(BatchCallback):
-    """Applies data augmentation on batch"""
+class HedCallback(BatchCallback):
+    def __init__(self, hem=0.02, eos=0.02, dab=0.02, probability=0.5):
+        self._hem = hem
+        self._eos = eos
+        self._dab = dab
 
-    def __init__(self, data_augmentation_config):
-        self._data_augmentation_config = data_augmentation_config
+    def __call__(self, x_batch: np.ndarray, y_batch: np.ndarray):
 
-    def __call__(
-            self, x_batch: np.ndarray, y_batch: np.ndarray
-    ) -> Tuple[np.ndarray, np.ndarray]:
-        return x_batch, y_batch
+        if np.random.randint(2) < 1:
+            return x_batch, y_batch
 
+        _type = type(x_batch)
+        x_batch = np.array(x_batch)
+        batch_size = x_batch.shape[0]
+
+        x_batch_hed = skimage.color.rgb2hed(x_batch / 255)
+
+        h = np.random.uniform(low=-self._hem, high=self._hem, size=(batch_size,))
+        e = np.random.uniform(low=-self._eos, high=self._eos, size=(batch_size,))
+        d = np.random.uniform(low=-self._dab, high=self._dab, size=(batch_size,))
+
+        h *= np.random.randint(2, size=(batch_size))
+        e *= np.random.randint(2, size=(batch_size))
+        d *= np.random.randint(2, size=(batch_size))
+
+        for i, (hv, ev, db) in enumerate(zip(h, e, d)):
+            x_batch_hed[..., i, :, :, 0] += hv
+            x_batch_hed[..., i, :, :, 1] += ev
+            x_batch_hed[..., i, :, :, 2] += db
+
+        ihc_rgb = skimage.color.hed2rgb(x_batch_hed)
+        ihc = np.clip(a=ihc_rgb * 255, a_min=0, a_max=255)
+        return _type(ihc), y_batch
 
 class Resolver(BatchCallback):
     """Resolves shape of batch"""
