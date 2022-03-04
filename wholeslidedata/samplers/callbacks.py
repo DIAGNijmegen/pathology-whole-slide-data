@@ -36,7 +36,8 @@ class AlbumentationsDetectionAugmentationsCallback(SampleCallback):
     ) -> Tuple[np.ndarray, np.ndarray]:
         y_boxes = y_patch[~np.all(y_patch == 0, axis=-1)]
         augmented = self._augmentations(image=x_patch, bboxes=y_boxes)
-        y_patch[~np.all(y_patch == 0, axis=-1)] = augmented["bboxes"]
+        if y_boxes.size != 0:
+            y_patch[~np.all(y_patch == 0, axis=-1)] = augmented["bboxes"]
         return augmented["image"], y_patch
 
     def reset(self):
