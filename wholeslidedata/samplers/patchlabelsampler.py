@@ -212,15 +212,18 @@ class DetectionPatchLabelSampler(PatchLabelSampler):
                     continue
 
             if isinstance(annotation, Point):
-                objects[idx][:4] = self._get_point_coordinates(
+                box_coords = self._get_point_coordinates(
                     annotation, center_x, center_y, width, height, ratio
                 )
 
             if isinstance(annotation, Polygon):
-                objects[idx][:4] = self._get_polygon_coordinates(
+                box_coords = self._get_polygon_coordinates(
                     annotation, center_x, center_y, width, height, ratio
                 )
-
+            if box_coords is None:
+                continue
+                
+            objects[idx][:4] = box_coords
             objects[idx][4] = annotation.label.value
             objects[idx][5] = 1  # confidence
             idx += 1
@@ -241,7 +244,10 @@ class DetectionPatchLabelSampler(PatchLabelSampler):
         y1 = int(max(0, coordinates[1] - (size // 2)))
         x2 = int(min(width-1, coordinates[0] + (size // 2)))
         y2 = int(min(height-1, coordinates[1] + (size // 2)))
-
+        if x2 <= x1:
+            return None
+        if y2 <= y1:
+            return None
         return x1, y1, x2, y2
 
     def _get_polygon_coordinates(
@@ -256,4 +262,8 @@ class DetectionPatchLabelSampler(PatchLabelSampler):
         y1 = int(max(0, coordinates[0][1]))
         x2 = int(min(width-1, coordinates[1][0]))
         y2 = int(min(height-1, coordinates[1][1]))
+        if x2 <= x1:
+            return None
+        if y2 <= y1:
+            return None
         return x1, y1, x2, y2
