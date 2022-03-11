@@ -27,9 +27,9 @@ class Label(RegistrantFactory):
         self,
         name: str,
         value: int,
-        overlay_index: int = 1,
+        overlay_index: int = None,
         weight: float = None,
-        color: str = "black",
+        color: str = None,
         **kwargs,
     ):
 
@@ -55,12 +55,6 @@ class Label(RegistrantFactory):
     def name(self):
         return self._name
 
-    def set_name(self, name):
-        self._name = str(name).lower()
-
-    def set_color(self, color):
-        self._color = color
-
     @property
     def value(self):
         return self._value
@@ -76,6 +70,13 @@ class Label(RegistrantFactory):
     @property
     def color(self):
         return self._color
+
+    @property
+    def properties(self):
+        return {key.lstrip('_'): value for key, value in vars(self).items() if value is not None}
+
+    def __str__(self):
+        return f"Label({', '.join([f'{key}={value}' for key, value in self.properties.items()])})"
 
 
 @Label.register_func((Label,))

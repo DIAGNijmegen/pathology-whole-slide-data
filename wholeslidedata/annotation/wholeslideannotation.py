@@ -23,7 +23,6 @@ class WholeSlideAnnotation:
         self,
         annotation_path: Union[Path, str],
         labels: Optional[Union[Labels, list, tuple, dict]] = None,
-        renamed_labels: Optional[Union[Labels, list, tuple, dict]] = None,
         parser: AnnotationParser = "asap",
         sort_by_overlay_index: bool = False,
         ignore_overlap: bool = True,
@@ -47,10 +46,8 @@ class WholeSlideAnnotation:
         if not self._annotation_path.exists():
             raise FileNotFoundError(self._annotation_path)
 
-        self._annotation_parser = AnnotationParser.create(parser)
-        self._annotations = self._annotation_parser.parse(
-            annotation_path, labels, renamed_labels
-        )
+        self._annotation_parser = AnnotationParser.create(parser, labels=labels)
+        self._annotations = self._annotation_parser.parse(annotation_path)
 
         self._sort_by_overlay_index = sort_by_overlay_index
         self._labels = annotation_utils.get_labels_in_annotations(self.annotations)

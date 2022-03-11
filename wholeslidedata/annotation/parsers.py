@@ -1,19 +1,51 @@
 import abc
-import json
-import re
 import xml.etree.ElementTree as ET
-from pathlib import Path
-from typing import Collection, Iterator, List, Optional, Union
+from typing import List, Optional, Union
 
 import numpy as np
 from creationism.registration.factory import RegistrantFactory
-from shapely import affinity, geometry
-from wholeslidedata.annotation.structures import (Annotation,
-                                                  AnnotationStructure)
+from enum import Enum
+from wholeslidedata.annotation.structures import Annotation
+from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.labels import Label, Labels
 from wholeslidedata.samplers.utils import block_shaped
+import json
 
-from ..image.wholeslideimage import WholeSlideImage
+SCHEMA = {
+    "type": "object",
+    "required": ["type", "label", "coordinates"],
+    "additionalProperties": False,
+    "properties": {
+        "type": {"enum": ["polygon", "point"]},
+        "coordinates": {
+            "type": "array",
+            "items": {
+                "type": "array",
+                "contains": {"type": "number"},
+                "minContains": 2,
+                "maxContains": 2,
+            },
+        },
+        "label": {
+            "type": "object",
+            "required": ["name", "value"],
+            "properties": {
+                "name": {"type": "string"},
+                "value": {"type": "integer", "minimum": 0},
+                "color": {"type": "string"},
+                "weight": {"type": "number"},
+                "confidence": {"type": "number"},
+                "overlay_index": {"type": "integer"},
+            },
+        },
+        "index": {"type": "integer", "minimum": 0},
+    },
+}
+
+
+class AnnotationType(Enum):
+    POINT = "point"
+    POLYGON = "polygon"
 
 
 class InvalidAnnotationParserError(Exception):
@@ -24,12 +56,12 @@ class AnnotationParser(RegistrantFactory):
     """Base class for parsing annotations. Inherents from RegistrantFactory which allows to register subclasses"""
 
     def __init__(
-            self,
-            labels: Optional[Union[Labels, list, tuple, dict]] = None,
-            renamed_labels: Optional[Union[Labels, list, tuple, dict]] = None,
-            scaling: float = 1.0,
-            sample_label_names: Union[list, tuple] = (),
-            sample_annotation_types: Union[list, tuple] = ("polygon",),
+        self,
+        labels: Optional[Union[Labels, list, tuple, dict]] = None,
+        renamed_labels: Optional[Union[Labels, list, tuple, dict]] = None,
+        scaling: float = 1.0,
+        sample_label_names: Union[list, tuple] = (),
+        sample_annotation_types: Union[list, tuple] = ("polygon",),
     ):
         """Init
 
@@ -44,6 +76,7 @@ class AnnotationParser(RegistrantFactory):
         self._labels = labels
         if self._labels is not None:
             self._labels = Labels.create(self._labels)
+
         self._renamed_labels = renamed_labels
         if self._renamed_labels is not None:
             self._renamed_labels = Labels.create(self._renamed_labels)
@@ -56,205 +89,148 @@ class AnnotationParser(RegistrantFactory):
 
         self._sample_label_names = sample_label_names
 
-    def parse(
-            self,
-            annotation_path: Union[Path, str],
-            labels: Optional[Union[Labels, list, tuple, dict]] = None,
-            renamed_labels: Optional[Union[Labels, list, tuple, dict]] = None,
-    ) -> List[Annotation]:
-
-        """Parses annotation file into list of annotations
-
-        Args:
-            annotation_path (Union[Path, str]): path to annotation file
-            labels (Optional[Union[Labels, list, tuple, dict]], optional): overwrites object instance labels. Defaults to None.
-            renamed_labels (Optional[Union[Labels, list, tuple, dict]], optional): overwrites object instance renamed labels. Defaults to None.
-
-        Returns:
-            List[Annotation]: list of Annotations
-        """
-
-        if labels is None:
-            if self._labels is None:
-                labels = self.get_available_labels(str(annotation_path))
-            else:
-                labels = self._labels
-        else:
-            labels = Labels.create(labels)
-
-        if renamed_labels is None:
-            renamed_labels = self._renamed_labels
-        else:
-            renamed_labels = Labels.create(renamed_labels)
-
-        annotations = []
-        for annotation_structure in self._get_annotation_structures(
-                annotation_path, labels
-        ):
-            annotation = Annotation.create(
-                annotation_structure, labels, renamed_labels, self._scaling
-            )
-
-            annotations.append(annotation)
-        return annotations
+    @property
+    def sample_label_names(self):
+        return self._sample_label_names
 
     @property
     def sample_annotation_types(self):
         return self._sample_annotation_types
 
     @property
-    def sample_label_names(self):
-        return self._sample_label_names
+    def scaling(self):
+        return self._scaling
 
-    def get_available_labels(self, path: Union[Path, str]) -> Labels:
-        """Get all labels available from annotation path
+    def _rename_label(self, label):
+        if self._renamed_labels is None:
+            return label
+        renamed_label = self._renamed_labels.get_label_by_value(label["value"])
+        renamed_label = renamed_label.properties
+        for key, value in label.items():
+            if key not in renamed_label or renamed_label[key] is None:
+                renamed_label[key] = value
+        return renamed_label
 
-        Args:
-            path (Union[Path, str]): path to annotation
+    def parse(self, path) -> List[Annotation]:
+        annotations = []
+        for annotation in self._parse(path):
+            annotation["coordinates"] = np.array(annotation["coordinates"]) * self._scaling
+            annotation["label"] = self._rename_label(annotation["label"])
+            annotations.append(Annotation.create(**annotation))
+        return annotations
 
-        Returns:
-            Labels: labels found in annotation path
-        """
+    @staticmethod
+    def get_available_labels(opened_annotation):
+        return Labels.create(set([Label.create(annotation["label"]) for annotation in opened_annotation]))
 
-        labels = []
-        for annotation_structure in self._get_annotation_structures(path, None):
-            labels.append(annotation_structure.label)
-        return Labels.create(set(labels))
+    def _get_labels(self, path):
+        if self._labels is None:
+            return self.get_available_labels(path)
+        return self._labels
 
-    @abc.abstractmethod
-    def _get_annotation_structures(self, path: Union[Path, str], labels: Optional[Labels]) -> Iterator[
-        AnnotationStructure]:
-        pass
+    def _parse(self, path) -> List[dict]:
+        with open(path) as json_file:
+            data = json.load(json_file)
 
-    @abc.abstractmethod
-    def _get_annotation_type(self, structure) -> str:
-        pass
-
-    @abc.abstractmethod
-    def _get_coordinates(self, structure) -> List:
-        pass
-
-    @abc.abstractmethod
-    def _get_label_name(self, structure) -> str:
-        pass
+        labels = self._get_labels(data)
+        for annotation in data:
+            label_name = annotation["label"]["name"]
+            if label_name not in labels.names:
+                continue
+            label = labels.get_label_by_name(label_name)
+            annotation['label'].update(label.properties)
+            yield annotation
 
 
 @AnnotationParser.register(("asap",))
 class AsapAnnotationParser(AnnotationParser):
+
     TYPES = {
-        "polygon": "polygon",
-        "rectangle": "polygon",
-        "dot": "point",
-        "spline": "polygon",
-        "pointset": "point",
+        "polygon": AnnotationType.POLYGON,
+        "rectangle": AnnotationType.POLYGON,
+        "dot": AnnotationType.POINT,
+        "spline": AnnotationType.POLYGON,
+        "pointset": AnnotationType.POINT,
     }
 
-    def get_available_labels(self, path):
+    @staticmethod
+    def get_available_labels(opened_annotation):
         labels = []
-        tree = ET.parse(path)
-        opened_annotation = tree.getroot()
         for parent in opened_annotation:
             for child in parent:
                 if child.tag == "Annotation":
                     labels.append(child.attrib.get("PartOfGroup").lower().strip())
         return Labels.create(set(labels))
 
-    def _get_annotation_structures(self, path, labels):
+    def _parse(self, path):
         tree = ET.parse(path)
         opened_annotation = tree.getroot()
-        annotation_index = 0
-
-        if labels is None:
-            labels = self.get_available_labels(path)
-        
+        labels = self._get_labels(opened_annotation)
         for parent in opened_annotation:
             for child in parent:
-                if child.tag == "Annotation":
-                    annotation_type = self._get_annotation_type(child)
-                    annotation_color = self._get_annotation_color(child)
-                    annotation_name = self._get_label_name(child, labels)
-                    if annotation_name not in labels.names:
-                        continue
-                    annotation_value = labels.get_label_by_name(annotation_name).value
-                    annotation_label = Label(name=annotation_name, value=annotation_value, color=annotation_color)
-                    annotation_coordinates = self._get_coordinates(child)
 
-                    if AsapAnnotationParser.TYPES[annotation_type] == 'polygon' and len(annotation_coordinates) < 3:
-                        print('error annotation')
-                        continue
-                    annotation_holes = self._get_holes(child)
-                    if not annotation_label or (
-                            not isinstance(annotation_label, Label)
-                            and isinstance(labels, Labels)
-                            and annotation_label not in labels.names
-                    ):
-                        continue
+                if child.tag != "Annotation":
+                    continue
 
-                    if (
-                            isinstance(annotation_label, Label)
-                            and isinstance(labels, Labels)
-                            and annotation_label.name not in labels.names
-                    ):
-                        continue
+                type = self._get_annotation_type(child)
 
-                    if annotation_type == "pointset":
-                        for coordinate in annotation_coordinates:
-                            annotation_structure = AnnotationStructure(
-                                annotation_path=path,
-                                index=annotation_index,
-                                type=AsapAnnotationParser.TYPES[annotation_type],
-                                label=annotation_label,
-                                coordinates=[coordinate],
-                                holes=annotation_holes,
-                            )
-                            annotation_index += 1
-                            yield annotation_structure
-                        continue
+                label = self._get_label(child, labels, type)
+                if label is None:
+                    continue
 
-                    annotation_structure = AnnotationStructure(
-                        annotation_path=path,
-                        index=annotation_index,
-                        type=AsapAnnotationParser.TYPES[annotation_type],
-                        label=annotation_label,
-                        coordinates=annotation_coordinates,
-                        holes=annotation_holes,
-                    )
-                    annotation_index += 1
-                    yield annotation_structure
+                for coordinates in self._yield_coordinates(child, type):
+                    yield {
+                        "type": type.value,
+                        "coordinates": coordinates,
+                        "label": label,
+                    }
 
-    def _get_annotation_type(self, structure):
-        annotation_type = structure.attrib.get("Type").lower()
+    def _get_annotation_type(self, child):
+        annotation_type = child.attrib.get("Type").lower()
         if annotation_type in AsapAnnotationParser.TYPES:
-            return annotation_type
-        raise ValueError(f"unsupported annotation type in {structure}")
+            return AsapAnnotationParser.TYPES[annotation_type]
+        raise ValueError(f"unsupported annotation type in {child}")
 
-    def _get_label_name(self, annotation_structure, labels) -> str:
-        if (
-                isinstance(labels, Labels)
-                and self._get_annotation_type(annotation_structure) in labels.names
-        ):
-            return self._get_annotation_type(annotation_structure).strip()
-        return annotation_structure.attrib.get("PartOfGroup").lower().strip()
+    def _get_label(self, child, labels: Labels, type):
+        name = self._get_label_name(child, labels, type)
+        if name not in labels.names:
+            return None
 
-    @staticmethod
-    def _get_annotation_color(structure) -> str:
-        return structure.attrib.get("Color")
+        label = labels.get_label_by_name(name)
+        label = label.properties
+        color = child.attrib.get("Color")
+        if color:
+            label["color"] = color
 
-    def _get_coordinates(self, annotation_structure):
+        return label
+
+    def _get_label_name(self, child, labels, type) -> str:
+        if type in labels.names:
+            return type
+        return child.attrib.get("PartOfGroup").lower().strip()
+
+    def _yield_coordinates(self, child, type):
         coordinates = []
-        coordinate_structure = annotation_structure[0]
-        for coordinate in coordinate_structure:
-            coordinates.append(
-                (
-                    float(coordinate.get("X").replace(",", ".")),
-                    float(coordinate.get("Y").replace(",", ".")),
-                )
-            )
+        coordinate_structure = child[0]
+        coordinates = self._get_coordinates(coordinate_structure)
+        if type is AnnotationType.POLYGON:
+            if len(coordinates) < 3:
+                raise InvalidAnnotationParserError(f"Polygon contains < 3 coordinates")
+            yield coordinates
+        elif type is AnnotationType.POINT and len(coordinates) > 1:
+            for coordinate in coordinates:
+                yield coordinate
+        else:
+            yield coordinates[0]
 
-        return coordinates
-
-    def _get_holes(self, annotation_structure):
-        return []
+    def _get_coordinates(self, coordinate_structure):
+        return [
+            [
+                float(coordinate.get("X").replace(",", ".")),
+                float(coordinate.get("Y").replace(",", ".")),
+            ]
+            for coordinate in coordinate_structure
+        ]
 
 
 # @AnnotationParser.register(("hnasap",))
@@ -518,23 +494,20 @@ class AsapAnnotationParser(AnnotationParser):
 @AnnotationParser.register(("mask",))
 class MaskAnnotationParser(AnnotationParser):
     def __init__(
-            self,
-            shape=(1024, 1024),
-            processing_spacing=0.5,
-            output_spacing=0.5,
-            labels=("tissue",),
-            out_labels=None,
-            scaling=1.0,
-            sample_annotation_types=("polygon",),
-            backend="asap",
+        self,
+        labels=("tissue",),
+        processing_spacing=4.0,
+        output_spacing=0.5,
+        shape=(1024, 1024),
+        backend="asap",
     ):
+        super().__init__(labels=labels)
         self._processing_spacing = processing_spacing
         self._output_spacing = output_spacing
-        super().__init__(labels, out_labels, scaling, (), sample_annotation_types)
         self._shape = np.array(shape)
         self._backend = backend
 
-    def _get_annotation_structures(self, path, labels):
+    def _parse(self, path):
         mask = WholeSlideImage(path, backend=self._backend)
 
         size = self._shape[0]
@@ -544,13 +517,12 @@ class MaskAnnotationParser(AnnotationParser):
         shape = np.array(np_mask.shape)
 
         new_shape = shape + size // ratio - shape % (size // ratio)
-        new_mask = np.zeros(new_shape.astype('int'), dtype='uint8')
-        new_mask[:shape[0], :shape[1]] = np_mask
+        new_mask = np.zeros(new_shape.astype("int"), dtype="uint8")
+        new_mask[: shape[0], : shape[1]] = np_mask
 
         blocks = block_shaped(new_mask, int(size // ratio), int(size // ratio))
 
         region_index = -1
-        annotation_index = 0
         for y in range(new_mask.shape[0] // (int(size // ratio))):
             for x in range(new_mask.shape[1] // int((size // ratio))):
                 region_index += 1
@@ -558,15 +530,11 @@ class MaskAnnotationParser(AnnotationParser):
                     continue
 
                 box = self._get_coordinates(x * size, y * size, size, size)
-                annotation_structure = AnnotationStructure(
-                    annotation_path=path,
-                    index=annotation_index,
-                    type=AsapAnnotationParser.TYPES['polygon'],
-                    label=Label('tissue', 1),
-                    coordinates=box,
-                )
-                annotation_index += 1
-                yield annotation_structure
+                yield {
+                    "type": AnnotationType.POLYGON.value,
+                    "coordinates": np.array(box),
+                    "label": {"name": "tissue", "value": 1},
+                }
 
         mask.close()
         mask = None
@@ -575,29 +543,23 @@ class MaskAnnotationParser(AnnotationParser):
     def _get_coordinates(self, x_pos, y_pos, x_shift, y_shift) -> List:
 
         return [
-            (x_pos, y_pos),
-            (
+            [x_pos, y_pos],
+            [
                 x_pos,
                 y_pos + y_shift,
-            ),
-            (
+            ],
+            [
                 x_pos + x_shift,
                 y_pos + y_shift,
-            ),
-            (
+            ],
+            [
                 x_pos + x_shift,
                 y_pos,
-            ),
-            (x_pos, y_pos),
+            ],
+            [x_pos, y_pos],
         ]
 
     def _check_mask(self, mask_patch):
         if np.any(mask_patch):
             return np.unique(mask_patch, return_counts=True)
         return None, None
-
-    def _get_annotation_type(self, structure) -> str:
-        return "polygon"
-
-    def _get_label_name(self, structure) -> str:
-        return "tissue"
