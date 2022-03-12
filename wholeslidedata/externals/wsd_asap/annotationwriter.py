@@ -1,12 +1,9 @@
-import json
 import xml.etree.cElementTree as ET
 from pathlib import Path
 from typing import List
 from xml.dom import minidom
 
-import jsonschema
-from wholeslidedata.annotation.parsers import SCHEMA
-from wholeslidedata.annotation.structures import Annotation, Point, Polygon
+from wholeslidedata.annotation.structures import Point, Polygon
 from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
 
 
@@ -235,25 +232,3 @@ def convert_annotations(input_folder, output_folder, scaling, suffix=""):
         output_path = output_folder / xml_path.name.replace(".xml", f"{suffix}.xml")
         print(f"Creating: {output_path}")
         write_asap_annotation2(old_xml, wsa.annotations, output_path, scaling)
-
-
-def convert_annotations_to_json(annotations: List[Annotation]):
-    output = []
-    for annotation in annotations:
-        output.append(
-            {
-                "type": annotation.type,
-                "coordinates": annotation.coordinates.tolist(),
-                "label": annotation.label.properties,
-            }
-        )
-    return output
-
-
-def write_json_annotations(output_path, data, validate=True):
-    if validate:
-        for d in data:
-            jsonschema.validate(d, SCHEMA)
-
-    with open(output_path, "w") as outfile:
-        json.dump(data, outfile)
