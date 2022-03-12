@@ -15,6 +15,7 @@ import jsonschema
 from wholeslidedata.annotation.parser import SCHEMA
 from wholeslidedata.annotation.structures import Annotation
 
+
 class GeometrySelector:
     def __init__(self, geometries: List[geometry.base.BaseGeometry]):
         self._geometries = geometries
@@ -161,17 +162,18 @@ def plot_annotations(
         ax.set_title(title)
 
 
+def convert_annotation_to_json(annotation: Annotation):
+    return {
+        "type": annotation.type,
+        "coordinates": annotation.coordinates.tolist(),
+        "label": annotation.label.properties,
+    }
+
 
 def convert_annotations_to_json(annotations: List[Annotation]):
     output = []
     for annotation in annotations:
-        output.append(
-            {
-                "type": annotation.type,
-                "coordinates": annotation.coordinates.tolist(),
-                "label": annotation.label.properties,
-            }
-        )
+        output.append(convert_annotation_to_json(annotation=annotation))
     return output
 
 
