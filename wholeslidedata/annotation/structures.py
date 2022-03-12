@@ -43,7 +43,7 @@ class Annotation(RegistrantFactory, geometry.base.BaseGeometry):
         return dict(
             type=self.type,
             index=self.index,
-            coordinates=self.coordinates,
+            coordinates=self.coordinates.tolist(),
             label=self.label.properties,
         )
 
