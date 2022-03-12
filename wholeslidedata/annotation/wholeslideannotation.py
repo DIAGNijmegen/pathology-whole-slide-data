@@ -4,7 +4,7 @@ from typing import List, Optional, Union
 from shapely import geometry
 from shapely.strtree import STRtree
 from wholeslidedata.annotation.structures import Annotation, Polygon
-from wholeslidedata.annotation.parsers import AnnotationParser
+from wholeslidedata.annotation.parser import AnnotationParser
 from wholeslidedata.annotation import utils as annotation_utils
 from wholeslidedata.labels import Labels
 

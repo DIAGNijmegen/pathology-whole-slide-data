@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 
-from wholeslidedata.annotation.parsers import (
+from wholeslidedata.annotation.parser import (
     AnnotationParser,
     AnnotationType,
     InvalidAnnotationParserError,

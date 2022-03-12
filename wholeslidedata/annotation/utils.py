@@ -12,7 +12,7 @@ from scipy.ndimage.morphology import binary_dilation, binary_erosion, binary_fil
 import json
 from typing import List
 import jsonschema
-from wholeslidedata.annotation.parsers import SCHEMA
+from wholeslidedata.annotation.parser import SCHEMA
 from wholeslidedata.annotation.structures import Annotation
 
 class GeometrySelector:
