@@ -18,9 +18,14 @@ class Annotation(RegistrantFactory, geometry.base.BaseGeometry):
     def create(cls, type: Union[str, type], *args, **kwargs):
         return super().create(registrant_name=type, *args, **kwargs)
 
-    def __init__(self, index: int, label: Union[Label, dict]):
-        self._label = Label.create(label)
+    def __init__(self, index: int, label: Union[Label, dict], coordinates):
         self._index = index
+        self._label = Label.create(label)
+        self._coordinates = coordinates
+
+    @property
+    def type(self):
+        return super().type.lower()
 
     @property
     def index(self) -> int:
@@ -30,20 +35,24 @@ class Annotation(RegistrantFactory, geometry.base.BaseGeometry):
     def label(self) -> Label:
         return self._label
 
-    def set_label(self, label):
-        self._label = label
-
     @property
-    def type(self):
-        return super().type.lower()
+    def coordinates(self):
+        return self._coordinates
+
+    def to_json(self):
+        return dict(
+            type=self.type,
+            index=self.index,
+            coordinates=self.coordinates,
+            label=self.label.properties,
+        )
 
 
 @Annotation.register(("point", "dot"))
 class Point(geometry.Point, Annotation):
     def __init__(self, index, label, coordinates):
         geometry.Point.__init__(self, coordinates)
-        Annotation.__init__(self, index=index, label=label)
-        self._coordinates = coordinates
+        Annotation.__init__(self, index=index, label=label, coordinates=coordinates)
 
     def __reduce__(self):
         return (
@@ -76,9 +85,9 @@ class Point(geometry.Point, Annotation):
 class Polygon(geometry.Polygon, Annotation):
     def __init__(self, index: int, label, coordinates, holes=[]):
         geometry.Polygon.__init__(self, coordinates, holes=holes)
-        Annotation.__init__(self, index=index, label=label)
-
-        self._coordinates = np.array(self.exterior.xy).T
+        Annotation.__init__(
+            self, index=index, label=label, coordinates=np.array(self.exterior.xy).T
+        )
         self._holes = holes
         self._overlapping_annotations = []
 

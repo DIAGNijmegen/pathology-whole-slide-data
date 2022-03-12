@@ -162,18 +162,10 @@ def plot_annotations(
         ax.set_title(title)
 
 
-def convert_annotation_to_json(annotation: Annotation):
-    return {
-        "type": annotation.type,
-        "coordinates": annotation.coordinates.tolist(),
-        "label": annotation.label.properties,
-    }
-
-
 def convert_annotations_to_json(annotations: List[Annotation]):
     output = []
     for annotation in annotations:
-        output.append(convert_annotation_to_json(annotation=annotation))
+        output.append(annotation.to_json())
     return output
 
 

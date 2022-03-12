@@ -1,7 +1,8 @@
+import abc
 import json
-
 from enum import Enum
-from typing import List, Optional, Union
+from pathlib import Path
+from typing import Any, List, Optional, Union
 
 import numpy as np
 from creationism.registration.factory import RegistrantFactory
@@ -113,7 +114,7 @@ class AnnotationParser(RegistrantFactory):
     def parse(self, path) -> List[Annotation]:
         annotations = []
         for index, annotation in enumerate(self._parse(path)):
-            annotation['index'] = index
+            annotation["index"] = index
             annotation["coordinates"] = (
                 np.array(annotation["coordinates"]) * self._scaling
             )
@@ -121,16 +122,28 @@ class AnnotationParser(RegistrantFactory):
             annotations.append(Annotation.create(**annotation))
         return annotations
 
+    def _get_labels(self, opened_annotation):
+        if self._labels is None:
+            return self.get_available_labels(opened_annotation)
+        return self._labels
+
     @staticmethod
-    def get_available_labels(opened_annotation):
+    @abc.abstractmethod
+    def get_available_labels(opened_annotation: Any) -> Labels:
+        ...
+
+    @abc.abstractmethod
+    def _parse(self, path: Union[Path, str]) -> List[dict]:
+        ...
+
+
+@AnnotationParser.register(("wsa", ))
+class WholeSlideAnnotationParser(AnnotationParser):
+    @staticmethod
+    def get_available_labels(opened_annotation: dict):
         return Labels.create(
             set([Label.create(annotation["label"]) for annotation in opened_annotation])
         )
-
-    def _get_labels(self, path):
-        if self._labels is None:
-            return self.get_available_labels(path)
-        return self._labels
 
     def _parse(self, path) -> List[dict]:
         with open(path) as json_file:
@@ -144,7 +157,7 @@ class AnnotationParser(RegistrantFactory):
             label = labels.get_label_by_name(label_name)
             annotation["label"].update(label.properties)
             yield annotation
-            
+
 
 @AnnotationParser.register(("mask",))
 class MaskAnnotationParser(AnnotationParser):
