@@ -18,7 +18,7 @@ class Annotation(RegistrantFactory, geometry.base.BaseGeometry):
     def create(cls, type: Union[str, type], *args, **kwargs):
         return super().create(registrant_name=type, *args, **kwargs)
 
-    def __init__(self, label: Union[Label, dict], index: Optional[int] = None):
+    def __init__(self, index: int, label: Union[Label, dict]):
         self._label = Label.create(label)
         self._index = index
 
@@ -40,9 +40,9 @@ class Annotation(RegistrantFactory, geometry.base.BaseGeometry):
 
 @Annotation.register(("point", "dot"))
 class Point(geometry.Point, Annotation):
-    def __init__(self, label, coordinates, index: Optional[int] = None):
+    def __init__(self, index, label, coordinates):
         geometry.Point.__init__(self, coordinates)
-        Annotation.__init__(self, label=label, index=index)
+        Annotation.__init__(self, index=index, label=label)
         self._coordinates = coordinates
 
     def __reduce__(self):
@@ -74,9 +74,9 @@ class Point(geometry.Point, Annotation):
 
 @Annotation.register(("polygon", "rectangle", "box", "bounding-box"))
 class Polygon(geometry.Polygon, Annotation):
-    def __init__(self, label, coordinates, holes=[], index: Optional[int] = None):
+    def __init__(self, index: int, label, coordinates, holes=[]):
         geometry.Polygon.__init__(self, coordinates, holes=holes)
-        Annotation.__init__(self, label=label, index=index)
+        Annotation.__init__(self, index=index, label=label)
 
         self._coordinates = np.array(self.exterior.xy).T
         self._holes = holes

@@ -45,7 +45,6 @@ class WholeSlideAnnotation:
 
         if not self._annotation_path.exists():
             raise FileNotFoundError(self._annotation_path)
-
         self._annotation_parser = AnnotationParser.create(parser, labels=labels)
         self._annotations = self._annotation_parser.parse(annotation_path)
 

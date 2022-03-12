@@ -112,7 +112,8 @@ class AnnotationParser(RegistrantFactory):
 
     def parse(self, path) -> List[Annotation]:
         annotations = []
-        for annotation in self._parse(path):
+        for index, annotation in enumerate(self._parse(path)):
+            annotation['index'] = index
             annotation["coordinates"] = (
                 np.array(annotation["coordinates"]) * self._scaling
             )

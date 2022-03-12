@@ -29,12 +29,10 @@ class DataSet(UserDict):
         mode,
         associations: Associations,
         labels: Labels = None,
-        renamed_labels: Labels = None,
     ):
         self._mode = WholeSlideMode.create(mode)
         self._associations = associations
         self._labels = labels
-        self._renamed_labels = renamed_labels
 
         self.data = self._open(self._associations)
         self._sample_references, self._all_sample_references, self._all_labels = self._init_samples(
@@ -112,13 +110,12 @@ class WholeSlideDataSet(DataSet):
         mode,
         associations: Associations,
         labels: Labels = None,
-        renamed_labels: Labels = None,
         load_images=True,
         copy_path=None,
     ):
         self._load_images = load_images
         self._copy_path = copy_path
-        super().__init__(mode, associations, labels, renamed_labels)
+        super().__init__(mode, associations, labels)
 
     def _open(self, associations):
         data = dict()
@@ -149,7 +146,7 @@ class WholeSlideDataSet(DataSet):
     def _open_annotation(self, wsa_file: WholeSlideAnnotationFile):
         if self._copy_path:
             wsa_file.copy(self._copy_path)
-        return wsa_file.open(labels=self._labels, renamed_labels=self._renamed_labels)
+        return wsa_file.open(labels=self._labels)
 
     def _init_samples(self, data) -> Tuple:
         samples = {}

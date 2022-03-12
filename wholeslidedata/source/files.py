@@ -94,9 +94,9 @@ class WholeSlideAnnotationFile(WholeSlideFile, AnnotationFile):
     def __init__(self, mode: Union[Mode, str], path: str, annotation_parser: str = None):
         super().__init__(mode, path, annotation_parser)
 
-    def open(self, labels=None, renamed_labels=None):
+    def open(self, labels=None):
         return WholeSlideAnnotation(
-            self.path, labels, renamed_labels, self._annotation_parser
+            self.path, labels=labels, parser=self._annotation_parser
         )
 
     def copy(self, destination_folder) -> None:
