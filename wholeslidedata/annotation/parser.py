@@ -137,7 +137,7 @@ class AnnotationParser(RegistrantFactory):
         ...
 
 
-@AnnotationParser.register(("wsa", ))
+@AnnotationParser.register(("wsa",))
 class WholeSlideAnnotationParser(AnnotationParser):
     @staticmethod
     def get_available_labels(opened_annotation: dict):
@@ -148,14 +148,17 @@ class WholeSlideAnnotationParser(AnnotationParser):
     def _parse(self, path) -> List[dict]:
         with open(path) as json_file:
             data = json.load(json_file)
-
         labels = self._get_labels(data)
         for annotation in data:
             label_name = annotation["label"]["name"]
             if label_name not in labels.names:
                 continue
             label = labels.get_label_by_name(label_name)
-            annotation["label"].update(label.properties)
+
+            for key, value in label.todict().items():
+                if key not in annotation["label"] or annotation["label"][key] is None:
+                    annotation["label"][key] = value
+                
             yield annotation
 
 

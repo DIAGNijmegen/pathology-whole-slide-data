@@ -7,12 +7,25 @@ from wholeslidedata.annotation.structures import Annotation, Polygon
 from wholeslidedata.annotation.parser import AnnotationParser
 from wholeslidedata.annotation import utils as annotation_utils
 from wholeslidedata.labels import Labels
+from wholeslidedata.extensions import (
+    WholeSlideAnnotationExtension,
+    JavaScriptObjectNotation,
+    ExtensibleMarkupLanguage,
+    TaggedImageFileExtension,
+)
 
 
 def area_sort_with_roi(item):
     if item.label.name in ["roi", "rois", "none"]:
         return 100000 * 100000
     return item.area
+
+
+DEFAULT_PARSERS = {
+    JavaScriptObjectNotation: "wsa",
+    ExtensibleMarkupLanguage: "asap",
+    TaggedImageFileExtension: "mask",
+}
 
 
 class WholeSlideAnnotation:
@@ -23,7 +36,7 @@ class WholeSlideAnnotation:
         self,
         annotation_path: Union[Path, str],
         labels: Optional[Union[Labels, list, tuple, dict]] = None,
-        parser: AnnotationParser = "asap",
+        parser: AnnotationParser = None,
         sort_by_overlay_index: bool = False,
         ignore_overlap: bool = True,
     ):
@@ -45,6 +58,14 @@ class WholeSlideAnnotation:
 
         if not self._annotation_path.exists():
             raise FileNotFoundError(self._annotation_path)
+
+        if parser is None:
+            parser = DEFAULT_PARSERS[
+                WholeSlideAnnotationExtension.get_registrant(
+                    self._annotation_path.suffix
+                )
+            ]
+
         self._annotation_parser = AnnotationParser.create(parser, labels=labels)
         self._annotations = self._annotation_parser.parse(annotation_path)
 
@@ -82,7 +103,7 @@ class WholeSlideAnnotation:
         """Annotations that will be used for sampling
 
         Returns:
-            List[Annotation]: list of annotations 
+            List[Annotation]: list of annotations
         """
         return self._sampling_annotations
 
@@ -96,8 +117,10 @@ class WholeSlideAnnotation:
 
                 annotation.add_overlapping_annotations(overlap_tree.query(annotation))
 
-    def select_annotations(self, center_x: int, center_y: int, width: int, height: int) -> List[Annotation]:
-        """ Selects annotations within specific region and sorts accordingly 
+    def select_annotations(
+        self, center_x: int, center_y: int, width: int, height: int
+    ) -> List[Annotation]:
+        """Selects annotations within specific region and sorts accordingly
 
         Args:
             center_x (int): x center of region
@@ -108,7 +131,7 @@ class WholeSlideAnnotation:
         Returns:
             List[Annotation]: all annotations that overlap with specified region
         """
-        
+
         box = geometry.box(
             center_x - width // 2,
             center_y - height // 2,

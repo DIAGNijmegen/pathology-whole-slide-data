@@ -149,9 +149,7 @@ def write_asap_annotation(annotations, output_path, scaling=1.0):
 
     for annotation in annotations:
         label_name = annotation.label.name
-        if annotation.label.weight is not None and annotation.label.weight > 0:
-            label_name = label_name + "-weight=" + str(annotation.label.weight)
-        label_color = annotation.label.color if annotation.label.color else "black"
+        label_color = annotation.label.color if annotation.label.color is not None else "black"
         index = annotation.index
         if isinstance(annotation, Polygon):
             coordinates = annotation.coordinates / scaling

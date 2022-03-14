@@ -18,10 +18,14 @@ class Annotation(RegistrantFactory, geometry.base.BaseGeometry):
     def create(cls, type: Union[str, type], *args, **kwargs):
         return super().create(registrant_name=type, *args, **kwargs)
 
-    def __init__(self, index: int, label: Union[Label, dict], coordinates):
+    def __init__(self, index: int, label: Union[Label, dict], coordinates, **kwargs):
         self._index = index
         self._label = Label.create(label)
         self._coordinates = coordinates
+        self._kwargs = kwargs
+
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
     @property
     def type(self):
@@ -39,12 +43,27 @@ class Annotation(RegistrantFactory, geometry.base.BaseGeometry):
     def coordinates(self):
         return self._coordinates
 
-    def to_json(self):
+    def todict(self):
         return dict(
             type=self.type,
             index=self.index,
             coordinates=self.coordinates.tolist(),
-            label=self.label.properties,
+            label=self.label.todict(),
+            **self._kwargs
+        )
+
+    def __str__(self):
+        return ",".join(map(str, list(self.todict().values())))
+
+    def __hash__(self):
+        return hash(str(self))
+
+    def __eq__(self, other):
+        return (
+            self.type == other.type
+            and self.index == other.index
+            and self.coordinates == other.coordinates
+            and self.label == other.label
         )
 
 

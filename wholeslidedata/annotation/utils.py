@@ -165,7 +165,7 @@ def plot_annotations(
 def convert_annotations_to_json(annotations: List[Annotation]):
     output = []
     for annotation in annotations:
-        output.append(annotation.to_json())
+        output.append(annotation.todict())
     return output
 
 
