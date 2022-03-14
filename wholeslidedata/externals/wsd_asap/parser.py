@@ -63,10 +63,11 @@ class AsapAnnotationParser(AnnotationParser):
             return None
 
         label = labels.get_label_by_name(name)
-        label = label.properties
+        label = label.todict()
         color = child.attrib.get("Color")
-        if color:
-            label["color"] = color
+        if 'color' not in label or label['color'] is None:
+            if color:
+                label["color"] = color
 
         return label
 
