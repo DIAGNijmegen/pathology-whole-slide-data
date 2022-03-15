@@ -50,11 +50,12 @@ class PatchLabelSampler(Sampler):
 
 @PatchLabelSampler.register(("mask",))
 class MaskPatchLabelSampler(PatchLabelSampler):
-    def __init__(self, image_backend, ratio, center, relative):
+    def __init__(self, image_backend, ratio, center, relative, spacing=0.5):
         self._image_backend = image_backend
         self._ratio = ratio
         self._center =center
         self._relative = relative
+        self._spacing = spacing
 
     # annotation should be coupled to image_annotation. how?
     def sample(
@@ -75,7 +76,7 @@ class MaskPatchLabelSampler(PatchLabelSampler):
                 int(y // self._ratio),
                 int(width // self._ratio),
                 int(height // self._ratio),
-                spacing=spacing,
+                spacing=self._spacing,
                 center=self._center,
                 relative=self._relative,
             )
