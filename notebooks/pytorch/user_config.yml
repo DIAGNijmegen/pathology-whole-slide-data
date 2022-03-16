@@ -1,0 +1,26 @@
+wholeslidedata:
+    default:
+        yaml_source: data.yml
+        seed: 2
+
+        label_map:
+            stroma: 1
+            tumor: 2
+            lymphocytes: 3
+
+        annotation_sources: 
+            filters: ['xml']
+            
+        batch_shape:
+            batch_size: 8
+            spacing: 0.5
+            shape: [256, 256, 3]
+            
+        label_sampler:
+            attribute: OrderedLabelSampler
+
+        annotation_sampler:
+            attribute: OrderedAnnotationSampler
+            
+        point_sampler:
+            attribute: UniformPointSampler
