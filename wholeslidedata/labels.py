@@ -27,9 +27,9 @@ class Label(RegistrantFactory):
         self,
         name: str,
         value: int,
-        overlay_index: int = 1,
+        overlay_index: int = None,
         weight: float = None,
-        color: str = "black",
+        color: str = None,
         **kwargs,
     ):
 
@@ -38,6 +38,7 @@ class Label(RegistrantFactory):
         self._weight = weight
         self._overlay_index = overlay_index
         self._color = color
+        self._kwargs = kwargs
 
         if not isinstance(value, int):
             raise LabelValueError(f"label value {value} should be an integer")
@@ -55,12 +56,6 @@ class Label(RegistrantFactory):
     def name(self):
         return self._name
 
-    def set_name(self, name):
-        self._name = str(name).lower()
-
-    def set_color(self, color):
-        self._color = color
-
     @property
     def value(self):
         return self._value
@@ -76,6 +71,20 @@ class Label(RegistrantFactory):
     @property
     def color(self):
         return self._color
+
+    def todict(self):
+        label_dict = dict(name=self.name, value=self.value)
+        if self.weight is not None:
+            label_dict["weight"] = self.weight
+        if self.overlay_index is not None:
+            label_dict["overlay_index"] = self.overlay_index
+        if self.color is not None:
+            label_dict["color"] = self.color
+        label_dict.update(self._kwargs)
+        return label_dict
+
+    def __str__(self):
+        return f"Label({', '.join([f'{key}={value}' for key, value in self.properties.items()])})"
 
 
 @Label.register_func((Label,))
@@ -149,7 +158,7 @@ class Labels(RegistrantFactory):
 
 
 @Labels.register_func((Labels,))
-def labels_from_dict(labels: Labels):
+def labels_from_labels(labels: Labels):
     return labels
 
 

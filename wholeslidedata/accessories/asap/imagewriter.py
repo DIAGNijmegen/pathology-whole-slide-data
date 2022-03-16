@@ -1,21 +1,11 @@
 import abc
-
 from pathlib import Path
-
 
 import multiresolutionimageinterface as mir
 import numpy as np
-
-
-
-class AsapNotFoundError(ImportError):
-    ...
-
-
-try:
-    from multiresolutionimageinterface import MultiResolutionImageWriter
-except ImportError:
-    raise AsapNotFoundError('can not find installed asap for wholeslideimage writing')
+from multiresolutionimageinterface import MultiResolutionImageWriter
+from shapely import geometry
+from wholeslidedata.samplers.patchlabelsampler import SegmentationPatchLabelSampler
 
 
 class TileShapeError(Exception):
@@ -73,9 +63,11 @@ class WholeSlideImageWriterBase(Writer, MultiResolutionImageWriter):
         if coordinates:
             col, row = self._get_col_row(coordinates)
             if col is not None and row is not None:
-                self.writeBaseImagePartToLocation(tile.flatten().astype('uint8'), col, row)
+                self.writeBaseImagePartToLocation(
+                    tile.flatten().astype("uint8"), col, row
+                )
         else:
-            self.writeBaseImagePart(tile.flatten().astype('uint8'))
+            self.writeBaseImagePart(tile.flatten().astype("uint8"))
 
     def _get_col_row(self, coordinates):
         x, y = coordinates
@@ -114,7 +106,7 @@ class WholeSlideImageWriterBase(Writer, MultiResolutionImageWriter):
 
 
 class WholeSlideMaskWriter(WholeSlideImageWriterBase):
-    def __init__(self, callbacks=(), suffix='.tif'):
+    def __init__(self, callbacks=(), suffix=".tif"):
         super().__init__(callbacks=callbacks)
         self._suffix = suffix
 
@@ -143,8 +135,9 @@ class WholeSlideMaskWriter(WholeSlideImageWriterBase):
         self.setSpacing(pixel_size_vec)
         self.writeImageInformation(self._dimensions[0], self._dimensions[1])
 
+
 class WholeSlideImageWriter(WholeSlideImageWriterBase):
-    def __init__(self, callbacks=(), suffix='.tif'):
+    def __init__(self, callbacks=(), suffix=".tif"):
         super().__init__(callbacks=callbacks)
         self._suffix = suffix
 
@@ -173,4 +166,36 @@ class WholeSlideImageWriter(WholeSlideImageWriterBase):
         self.writeImageInformation(self._dimensions[0], self._dimensions[1])
 
 
-  
+def write_mask(wsi, wsa, spacing, tile_size=1024, suffix="_gt_mask.tif"):
+    shape = wsi.shapes[wsi.get_level_from_spacing(spacing)]
+    ratio = wsi.get_downsampling_from_spacing(spacing)
+    write_spacing = wsi.get_real_spacing(spacing)
+
+    mask_output_path = str(wsa.path).replace(".xml", suffix)
+
+    wsm_writer = WholeSlideMaskWriter()
+    wsm_writer.write(
+        path=mask_output_path,
+        spacing=write_spacing,
+        dimensions=(shape[0], shape[1]),
+        tile_shape=(tile_size, tile_size),
+    )
+
+    label_sampler = SegmentationPatchLabelSampler()
+    for y_pos in range(0, shape[1], tile_size):
+        for x_pos in range(0, shape[0], tile_size):
+            mask = label_sampler.sample(
+                wsa,
+                geometry.Point(
+                    (x_pos + tile_size // 2) * ratio,
+                    (y_pos + tile_size // 2) * ratio,
+                ),
+                (tile_size, tile_size),
+                ratio,
+            )
+            if np.any(mask):
+                wsm_writer.write_tile(tile=mask, coordinates=(int(x_pos), int(y_pos)))
+
+    print("closing...")
+    wsm_writer.save()
+    print("done")

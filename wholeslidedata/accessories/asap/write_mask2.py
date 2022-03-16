@@ -7,7 +7,7 @@ from shapely import geometry
 from shapely.strtree import STRtree
 from wholeslidedata.annotation.structures import Annotation, Point, Polygon
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
-from wholeslidedata.image.wholeslideimagewriter import WholeSlideMaskWriter
+from wholeslidedata.accessories.asap.imagewriter import WholeSlideMaskWriter
 from wholeslidedata.samplers.utils import shift_coordinates
 
 
