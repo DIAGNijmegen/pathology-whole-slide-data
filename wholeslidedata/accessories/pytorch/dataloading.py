@@ -10,7 +10,7 @@ class PytorchWholeSlideData(Dataset):
         ])
 
     def __len__(self):
-        if steps is not None:
+        if self._steps is not None:
             return self._steps
         return super().__len__()
 
@@ -23,4 +23,3 @@ class PytorchWholeSlideData(Dataset):
         return [image, mask]
 
 
-def get_data_loaders(usconfig)
