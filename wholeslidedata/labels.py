@@ -158,7 +158,7 @@ class Labels(RegistrantFactory):
 
 
 @Labels.register_func((Labels,))
-def labels_from_dict(labels: Labels):
+def labels_from_labels(labels: Labels):
     return labels
 
 
