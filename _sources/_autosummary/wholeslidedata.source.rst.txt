@@ -1,4 +1,4 @@
-﻿wholeslidedata.source
+wholeslidedata.source
 =====================
 
 .. automodule:: wholeslidedata.source

@@ -1,0 +1,32 @@
+wholeslidedata.accessories.pyvips
+=================================
+
+.. automodule:: wholeslidedata.accessories.pyvips
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst                 
+   :recursive:
+
+   wholeslidedata.accessories.pyvips.backend
+

@@ -1,0 +1,32 @@
+wholeslidedata.accessories.virtum
+=================================
+
+.. automodule:: wholeslidedata.accessories.virtum
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst                 
+   :recursive:
+
+   wholeslidedata.accessories.virtum.parser
+

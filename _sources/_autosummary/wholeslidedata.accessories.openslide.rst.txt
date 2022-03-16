@@ -1,0 +1,32 @@
+wholeslidedata.accessories.openslide
+====================================
+
+.. automodule:: wholeslidedata.accessories.openslide
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst                 
+   :recursive:
+
+   wholeslidedata.accessories.openslide.backend
+

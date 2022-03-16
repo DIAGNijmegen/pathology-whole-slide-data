@@ -157,9 +157,9 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">overlay_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">overlay_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+        <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
 
@@ -168,6 +168,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_weight</span> <span class="o">=</span> <span class="n">weight</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_overlay_index</span> <span class="o">=</span> <span class="n">overlay_index</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_color</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">LabelValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;label value </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> should be an integer&quot;</span><span class="p">)</span>
@@ -185,12 +186,6 @@
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
 
-    <span class="k">def</span> <span class="nf">set_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">set_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_color</span> <span class="o">=</span> <span class="n">color</span>
-
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
@@ -205,7 +200,21 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">color</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_color</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_color</span>
+
+    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">label_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">label_dict</span><span class="p">[</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">overlay_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">label_dict</span><span class="p">[</span><span class="s2">&quot;overlay_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">overlay_index</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">label_dict</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span>
+        <span class="n">label_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">label_dict</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Label(</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span><span class="si">}</span><span class="s2">)&quot;</span></div>
 
 
 <div class="viewcode-block" id="label_from_label"><a class="viewcode-back" href="../../_autosummary/wholeslidedata.labels.label_from_label.html#wholeslidedata.labels.label_from_label">[docs]</a><span class="nd">@Label</span><span class="o">.</span><span class="n">register_func</span><span class="p">((</span><span class="n">Label</span><span class="p">,))</span>
@@ -278,9 +287,9 @@
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;no label with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
-<span class="nd">@Labels</span><span class="o">.</span><span class="n">register_func</span><span class="p">((</span><span class="n">Labels</span><span class="p">,))</span>
-<span class="k">def</span> <span class="nf">labels_from_dict</span><span class="p">(</span><span class="n">labels</span><span class="p">:</span> <span class="n">Labels</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">labels</span>
+<div class="viewcode-block" id="labels_from_labels"><a class="viewcode-back" href="../../_autosummary/wholeslidedata.labels.labels_from_labels.html#wholeslidedata.labels.labels_from_labels">[docs]</a><span class="nd">@Labels</span><span class="o">.</span><span class="n">register_func</span><span class="p">((</span><span class="n">Labels</span><span class="p">,))</span>
+<span class="k">def</span> <span class="nf">labels_from_labels</span><span class="p">(</span><span class="n">labels</span><span class="p">:</span> <span class="n">Labels</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">labels</span></div>
 
 
 <div class="viewcode-block" id="labels_from_dict"><a class="viewcode-back" href="../../_autosummary/wholeslidedata.labels.labels_from_dict.html#wholeslidedata.labels.labels_from_dict">[docs]</a><span class="nd">@Labels</span><span class="o">.</span><span class="n">register_func</span><span class="p">((</span><span class="nb">dict</span><span class="p">,))</span>

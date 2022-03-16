@@ -48,10 +48,10 @@ wholeslidedata.annotation.structures.Point
       ~Point.relate
       ~Point.relate_pattern
       ~Point.representative_point
-      ~Point.set_label
       ~Point.simplify
       ~Point.svg
       ~Point.symmetric_difference
+      ~Point.todict
       ~Point.touches
       ~Point.union
       ~Point.within
@@ -69,7 +69,6 @@ wholeslidedata.annotation.structures.Point
       ~Point.RECURSIVE
       ~Point.REPLACE
       ~Point.STATIC
-      ~Point.annotation_path
       ~Point.area
       ~Point.array_interface_base
       ~Point.boundary

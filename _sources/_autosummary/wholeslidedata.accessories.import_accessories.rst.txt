@@ -1,0 +1,6 @@
+wholeslidedata.accessories.import\_accessories
+==============================================
+
+.. currentmodule:: wholeslidedata.accessories
+
+.. autofunction:: import_accessories

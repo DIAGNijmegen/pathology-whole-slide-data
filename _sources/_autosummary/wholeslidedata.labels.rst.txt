@@ -19,6 +19,7 @@ wholeslidedata.labels
       label_from_str
       labels_from_collection
       labels_from_dict
+      labels_from_labels
    
    
 

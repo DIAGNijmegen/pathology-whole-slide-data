@@ -1,4 +1,4 @@
-﻿wholeslidedata.annotation
+wholeslidedata.annotation
 =========================
 
 .. automodule:: wholeslidedata.annotation
@@ -28,12 +28,8 @@
    :template: custom-module-template.rst                 
    :recursive:
 
-   wholeslidedata.annotation.generate_polygons
-   wholeslidedata.annotation.parsers
+   wholeslidedata.annotation.parser
    wholeslidedata.annotation.structures
    wholeslidedata.annotation.utils
    wholeslidedata.annotation.wholeslideannotation
-   wholeslidedata.annotation.wholeslideannotationwriter
-   wholeslidedata.annotation.write_mask
-   wholeslidedata.annotation.write_mask2
 

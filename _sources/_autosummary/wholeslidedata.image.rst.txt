@@ -31,5 +31,4 @@ wholeslidedata.image
    wholeslidedata.image.backend
    wholeslidedata.image.utils
    wholeslidedata.image.wholeslideimage
-   wholeslidedata.image.wholeslideimagewriter
 

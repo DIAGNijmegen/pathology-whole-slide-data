@@ -50,10 +50,10 @@ wholeslidedata.annotation.structures.Polygon
       ~Polygon.relate
       ~Polygon.relate_pattern
       ~Polygon.representative_point
-      ~Polygon.set_label
       ~Polygon.simplify
       ~Polygon.svg
       ~Polygon.symmetric_difference
+      ~Polygon.todict
       ~Polygon.touches
       ~Polygon.union
       ~Polygon.within
@@ -71,7 +71,6 @@ wholeslidedata.annotation.structures.Polygon
       ~Polygon.RECURSIVE
       ~Polygon.REPLACE
       ~Polygon.STATIC
-      ~Polygon.annotation_path
       ~Polygon.area
       ~Polygon.array_interface_base
       ~Polygon.base_coordinates

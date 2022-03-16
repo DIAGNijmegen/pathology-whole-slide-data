@@ -1,4 +1,4 @@
-﻿wholeslidedata.image.backend
+wholeslidedata.image.backend
 ============================
 
 .. automodule:: wholeslidedata.image.backend
@@ -20,7 +20,6 @@
       :template: custom-class-template.rst               
    
       ImageBackend
-      OpenSlideWholeSlideImageBackend
       WholeSlideImageBackend
    
    

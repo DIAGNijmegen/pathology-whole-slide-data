@@ -1,0 +1,32 @@
+wholeslidedata.accessories.pytorch
+==================================
+
+.. automodule:: wholeslidedata.accessories.pytorch
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst                 
+   :recursive:
+
+   wholeslidedata.accessories.pytorch.dataloading
+

@@ -28,6 +28,7 @@
    :template: custom-module-template.rst                 
    :recursive:
 
+   wholeslidedata.accessories
    wholeslidedata.annotation
    wholeslidedata.buffer
    wholeslidedata.configuration

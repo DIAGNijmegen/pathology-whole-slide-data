@@ -1,4 +1,4 @@
-﻿wholeslidedata.configuration
+wholeslidedata.configuration
 ============================
 
 .. automodule:: wholeslidedata.configuration
