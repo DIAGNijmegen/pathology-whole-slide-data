@@ -1,4 +1,4 @@
-module: wholeslidedata.externals.wsd_asap.parser
+module: wholeslidedata.accessories.asap.parser
 attribute: AsapAnnotationParser
 labels: ${wholeslidedata:labels}
 scaling: 1.0
