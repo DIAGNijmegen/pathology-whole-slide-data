@@ -1,5 +1,5 @@
-concurrentbuffer>=0.0.3
-creationism>=0.0.3
+concurrentbuffer>=0.0.7
+creationism>=0.0.3s
 numpy>=1.20.2
 opencv-python-headless>=4.4.0
 scipy>=1.5.2
@@ -8,3 +8,4 @@ shapely==1.7.1
 openslide-python>=1.1.1
 PyYAML>=5.4.1
 albumentations>=1.1.0
+jsonschema>=4.4.0
