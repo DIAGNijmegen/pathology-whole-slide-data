@@ -1,1 +1,1 @@
-from wholeslidedata import externals as _
+from wholeslidedata import accessories as _

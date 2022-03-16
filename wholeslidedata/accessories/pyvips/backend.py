@@ -1,4 +1,8 @@
-import mygame
+from typing import List, Tuple
+import numpy as np
+import pyvips
+
+from wholeslidedata.image.backend import UnsupportedVendorError, WholeSlideImageBackend
 
 @WholeSlideImageBackend.register(('pyvips', ))
 class PyVipsImageBackend(WholeSlideImageBackend):
