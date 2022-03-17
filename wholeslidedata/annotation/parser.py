@@ -178,6 +178,9 @@ class MaskAnnotationParser(AnnotationParser):
         self._shape = np.array(shape)
         self._backend = backend
 
+    def get_available_labels(opened_annotation: Any) -> Labels:
+        return Labels.create({'tissue': 1})
+
     def _parse(self, path):
         mask = WholeSlideImage(path, backend=self._backend)
 
