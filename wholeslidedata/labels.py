@@ -84,7 +84,7 @@ class Label(RegistrantFactory):
         return label_dict
 
     def __str__(self):
-        return f"Label({', '.join([f'{key}={value}' for key, value in self.properties.items()])})"
+        return f"Label({', '.join([f'{key}={value}' for key, value in self.todict().items()])})"
 
 
 @Label.register_func((Label,))

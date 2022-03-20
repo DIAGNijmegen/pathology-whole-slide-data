@@ -1,19 +1,16 @@
-from typing import List
-
-import numpy as np
-from matplotlib import pyplot as plt
-from shapely import geometry
-from shapely.strtree import STRtree
-from wholeslidedata.annotation.structures import Annotation, Point, Polygon
-from wholeslidedata.labels import Labels
-import cv2
-import numpy as np
-from scipy.ndimage.morphology import binary_dilation, binary_erosion, binary_fill_holes
 import json
 from typing import List
+
+import cv2
 import jsonschema
+import numpy as np
+from matplotlib import pyplot as plt
+from scipy.ndimage.morphology import binary_dilation, binary_erosion, binary_fill_holes
+from shapely import geometry
+from shapely.strtree import STRtree
 from wholeslidedata.annotation.parser import SCHEMA
-from wholeslidedata.annotation.structures import Annotation
+from wholeslidedata.annotation.structures import Annotation, Point, Polygon
+from wholeslidedata.labels import Labels
 
 
 class GeometrySelector:

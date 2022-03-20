@@ -10,6 +10,7 @@ from wholeslidedata.annotation.structures import Annotation
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.labels import Label, Labels
 from wholeslidedata.samplers.utils import block_shaped
+from shapely import geometry
 
 SCHEMA = {
     "type": "object",
@@ -105,7 +106,7 @@ class AnnotationParser(RegistrantFactory):
         if self._renamed_labels is None:
             return label
         renamed_label = self._renamed_labels.get_label_by_value(label["value"])
-        renamed_label = renamed_label.properties
+        renamed_label = renamed_label.todict()
         for key, value in label.items():
             if key not in renamed_label or renamed_label[key] is None:
                 renamed_label[key] = value
@@ -194,9 +195,16 @@ class MaskAnnotationParser(AnnotationParser):
         new_mask = np.zeros(new_shape.astype("int"), dtype="uint8")
         new_mask[: shape[0], : shape[1]] = np_mask
 
-        blocks = block_shaped(new_mask, int(size // ratio), int(size // ratio))
+        for annotation in self._get_annotations(new_mask, size, ratio):
+            yield annotation
 
+        mask.close()
+        mask = None
+        del mask
+
+    def _get_annotations(self, new_mask, size, ratio):
         region_index = -1
+        blocks = block_shaped(new_mask, int(size // ratio), int(size // ratio))
         for y in range(new_mask.shape[0] // (int(size // ratio))):
             for x in range(new_mask.shape[1] // int((size // ratio))):
                 region_index += 1
@@ -210,28 +218,10 @@ class MaskAnnotationParser(AnnotationParser):
                     "label": {"name": "tissue", "value": 1},
                 }
 
-        mask.close()
-        mask = None
-        del mask
 
     def _get_coordinates(self, x_pos, y_pos, x_shift, y_shift) -> List:
-
-        return [
-            [x_pos, y_pos],
-            [
-                x_pos,
-                y_pos + y_shift,
-            ],
-            [
-                x_pos + x_shift,
-                y_pos + y_shift,
-            ],
-            [
-                x_pos + x_shift,
-                y_pos,
-            ],
-            [x_pos, y_pos],
-        ]
+        box = geometry.box(x_pos, y_pos, x_pos+x_shift, y_pos+y_shift)
+        return np.array(box.exterior.xy).T.tolist()
 
     def _check_mask(self, mask_patch):
         if np.any(mask_patch):

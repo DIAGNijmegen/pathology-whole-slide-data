@@ -23,7 +23,7 @@ class BatchSampler:
         x_batch = []
         y_batch = []
         for sample_reference in batch_data:
-            wsi = self._dataset.get_image_from_reference(sample_reference['reference'])
+            wsi = self._dataset.get_wsi_from_reference(sample_reference['reference'])
             wsa = self._dataset.get_wsa_from_reference(sample_reference['reference'])
             point = sample_reference['point']
             x_samples, y_samples = self._sampler.sample(wsi, wsa, point)

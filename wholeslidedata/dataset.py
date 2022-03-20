@@ -21,8 +21,8 @@ class WholeSlideSampleReference:
 
 class DataSet(UserDict):
 
-    IMAGES_IDENTIFIER = "images"
-    ANNOTATIONS_IDENTIFIER = "annotations"
+    IMAGES_KEY = "images"
+    ANNOTATIONS_KEY = "annotations"
 
     def __init__(
         self,
@@ -32,16 +32,16 @@ class DataSet(UserDict):
     ):
         self._mode = WholeSlideMode.create(mode)
         self._associations = associations
-        self._labels = labels
-
-        self.data = self._open(self._associations)
-        self._sample_references, self._all_sample_references, self._all_labels = self._init_samples(
-            self.data
-        )
+        self._data = dict(sorted(self._open(self._associations, labels=labels).items()))
+        self._labels = self._init_labels()
+        self._sample_references = self._init_samples()
         self._sample_labels = Labels.create(list(self._sample_references.keys()))
-
-        self._check_samples()
-        self._log()
+        
+        if len(self._sample_references) == 0:
+            raise ValueError(
+                f"No samples found in {self.mode.name} DataSet: \n{pformat(self.annotations_per_label_per_key)}"
+            )
+        super().__init__(self._data)
 
     @property
     def mode(self):
@@ -55,20 +55,20 @@ class DataSet(UserDict):
     def sample_labels(self):
         return self._sample_labels
 
-    def get_image_from_reference(self, sample_reference: WholeSlideSampleReference):
-        return self[sample_reference.file_key]["images"][0]
+    def get_wsi_from_reference(self, sample_reference: WholeSlideSampleReference):
+        return self[sample_reference.file_key][self.__class__.IMAGES_KEY][0]
 
     def get_wsa_from_reference(self, sample_reference: WholeSlideSampleReference):
-        return self[sample_reference.file_key]["annotations"][
+        return self[sample_reference.file_key][self.__class__.ANNOTATIONS_KEY][
             sample_reference.wsa_index
         ]
 
     def get_annotation_from_reference(
         self, sample_reference: WholeSlideSampleReference
     ):
-        return self.get_wsa_from_reference(sample_reference=sample_reference).annotations[
-            sample_reference.annotation_index
-        ]
+        return self.get_wsa_from_reference(
+            sample_reference=sample_reference
+        ).annotations[sample_reference.annotation_index]
 
     @abc.abstractmethod
     def _open(self, associations: Associations) -> dict:
@@ -85,6 +85,17 @@ class DataSet(UserDict):
         """
 
     @abc.abstractmethod
+    def _init_labels(self, data: dict) -> dict:
+        """[summary]
+
+        Args:
+            data (dict): [description]
+
+        Returns:
+            dict: [description]
+        """
+
+    @abc.abstractmethod
     def _init_samples(self, data: dict) -> dict:
         """[summary]
 
@@ -95,14 +106,6 @@ class DataSet(UserDict):
             dict: [description]
         """
 
-    def _check_samples(self):
-        if not self._sample_references:
-            raise ValueError(
-                f"No samples found in {self.mode.name} DataSet: \n{pformat(self.annotations_per_label)}"
-            )
-
-    def _log(self):
-        pass
 
 class WholeSlideDataSet(DataSet):
     def __init__(
@@ -117,23 +120,24 @@ class WholeSlideDataSet(DataSet):
         self._copy_path = copy_path
         super().__init__(mode, associations, labels)
 
-    def _open(self, associations):
+    def _open(self, associations, labels):
         data = dict()
         for file_key, associated_files in associations.items():
             data[file_key] = {
-                WholeSlideDataSet.IMAGES_IDENTIFIER: dict(),
-                WholeSlideDataSet.ANNOTATIONS_IDENTIFIER: dict(),
+                self.__class__.IMAGES_KEY: dict(),
+                self.__class__.ANNOTATIONS_KEY: dict(),
             }
             for wsi_index, wsi_file in enumerate(associated_files[WholeSlideImageFile]):
-                data[file_key][WholeSlideDataSet.IMAGES_IDENTIFIER][
+                data[file_key][self.__class__.IMAGES_KEY][
                     wsi_index
                 ] = self._open_image(wsi_file)
+
             for wsa_index, wsa_file in enumerate(
                 associated_files[WholeSlideAnnotationFile]
             ):
-                data[file_key][WholeSlideDataSet.ANNOTATIONS_IDENTIFIER][
+                data[file_key][self.__class__.ANNOTATIONS_KEY][
                     wsa_index
-                ] = self._open_annotation(wsa_file)
+                ] = self._open_annotation(wsa_file, labels=labels)
         return data
 
     def _open_image(self, wsi_file: WholeSlideImageFile):
@@ -143,22 +147,25 @@ class WholeSlideDataSet(DataSet):
             return wsi_file.open()
         return wsi_file.path
 
-    def _open_annotation(self, wsa_file: WholeSlideAnnotationFile):
+    def _open_annotation(self, wsa_file: WholeSlideAnnotationFile, labels):
         if self._copy_path:
             wsa_file.copy(self._copy_path)
-        return wsa_file.open(labels=self._labels)
+        return wsa_file.open(labels=labels)
 
-    def _init_samples(self, data) -> Tuple:
-        samples = {}
-        all_samples = {}
-        _all_labels = set()
-        data = dict(sorted(data.items()))
-        for file_index, (file_key, values) in enumerate(data.items()):
-            for wsa_index, wsa in values[
-                WholeSlideDataSet.ANNOTATIONS_IDENTIFIER
-            ].items():
+    def _init_labels(self):
+        labels = []
+        for values in self._data.values():
+            for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
+                for annotation in wsa._annotations:
+                    labels.append(annotation.label)
+        return Labels.create(list(set(labels)))
+
+    def _init_samples(self) -> Tuple:
+        sample_references = {}
+        for file_index, (file_key, values) in enumerate(self._data.items()):
+            for wsa_index, wsa in values[self.__class__.ANNOTATIONS_KEY].items():
                 for annotation in wsa.sampling_annotations:
-                    samples.setdefault(annotation.label.name, []).append(
+                    sample_references.setdefault(annotation.label.name, []).append(
                         WholeSlideSampleReference(
                             file_index=file_index,
                             file_key=file_key,
@@ -167,17 +174,7 @@ class WholeSlideDataSet(DataSet):
                         )
                     )
 
-                for annotation in wsa.annotations:
-                    _all_labels.add(annotation.label)
-                    all_samples.setdefault(annotation.label.name, []).append(
-                        WholeSlideSampleReference(
-                            file_index=file_index,
-                            file_key=file_key,
-                            wsa_index=wsa_index,
-                            annotation_index=annotation.index,
-                        )
-                    )
-        return samples, all_samples, Labels.create(_all_labels)
+        return sample_references
 
     def close_images(self):
         for image in self._images.values():
@@ -188,8 +185,8 @@ class WholeSlideDataSet(DataSet):
     @property
     def annotation_counts(self):
         _counts = []
-        for values in self.data.values():
-            for wsa in values[WholeSlideDataSet.ANNOTATIONS_IDENTIFIER].values():
+        for values in self._data.values():
+            for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
                 _counts.append(
                     annotation_utils.get_counts_in_annotations(wsa.annotations)
                 )
@@ -197,11 +194,11 @@ class WholeSlideDataSet(DataSet):
 
     @property
     def annotations_per_label(self) -> Dict[str, int]:
-        counts_per_label_ = {label.name: 0 for label in self._all_labels}
-        for values in self.data.values():
-            for wsa in values[WholeSlideDataSet.ANNOTATIONS_IDENTIFIER].values():
+        counts_per_label_ = {label.name: 0 for label in self._labels}
+        for values in self._data.values():
+            for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
                 for label, count in annotation_utils.get_counts_in_annotations(
-                    wsa.annotations, labels=self._all_labels
+                    wsa.annotations, labels=self._labels
                 ).items():
                     if label in counts_per_label_:
                         counts_per_label_[label] += count
@@ -210,9 +207,9 @@ class WholeSlideDataSet(DataSet):
     @property
     def annotations_per_key(self):
         _counts_per_key = {}
-        for file_key, values in self.data.items():
+        for file_key, values in self._data.items():
             _counts_per_key[file_key] = 0
-            for wsa in values[WholeSlideDataSet.ANNOTATIONS_IDENTIFIER].values():
+            for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
                 _counts_per_key[file_key] += annotation_utils.get_counts_in_annotations(
                     wsa.annotations
                 )
@@ -221,11 +218,11 @@ class WholeSlideDataSet(DataSet):
     @property
     def annotations_per_label_per_key(self):
         counts_per_label_per_key_ = {}
-        for file_key, values in self.data.items():
+        for file_key, values in self._data.items():
             counts_per_label_per_key_[file_key] = {}
-            for wsa in values[WholeSlideDataSet.ANNOTATIONS_IDENTIFIER].values():
+            for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
                 for label, count in annotation_utils.get_counts_in_annotations(
-                    wsa.annotations, labels=self._all_labels
+                    wsa.annotations, labels=self._labels
                 ).items():
                     if label not in counts_per_label_per_key_[file_key]:
                         counts_per_label_per_key_[file_key][label] = 0
@@ -235,8 +232,8 @@ class WholeSlideDataSet(DataSet):
     @property
     def pixels_count(self):
         _counts = []
-        for values in self.data.values():
-            for wsa in values[WholeSlideDataSet.ANNOTATIONS_IDENTIFIER].values():
+        for values in self._data.values():
+            for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
                 _counts.append(
                     annotation_utils.get_pixels_in_annotations(wsa.annotations)
                 )
@@ -244,12 +241,12 @@ class WholeSlideDataSet(DataSet):
 
     @property
     def pixels_per_label(self) -> Dict[str, int]:
-        counts_per_label_ = {label.name: 0 for label in self._all_labels}
+        counts_per_label_ = {label.name: 0 for label in self._labels}
 
-        for values in self.data.values():
-            for wsa in values[WholeSlideDataSet.ANNOTATIONS_IDENTIFIER].values():
+        for values in self._data.values():
+            for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
                 for label, count in annotation_utils.get_pixels_in_annotations(
-                    wsa.annotations, labels=self._all_labels
+                    wsa.annotations, labels=self._labels
                 ).items():
                     if label in counts_per_label_:
                         counts_per_label_[label] += count
@@ -258,9 +255,9 @@ class WholeSlideDataSet(DataSet):
     @property
     def pixels_per_key(self):
         _counts_per_key = {}
-        for file_key, values in self.data.items():
+        for file_key, values in self._data.items():
             _counts_per_key[file_key] = 0
-            for wsa in values[WholeSlideDataSet.ANNOTATIONS_IDENTIFIER].values():
+            for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
                 _counts_per_key[file_key] += annotation_utils.get_pixels_in_annotations(
                     wsa.annotations
                 )
@@ -269,11 +266,11 @@ class WholeSlideDataSet(DataSet):
     @property
     def pixels_per_label_per_key(self):
         counts_per_label_per_key_ = {}
-        for file_key, values in self.data.items():
+        for file_key, values in self._data.items():
             counts_per_label_per_key_[file_key] = {}
-            for wsa in values[WholeSlideDataSet.ANNOTATIONS_IDENTIFIER].values():
+            for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
                 for label, pixels in annotation_utils.get_pixels_in_annotations(
-                    wsa.annotations, labels=self._all_labels
+                    wsa.annotations, labels=self._labels
                 ).items():
                     if label not in counts_per_label_per_key_[file_key]:
                         counts_per_label_per_key_[file_key][label] = 0

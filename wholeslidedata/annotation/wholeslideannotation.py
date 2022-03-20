@@ -3,16 +3,16 @@ from typing import List, Optional, Union
 
 from shapely import geometry
 from shapely.strtree import STRtree
-from wholeslidedata.annotation.structures import Annotation, Polygon
-from wholeslidedata.annotation.parser import AnnotationParser
 from wholeslidedata.annotation import utils as annotation_utils
-from wholeslidedata.labels import Labels
+from wholeslidedata.annotation.parser import AnnotationParser
+from wholeslidedata.annotation.structures import Annotation, Polygon
 from wholeslidedata.extensions import (
-    WholeSlideAnnotationExtension,
-    JavaScriptObjectNotation,
     ExtensibleMarkupLanguage,
+    JavaScriptObjectNotation,
     TaggedImageFileExtension,
+    WholeSlideAnnotationExtension,
 )
+from wholeslidedata.labels import Labels
 
 
 def area_sort_with_roi(item):
@@ -66,20 +66,21 @@ class WholeSlideAnnotation:
                 )
             ]
 
-        self._annotation_parser = AnnotationParser.create(parser, labels=labels)
+        self._annotation_parser: AnnotationParser = AnnotationParser.create(
+            parser, labels=labels
+        )
         self._annotations = self._annotation_parser.parse(annotation_path)
 
         self._sort_by_overlay_index = sort_by_overlay_index
         self._labels = annotation_utils.get_labels_in_annotations(self.annotations)
-        sample_labels = self._annotation_parser.sample_label_names
+        self._sample_labels = self._annotation_parser.sample_label_names
+        self._sample_types = self._annotation_parser.sample_annotation_types
 
-        self._sampling_annotations = [
-            annotation
-            for annotation_type in self._annotation_parser.sample_annotation_types
-            for annotation in self._annotations
-            if isinstance(annotation, annotation_type)
-            and (not sample_labels or annotation.label.name in sample_labels)
-        ]
+        self._sampling_annotations = []
+        for annotation in self._annotations:
+            if not self._sample_labels or annotation.label.name in self._sample_labels:
+                if not self._sample_types or type(annotation) in self._sample_types:
+                    self._sampling_annotations.append(annotation)
 
         if not ignore_overlap:
             self._set_overlapping_annotations()
