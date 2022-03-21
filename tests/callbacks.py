@@ -1,10 +1,4 @@
 import os
-import sys
-import wholeslidedata
-
-if sys.platform.startswith("win"):
-    os.add_dll_directory(r"C:\Program Files\ASAP 2.0\bin")
-
 import unittest
 from pathlib import Path
 

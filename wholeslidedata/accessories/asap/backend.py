@@ -6,6 +6,8 @@ from multiresolutionimageinterface import (
     MultiResolutionImageReader,
 )
 from wholeslidedata.image.backend import InvalidSpacingError, WholeSlideImageBackend
+
+
 # from openslide import OpenSlide
 
 @WholeSlideImageBackend.register(("asap",))
@@ -19,7 +21,7 @@ class AsapWholeSlideImageBackend(MultiResolutionImage, WholeSlideImageBackend):
         WholeSlideImageBackend.__init__(self, path)
 
     def get_patch(
-        self, x: int, y: int, width: int, height: int, level: int
+            self, x: int, y: int, width: int, height: int, level: int
     ) -> np.ndarray:
 
         return np.array(
