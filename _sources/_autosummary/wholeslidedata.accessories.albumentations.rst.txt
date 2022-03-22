@@ -29,4 +29,5 @@ wholeslidedata.accessories.albumentations
    :recursive:
 
    wholeslidedata.accessories.albumentations.callbacks
+   wholeslidedata.accessories.albumentations.custom
 
