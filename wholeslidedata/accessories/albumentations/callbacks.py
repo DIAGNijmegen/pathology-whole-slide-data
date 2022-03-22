@@ -1,15 +1,25 @@
 import random
+from typing import Tuple
 
 import albumentations as A
+import numpy as np
 
-from wholeslidedata.accessories.albumentations.custom import *
+from wholeslidedata.accessories.albumentations import custom
 from wholeslidedata.samplers.callbacks import SampleCallback
 
 
-class AlbumentationsDetectionAugmentationsCallback(SampleCallback):
-    def __init__(self, augmentations):
+class AlbumentationsBase(SampleCallback):
+
+    def __init__(self, custom_callbacks):
+        super(AlbumentationsBase, self).__init__()
+        for cb in custom_callbacks:
+            setattr(A, cb, getattr(custom, cb))
+
+
+class AlbumentationsDetectionAugmentationsCallback(AlbumentationsBase):
+    def __init__(self, augmentations, custom_callbacks):
         random.seed()
-        super().__init__()
+        super(AlbumentationsDetectionAugmentationsCallback, self).__init__(custom_callbacks)
         self._augmentations = A.Compose(
             [
                 getattr(A, class_name)(**params)
@@ -32,13 +42,11 @@ class AlbumentationsDetectionAugmentationsCallback(SampleCallback):
         pass
 
 
-class AlbumentationsAugmentationsCallback(SampleCallback):
+class AlbumentationsAugmentationsCallback(AlbumentationsBase):
 
     def __init__(self, augmentations, custom_callbacks):
         random.seed()
-        super().__init__()
-        for cb in custom_callbacks:
-            setattr(A, cb, eval(cb))
+        super(AlbumentationsAugmentationsCallback, self).__init__(custom_callbacks)
         self._augmentations = A.Compose(
             [getattr(A, class_name)(**params) for augmentation in augmentations for class_name, params in
              augmentation.items()]
