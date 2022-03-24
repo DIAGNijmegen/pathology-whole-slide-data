@@ -1,6 +1,6 @@
 wholeslidedata:
   default:
-    image_backend: asap
+    image_backend: openslide
     seed: 123
     yaml_source: data.yml
 
@@ -25,15 +25,10 @@ wholeslidedata:
       spacing: [ 0.5, 8.0 ]
       y_shape: [ 2, 70, 70 ]
 
-    sample_callbacks:
+    batch_callbacks:
       - module: wholeslidedata.accessories.albumentations.callbacks
         attribute: AlbumentationsAugmentationsCallback
-        custom_callbacks:
-          - InstanceNormalize
         augmentations:
-          - InstanceNormalize:
-              p: 1.0
-              max_pixel_value: 1.0
           - RandomRotate90:
               p: 0.5
           - Flip:
@@ -54,7 +49,7 @@ wholeslidedata:
               val_shift_limit: 0.2
               p: 0.5
           - GridDistortion:
-              p: 0.5
+              p: 1.0
           - RandomBrightnessContrast:
               p: 0.4
 
