@@ -53,6 +53,9 @@ class AlbumentationsAugmentationsCallback(AlbumentationsBase):
     def __call__(
             self, x_batch: np.ndarray, y_batch: np.ndarray
     ) -> Tuple[np.ndarray, np.ndarray]:
+        _type_x, _type_y = type(x_batch), type(y_batch)
+        x_batch, y_batch = np.array(x_batch), np.array(y_batch)
+
         x_transformed, y_transformed = np.zeros(x_batch.shape), np.zeros(y_batch.shape)
         for batch_index in range(x_batch.shape[0]):
             if x_batch.ndim == 5:
@@ -80,6 +83,10 @@ class AlbumentationsAugmentationsCallback(AlbumentationsBase):
             else:
                 x_transformed[batch_index] = augmented["image"]
                 y_transformed[batch_index] = augmented["mask"]
+        if _type_x != type(x_transformed):
+            x_transformed = _type_x(x_transformed)
+        if _type_y != type(y_transformed):
+            y_transformed = _type_y(y_transformed)
         return x_transformed, y_transformed
 
     def reset(self):
