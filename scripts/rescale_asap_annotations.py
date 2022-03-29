@@ -9,7 +9,7 @@ def _scale_line(line: str, scale_factor: float):
         if ireg is not None:
             start, end = ireg.span()
             coord = line[start + 3 : end - 1]
-            line = line.replace(coord, str(float(coord) * scale_factor))
+            line = line.replace(coord, str(float(coord.replace(',', '.')) * scale_factor))
     return line
 
 
