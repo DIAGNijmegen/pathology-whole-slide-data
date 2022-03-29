@@ -7,9 +7,11 @@ def _scale_line(line: str, scale_factor: float):
     for i in ('X="(.*?)"{1}', 'Y="(.*?)"{1}'):
         ireg = re.search(i, line)
         if ireg is not None:
-            start, end = ireg.span()
-            coord = line[start + 3 : end - 1]
-            line = line.replace(coord, str(float(coord.replace(',', '.')) * scale_factor))
+            coord_setting = ireg.group()
+            coordinate = re.search('"(.*)"', coord_setting).group(1).strip()
+            scaled_coordinate = str(float(coordinate.replace(',', '.')) * scale_factor)
+            coord_setting_scaled = coord_setting.replace(coordinate, scaled_coordinate)
+            line = line.replace(coord_setting, coord_setting_scaled)
     return line
 
 
