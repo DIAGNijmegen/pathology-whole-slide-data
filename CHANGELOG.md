@@ -1,9 +1,43 @@
 # Changelog
 ---
 
-### **Upcoming** (0.0.12)
 
-### (0.0.11)  (**Latest**)
+### **Upcoming** (0.0.13)
+
+
+### 0.0.12  (**Latest**)
+
+**breaking changes**
+ - specific code for external software has been moved to accessories
+-  label weights in WeightedLabelSampler are now specified via a dictionary
+
+**refactoring**
+ - parsing of annotation files has been refactored and now includes a JSON schema
+ - enhance shape and spacing error messages (Contributed by Jakub Kaczmarzyk)
+  
+**new features:**
+ - accessories are loaded with package import
+ - WholeSlideAnnotationParser based on JSON schema
+ - JSON schema can be used to serialize annotations
+ - albumentations callback (contributation by Thijs Gelton)
+ - HedCallback augmentation
+ - 'none' labels are sorted below other labels
+ - associater classes StemSplitterAssociater and AnyOneAssociater
+ - exact match option for associate_files
+ - clip polygon and check for valid boxed in detection patch label sampler
+ - MaskPatchLabelSampler now accepts a spacing
+ - auxiliary method to create yaml from folders with data (contributation by Thijs Gelton)
+ 
+**bug fixes:**
+ - fix for randomness in uniform point sampler 
+
+**setup file**
+ - version is read from verion.py
+ - requirements are now read from the requirements file (contribution by Thijs Gelton)
+ - url now points to github repo (contribution by Jakub Kaczmarzyk)
+  
+
+### 0.0.11)
 
 **new features:**
  - image/annotations are now copied to separate folders

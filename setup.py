@@ -1,8 +1,12 @@
 from setuptools import setup, find_packages
 
+version = {}
+with open("wholeslidedata/version.py") as fp:
+    exec(fp.read(), version)
+
 setup(
     name="wholeslidedata",
-    version="0.0.11",
+    version=version['__version__'],
     author="Mart van Rijthoven",
     author_email="mart.vanrijthoven@gmail.com",
     package_data={"": ["*.yml"]},
