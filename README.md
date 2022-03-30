@@ -1,4 +1,7 @@
 # WholeSlideData
+
+[![PyPI version](https://badge.fury.io/py/wholeslidedata.svg)](https://badge.fury.io/py/wholeslidedata)
+
 -----
 #### This repository currently contains software at a major version zero. Anything MAY change at any time. The public API SHOULD NOT be considered stable. 
 -----
