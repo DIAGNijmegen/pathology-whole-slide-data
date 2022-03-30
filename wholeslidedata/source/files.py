@@ -29,7 +29,7 @@ class File(RegistrantFactory):
         self.mode = self.__class__.MODES.create(mode)
         self.path = Path(path)
         self.extension = self.__class__.EXTENSIONS.create(self.path.suffix)
-        self.orginal_path = copy(path)
+        self.original_path = copy(path)
 
     @abstractmethod
     def open(self):

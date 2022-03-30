@@ -22,13 +22,13 @@ class SourceFileTransferError(Exception):
         Can not copy {self.source_path} to {self.destination_folder} because {self.source_path} does not exists"""
 
 
-def _print_copy(orginal_path, destination_path):
+def _print_copy(original_path, destination_path):
     if destination_path.exists():
         pass
         # print(f"Destination path '{destination_path}' already exists")
     else:
         print(
-            f"Copied from '{orginal_path}'\nCopied to: '{destination_path.resolve()}'\n..."
+            f"Copied from '{original_path}'\nCopied to: '{destination_path.resolve()}'\n..."
         )
 
 
@@ -51,7 +51,7 @@ def copy(
     destination_path = _initialize_destination_path(source_path, destination_folder)
 
     if verbose:
-        _print_copy(orginal_path=source_path, destination_path=destination_path)
+        _print_copy(original_path=source_path, destination_path=destination_path)
 
     if not destination_path.exists():
         _transfer(source_path, destination_path)
