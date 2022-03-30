@@ -1,7 +1,8 @@
 # WholeSlideData
 
 [![PyPI version](https://badge.fury.io/py/wholeslidedata.svg)](https://badge.fury.io/py/wholeslidedata)
-#### This repository contains software at a major version zero. Anything MAY change at any time. The public API SHOULD NOT be considered stable.
+
+This repository contains software at a major version zero. Anything MAY change at any time. The public API SHOULD NOT be considered stable.
 
 Please checkout the [CHANGELOG](https://github.com/DIAGNijmegen/pathology-whole-slide-data/blob/main/CHANGELOG.md) for updates for each version
 
