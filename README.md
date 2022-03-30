@@ -1,8 +1,7 @@
-### WholeSlideData
+# WholeSlideData
 -----
-
-***This repository contains alpha software***
-
+#### This repository currently contains software at a major version zero. Anything MAY change at any time. The public API SHOULD NOT be considered stable. 
+-----
 
 ### Installation
 pip install git+https://github.com/DIAGNijmegen/pathology-whole-slide-data@main
