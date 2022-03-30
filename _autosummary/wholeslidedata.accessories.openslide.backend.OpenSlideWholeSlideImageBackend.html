@@ -8,26 +8,23 @@
 
     <title>wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend &#8212; wholeslidedata 0.0.10 documentation</title>
     
-    <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/pydata-sphinx-theme.css" />
     
-    <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
@@ -41,7 +38,7 @@
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
     
     <div class="container-fluid" id="banner"></div>
 
@@ -845,6 +842,11 @@
    </li>
   </ul>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="wholeslidedata.version.html">
+   wholeslidedata.version
+  </a>
+ </li>
 </ul>
 
   </div>
@@ -885,20 +887,20 @@
               <div>
                 
   <section id="wholeslidedata-accessories-openslide-backend-openslidewholeslideimagebackend">
-<h1>wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend<a class="headerlink" href="#wholeslidedata-accessories-openslide-backend-openslidewholeslideimagebackend" title="Permalink to this headline">¶</a></h1>
+<h1>wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend<a class="headerlink" href="#wholeslidedata-accessories-openslide-backend-openslidewholeslideimagebackend" title="Permalink to this headline">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">OpenSlideWholeSlideImageBackend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/accessories/openslide/backend.html#OpenSlideWholeSlideImageBackend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">OpenSlideWholeSlideImageBackend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/accessories/openslide/backend.html#OpenSlideWholeSlideImageBackend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">openslide.OpenSlide</span></code>, <a class="reference internal" href="wholeslidedata.image.backend.WholeSlideImageBackend.html#wholeslidedata.image.backend.WholeSlideImageBackend" title="wholeslidedata.image.backend.WholeSlideImageBackend"><code class="xref py py-class docutils literal notranslate"><span class="pre">wholeslidedata.image.backend.WholeSlideImageBackend</span></code></a></p>
 <p>Open a whole-slide image.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/wholeslidedata/accessories/openslide/backend.html#OpenSlideWholeSlideImageBackend.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.__init__" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/wholeslidedata/accessories/openslide/backend.html#OpenSlideWholeSlideImageBackend.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.__init__" title="Permalink to this definition">#</a></dt>
 <dd><p>Open a whole-slide image.</p>
 </dd></dl>
 
 <p class="rubric">Methods</p>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -949,7 +951,7 @@
 </tbody>
 </table>
 <p class="rubric">Attributes</p>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -995,7 +997,7 @@
 </table>
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.associated_images">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">associated_images</span></span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.associated_images" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">associated_images</span></span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.associated_images" title="Permalink to this definition">#</a></dt>
 <dd><p>Images associated with this whole-slide image.</p>
 <p>This is a map: image name -&gt; PIL.Image.</p>
 <p>Unlike in the C interface, the images accessible via this property
@@ -1004,66 +1006,66 @@ are not premultiplied.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.close">
-<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/accessories/openslide/backend.html#OpenSlideWholeSlideImageBackend.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.close" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/accessories/openslide/backend.html#OpenSlideWholeSlideImageBackend.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.close" title="Permalink to this definition">#</a></dt>
 <dd><p>Close the OpenSlide object.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.detect_format">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">detect_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.detect_format" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">detect_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.detect_format" title="Permalink to this definition">#</a></dt>
 <dd><p>Return a string describing the format vendor of the specified file.</p>
 <p>If the file format is not recognized, return None.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.dimensions">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dimensions</span></span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.dimensions" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dimensions</span></span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.dimensions" title="Permalink to this definition">#</a></dt>
 <dd><p>A (width, height) tuple for level 0 of the image.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.get_best_level_for_downsample">
-<span class="sig-name descname"><span class="pre">get_best_level_for_downsample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">downsample</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.get_best_level_for_downsample" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_best_level_for_downsample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">downsample</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.get_best_level_for_downsample" title="Permalink to this definition">#</a></dt>
 <dd><p>Return the best level for displaying the given downsample.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.get_thumbnail">
-<span class="sig-name descname"><span class="pre">get_thumbnail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.get_thumbnail" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_thumbnail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.get_thumbnail" title="Permalink to this definition">#</a></dt>
 <dd><p>Return a PIL.Image containing an RGB thumbnail of the image.</p>
 <p>size:     the maximum size of the thumbnail.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.level_count">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">level_count</span></span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.level_count" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">level_count</span></span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.level_count" title="Permalink to this definition">#</a></dt>
 <dd><p>The number of levels in the image.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.level_dimensions">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">level_dimensions</span></span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.level_dimensions" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">level_dimensions</span></span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.level_dimensions" title="Permalink to this definition">#</a></dt>
 <dd><p>A list of (width, height) tuples, one for each level of the image.</p>
 <p>level_dimensions[n] contains the dimensions of level n.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.level_downsamples">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">level_downsamples</span></span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.level_downsamples" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">level_downsamples</span></span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.level_downsamples" title="Permalink to this definition">#</a></dt>
 <dd><p>A list of downsampling factors for each level of the image.</p>
 <p>level_downsample[n] contains the downsample factor of level n.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.properties">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">properties</span></span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.properties" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">properties</span></span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.properties" title="Permalink to this definition">#</a></dt>
 <dd><p>Metadata about the image.</p>
 <p>This is a map: property name -&gt; property value.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.read_region">
-<span class="sig-name descname"><span class="pre">read_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.read_region" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">read_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.read_region" title="Permalink to this definition">#</a></dt>
 <dd><p>Return a PIL.Image containing the contents of the region.</p>
 <dl class="simple">
 <dt>location: (x, y) tuple giving the top left pixel in the level 0</dt><dd><p>reference frame.</p>
@@ -1077,7 +1079,7 @@ function is not premultiplied.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.register">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registrant_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.register" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registrant_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.register" title="Permalink to this definition">#</a></dt>
 <dd><p>Register a virtual subclass of an ABC.</p>
 <p>Returns the subclass, to allow usage as a class decorator.</p>
 </dd></dl>
@@ -1100,8 +1102,9 @@ function is not premultiplied.</p>
       </div>
     </div>
   
-    <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -1112,7 +1115,7 @@ function is not premultiplied.</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.4.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
 </p>
     </div>
     

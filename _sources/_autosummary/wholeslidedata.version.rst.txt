@@ -1,0 +1,23 @@
+wholeslidedata.version
+======================
+
+.. automodule:: wholeslidedata.version
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

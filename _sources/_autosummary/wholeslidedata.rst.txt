@@ -40,4 +40,5 @@
    wholeslidedata.mode
    wholeslidedata.samplers
    wholeslidedata.source
+   wholeslidedata.version
 
