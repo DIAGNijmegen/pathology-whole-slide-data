@@ -4,7 +4,8 @@
 
 This repository contains software at a major version zero. Anything MAY change at any time. The public API SHOULD NOT be considered stable.
 
-Please checkout the [CHANGELOG](https://github.com/DIAGNijmegen/pathology-whole-slide-data/blob/main/CHANGELOG.md) for updates for each version
+Please checkout the [CHANGELOG](https://github.com/DIAGNijmegen/pathology-whole-slide-data/blob/main/CHANGELOG.md) for updates for each version.
+Please checkout the API for the current PyPI deployed version [here](https://diagnijmegen.github.io/pathology-whole-slide-data/).
 
 -----
 ### Installation
