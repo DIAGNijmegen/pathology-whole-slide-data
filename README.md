@@ -30,12 +30,32 @@ wholeslidedata:
 
 ### Main Features
 
- - Image opening and patch extraction (ASAP, openslide-python and pyvips support)
- - Annotation opening and extraction (ASAP, QuPath, Virtum and Histomicstk support)
- - Batch iterator: iterator to be used for training a CNN
-   - custom sampling strategies (various build-in strategies, e.g., random, balanced, area-based, and more)
-   - custom sample/batch callbacks (various build in callbacks, e.g., fit_shape, one-hot-encoding, albumentations, and more)
-   - multi-core patch extraction
+#### Image opening and patch extraction (ASAP, openslide-python and pyvips support)
+```python
+from wholeslidedata.image.wholeslideimage import WholeSlideImage
+image = WholeSlideImage('path_to_image.tif') 
+patch = image.get_patch(x, y, width, height, spacing)
+```
+#### Annotation opening and extraction (ASAP, QuPath, Virtum and Histomicstk support)
+```python
+from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
+wsa = WholeSlideAnnotation('path_to_annotation.xml')
+annotations = wsa.select_annotations(x, y, width, height)
+```
+
+#### Batch iterator: iterator to be used for training a CNN
+- custom sampling strategies (various build-in strategies, e.g., random, balanced, area-based, and more)
+- custom sample/batch callbacks (various build in callbacks, e.g., fit_shape, one-hot-encoding, albumentations, and more)
+- multi-core patch extraction
+```python
+from wholeslidedata.iterators import create_batch_iterator
+training_iterator = create_batch_iterator(mode='training', 
+                                          user_config='path_to_user_config.yml',
+                                          number_of_batches=10,
+                                          cpus=4) 
+for x_batch, y_batch, info in training_iterator:
+    pass
+```
 
 
 ### Examples:
