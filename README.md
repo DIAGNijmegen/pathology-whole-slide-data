@@ -53,7 +53,7 @@ The batch generator needs to be configured via a *data* and *user config* file. 
 
 Here below we show a basic example of a data and user config file.
 
-**Example of a basic data configuration file (data.yml):**
+**Example of a basic data configuration file (data.yml)**
 ```yaml
 training:
     - wsi: 
@@ -64,7 +64,7 @@ training:
 
 ```
 
-**Example of a basic user config file (user_config.yml):**
+**Example of a basic user config file (user_config.yml)**
 ```yaml
 wholeslidedata:
     default:
