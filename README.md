@@ -7,7 +7,7 @@ This repository contains software at a major version zero. Anything MAY change a
 Please checkout the [CHANGELOG](https://github.com/DIAGNijmegen/pathology-whole-slide-data/blob/main/CHANGELOG.md) for updates for each version and the API for the current PyPI deployed version can be found [here](https://diagnijmegen.github.io/pathology-whole-slide-data/).
 
 -----
-### Installation
+## Installation
 pip install git+https://github.com/DIAGNijmegen/pathology-whole-slide-data@main
 
 Wholeslidedata supports three image backends: openslide, ASAP, and pyvips. You will have to install additional software for these backends. You will only need one.
@@ -26,29 +26,61 @@ wholeslidedata:
 ```
 
 -----
-### Main Features
+## Main Features
 
-#### Image opening and patch extraction (ASAP, openslide-python and pyvips support)
+### Image opening and patch extraction (ASAP, openslide-python and pyvips support)
 ```python
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
 image = WholeSlideImage('path_to_image.tif') 
 patch = image.get_patch(x, y, width, height, spacing)
 ```
-#### Annotation opening and extraction (ASAP, QuPath, Virtum and Histomicstk support)
+### Annotation opening and extraction (ASAP, QuPath, Virtum and Histomicstk support)
 ```python
 from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
 wsa = WholeSlideAnnotation('path_to_annotation.xml')
 annotations = wsa.select_annotations(x, y, width, height)
 ```
 
-#### Batch iterator: iterator to be used for training a CNN
+### Batch iterator: iterator to be used for training a CNN
 - custom sampling strategies (various build-in strategies, e.g., random, balanced, area-based, and more)
 - custom sample/batch callbacks (various build in callbacks, e.g., fit_shape, one-hot-encoding, albumentations, and more)
 - multi-core patch extraction
+
+The batch generator needs to be configured via a data and user config file. Here below we show a basic example
+
+**Example of a basic data configuration file (data.yml):**
+```yaml
+training:
+    - wsi: 
+        path: /tmp/TCGA-21-5784-01Z-00-DX1.tif
+      wsa: 
+        path: /tmp/TCGA-21-5784-01Z-00-DX1.xml       
+
+
+```
+
+**Example of a basic user config file (user_config.yml):**
+```yaml
+wholeslidedata:
+    default:
+        yaml_source: data.yml
+        
+        label_map:
+            stroma: 1
+            tumor: 2
+            lymphocytes: 3
+            
+        batch_shape:
+            batch_size: 8
+            spacing: 0.5
+            shape: [256, 256, 3]
+```           
+
+**Creating a batch iterator**
 ```python
 from wholeslidedata.iterators import create_batch_iterator
 training_iterator = create_batch_iterator(mode='training', 
-                                          user_config='path_to_user_config.yml',
+                                          user_config='user_config.yml',
                                           number_of_batches=10,
                                           cpus=4) 
 for x_batch, y_batch, batch_info in training_iterator:
@@ -56,7 +88,7 @@ for x_batch, y_batch, batch_info in training_iterator:
 ```
 
 -----
-### Examples & Video Tutorials:
+## Examples & Video Tutorials:
 Please see [notebook examples](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/notebooks) on how to use this code
 
 Please also checkout the [video tutorials](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/tutorials) 
