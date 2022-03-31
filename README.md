@@ -34,6 +34,7 @@ from wholeslidedata.image.wholeslideimage import WholeSlideImage
 image = WholeSlideImage('path_to_image.tif') 
 patch = image.get_patch(x, y, width, height, spacing)
 ```
+
 ### Annotation opening and extraction (ASAP, QuPath, Virtum and Histomicstk support)
 ```python
 from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
@@ -42,14 +43,10 @@ annotations = wsa.select_annotations(x, y, width, height)
 ```
 
 ### Batch iterator: iterator to be used for training a CNN
-- Features:
-    - Custom and build-in sampling strategies:
-        - random, balanced, area-based, and more.
-    - Custom and build-in sample/batch callbacks:
-        - fit_shape, one-hot-encoding, albumentations, and more.
-    - Multi-core patch extraction via shared memory.
 
-The batch generator needs to be configured via a data and user config file. Here below we show a basic example
+The batch generator needs to be configured via a *data* and *user config* file. In the user config file, custom and build-in sampling strategies can be configured, such as random, balanced, area-based, and more. Additionally. custom and build-in sample and batch callbacks can be composed such as fit_shape, one-hot-encoding, albumentations, and more. For a complete overview please check out the main [config file](https://github.com/DIAGNijmegen/pathology-whole-slide-data/blob/main/wholeslidedata/configuration/config_files/config.yml) and all the sub config files [here](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/wholeslidedata/configuration/config_files)
+
+Here below we show a basic example of a data and user config file
 
 **Example of a basic data configuration file (data.yml):**
 ```yaml
