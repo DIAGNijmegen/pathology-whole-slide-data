@@ -56,10 +56,6 @@ for x_batch, y_batch, info in training_iterator:
 ```
 
 -----
-### Examples:
+### Examples & Video Tutorials:
 Please see [notebook examples](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/notebooks) on how to use this code:
-
------
-### Video Tutorials
 Please see [video tutorials](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/tutorials) 
-
