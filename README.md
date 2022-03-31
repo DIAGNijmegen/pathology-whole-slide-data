@@ -51,7 +51,7 @@ training_iterator = create_batch_iterator(mode='training',
                                           user_config='path_to_user_config.yml',
                                           number_of_batches=10,
                                           cpus=4) 
-for x_batch, y_batch, info in training_iterator:
+for x_batch, y_batch, batch_info in training_iterator:
     pass
 ```
 
