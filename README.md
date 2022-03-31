@@ -1,3 +1,4 @@
+----
 # WholeSlideData
 
 [![PyPI version](https://badge.fury.io/py/wholeslidedata.svg)](https://badge.fury.io/py/wholeslidedata)
