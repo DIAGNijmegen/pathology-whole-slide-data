@@ -42,11 +42,11 @@ annotations = wsa.select_annotations(x, y, width, height)
 ```
 
 ### Batch iterator: iterator to be used for training a CNN
-- custom and build-in sampling strategies:
+- Custom and build-in sampling strategies:
     - random, balanced, area-based, and more.
-- custom and build-in sample/batch callbacks:
+- Custom and build-in sample/batch callbacks:
     - fit_shape, one-hot-encoding, albumentations, and more.
-- fast multi-core patch extraction via shared memory.
+- Multi-core patch extraction via shared memory.
 
 The batch generator needs to be configured via a data and user config file. Here below we show a basic example
 
