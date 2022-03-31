@@ -2,8 +2,9 @@
 ---
 
 
-### **Upcoming** (0.0.13)
+#### **Upcoming** (0.0.13)
 
+---
 
 ### 0.0.12  (**Latest**)
 
@@ -36,8 +37,9 @@
  - requirements are now read from the requirements file (contribution by Thijs Gelton)
  - url now points to github repo (contribution by Jakub Kaczmarzyk)
   
+---
 
-### 0.0.11)
+### 0.0.11
 
 **new features:**
  - image/annotations are now copied to separate folders
@@ -49,19 +51,25 @@
 **requirements:**
  - increased NumPy version to make it compatible with ASAP2.0
 
+---
 
 ### 0.0.10
 **bug fixes:**
  - fixed sampling bugs
 
+---
+
 ### 0.0.9
 **new features:**
  - increase speed sampling
 
+---
 
 ### 0.0.8 
 **bug fixes:**
  - fixed detection sampling bugs 
+
+---
 
 ### 0.0.7
 **new features:**
