@@ -25,9 +25,7 @@ wholeslidedata:
         image_backend: asap
 ```
 
-
-
-
+-----
 ### Main Features
 
 #### Image opening and patch extraction (ASAP, openslide-python and pyvips support)
@@ -57,11 +55,11 @@ for x_batch, y_batch, info in training_iterator:
     pass
 ```
 
-
+-----
 ### Examples:
 Please see [notebook examples](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/notebooks) on how to use this code:
 
-
+-----
 ### Video Tutorials
 Please see [video tutorials](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/tutorials) 
 
