@@ -7,6 +7,10 @@ This repository contains software at a major version zero. Anything MAY change a
 
 Please checkout the [CHANGELOG](https://github.com/DIAGNijmegen/pathology-whole-slide-data/blob/main/CHANGELOG.md) for updates for each version and the API for the current PyPI deployed version can be found [here](https://diagnijmegen.github.io/pathology-whole-slide-data/).
 
+- [Installation](#installation)
+- [Main Features](#main-features)
+- [Examples and Video Tutorials](#examples-and-video-tutorials)
+
 -----
 ## Installation
 pip install git+https://github.com/DIAGNijmegen/pathology-whole-slide-data@main
@@ -89,6 +93,6 @@ for x_batch, y_batch, batch_info in training_iterator:
 ```
 
 -----
-## Examples & Video Tutorials:
+## Examples and Video Tutorials
 - Please see [notebook examples](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/notebooks) on how to use this code.
 - Please also checkout the [video tutorials](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/tutorials).
