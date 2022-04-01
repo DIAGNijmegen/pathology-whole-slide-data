@@ -36,6 +36,7 @@ wholeslidedata:
 ### Image opening and patch extraction (ASAP, openslide-python and pyvips support)
 ```python
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
+
 wsi = WholeSlideImage('path_to_image.tif') 
 patch = wsi.get_patch(x, y, width, height, spacing)
 ```
@@ -43,6 +44,7 @@ patch = wsi.get_patch(x, y, width, height, spacing)
 ### Annotation opening and extraction (ASAP, QuPath, Virtum and Histomicstk support)
 ```python
 from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
+
 wsa = WholeSlideAnnotation('path_to_annotation.xml')
 annotations = wsa.select_annotations(x, y, width, height)
 ```
@@ -84,12 +86,14 @@ wholeslidedata:
 **Creating a batch iterator**
 ```python
 from wholeslidedata.iterators import create_batch_iterator
-training_iterator = create_batch_iterator(mode='training', 
-                                          user_config='user_config.yml',
-                                          number_of_batches=10,
-                                          cpus=4) 
-for x_batch, y_batch, batch_info in training_iterator:
-    pass
+
+with create_batch_iterator(mode='training', 
+                           user_config='user_config.yml',
+                           number_of_batches=10,
+                           cpus=4) as training_iterator:
+                           
+    for x_batch, y_batch, batch_info in training_iterator:
+        pass
 ```
 
 -----
