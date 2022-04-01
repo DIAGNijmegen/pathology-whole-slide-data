@@ -36,8 +36,8 @@ wholeslidedata:
 ### Image opening and patch extraction (ASAP, openslide-python and pyvips support)
 ```python
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
-image = WholeSlideImage('path_to_image.tif') 
-patch = image.get_patch(x, y, width, height, spacing)
+wsi = WholeSlideImage('path_to_image.tif') 
+patch = wsi.get_patch(x, y, width, height, spacing)
 ```
 
 ### Annotation opening and extraction (ASAP, QuPath, Virtum and Histomicstk support)
