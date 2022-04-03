@@ -26,7 +26,7 @@ WholeSlideData aims to provide the tools to work with whole slide images and ann
 
 
 > ### Ease
-> WholeSlideData uses a configuration system that allows users to configure anything in a single config file to make it very easy to use this package and the batch iterator. Using multiple configuration files is also possible to create a clean and well-structured configuration for your project. The configuration system has some parallels with Hydra. So if you are familiar with that framework, it should be easy to use the configuration system used in this package. Our configuration system lets you configure any setting, build instances, and insert these instances as dependencies for other functions or classes directly in the config file. Furthermore, users can build on top of base classes, and they only need to change the configuration file to use their code, without the need to change any part of the batch iterator.
+> WholeSlideData uses a configuration system called creationism that allows users to configure anything in a single config file to make it very easy to use this package and the batch iterator. Using multiple configuration files is also possible to create a clean and well-structured configuration for your project. Creationism has some parallels with Hydra. So if you are familiar with Hydra, it should be easy to use creationism. Creationism lets you configure any setting, build instances, and insert these instances as dependencies for other functions or classes directly in the config file. Furthermore, users can build on top of base classes, and they only need to change the configuration file to use their code, without the need to change any part of the batch iterator.
 
 -----
 ## Installation
