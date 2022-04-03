@@ -16,8 +16,7 @@ Please checkout the [CHANGELOG](https://github.com/DIAGNijmegen/pathology-whole-
 
 ----
 ## Introduction
-
-The wholeslidedata aims to provide the tools to work with whole slide images and annotations from different vendors and annotation software. The main contribution is a batch iterator that enables users to sample patches from the data efficiently, fast, and easily. 
+WholeSlideData aims to provide the tools to work with whole slide images and annotations from different vendors and annotation software. The main contribution is a batch iterator that enables users to sample patches from the data efficiently, fast, and easily. 
 
 > ### Efficient
 > We preserve the annotations in a JSON format internally and use the [Shapely](https://github.com/shapely/shapely) library to do essential computations on basic geometries. Using this design ensures that the required memory to keep all the annotations in memory is more efficient than converting the annotations to masks. Furthermore, this package allows for the generation of patches and labels on the fly, which eludes the need for saving them to disk.
