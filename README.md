@@ -71,7 +71,7 @@ annotations = wsa.select_annotations(x, y, width, height)
 ```
 
 ### Batch iterator
-The batch generator needs to be configured via *user config* file. In the user config file, custom and build-in sampling strategies can be configured, such as random, balanced, area-based, and more. Additionally. custom and build-in sample and batch callbacks can be composed such as fit_shape, one-hot-encoding, albumentations, and more. For a complete overview please check out the main [config file](https://github.com/DIAGNijmegen/pathology-whole-slide-data/blob/main/wholeslidedata/configuration/config_files/config.yml) and all the sub config files [here](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/wholeslidedata/configuration/config_files).
+The batch generator needs to be configured via *user config* file. In the user config file, custom and build-in sampling strategies can be configured, such as random, balanced, area-based, and more. Additionally. custom and build-in sample and batch callbacks can be composed such as fit_shape, one-hot-encoding, albumentations, and more. For a complete overview please check out the main [config file](https://github.com/DIAGNijmegen/pathology-whole-slide-data/blob/main/wholeslidedata/configuration/config_files/config.yml) and all the [sub config files](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/wholeslidedata/configuration/config_files).
 
 **Example of a basic user config file (user_config.yml)**
 ```yaml
