@@ -1,3 +1,5 @@
+### Video Tutorials
+
 These video tutorals were made for the TIGER challenge, and show how you can use the wholeslidedata package in practice.
 
 
