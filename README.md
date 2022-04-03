@@ -71,34 +71,31 @@ annotations = wsa.select_annotations(x, y, width, height)
 
 The batch generator needs to be configured via a *data* and *user config* file. In the user config file, custom and build-in sampling strategies can be configured, such as random, balanced, area-based, and more. Additionally. custom and build-in sample and batch callbacks can be composed such as fit_shape, one-hot-encoding, albumentations, and more. For a complete overview please check out the main [config file](https://github.com/DIAGNijmegen/pathology-whole-slide-data/blob/main/wholeslidedata/configuration/config_files/config.yml) and all the sub config files [here](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/wholeslidedata/configuration/config_files).
 
-Here below we show a basic example of a data and user config file.
-
-**Example of a basic data configuration file (data.yml)**
-```yaml
-training:
-    - wsi: 
-        path: /tmp/TCGA-21-5784-01Z-00-DX1.tif
-      wsa: 
-        path: /tmp/TCGA-21-5784-01Z-00-DX1.xml       
-
-
-```
+Here below we show a basic example of a user config file.
 
 **Example of a basic user config file (user_config.yml)**
 ```yaml
-wholeslidedata:
-    default:
-        yaml_source: data.yml
-        
-        label_map:
-            stroma: 1
-            tumor: 2
-            lymphocytes: 3
+--- 
+wholeslidedata: 
+  default: 
+  
+    yaml_source: 
+      training: 
+        - 
+          wsa: 
+            path: /tmp/TCGA-21-5784-01Z-00-DX1.xml
+          wsi: 
+            path: /tmp/TCGA-21-5784-01Z-00-DX1.tif
             
-        batch_shape:
-            batch_size: 8
-            spacing: 0.5
-            shape: [256, 256, 3]
+    label_map: 
+      stroma: 1
+      tumor: 2
+      lymphocytes: 3
+      
+    batch_shape: 
+      shape: [256, 256, 3]
+      batch_size: 8
+      spacing: 0.5
 ```           
 
 **Creating a batch iterator**
