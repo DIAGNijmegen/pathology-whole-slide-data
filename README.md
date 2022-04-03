@@ -50,7 +50,9 @@ wholeslidedata:
 -----
 ## Main Features
 
-### Image opening and patch extraction (ASAP, openslide-python and pyvips support)
+### Image opening and patch extraction
+Current wholeslidedata support image backends for openslide, ASAP, and pyvips.
+
 ```python
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
 
@@ -58,7 +60,9 @@ wsi = WholeSlideImage('path_to_image.tif')
 patch = wsi.get_patch(x, y, width, height, spacing)
 ```
 
-### Annotation opening and extraction (ASAP, QuPath, Virtum and Histomicstk support)
+### Annotation opening and extraction
+Current wholeslidedata supports annotations from the following annotation software: ASAP, QuPath, Virtum, and Histomicstk.
+
 ```python
 from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
 
@@ -66,11 +70,9 @@ wsa = WholeSlideAnnotation('path_to_annotation.xml')
 annotations = wsa.select_annotations(x, y, width, height)
 ```
 
-### Batch iterator: iterator to be used for training a CNN
+### Batch iterator
 
-The batch generator needs to be configured via a *data* and *user config* file. In the user config file, custom and build-in sampling strategies can be configured, such as random, balanced, area-based, and more. Additionally. custom and build-in sample and batch callbacks can be composed such as fit_shape, one-hot-encoding, albumentations, and more. For a complete overview please check out the main [config file](https://github.com/DIAGNijmegen/pathology-whole-slide-data/blob/main/wholeslidedata/configuration/config_files/config.yml) and all the sub config files [here](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/wholeslidedata/configuration/config_files).
-
-Here below we show a basic example of a user config file.
+The batch generator needs to be configured via *user config* file. In the user config file, custom and build-in sampling strategies can be configured, such as random, balanced, area-based, and more. Additionally. custom and build-in sample and batch callbacks can be composed such as fit_shape, one-hot-encoding, albumentations, and more. For a complete overview please check out the main [config file](https://github.com/DIAGNijmegen/pathology-whole-slide-data/blob/main/wholeslidedata/configuration/config_files/config.yml) and all the sub config files [here](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/wholeslidedata/configuration/config_files).
 
 **Example of a basic user config file (user_config.yml)**
 ```yaml
