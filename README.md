@@ -113,5 +113,5 @@ with create_batch_iterator(mode='training',
 
 -----
 ## Examples and Video Tutorials
-- Please see [notebook examples](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/notebooks) on how to use this code.
-- Please also checkout the [video tutorials](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/tutorials).
+- [Notebook examples](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/notebooks).
+- [Video tutorials](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/tutorials).
