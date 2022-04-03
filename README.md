@@ -51,7 +51,7 @@ wholeslidedata:
 ## Main Features
 
 ### Whole-slide images 
-Current wholeslidedata support image backends for openslide, ASAP, and pyvips.
+Currently, wholeslidedata support image backends for openslide, ASAP, and pyvips.
 
 ```python
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
@@ -61,7 +61,7 @@ patch = wsi.get_patch(x, y, width, height, spacing)
 ```
 
 ### Whole-slide annotations
-Current wholeslidedata supports annotations from the following annotation software: ASAP, QuPath, Virtum, and Histomicstk.
+Current, wholeslidedata supports annotations from the following annotation software: ASAP, QuPath, Virtum, and Histomicstk.
 
 ```python
 from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
