@@ -126,7 +126,7 @@
                 
   <h1>Source code for wholeslidedata.buffer.patchcommander</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">concurrentbuffer.commander</span> <span class="kn">import</span> <span class="n">Commander</span>
-
+<span class="kn">import</span> <span class="nn">sys</span>
 <div class="viewcode-block" id="PatchCommander"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.buffer.patchcommander.PatchCommander.html#wholeslidedata.buffer.patchcommander.PatchCommander">[docs]</a><span class="k">class</span> <span class="nc">PatchCommander</span><span class="p">(</span><span class="n">Commander</span><span class="p">):</span>
 <div class="viewcode-block" id="PatchCommander.__init__"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.buffer.patchcommander.PatchCommander.html#wholeslidedata.buffer.patchcommander.PatchCommander.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info_queue</span><span class="p">,</span> <span class="n">x_dims</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y_dims</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">spacing</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_x_dims</span> <span class="o">=</span> <span class="n">x_dims</span>

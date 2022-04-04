@@ -1,0 +1,31 @@
+wholeslidedata.buffer.patchproducer
+===================================
+
+.. automodule:: wholeslidedata.buffer.patchproducer
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                         
+      :template: custom-class-template.rst               
+   
+      PatchProducer
+   
+   
+
+   
+   
+   
+
+
+
