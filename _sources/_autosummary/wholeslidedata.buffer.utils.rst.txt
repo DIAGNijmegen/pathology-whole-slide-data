@@ -1,4 +1,4 @@
-﻿wholeslidedata.buffer.utils
+wholeslidedata.buffer.utils
 ===========================
 
 .. automodule:: wholeslidedata.buffer.utils
