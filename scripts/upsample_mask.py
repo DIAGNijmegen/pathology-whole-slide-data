@@ -5,7 +5,7 @@ import numpy as np
 from wholeslidedata.accessories.asap.imagewriter import WholeSlideMaskWriter
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.iterators import create_patch_iterator
-
+from tqdm import tqdm
 
 def upscale_mask(mask_path, mask_spacing, output_spacing, cpus):
 
@@ -63,7 +63,7 @@ def upscale_mask(mask_path, mask_spacing, output_spacing, cpus):
 @click.option("--cpus", type=int, required=True)
 def main(mask_folder, suffix, mask_spacing, output_spacing, cpus):
     mask_paths = list(mask_folder.glob("*" + suffix))
-    for mask_path in mask_paths:
+    for mask_path in tqdm(mask_paths):
         try:
             upscale_mask(
                 mask_path=mask_path,
