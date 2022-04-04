@@ -57,7 +57,7 @@ def upscale_mask(mask_path, mask_spacing, output_spacing, cpus):
 
 @click.command()
 @click.option("--mask_folder", type=Path, required=True)
-@click.option("--suffix", type=Path, required=True)
+@click.option("--suffix", type=str, required=True)
 @click.option("--mask_spacing", type=float, required=True)
 @click.option("--output_spacing", type=float, required=True)
 @click.option("--cpus", type=int, required=True)
