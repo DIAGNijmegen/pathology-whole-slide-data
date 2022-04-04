@@ -22,7 +22,10 @@ def upscale_mask(mask_path, mask_spacing, output_spacing, cpus):
 
     writer = WholeSlideMaskWriter()
 
-    output_path = mask_path.parent / mask_path.name.replace(
+    output_folder: Path = mask_path.parent / f"spacing@{str(output_spacing).replace('.','_')}"
+    output_folder.mkdir(parents=True, exist_ok=True)
+
+    output_path = output_folder / mask_path.name.replace(
         ".tif", f"@{str(output_spacing).replace('.','_')}.tif"
     )
     print(f"Upscaling: {mask_path} @ {mask_spacing}")
