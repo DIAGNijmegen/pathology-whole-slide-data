@@ -72,3 +72,7 @@ def main(mask_folder, suffix, mask_spacing, output_spacing, cpus):
             print(f"Error processing {mask_path}")
             print(e)
             print("--------------")
+
+
+if __name__ == "__main__":
+    main()
