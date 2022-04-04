@@ -1,5 +1,5 @@
 from concurrentbuffer.commander import Commander
-
+import sys
 class PatchCommander(Commander):
     def __init__(self, info_queue, x_dims: int, y_dims: int, spacing: float, tile_size: int = 1024):
         self._x_dims = x_dims
