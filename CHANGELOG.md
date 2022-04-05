@@ -1,12 +1,21 @@
 # Changelog
 ---
+#### **Upcoming** (0.0.14)  
 
+### (0.0.13)  (**Latest**)
 
-#### **Upcoming** (0.0.13)
+**refactoring**
+- renamed orginal_path to original_path in File
+
+**new features:**
+- added patch iterator
+
+**bug fixes:**
+- install of 0.0.12 failed due to not finding requirements.txt. Requirements are now again specified in the setup.py. 
 
 ---
 
-### 0.0.12  (**Latest**)
+### 0.0.12 
 
 **breaking changes**
  - specific code for external software has been moved to accessories
@@ -33,7 +42,7 @@
  - fix for randomness in uniform point sampler 
 
 **setup file**
- - version is read from verion.py
+ - version is read from version.py
  - requirements are now read from the requirements file (contribution by Thijs Gelton)
  - url now points to github repo (contribution by Jakub Kaczmarzyk)
   
