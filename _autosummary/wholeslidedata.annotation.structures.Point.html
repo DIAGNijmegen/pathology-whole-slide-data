@@ -970,8 +970,8 @@ There are 2 cases:</p></td>
 <tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.covers" title="wholeslidedata.annotation.structures.Point.covers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">covers</span></code></a>(other)</p></td>
 <td><p>Returns True if the geometry covers the other, else False</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create</span></code>(type, *args, **kwargs)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.create" title="wholeslidedata.annotation.structures.Point.create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create</span></code></a>(type, *args, **kwargs)</p></td>
+<td><p>Creates from registrant a type or instance</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.annotation.structures.Point.crosses" title="wholeslidedata.annotation.structures.Point.crosses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crosses</span></code></a>(other)</p></td>
 <td><p>Returns True if the geometries cross, else False</p></td>
@@ -1344,6 +1344,21 @@ triangular polygon.</p>
 <dt class="sig sig-object py" id="wholeslidedata.annotation.structures.Point.covers">
 <span class="sig-name descname"><span class="pre">covers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.annotation.structures.Point.covers" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns True if the geometry covers the other, else False</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wholeslidedata.annotation.structures.Point.create">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">type</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.annotation.structures.Point.create" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates from registrant a type or instance</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>registrant_name (Union[str, type]): name of the registrant that should be created
+return_type (bool, optional): if True only the type of the registrant is returened otherwise it will create and return an instance. Defaults to False.</p>
+</dd>
+<dt>Raises:</dt><dd><p>RegistrantNotRegisteredError: raises when the registrant is nog registered</p>
+</dd>
+<dt>Returns:</dt><dd><p>Any: type or instance of the registrant</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">

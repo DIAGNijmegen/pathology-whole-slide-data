@@ -937,8 +937,8 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.close" title="wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.close"><code class="xref py py-obj docutils literal notranslate"><span class="pre">close</span></code></a>()</p></td>
 <td><p>Close the OpenSlide object.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create</span></code>(registrant_name[, return_type])</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.create" title="wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create</span></code></a>(registrant_name[, return_type])</p></td>
+<td><p>Creates from registrant a type or instance</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.detect_format" title="wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.detect_format"><code class="xref py py-obj docutils literal notranslate"><span class="pre">detect_format</span></code></a>(filename)</p></td>
 <td><p>Return a string describing the format vendor of the specified file.</p></td>
@@ -1030,6 +1030,21 @@ are not premultiplied.</p>
 <dt class="sig sig-object py" id="wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.close">
 <span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wholeslidedata/accessories/openslide/backend.html#OpenSlideWholeSlideImageBackend.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.close" title="Permalink to this definition">#</a></dt>
 <dd><p>Close the OpenSlide object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.create">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registrant_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">type</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.accessories.openslide.backend.OpenSlideWholeSlideImageBackend.create" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates from registrant a type or instance</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>registrant_name (Union[str, type]): name of the registrant that should be created
+return_type (bool, optional): if True only the type of the registrant is returened otherwise it will create and return an instance. Defaults to False.</p>
+</dd>
+<dt>Raises:</dt><dd><p>RegistrantNotRegisteredError: raises when the registrant is nog registered</p>
+</dd>
+<dt>Returns:</dt><dd><p>Any: type or instance of the registrant</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">

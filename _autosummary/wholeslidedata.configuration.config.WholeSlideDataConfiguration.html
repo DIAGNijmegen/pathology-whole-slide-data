@@ -950,8 +950,8 @@
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create</span></code>(class_type, config_value, *args, **kwargs)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wholeslidedata.configuration.config.WholeSlideDataConfiguration.create" title="wholeslidedata.configuration.config.WholeSlideDataConfiguration.create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create</span></code></a>(class_type, config_value, *args, **kwargs)</p></td>
+<td><p>Creates from registrant a type or instance</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fromkeys</span></code>(iterable[, value])</p></td>
 <td><p></p></td>
@@ -1055,6 +1055,21 @@
 <dt class="sig sig-object py" id="wholeslidedata.configuration.config.WholeSlideDataConfiguration.clear">
 <span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None.</span>&#160; <span class="pre">Remove</span> <span class="pre">all</span> <span class="pre">items</span> <span class="pre">from</span> <span class="pre">D.</span></span></span><a class="headerlink" href="#wholeslidedata.configuration.config.WholeSlideDataConfiguration.clear" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wholeslidedata.configuration.config.WholeSlideDataConfiguration.create">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">class_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">creationism.configuration.config.Config</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wholeslidedata.configuration.config.WholeSlideDataConfiguration.create" title="Permalink to this definition">#</a></dt>
+<dd><p>Creates from registrant a type or instance</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>registrant_name (Union[str, type]): name of the registrant that should be created
+return_type (bool, optional): if True only the type of the registrant is returened otherwise it will create and return an instance. Defaults to False.</p>
+</dd>
+<dt>Raises:</dt><dd><p>RegistrantNotRegisteredError: raises when the registrant is nog registered</p>
+</dd>
+<dt>Returns:</dt><dd><p>Any: type or instance of the registrant</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wholeslidedata.configuration.config.WholeSlideDataConfiguration.get">
