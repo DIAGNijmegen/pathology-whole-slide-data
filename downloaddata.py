@@ -2,6 +2,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from black import main
+
 try:
     import gdown
 except ImportError:
@@ -30,3 +32,8 @@ def download_example_data(output_folder=Path("/tmp/")):
     _download(output_folder, WSI_DOWNLOAD_LINK, WSI_NAME)
     _download(output_folder, WSA_DOWNLOAD_LINK, WSA_NAME)
     _download(output_folder, WSM_DOWNLOAD_LINK, WSM_NAME)
+
+
+
+if __name__ == "__main__":
+    download_example_data()
