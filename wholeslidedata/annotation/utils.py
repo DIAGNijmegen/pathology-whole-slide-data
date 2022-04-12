@@ -140,7 +140,7 @@ def plot_annotations(
         )
 
         if use_base_coordinates:
-            coordinates = annotation.base_coordinates
+            coordinates = annotation.base_coordinates * scale
         else:
             coordinates = annotation.coordinates * scale
 
