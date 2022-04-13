@@ -214,6 +214,11 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spacings</span><span class="p">[</span><span class="n">level</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">get_slide</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spacing</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">spacing</span> <span class="o">&lt;</span> <span class="mf">2.0</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Trying to load slide at spacing&lt;2.0...&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+
         <span class="n">level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_level_from_spacing</span><span class="p">(</span><span class="n">spacing</span><span class="p">)</span>
         <span class="n">shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shapes</span><span class="p">[</span><span class="n">level</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_patch</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -230,6 +235,10 @@
     <span class="k">def</span> <span class="nf">get_downsampling_from_spacing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spacing</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_level_from_spacing</span><span class="p">(</span><span class="n">spacing</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_downsampling_from_level</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_shape_from_spacing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spacing</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_level_from_spacing</span><span class="p">(</span><span class="n">spacing</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shapes</span><span class="p">[</span><span class="n">level</span><span class="p">]</span>
 
 <div class="viewcode-block" id="WholeSlideImage.get_patch"><a class="viewcode-back" href="../../../_autosummary/wholeslidedata.image.wholeslideimage.WholeSlideImage.html#wholeslidedata.image.wholeslideimage.WholeSlideImage.get_patch">[docs]</a>    <span class="k">def</span> <span class="nf">get_patch</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>

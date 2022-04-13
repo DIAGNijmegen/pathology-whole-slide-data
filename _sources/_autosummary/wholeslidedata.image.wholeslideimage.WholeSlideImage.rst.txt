@@ -1,4 +1,4 @@
-wholeslidedata.image.wholeslideimage.WholeSlideImage
+﻿wholeslidedata.image.wholeslideimage.WholeSlideImage
 ====================================================
 
 .. currentmodule:: wholeslidedata.image.wholeslideimage
@@ -24,6 +24,7 @@ wholeslidedata.image.wholeslideimage.WholeSlideImage
       ~WholeSlideImage.get_level_from_spacing
       ~WholeSlideImage.get_patch
       ~WholeSlideImage.get_real_spacing
+      ~WholeSlideImage.get_shape_from_spacing
       ~WholeSlideImage.get_slide
    
    
