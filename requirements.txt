@@ -9,3 +9,4 @@ openslide-python>=1.1.1
 PyYAML>=5.4.1
 albumentations>=1.1.0
 jsonschema>=4.4.0
+matplotlib>=3.3.1
