@@ -85,7 +85,6 @@ class AnnotationCountedLabelSampler(LabelSampler):
 class BalancedLabelSampler(LabelSampler):
     def __init__(self, labels: List[str], seed: int = 123, random_reset=False):
         super().__init__(labels=labels, seed=seed)
-        np.random.shuffle(self._labels)
         self._labels_cycle = iter(self._labels)
         self._random_reset = random_reset
         self.reset()
