@@ -120,19 +120,13 @@ def resolve_classification_batch(y_batch):
 """Plotting"""
 
 
-def plot_batch(x_batch, y_batch, output_shape=None, axes=None):
-    if axes is not None and len(axes) != len(x_batch) * 2:
-        raise ValueError(
-            f"axes dims {len(axes)}  do not correspond to samples {len(x_batch)} in batch"
-        )
-
+def plot_batch(x_batch, y_batch, alpha=0.4, size=(20,5)):
+    fig, axes = plt.subplots(1, len(x_batch), figsize=size)
     for batch_index in range(len(x_batch)):
-        if axes is None:
-            fig, axes = plt.subplots(1, 2, figsize=(10, 10))
-        plot_patch(x_batch[batch_index], axes=axes[0])
-        # plot_mask(y_batch[batch_index], axes=axes[1], output_shape=output_shape)
-        if axes is None:
-            plt.show()
+        axes[batch_index].imshow(x_batch[batch_index])
+        plot_mask(y_batch[batch_index], axes=axes[batch_index], alpha=alpha)
+    plt.tight_layout()
+    plt.show()
 
 
 def plot_batch_overlay(x_batch, y_batch, output_shape=None):
