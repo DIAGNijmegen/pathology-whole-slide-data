@@ -87,6 +87,11 @@ class WholeSlideImage:
         return self._spacings[level]
 
     def get_slide(self, spacing):
+        if spacing < 2.0:
+            warnings.warn(
+                f"Trying to load slide at spacing<2.0...",
+            )
+
         level = self.get_level_from_spacing(spacing)
         shape = self.shapes[level]
         return self.get_patch(0, 0, *shape, spacing, center=False)
@@ -103,6 +108,10 @@ class WholeSlideImage:
     def get_downsampling_from_spacing(self, spacing: float) -> float:
         level = self.get_level_from_spacing(spacing)
         return self.get_downsampling_from_level(level)
+
+    def get_shape_from_spacing(self, spacing: float) -> float:
+        level = self.get_level_from_spacing(spacing)
+        return self.shapes[level]
 
     def get_patch(
         self,
