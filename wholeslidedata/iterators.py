@@ -146,7 +146,7 @@ def create_batch_iterator(
     if number_of_batches is not None:
         total_annotations = 0
         for label_name in dataset.sample_labels.names:
-            total_annotations += dataset.annotations_per_label[label_name],
+            total_annotations += dataset.annotations_per_label[label_name]
 
         number_of_batches, redundant = get_number_of_batches(
             number_of_batches=number_of_batches,
