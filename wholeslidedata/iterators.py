@@ -11,6 +11,7 @@ from wholeslidedata.buffer.patchproducer import PatchProducer
 from wholeslidedata.buffer.utils import create_buffer_factory
 from wholeslidedata.configuration.config import WholeSlideDataConfiguration
 from wholeslidedata.configuration.utils import get_buffer_shape, get_dataset
+from wholeslidedata.dataset import WholeSlideDataSet
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
 
 
@@ -143,9 +144,13 @@ def create_batch_iterator(
 
     redundant = 0
     if number_of_batches is not None:
+        total_annotations = 0
+        for label_name in dataset.sample_labels.names:
+            total_annotations += dataset.annotations_per_label[label_name],
+
         number_of_batches, redundant = get_number_of_batches(
             number_of_batches=number_of_batches,
-            total_annotations=dataset.annotation_counts,
+            total_annotations=total_annotations,
             batch_size=batch_size,
         )
 
