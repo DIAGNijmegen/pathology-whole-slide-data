@@ -70,6 +70,9 @@ class Annotation(RegistrantFactory, geometry.base.BaseGeometry):
 @Annotation.register(("point", "dot"))
 class Point(geometry.Point, Annotation):
     def __init__(self, index, label, coordinates):
+        if len(coordinates) == 1 and len(coordinates[0]) == 2:
+            coordinates = coordinates[0]
+            
         geometry.Point.__init__(self, coordinates)
         Annotation.__init__(self, index=index, label=label, coordinates=coordinates)
 
