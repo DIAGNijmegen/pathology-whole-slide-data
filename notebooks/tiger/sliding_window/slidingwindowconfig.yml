@@ -1,0 +1,54 @@
+wholeslidedata:
+    default:
+    
+        # use 'folders' preset in batch iterator -- images are /input  
+        image_sources:
+            folder: /input/
+
+        # use 'folders' preset in batch iterator -- masks are /input/images
+        annotation_sources:
+            folder: /input/images/
+        
+        # simple label map for tissue/roi
+        label_map: 
+            tissue: 1
+      
+        # Mask Annotation Parser, converts the mask to annotations
+        annotation_parser@replace=true: 
+            module: wholeslidedata.annotation.parser
+            attribute: MaskAnnotationParser
+            processing_spacing: 4.0
+            output_spacing: 0.5
+            shape: [256, 256]
+        
+        # Image/masks names are random on grand-challenge so we have to associate them assuming that there is only 1 image and 1 mask
+        associations:
+            associator: 
+                module: wholeslidedata.source.associations
+                attribute: AnyOneAssociater
+        
+        # example of batch shape if your model has input 512,512,3
+        batch_shape:
+            batch_size: 1
+            shape: [512, 512, 3]
+            spacing: 0.5
+        
+        # OrderedAnnotationSampler such that the patches and masks are generated in sliding window fashion
+        annotation_sampler:
+            attribute: OrderedAnnotationSampler
+        
+        # Use center point Sampler to sample point
+        point_sampler:
+            attribute: CenterPointSampler
+          
+        # set center to True in patch sampler to extract patches based on center point
+        patch_sampler:
+            center: True
+          
+        # sample the mask values corresponding to the patch as a 'segmentation' mask. Usefull to mask out regions outside the roi
+        patch_label_sampler:
+            attribute: MaskPatchLabelSampler
+            image_backend: 'asap'
+            ratio: 1.0
+            center: True
+            relative: True
