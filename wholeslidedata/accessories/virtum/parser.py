@@ -8,7 +8,7 @@ class VirtumAsapAnnotationParser(AnnotationParser):
     @staticmethod
     def get_available_labels(opened_annotation):
         name_to_group = {}
-        for parent in tree.getroot():
+        for parent in opened_annotation.getroot():
             for child in parent:
                 if child.tag == "Group":
                     group = child
@@ -19,7 +19,7 @@ class VirtumAsapAnnotationParser(AnnotationParser):
                             name_to_group[group.attrib.get("Name")] = group.attrib.get(
                                 "PartOfGroup"
                             )
-        return name_to_group
+        return Labels.create(set(list(name_to_group.values())))
                              
     def _parse(self, path):
         tree = ET.parse(path)
