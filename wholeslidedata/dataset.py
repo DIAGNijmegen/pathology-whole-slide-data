@@ -145,7 +145,7 @@ class WholeSlideDataSet(DataSet):
             wsi_file.copy(self._copy_path)
         if self._load_images:
             return wsi_file.open()
-        return wsi_file.path
+        return wsi_file
 
     def _open_annotation(self, wsa_file: WholeSlideAnnotationFile, labels):
         if self._copy_path:
