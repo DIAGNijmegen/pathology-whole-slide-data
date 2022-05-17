@@ -47,9 +47,8 @@ class SampleSampler:
         pixel_spacing: float,
     ):
 
-        patch = self._patch_sampler.sample(wsi, point, patch_shape[:2], pixel_spacing)
+        patch, ratio = self._patch_sampler.sample(wsi, point, patch_shape[:2], pixel_spacing)
 
-        ratio = wsi.get_downsampling_from_spacing(pixel_spacing)
         label = self._patch_label_sampler.sample(
             wsa=wsa,
             point=point,
