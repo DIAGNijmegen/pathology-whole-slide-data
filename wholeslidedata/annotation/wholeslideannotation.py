@@ -50,16 +50,16 @@ class WholeSlideAnnotation:
         Raises:
             FileNotFoundError: if annotation file is not found
         """
-        
-        self._annotation_path = Path(annotation_path)
 
-        if not self._annotation_path.exists():
-            raise FileNotFoundError(self._annotation_path)
+        self._annotation_path = annotation_path # Path(annotation_path)
+
+        # if not self._annotation_path.exists():
+        #     raise FileNotFoundError(self._annotation_path)
 
         if parser is None:
             parser = DEFAULT_PARSERS[
                 WholeSlideAnnotationExtension.get_registrant(
-                    self._annotation_path.suffix
+                    '.xml' #self._annotation_path.suffix
                 )
             ]
 
