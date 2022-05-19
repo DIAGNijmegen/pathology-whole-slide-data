@@ -123,9 +123,9 @@ class HedCallback(BatchCallback):
         d *= np.random.randint(2, size=(batch_size))
 
         for i, (hv, ev, db) in enumerate(zip(h, e, d)):
-            x_batch_hed[..., i, :, :, 0] += hv
-            x_batch_hed[..., i, :, :, 1] += ev
-            x_batch_hed[..., i, :, :, 2] += db
+            x_batch_hed[i, ..., 0] += hv
+            x_batch_hed[i, ..., 1] += ev
+            x_batch_hed[i, ..., 2] += db
 
         ihc_rgb = skimage.color.hed2rgb(x_batch_hed)
         ihc = np.clip(a=ihc_rgb * 255, a_min=0, a_max=255)

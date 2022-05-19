@@ -26,13 +26,15 @@ class PatchSampler:
                 relative=self._relative,
             )
         )
-
+        
+        ratio = wsi.get_downsampling_from_spacing(pixel_spacing)
+        
         if not image_opened:
             wsi.close()
             wsi = None
             del wsi
 
-        return patch.astype(np.uint8)
+        return patch.astype(np.uint8), ratio
 
 
 
