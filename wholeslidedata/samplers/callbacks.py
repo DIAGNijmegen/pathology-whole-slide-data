@@ -102,15 +102,17 @@ class HedCallback(BatchCallback):
         self._hem = hem
         self._eos = eos
         self._dab = dab
+        self._probability = probability
 
     def __call__(self, x_batch: np.ndarray, y_batch: np.ndarray):
-
-        if np.random.randint(2) < 1:
+        batch_size = len(x_batch)
+        
+        probs = np.random.uniform(size=batch_size)
+        if np.all(probs > self._probability):
             return x_batch, y_batch
 
         _type = type(x_batch)
         x_batch = np.array(x_batch)
-        batch_size = x_batch.shape[0]
 
         x_batch_hed = skimage.color.rgb2hed(x_batch / 255)
 
@@ -123,6 +125,8 @@ class HedCallback(BatchCallback):
         d *= np.random.randint(2, size=(batch_size))
 
         for i, (hv, ev, db) in enumerate(zip(h, e, d)):
+            if probs[i] > self._probability:
+                continue
             x_batch_hed[i, ..., 0] += hv
             x_batch_hed[i, ..., 1] += ev
             x_batch_hed[i, ..., 2] += db
