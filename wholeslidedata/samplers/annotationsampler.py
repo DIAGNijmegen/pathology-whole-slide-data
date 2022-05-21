@@ -79,78 +79,74 @@ class BalancedAnnotationSampler(AnnotationSampler):
             self._reset_label(label)
 
 
-@AnnotationSampler.register(("weighted",))
-class WeightedAnnotationSampler(AnnotationSampler):
-    def __init__(
-        self,
-        counts_per_label,
-        seed,
-        samples,
-        standard_weight=0.2,
-        normalize_value=255.0,
-    ):
-        super().__init__(counts_per_label, seed=seed)
-        self._Annotationes = {
-            label: list(range(counts))
-            for label, counts in self._counts_per_label.items()
-        }
-        self._Annotation_weights = {}
-        for label_name, annotations in samples.items():
-            label_weights = []
-            for annotation in annotations:
-                if annotation.label.weight is not None:
-                    label_weights.append(annotation.label.weight / normalize_value)
-                else:
-                    label_weights.append(standard_weight)
-            label_weights = np.array(label_weights)
-            self._Annotation_weights[label_name] = label_weights / sum(label_weights)
+# @AnnotationSampler.register(("weighted",))
+# class WeightedAnnotationSampler(AnnotationSampler):
+#     def __init__(
+#         self,
+#         counts_per_label,
+#         seed,
+#         samples,
+#         standard_weight=0.2,
+#         normalize_value=255.0,
+#     ):
+#         super().__init__(counts_per_label, seed=seed)
+#         self._Annotationes = {
+#             label: list(range(counts))
+#             for label, counts in self._counts_per_label.items()
+#         }
+#         self._Annotation_weights = {}
+#         for label_name, annotations in samples.items():
+#             label_weights = []
+#             for annotation in annotations:
+#                 if annotation.label.weight is not None:
+#                     label_weights.append(annotation.label.weight / normalize_value)
+#                 else:
+#                     label_weights.append(standard_weight)
+#             label_weights = np.array(label_weights)
+#             self._Annotation_weights[label_name] = label_weights / sum(label_weights)
 
-    def _next(self, label):
-        return np.random.choice(
-            self._Annotationes[label], 1, p=self._Annotation_weights[label]
-        )[0]
+#     def _next(self, label):
+#         return np.random.choice(
+#             self._Annotationes[label], 1, p=self._Annotation_weights[label]
+#         )[0]
 
-    def update(self, data):
-        pass
+#     def update(self, data):
+#         pass
 
-    def _reset_label(self, label):
-        pass
+#     def _reset_label(self, label):
+#         pass
 
-    def reset(self):
-        super().set_seed()
+#     def reset(self):
+#         super().set_seed()
 
 
 @AnnotationSampler.register(("area",))
 class AreaAnnotationSampler(AnnotationSampler):
-    def __init__(self, counts_per_label, seed, samples, weight=1.0):
+    def __init__(self, counts_per_label, seed, dataset, weight=1.0):
         super().__init__(counts_per_label, seed=seed)
-
+        self._dataset = dataset
         self._weight = weight
-        self._area_Annotation_map = {label: {} for label in counts_per_label}
+        self._area_annotation_map = {label: {} for label in counts_per_label}
         self._total_area = {label: 0 for label in counts_per_label}
 
-        # calculate here to save time in __next__
-        self._area_Annotationes = {
+        self._area_annotations = {
             label: np.zeros(counts) for label, counts in counts_per_label.items()
         }
 
-        for label, values in samples.items():
-            for annotation_Annotation, annotation in enumerate(values):
-                self._area_Annotation_map[label][
-                    self._total_area[label]
-                ] = annotation_Annotation
-                self._area_Annotationes[label][
-                    annotation_Annotation
-                ] = self._total_area[label]
+        for label, sample_references in dataset.sample_references.items():
+            for annotation_index, sample_reference in enumerate(sample_references):
+                annotation = self._dataset.get_annotation_from_reference(sample_reference)
+                # make map dict where every increase value has its own range
+                self._area_annotation_map[label][self._total_area[label]] = annotation_index
+                self._area_annotations[label][annotation_index] = self._total_area[label]
                 self._total_area[label] += annotation.area ** self._weight
-
         self.reset()
 
     def _next(self, label):
-        rint = np.random.randint(self._total_area[label])
-        area_Annotation = np.where((rint >= self._area_Annotationes[label]))[0][-1]
-        return self._area_Annotation_map[label][
-            self._area_Annotationes[label][area_Annotation]
+        rint = self._rng.randint(self._total_area[label])
+        area_annotation = np.where((rint >= self._area_annotations[label]))[0][-1]
+        return self._area_annotation_map[label][
+            self._area_annotations[label][area_annotation]
         ]
 
     def update(self, data):
