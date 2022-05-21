@@ -1,4 +1,4 @@
-wholeslidedata.image
+﻿wholeslidedata.image
 ====================
 
 .. automodule:: wholeslidedata.image

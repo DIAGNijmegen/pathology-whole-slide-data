@@ -1,4 +1,4 @@
-wholeslidedata.labels
+﻿wholeslidedata.labels
 =====================
 
 .. automodule:: wholeslidedata.labels

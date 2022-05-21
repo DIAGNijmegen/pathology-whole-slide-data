@@ -29,7 +29,6 @@ wholeslidedata.source
    :recursive:
 
    wholeslidedata.source.associations
-   wholeslidedata.source.configuration
    wholeslidedata.source.copy
    wholeslidedata.source.files
    wholeslidedata.source.utils

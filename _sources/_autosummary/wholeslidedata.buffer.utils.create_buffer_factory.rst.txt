@@ -1,6 +1,0 @@
-wholeslidedata.buffer.utils.create\_buffer\_factory
-===================================================
-
-.. currentmodule:: wholeslidedata.buffer.utils
-
-.. autofunction:: create_buffer_factory

@@ -30,7 +30,5 @@ wholeslidedata.buffer
 
    wholeslidedata.buffer.batchcommander
    wholeslidedata.buffer.batchproducer
-   wholeslidedata.buffer.patchcommander
-   wholeslidedata.buffer.patchproducer
    wholeslidedata.buffer.utils
 
