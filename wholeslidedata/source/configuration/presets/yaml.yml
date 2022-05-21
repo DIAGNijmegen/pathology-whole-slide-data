@@ -1,0 +1,20 @@
+default:
+  annotation_sources@replace=true:
+    module: wholeslidedata.source.utils
+    attribute: sources_from_yaml_factory
+    file_type: wsa
+    annotation_parser: None
+    mode: ${source:mode.name}
+    yaml_source: ${source:yaml_source}
+    filters: []
+    excludes: []
+
+  image_sources@replace=true:
+    module: wholeslidedata.source.utils
+    attribute: sources_from_yaml_factory
+    file_type: wsi
+    image_backend: None
+    mode: ${source:mode.name}
+    yaml_source: ${source:yaml_source}
+    filters: []
+    excludes: []
