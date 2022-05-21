@@ -2,7 +2,6 @@ from pathlib import Path
 from typing import List, Optional, Union
 
 from shapely import geometry
-from shapely.strtree import STRtree
 from wholeslidedata.annotation import utils as annotation_utils
 from wholeslidedata.annotation.parser import AnnotationParser
 from wholeslidedata.annotation.structures import Annotation, Polygon
@@ -29,8 +28,6 @@ DEFAULT_PARSERS = {
 
 
 class WholeSlideAnnotation:
-    # fix for strtree segmentation fault bug
-
 
     def __init__(
         self,
@@ -115,12 +112,13 @@ class WholeSlideAnnotation:
     def _set_overlapping_annotations(self):
         for annotation_index, annotation in enumerate(self._annotations[:-1]):
             if isinstance(annotation, Polygon):
-                overlap_tree = STRtree(
-                    annotation
-                    for annotation in self._annotations[annotation_index + 1 :]
-                )
-
-                annotation.add_overlapping_annotations(overlap_tree.query(annotation))
+                tree = index.Index()
+                annotation_view = self._annotations[annotation_index + 1 :]
+                for pos, annotation in enumerate(annotation_view):
+                    tree.insert(pos, annotation.bounds)
+           
+                for pos in tree.intersection(annotation.bounds):
+                    annotation.add_overlapping_annotations(annotation_view[pos])
 
     def select_annotations(
         self, center_x: int, center_y: int, width: int, height: int
