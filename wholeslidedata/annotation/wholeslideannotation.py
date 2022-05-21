@@ -13,7 +13,7 @@ from wholeslidedata.extensions import (
     WholeSlideAnnotationExtension,
 )
 from wholeslidedata.labels import Labels
-
+from rtree import index
 
 def area_sort_with_roi(item):
     if item.label.name in ["roi", "rois", "none"]:
@@ -30,7 +30,7 @@ DEFAULT_PARSERS = {
 
 class WholeSlideAnnotation:
     # fix for strtree segmentation fault bug
-    STREE = {}
+
 
     def __init__(
         self,
@@ -53,7 +53,7 @@ class WholeSlideAnnotation:
         Raises:
             FileNotFoundError: if annotation file is not found
         """
-
+        
         self._annotation_path = Path(annotation_path)
 
         if not self._annotation_path.exists():
@@ -85,7 +85,11 @@ class WholeSlideAnnotation:
         if not ignore_overlap:
             self._set_overlapping_annotations()
 
-        WholeSlideAnnotation.STREE[self] = STRtree(self._annotations)
+        self._tree = index.Index()
+        for pos, annotation in enumerate(self._annotations):
+            self._tree.insert(pos, annotation.bounds)
+
+
 
     @property
     def path(self):
@@ -139,7 +143,9 @@ class WholeSlideAnnotation:
             center_x + width // 2,
             center_y + height // 2,
         )
-        annotations = WholeSlideAnnotation.STREE[self].query(box)
+        
+        annotations = [self._annotations[pos] for pos in self._tree.intersection(box.bounds)]
+        
         if self._sort_by_overlay_index:
             return sorted(
                 annotations,
