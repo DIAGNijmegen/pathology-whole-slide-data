@@ -1,6 +1,6 @@
 from pathlib import Path
-from typing import List, Optional, Union
-
+from typing import Dict, List, Optional, Union
+from collections import defaultdict
 from shapely import geometry
 from wholeslidedata.annotation import utils as annotation_utils
 from wholeslidedata.annotation.parser import AnnotationParser
@@ -13,6 +13,7 @@ from wholeslidedata.extensions import (
 )
 from wholeslidedata.labels import Labels
 from rtree import index
+
 
 def area_sort_with_roi(item):
     if item.label.name in ["roi", "rois", "none"]:
@@ -28,7 +29,6 @@ DEFAULT_PARSERS = {
 
 
 class WholeSlideAnnotation:
-
     def __init__(
         self,
         annotation_path: Union[Path, str],
@@ -86,19 +86,17 @@ class WholeSlideAnnotation:
         for pos, annotation in enumerate(self._annotations):
             self._tree.insert(pos, annotation.bounds)
 
-
-
     @property
     def path(self):
         return self._annotation_path
 
     @property
-    def annotations(self):
-        return self._annotations
-
-    @property
     def labels(self):
         return self._labels
+
+    @property
+    def annotations(self):
+        return self._annotations
 
     @property
     def sampling_annotations(self) -> List[Annotation]:
@@ -108,6 +106,20 @@ class WholeSlideAnnotation:
             List[Annotation]: list of annotations
         """
         return self._sampling_annotations
+
+    @property
+    def annotations_per_label(self) -> Dict[str, List[Annotation]]:
+        return self._get_annotations_per_label(self.annotations)
+
+    @property
+    def sampling_annotations_per_label(self) -> Dict[str, List[Annotation]]:
+        return self._get_annotations_per_label(self.sampling_annotations)
+
+    def _get_annotations_per_label(self, annotations: List[Annotation]) -> Dict[str, List[Annotation]]:
+        annos_per_label = dict()
+        for annotation in annotations:
+            annos_per_label.setdefault(annotation.label.name, []).append(annotation)
+        return annos_per_label
 
     def _set_overlapping_annotations(self):
         for annotation_index, annotation in enumerate(self._annotations[:-1]):
@@ -141,9 +153,11 @@ class WholeSlideAnnotation:
             center_x + width // 2,
             center_y + height // 2,
         )
-        
-        annotations = [self._annotations[pos] for pos in self._tree.intersection(box.bounds)]
-        
+
+        annotations = [
+            self._annotations[pos] for pos in self._tree.intersection(box.bounds)
+        ]
+
         if self._sort_by_overlay_index:
             return sorted(
                 annotations,
