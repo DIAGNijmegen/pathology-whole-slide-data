@@ -51,7 +51,7 @@ class BatchIterator(BufferIterator):
 
         if (
             self._stop_index is not None
-            and self._index == self._stop_index - 2
+            and self._index == self._stop_index
             and self._redundant > 0
         ):
             x_batch = x_batch[: self._redundant]
@@ -66,7 +66,7 @@ class BatchIterator(BufferIterator):
         if self._stop_index is None:
             return False
 
-        if self._index == (self._stop_index - 1):
+        if self._index == self._stop_index:
             self._index = 0
             return True
 
