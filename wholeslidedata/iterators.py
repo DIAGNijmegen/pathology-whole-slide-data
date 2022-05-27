@@ -51,7 +51,7 @@ class BatchIterator(BufferIterator):
 
         if (
             self._stop_index is not None
-            and self._index == self._stop_index - 1
+            and self._index == self._stop_index - 2
             and self._redundant > 0
         ):
             x_batch = x_batch[: self._redundant]
@@ -66,7 +66,7 @@ class BatchIterator(BufferIterator):
         if self._stop_index is None:
             return False
 
-        if self._index == self._stop_index:
+        if self._index == (self._stop_index - 1):
             self._index = 0
             return True
 
@@ -99,7 +99,7 @@ class PatchBufferIterator(BufferIterator):
 
 def get_number_of_batches(number_of_batches, total_annotations, batch_size):
     if number_of_batches == -1:
-        number_of_batches = math.ceil(total_annotations / batch_size) - 1
+        number_of_batches = math.ceil(total_annotations / batch_size)
         redundant = batch_size - (total_annotations % batch_size)
         return number_of_batches, redundant
 
