@@ -99,7 +99,7 @@ class PatchBufferIterator(BufferIterator):
 
 def get_number_of_batches(number_of_batches, total_annotations, batch_size):
     if number_of_batches == -1:
-        number_of_batches = math.ceil(total_annotations / batch_size)
+        number_of_batches = math.ceil(total_annotations / batch_size) - 1
         redundant = batch_size - (total_annotations % batch_size)
         return number_of_batches, redundant
 
