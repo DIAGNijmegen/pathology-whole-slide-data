@@ -14,6 +14,8 @@ from wholeslidedata.extensions import (
 from wholeslidedata.labels import Labels
 from rtree import index
 
+from urllib.parse import urlparse
+
 
 def area_sort_with_roi(item):
     if item.label.name in ["roi", "rois", "none"]:
@@ -51,15 +53,22 @@ class WholeSlideAnnotation:
             FileNotFoundError: if annotation file is not found
         """
 
-        self._annotation_path = annotation_path # Path(annotation_path)
+        if urlparse(annotation_path, allow_fragments=False).scheme == 's3':
+            self._annotation_path = annotation_path
+            annotation_path_suffix = '.xml'
 
-        # if not self._annotation_path.exists():
-        #     raise FileNotFoundError(self._annotation_path)
+        else:
+            self._annotation_path = Path(annotation_path)
+
+            if not self._annotation_path.exists():
+                raise FileNotFoundError(self._annotation_path)
+
+            annotation_path_suffix = self._annotation_path.suffix
 
         if parser is None:
             parser = DEFAULT_PARSERS[
                 WholeSlideAnnotationExtension.get_registrant(
-                    '.xml' #self._annotation_path.suffix
+                    annotation_path_suffix
                 )
             ]
 

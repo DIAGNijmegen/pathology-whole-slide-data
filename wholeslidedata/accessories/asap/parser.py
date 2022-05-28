@@ -36,20 +36,19 @@ class AsapAnnotationParser(AnnotationParser):
         return Labels.create(set(labels))
 
     def _parse(self, path):
-        # tree = ET.parse(path)
-        # opened_annotation = tree.getroot()
 
-        s3_url_parse = urlparse(path, allow_fragments=False)
+        if urlparse(path, allow_fragments=False).scheme == 's3':
+            s3_url_parse = urlparse(path, allow_fragments=False)
+            s3_bucket_name = s3_url_parse.netloc
+            s3_path = s3_url_parse.path.lstrip('/')
+            boto_obj = boto_resource.Object(s3_bucket_name, s3_path)
+            xmldata = boto_obj.get()["Body"].read().decode('utf-8')
+            opened_annotation = ET.fromstring(xmldata)
+            
+        else:
+            tree = ET.parse(path)
+            opened_annotation = tree.getroot()
 
-        s3_bucket_name = s3_url_parse.netloc
-
-        s3_path = s3_url_parse.path.lstrip('/')
-
-        boto_obj = boto_resource.Object(s3_bucket_name, s3_path)
-
-        xmldata = boto_obj.get()["Body"].read().decode('utf-8')
-
-        opened_annotation = ET.fromstring(xmldata)
 
         labels = self._get_labels(opened_annotation)
         for parent in opened_annotation:
