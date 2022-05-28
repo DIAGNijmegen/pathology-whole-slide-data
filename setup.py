@@ -24,6 +24,7 @@ setup(
         "openslide-python>=1.1.1",
         "PyYAML>=5.4.1",
         "jsonschema>=4.4.0",
+        "rtree==1.0.0",
     ],
     long_description="Package for working with whole slide images.",
 )
