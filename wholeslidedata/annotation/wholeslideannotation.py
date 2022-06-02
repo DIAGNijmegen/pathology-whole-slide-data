@@ -14,7 +14,7 @@ from wholeslidedata.extensions import (
 from wholeslidedata.labels import Labels
 from rtree import index
 
-from urllib.parse import urlparse
+from wholeslidedata.accessories.s3.read_annotations import ReadAnnotationsFromS3
 
 
 def area_sort_with_roi(item):
@@ -38,6 +38,7 @@ class WholeSlideAnnotation:
         parser: AnnotationParser = None,
         sort_by_overlay_index: bool = False,
         ignore_overlap: bool = True,
+        storage_source = 'local'
     ):
         """WholeSlideAnnotation contains all annotions of an whole slide image
 
@@ -53,10 +54,9 @@ class WholeSlideAnnotation:
             FileNotFoundError: if annotation file is not found
         """
 
-        if urlparse(annotation_path, allow_fragments=False).scheme == 's3':
-            self._annotation_path = annotation_path
-            annotation_path_suffix = '.xml'
-
+        if storage_source == 's3':
+            self._annotation_path, annotation_path_suffix = ReadAnnotationsFromS3.get_annotation_path_and_suffix(
+                                                                                annotation_path)
         else:
             self._annotation_path = Path(annotation_path)
 
@@ -75,7 +75,7 @@ class WholeSlideAnnotation:
         self._annotation_parser: AnnotationParser = AnnotationParser.create(
             parser, labels=labels
         )
-        self._annotations = self._annotation_parser.parse(annotation_path)
+        self._annotations = self._annotation_parser.parse(annotation_path, storage_source)
 
         self._sort_by_overlay_index = sort_by_overlay_index
         self._labels = annotation_utils.get_labels_in_annotations(self.annotations)
