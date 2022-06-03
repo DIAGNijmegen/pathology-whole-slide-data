@@ -55,8 +55,13 @@ class WholeSlideAnnotation:
 
         if parser == 's3asap':
 
-            s3_obj_status_code = S3AsapAnnotationParser.get_boto_obj(annotation_path).get()[
-                                                                    'ResponseMetadata']['HTTPStatusCode']
+            try:
+                s3_obj_status_code = S3AsapAnnotationParser.get_boto_obj(annotation_path).get()[
+                                                                                'ResponseMetadata']['HTTPStatusCode']
+                
+            except Exception as e:
+                print('could not check if s3 file exists - please check input s3 url')
+
             
             if s3_obj_status_code == 200:
                 self._annotation_path = annotation_path
