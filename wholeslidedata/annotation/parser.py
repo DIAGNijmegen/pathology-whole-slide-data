@@ -112,9 +112,9 @@ class AnnotationParser(RegistrantFactory):
                 renamed_label[key] = value
         return renamed_label
 
-    def parse(self, path, storage_source) -> List[Annotation]:
+    def parse(self, path) -> List[Annotation]:
         annotations = []
-        for index, annotation in enumerate(self._parse(path, storage_source)):
+        for index, annotation in enumerate(self._parse(path)):
             annotation["index"] = index
             annotation["coordinates"] = (
                 np.array(annotation["coordinates"]) * self._scaling

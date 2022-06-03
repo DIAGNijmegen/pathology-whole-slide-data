@@ -14,7 +14,7 @@ from wholeslidedata.extensions import (
 from wholeslidedata.labels import Labels
 from rtree import index
 
-from wholeslidedata.accessories.s3.read_annotations import ReadAnnotationsFromS3
+from wholeslidedata.accessories.s3.parser import S3AsapAnnotationParser
 
 
 def area_sort_with_roi(item):
@@ -37,8 +37,7 @@ class WholeSlideAnnotation:
         labels: Optional[Union[Labels, list, tuple, dict]] = None,
         parser: AnnotationParser = None,
         sort_by_overlay_index: bool = False,
-        ignore_overlap: bool = True,
-        storage_source = 'local'
+        ignore_overlap: bool = True
     ):
         """WholeSlideAnnotation contains all annotions of an whole slide image
 
@@ -54,9 +53,18 @@ class WholeSlideAnnotation:
             FileNotFoundError: if annotation file is not found
         """
 
-        if storage_source == 's3':
-            self._annotation_path, annotation_path_suffix = ReadAnnotationsFromS3.get_annotation_path_and_suffix(
-                                                                                annotation_path)
+        if parser == 's3asap':
+
+            s3_obj_status_code = S3AsapAnnotationParser.get_boto_obj(annotation_path).get()[
+                                                                    'ResponseMetadata']['HTTPStatusCode']
+            
+            if s3_obj_status_code == 200:
+                self._annotation_path = annotation_path
+                annotation_path_suffix = '.xml'
+            else:
+                print('given s3 url is not publicly accessible')
+                raise FileNotFoundError(annotation_path)
+            
         else:
             self._annotation_path = Path(annotation_path)
 
@@ -75,7 +83,7 @@ class WholeSlideAnnotation:
         self._annotation_parser: AnnotationParser = AnnotationParser.create(
             parser, labels=labels
         )
-        self._annotations = self._annotation_parser.parse(annotation_path, storage_source)
+        self._annotations = self._annotation_parser.parse(annotation_path)
 
         self._sort_by_overlay_index = sort_by_overlay_index
         self._labels = annotation_utils.get_labels_in_annotations(self.annotations)

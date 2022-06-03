@@ -7,8 +7,6 @@ from wholeslidedata.annotation.parser import (
 )
 from wholeslidedata.labels import Labels
 
-from wholeslidedata.accessories.s3.read_annotations import ReadAnnotationsFromS3
-
 @AnnotationParser.register(("asap",))
 class AsapAnnotationParser(AnnotationParser):
 
@@ -28,16 +26,19 @@ class AsapAnnotationParser(AnnotationParser):
                 if child.tag == "Annotation":
                     labels.append(child.attrib.get("PartOfGroup").lower().strip())
         return Labels.create(set(labels))
+        
 
-    def _parse(self, path, storage_source):
+    def _open_annotation(self, path):
 
-        if storage_source == 's3':
-            opened_annotation = ReadAnnotationsFromS3.return_opened_annotation(path)
+        tree = ET.parse(path)
+        opened_annotation = tree.getroot()
 
-        else:
-            tree = ET.parse(path)
-            opened_annotation = tree.getroot()
+        return opened_annotation
 
+
+    def _parse(self, path):
+
+        opened_annotation = self._open_annotation(path)
 
         labels = self._get_labels(opened_annotation)
         for parent in opened_annotation:
