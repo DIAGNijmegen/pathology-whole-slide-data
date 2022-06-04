@@ -1,4 +1,3 @@
-from pathlib import Path
 import xml.etree.ElementTree as ET
 from urllib.parse import urlparse
 
@@ -16,7 +15,7 @@ from wholeslidedata.annotation.parser import AnnotationParser, CloudAnnotationPa
 class S3Parser(CloudAnnotationParser):
     @classmethod
     def get_boto_obj(cls, path: str):
-        s3_url_parse = urlparse(str(path), allow_fragments=False)
+        s3_url_parse = urlparse(path, allow_fragments=False)
         s3_bucket_name = s3_url_parse.netloc
         s3_path = s3_url_parse.path.lstrip("/")
         boto_obj = boto_resource.Object(s3_bucket_name, s3_path)
@@ -29,7 +28,7 @@ class S3Parser(CloudAnnotationParser):
             s3_obj_status_code = cls.get_boto_obj(path).get()["ResponseMetadata"][
                 "HTTPStatusCode"
             ]
-        except ClientError as e:
+        except ClientError:
             raise FileNotFoundError(
                 f"Could not retreive boto object while retreiving status code for path: \n{path}"
             )
