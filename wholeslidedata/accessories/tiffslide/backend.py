@@ -1,14 +1,20 @@
-from typing import List, Tuple
+import warnings
+from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 from wholeslidedata.image.backend import UnsupportedVendorError, WholeSlideImageBackend
 
+warnings.filterwarnings("ignore", ".*aliasing tiffslide.TiffSlide.*")
 from tiffslide import OpenSlide
+
 
 @WholeSlideImageBackend.register(("tiffslide",))
 class OpenSlideWholeSlideImageBackend(OpenSlide, WholeSlideImageBackend):
-    def __init__(self, path: str) -> None:
-        OpenSlide.__init__(self, str(path), storage_options={'anon': True})
+    def __init__(self, path: str, storage_options: Optional[Dict] = None) -> None:
+        if storage_options is None:
+            storage_options = {"anon": True}
+
+        OpenSlide.__init__(self, str(path), storage_options=storage_options)
         WholeSlideImageBackend.__init__(self, path)
 
     def get_patch(

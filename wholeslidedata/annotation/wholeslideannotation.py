@@ -1,6 +1,5 @@
 from pathlib import Path
 from typing import Dict, List, Optional, Union
-from collections import defaultdict
 from shapely import geometry
 from wholeslidedata.annotation import utils as annotation_utils
 from wholeslidedata.annotation.parser import AnnotationParser
@@ -13,8 +12,6 @@ from wholeslidedata.extensions import (
 )
 from wholeslidedata.labels import Labels
 from rtree import index
-
-from wholeslidedata.accessories.s3.parser import S3AsapAnnotationParser
 
 
 def area_sort_with_roi(item):
@@ -49,46 +46,20 @@ class WholeSlideAnnotation:
             sort_by_overlay_index (bool, optional): if true, selecting annotions will be sorted by overlay index when . Defaults to False.
             ignore_overlap (bool, optional): if true overlapping annotations will be not set. Defaults to True.
 
-        Raises:
-            FileNotFoundError: if annotation file is not found
         """
-
-        if parser == 's3asap':
-
-            try:
-                s3_obj_status_code = S3AsapAnnotationParser.get_boto_obj(annotation_path).get()[
-                                                                                'ResponseMetadata']['HTTPStatusCode']
-                
-            except Exception as e:
-                print('could not check if s3 file exists - please check input s3 url')
-
-            
-            if s3_obj_status_code == 200:
-                self._annotation_path = annotation_path
-                annotation_path_suffix = '.xml'
-            else:
-                print('given s3 url is not publicly accessible')
-                raise FileNotFoundError(annotation_path)
-            
-        else:
-            self._annotation_path = Path(annotation_path)
-
-            if not self._annotation_path.exists():
-                raise FileNotFoundError(self._annotation_path)
-
-            annotation_path_suffix = self._annotation_path.suffix
-
+        self._annotation_path = annotation_path   
+    
         if parser is None:
             parser = DEFAULT_PARSERS[
                 WholeSlideAnnotationExtension.get_registrant(
-                    annotation_path_suffix
+                    Path(self._annotation_path).suffix
                 )
             ]
 
         self._annotation_parser: AnnotationParser = AnnotationParser.create(
             parser, labels=labels
         )
-        self._annotations = self._annotation_parser.parse(annotation_path)
+        self._annotations = self._annotation_parser.parse(self._annotation_path)
 
         self._sort_by_overlay_index = sort_by_overlay_index
         self._labels = annotation_utils.get_labels_in_annotations(self.annotations)
