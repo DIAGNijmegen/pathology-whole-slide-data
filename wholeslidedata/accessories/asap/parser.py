@@ -7,7 +7,6 @@ from wholeslidedata.annotation.parser import (
 )
 from wholeslidedata.labels import Labels
 
-
 @AnnotationParser.register(("asap",))
 class AsapAnnotationParser(AnnotationParser):
 
@@ -27,10 +26,20 @@ class AsapAnnotationParser(AnnotationParser):
                 if child.tag == "Annotation":
                     labels.append(child.attrib.get("PartOfGroup").lower().strip())
         return Labels.create(set(labels))
+        
 
-    def _parse(self, path):
+    def _open_annotation(self, path):
+
         tree = ET.parse(path)
         opened_annotation = tree.getroot()
+
+        return opened_annotation
+
+
+    def _parse(self, path):
+
+        opened_annotation = self._open_annotation(path)
+
         labels = self._get_labels(opened_annotation)
         for parent in opened_annotation:
             for child in parent:

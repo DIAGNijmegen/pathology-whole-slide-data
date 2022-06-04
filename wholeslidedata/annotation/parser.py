@@ -90,6 +90,10 @@ class AnnotationParser(RegistrantFactory):
 
         self._sample_label_names = sample_label_names
 
+    @classmethod
+    def _path_exists(cls, path: str):
+        return Path(path).exists()
+
     @property
     def sample_label_names(self):
         return self._sample_label_names
@@ -113,6 +117,10 @@ class AnnotationParser(RegistrantFactory):
         return renamed_label
 
     def parse(self, path) -> List[Annotation]:
+
+        if not self._path_exists(path):
+            raise FileNotFoundError(path)
+
         annotations = []
         for index, annotation in enumerate(self._parse(path)):
             annotation["index"] = index
@@ -172,12 +180,14 @@ class MaskAnnotationParser(AnnotationParser):
         output_spacing=0.5,
         shape=(1024, 1024),
         backend="asap",
+        full_coverage=False,
     ):
         super().__init__(labels=labels)
         self._processing_spacing = processing_spacing
         self._output_spacing = output_spacing
         self._shape = np.array(shape)
         self._backend = backend
+        self._np_check_tissue = np.all if full_coverage else np.any
 
     def get_available_labels(opened_annotation: Any) -> Labels:
         return Labels.create({'tissue': 1})
@@ -208,7 +218,7 @@ class MaskAnnotationParser(AnnotationParser):
         for y in range(new_mask.shape[0] // (int(size // ratio))):
             for x in range(new_mask.shape[1] // int((size // ratio))):
                 region_index += 1
-                if not np.any(blocks[region_index]):
+                if not self._np_check_tissue(blocks[region_index]):
                     continue
 
                 box = self._get_coordinates(x * size, y * size, size, size)
@@ -227,3 +237,6 @@ class MaskAnnotationParser(AnnotationParser):
         if np.any(mask_patch):
             return np.unique(mask_patch, return_counts=True)
         return None, None
+
+class CloudAnnotationParser(WholeSlideAnnotationParser):
+    ...

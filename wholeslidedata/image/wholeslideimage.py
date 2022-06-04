@@ -25,11 +25,18 @@ class WholeSlideImage:
             backend (Union[WholeSlideImageBackend, str], optional): image backend that opens and extracts regions from the whole slide image. Defaults to 'openslide'.
         """
 
-        self._path = Path(path)
-        if not self._path.exists():
-            raise ValueError(f'path {self._path} does not exists.')
-        self._backend = WholeSlideImageBackend.create(backend, path=self._path)
-        self._extension = WholeSlideImageExtension.create(self._path.suffix)
+        if backend == 'tiffslide':
+
+            self._path = path
+            self._backend = WholeSlideImageBackend.create(backend, path=self._path)
+            self._extension = WholeSlideImageExtension.create('.tif')
+
+        else:
+            self._path = Path(path)
+            if not self._path.exists():
+                raise ValueError(f'path {self._path} does not exists.')
+            self._backend = WholeSlideImageBackend.create(backend, path=self._path)
+            self._extension = WholeSlideImageExtension.create(self._path.suffix)
 
         self._shapes = self._backend._init_shapes()
         self._downsamplings = self._backend._init_downsamplings()

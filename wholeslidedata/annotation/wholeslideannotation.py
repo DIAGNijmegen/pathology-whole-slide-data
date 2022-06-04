@@ -1,6 +1,5 @@
 from pathlib import Path
 from typing import Dict, List, Optional, Union
-from collections import defaultdict
 from shapely import geometry
 from wholeslidedata.annotation import utils as annotation_utils
 from wholeslidedata.annotation.parser import AnnotationParser
@@ -35,7 +34,7 @@ class WholeSlideAnnotation:
         labels: Optional[Union[Labels, list, tuple, dict]] = None,
         parser: AnnotationParser = None,
         sort_by_overlay_index: bool = False,
-        ignore_overlap: bool = True,
+        ignore_overlap: bool = True
     ):
         """WholeSlideAnnotation contains all annotions of an whole slide image
 
@@ -47,26 +46,20 @@ class WholeSlideAnnotation:
             sort_by_overlay_index (bool, optional): if true, selecting annotions will be sorted by overlay index when . Defaults to False.
             ignore_overlap (bool, optional): if true overlapping annotations will be not set. Defaults to True.
 
-        Raises:
-            FileNotFoundError: if annotation file is not found
         """
-        
-        self._annotation_path = Path(annotation_path)
-
-        if not self._annotation_path.exists():
-            raise FileNotFoundError(self._annotation_path)
-
+        self._annotation_path = annotation_path   
+    
         if parser is None:
             parser = DEFAULT_PARSERS[
                 WholeSlideAnnotationExtension.get_registrant(
-                    self._annotation_path.suffix
+                    Path(self._annotation_path).suffix
                 )
             ]
 
         self._annotation_parser: AnnotationParser = AnnotationParser.create(
             parser, labels=labels
         )
-        self._annotations = self._annotation_parser.parse(annotation_path)
+        self._annotations = self._annotation_parser.parse(self._annotation_path)
 
         self._sort_by_overlay_index = sort_by_overlay_index
         self._labels = annotation_utils.get_labels_in_annotations(self.annotations)
