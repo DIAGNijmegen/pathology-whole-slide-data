@@ -12,7 +12,7 @@ from wholeslidedata.accessories.asap.parser import AsapAnnotationParser
 from wholeslidedata.annotation.parser import AnnotationParser, CloudAnnotationParser
 
 
-class S3Parser(CloudAnnotationParser):
+class S3AnnotationParser(CloudAnnotationParser):
     @classmethod
     def get_boto_obj(cls, path: str):
         s3_url_parse = urlparse(path, allow_fragments=False)
@@ -38,7 +38,7 @@ class S3Parser(CloudAnnotationParser):
 
 
 @AnnotationParser.register(("s3asap",), recursive=True)
-class S3AsapAnnotationParser(AsapAnnotationParser, S3Parser):
+class S3AsapAnnotationParser(AsapAnnotationParser, S3AnnotationParser):
     def _open_annotation(self, path: str):
 
         boto_obj = self.get_boto_obj(path)
