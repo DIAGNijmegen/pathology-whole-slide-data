@@ -11,7 +11,7 @@ setup(
     author_email="mart.vanrijthoven@gmail.com",
     package_data={"": ["*.yml"]},
     packages=find_packages(exclude=("tests", "notebooks", "docs")),
-    url="repo",
+    url="https://github.com/DIAGNijmegen/pathology-whole-slide-data",
     license="LICENSE.txt",
     install_requires=[
         "concurrentbuffer>=0.0.7",
