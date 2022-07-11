@@ -30,7 +30,9 @@ WholeSlideData aims to provide the tools to work with whole slide images and ann
 
 -----
 ## Installation
+```bash
 pip install git+https://github.com/DIAGNijmegen/pathology-whole-slide-data@main
+```
 
 Wholeslidedata supports three image backends: openslide, ASAP, and pyvips. You will have to install additional software for these backends. You will only need one.
 
