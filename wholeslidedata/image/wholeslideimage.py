@@ -2,7 +2,7 @@ import warnings
 
 from pathlib import Path
 from typing import List, Tuple, Union
-from wholeslidedata.image.utils import take_closest_level
+from wholeslidedata.image.utils import mask_patch_with_annotation, take_closest_level
 from wholeslidedata.image.backend import WholeSlideImageBackend
 from wholeslidedata.extensions import WholeSlideImageExtension
 from wholeslidedata.annotation.structures import Annotation
@@ -93,14 +93,18 @@ class WholeSlideImage:
         shape = self.shapes[level]
         return self.get_patch(0, 0, *shape, spacing, center=False)
 
-    def get_annotation(self, annotation: Annotation, spacing: float, margin: int=0):
+    def get_annotation(self, annotation: Annotation, spacing: float, margin: int=0, masked=True):
         scaling = self._spacings[0] / self.get_real_spacing(spacing)
         size = np.array(annotation.size) + margin
-        return self.get_patch(
+        patch =  self.get_patch(
             *np.array(annotation.center),
             *np.array(size) * scaling,
             spacing=spacing,
         )
+        if not masked:
+            return patch
+
+        return mask_patch_with_annotation(patch, annotation, size, scaling)
 
     def get_downsampling_from_spacing(self, spacing: float) -> float:
         level = self.get_level_from_spacing(spacing)
