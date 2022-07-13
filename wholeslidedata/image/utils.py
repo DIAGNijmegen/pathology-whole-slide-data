@@ -27,11 +27,23 @@ def create_thumbnail(wsi, output_folder, spacing=8.0):
 def mask_patch_with_annotation(
     patch: np.ndarray, annotation: Annotation, scaling: float
 ):
-    mask = np.zeros(patch.shape[:2], dtype=np.int32)
-    coordinates = np.copy(annotation.coordinates)
+
+    coordinates = annotation.coordinates
+    center_x, center_y = annotation.center
+    height, width = patch.shape[:2]
+    ratio = 1 / scaling
+
     coordinates = shift_coordinates(
-        coordinates, *annotation.center, patch.shape[1], patch.shape[0], 1 / scaling
+        coordinates=coordinates,
+        center_x=center_x,
+        center_y=center_y,
+        width=width,
+        height=height,
+        ratio=ratio,
     )
+
+    mask = np.zeros((height, width), dtype=np.int32)
     cv2.fillPoly(mask, np.array([coordinates], dtype=np.int32), 1)
     patch[mask == 0] = 0
+
     return patch
