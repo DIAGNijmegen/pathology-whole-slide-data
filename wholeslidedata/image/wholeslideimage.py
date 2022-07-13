@@ -104,7 +104,7 @@ class WholeSlideImage:
         if not masked:
             return patch
 
-        return mask_patch_with_annotation(patch, annotation, size, scaling)
+        return mask_patch_with_annotation(patch, annotation, scaling)
 
     def get_downsampling_from_spacing(self, spacing: float) -> float:
         level = self.get_level_from_spacing(spacing)
