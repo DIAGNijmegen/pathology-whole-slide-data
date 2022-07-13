@@ -1,6 +1,5 @@
 
 from typing import List
-from wholeslidedata.annotation.parser import AnnotationType
 
 from wholeslidedata.annotation.structures import Annotation
 from shapely import geometry
@@ -30,16 +29,12 @@ class ScalingAnnotationHook(AnnotationHook):
 @AnnotationHook.register(('tiles', 'tiled'))
 class TiledAnnotationHook(AnnotationHook):
 
-    def __init__(self, tiled, tile_size, overlap=0, full_coverage=False):
-        self._tiled = tiled
+    def __init__(self, tile_size, overlap=0, full_coverage=False):
         self._tile_size = tile_size
         self._overlap = overlap
         self._full_coverage = full_coverage
 
     def __call__(self, annotations: List[Annotation]):
-        if not self._tiled:
-            return annotations
-
         tiled_annotations = []
         index=0
         for annotation in annotations:
@@ -54,7 +49,7 @@ class TiledAnnotationHook(AnnotationHook):
                     if not self._full_coverage or box_poly.within(annotation):
                         tiled_annotations.append(Annotation.create(
                             index=index,
-                            type=AnnotationType.POLYGON.value,
+                            type="polygon",
                             coordinates=box_poly.exterior.coords,
                             label={"name": "tissue", "value": 1}
                                 ))
