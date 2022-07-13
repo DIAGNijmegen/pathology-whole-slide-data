@@ -6,6 +6,7 @@ from typing import Any, List, Optional, Union
 
 import numpy as np
 from creationism.registration.factory import RegistrantFactory
+from wholeslidedata.annotation.hooks import AnnotationHook
 from wholeslidedata.annotation.structures import Annotation
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.labels import Label, Labels
@@ -60,16 +61,16 @@ class AnnotationParser(RegistrantFactory):
         self,
         labels: Optional[Union[Labels, list, tuple, dict]] = None,
         renamed_labels: Optional[Union[Labels, list, tuple, dict]] = None,
-        scaling: float = 1.0,
         sample_label_names: Union[list, tuple] = (),
         sample_annotation_types: Union[list, tuple] = ("polygon",),
+        hooks = (),
+        **kwargs,
     ):
         """Init
 
         Args:
             labels (Optional[Union[Labels, list, tuple, dict]], optional): All labels that are used to parse annotations. Defaults to None.
             renamed_labels (Optional[Union[Labels, list, tuple, dict]], optional): Automatic rename labels based on values. Defaults to None.
-            scaling (float, optional): scaling factor for annotations. Defaults to 1.0.
             sample_label_names (Union[list, tuple], optional): label names that will be used for sampling. Defaults to ().
             sample_annotation_types (Union[list, tuple], optional): annotation type that will be used for sampling . Defaults to ("polygon",).
         """
@@ -82,13 +83,17 @@ class AnnotationParser(RegistrantFactory):
         if self._renamed_labels is not None:
             self._renamed_labels = Labels.create(self._renamed_labels)
 
-        self._scaling = scaling
         self._sample_annotation_types = [
             Annotation.get_registrant(annotation_type)
             for annotation_type in sample_annotation_types
         ]
 
         self._sample_label_names = sample_label_names
+        
+        self._hooks = list(hooks)
+        for key, value in kwargs.items():
+            self._hooks.append(AnnotationHook.create(key, False, value))
+
 
     @classmethod
     def _path_exists(cls, path: str):
@@ -101,10 +106,6 @@ class AnnotationParser(RegistrantFactory):
     @property
     def sample_annotation_types(self):
         return self._sample_annotation_types
-
-    @property
-    def scaling(self):
-        return self._scaling
 
     def _rename_label(self, label):
         if self._renamed_labels is None:
@@ -124,11 +125,12 @@ class AnnotationParser(RegistrantFactory):
         annotations = []
         for index, annotation in enumerate(self._parse(path)):
             annotation["index"] = index
-            annotation["coordinates"] = (
-                np.array(annotation["coordinates"]) * self._scaling
-            )
+            annotation["coordinates"] = np.array(annotation["coordinates"]) 
             annotation["label"] = self._rename_label(annotation["label"])
             annotations.append(Annotation.create(**annotation))
+
+        for hook in self._hooks:
+            annotations = hook(annotations)
         return annotations
 
     def _get_labels(self, opened_annotation):
