@@ -36,6 +36,9 @@ class S3AnnotationParser(CloudAnnotationParser):
         if s3_obj_status_code == 200:
             return True
 
+    @classmethod
+    def _empty_file(cls, path: str):
+        return False
 
 @AnnotationParser.register(("s3asap",), recursive=True)
 class S3AsapAnnotationParser(AsapAnnotationParser, S3AnnotationParser):

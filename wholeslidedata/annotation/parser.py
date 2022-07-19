@@ -1,8 +1,10 @@
 import abc
 import json
 from enum import Enum
+import os
 from pathlib import Path
 from typing import Any, List, Optional, Union
+import warnings
 
 import numpy as np
 from creationism.registration.factory import RegistrantFactory
@@ -54,6 +56,7 @@ class InvalidAnnotationParserError(Exception):
     ...
 
 
+
 class AnnotationParser(RegistrantFactory):
     """Base class for parsing annotations. Inherents from RegistrantFactory which allows to register subclasses"""
 
@@ -99,6 +102,10 @@ class AnnotationParser(RegistrantFactory):
     def _path_exists(cls, path: str):
         return Path(path).exists()
 
+    @classmethod
+    def _empty_file(cls, path: str):
+        return os.stat(path).st_size == 0
+
     @property
     def sample_label_names(self):
         return self._sample_label_names
@@ -121,6 +128,11 @@ class AnnotationParser(RegistrantFactory):
 
         if not self._path_exists(path):
             raise FileNotFoundError(path)
+
+        if self._empty_file(path):
+            warn = f"Loading empty file: {path}"
+            warnings.warn(warn)
+            return []
 
         annotations = []
         for index, annotation in enumerate(self._parse(path)):
