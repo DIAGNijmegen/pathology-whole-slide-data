@@ -42,11 +42,11 @@ Wholeslidedata supports various image backends. You will have to install at leas
 
 | _backend_ |                            **installation instructions**                            |
 |:---------:|:-----------------------------------------------------------------------------------:|
-| ASAP      | [`https://github.com/computationalpathologygroup/ASAP/releases/tag/ASAP-2.1-(Nightly)`](https://github.com/computationalpathologygroup/ASAP/releases/tag/ASAP-2.1-(Nightly)) |
-| Openslide | [`https://openslide.org/download/`](https://openslide.org/download/)                                                     |
+| asap      | [`https://github.com/computationalpathologygroup/ASAP/releases/tag/ASAP-2.1-(Nightly)`](https://github.com/computationalpathologygroup/ASAP/releases/tag/ASAP-2.1-(Nightly)) |
+| openslide | [`https://openslide.org/download/`](https://openslide.org/download/)                                                     |
 | pyvips    | [`https://pypi.org/project/pyvips`](https://pypi.org/project/pyvips)                                                 |
 | tiffslide | [`https://github.com/bayer-science-for-a-better-life/tiffslide`](https://github.com/bayer-science-for-a-better-life/tiffslide)                        |
-| cuCim     | [`https://github.com/rapidsai/cucim`](https://github.com/rapidsai/cucim)                                                  |
+| cucim     | [`https://github.com/rapidsai/cucim`](https://github.com/rapidsai/cucim)                                                  |
 
 Openslide is currently the default image backend, but you can easily switch between different image backends in the config file.
 
