@@ -8,8 +8,6 @@ from multiresolutionimageinterface import (
 from wholeslidedata.image.backend import InvalidSpacingError, WholeSlideImageBackend
 
 
-# from openslide import OpenSlide
-
 @WholeSlideImageBackend.register(("asap",))
 class AsapWholeSlideImageBackend(MultiResolutionImage, WholeSlideImageBackend):
     def __init__(self, path: str) -> None:
