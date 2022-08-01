@@ -127,10 +127,10 @@ class WholeSlideMaskWriter(WholeSlideImageWriterBase):
 
         self.openFile(self._path)
         self.setTileSize(self._tile_shape[0])
-        self.setCompression(mir.LZW)
-        self.setDataType(mir.UChar)
-        self.setInterpolation(mir.NearestNeighbor)
-        self.setColorType(mir.Monochrome)
+        self.setCompression(mir.Compression_LZW)
+        self.setDataType(mir.DataType_UChar)
+        self.setInterpolation(mir.Interpolation_NearestNeighbor)
+        self.setColorType(mir.ColorType_Monochrome)
 
         # set writing spacing
         pixel_size_vec = mir.vector_double()
@@ -159,8 +159,8 @@ class WholeSlideImageWriter(WholeSlideImageWriterBase):
         self.openFile(self._path)
         self.setTileSize(self._tile_shape[0])
         self.setJPEGQuality(jpeg_quality)
-        self.setDataType(mir.UChar)
-        self.setColorType(mir.RGB)
+        self.setDataType(mir.DataType_UChar)
+        self.setColorType(mir.ColorType_RGB)
 
         # set writing spacing
         pixel_size_vec = mir.vector_double()
