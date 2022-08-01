@@ -12,7 +12,11 @@ Please checkout the [CHANGELOG](https://github.com/DIAGNijmegen/pathology-whole-
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [Main Features](#main-features)
+  - [Whole-slide images](#whole-slide-images)
+  - [Whole-slide annotations](#whole-slide-annotations)
+  - [Batch iterator](#batch-iterator)
 - [Examples and Video Tutorials](#examples-and-video-tutorials)
+  - [Acknowledgements](#acknowledgements)
 
 
 ----
@@ -34,11 +38,15 @@ WholeSlideData aims to provide the tools to work with whole slide images and ann
 pip install git+https://github.com/DIAGNijmegen/pathology-whole-slide-data@main
 ```
 
-Wholeslidedata supports three image backends: openslide, ASAP, and pyvips. You will have to install additional software for these backends. You will only need one.
+Wholeslidedata supports various image backends. You will have to install at least one of these image backends.
 
-- Installation instructions for [Openslide](https://openslide.org/download/)
-- Installation instructions for [ASAP](https://github.com/computationalpathologygroup/ASAP/releases/tag/ASAP-2.0-(Nightly))
-- Installation instructions for [PyVips](https://anaconda.org/conda-forge/pyvips)
+| _backend_ |                            **installation instructions**                            |
+|:---------:|:-----------------------------------------------------------------------------------:|
+| ASAP      | [`https://github.com/computationalpathologygroup/ASAP/releases/tag/ASAP-2.1-(Nightly)`](https://github.com/computationalpathologygroup/ASAP/releases/tag/ASAP-2.1-(Nightly)) |
+| Openslide | [`https://openslide.org/download/`](https://openslide.org/download/)                                                     |
+| PyVips    | [`https://pypi.org/project/pyvips`](https://pypi.org/project/pyvips)                                                 |
+| tiffslide | [`https://github.com/bayer-science-for-a-better-life/tiffslide`](https://github.com/bayer-science-for-a-better-life/tiffslide)                        |
+| cuCim     | [`https://github.com/rapidsai/cucim`](https://github.com/rapidsai/cucim)                                                  |
 
 Openslide is currently the default image backend, but you can easily switch between different image backends in the config file. The options are 'openslide', 'asap' and 'pyvips'
 
