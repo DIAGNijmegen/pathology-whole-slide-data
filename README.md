@@ -48,7 +48,7 @@ Wholeslidedata supports various image backends. You will have to install at leas
 | tiffslide | [`https://github.com/bayer-science-for-a-better-life/tiffslide`](https://github.com/bayer-science-for-a-better-life/tiffslide)                        |
 | cuCim     | [`https://github.com/rapidsai/cucim`](https://github.com/rapidsai/cucim)                                                  |
 
-Openslide is currently the default image backend, but you can easily switch between different image backends in the config file. The options are 'openslide', 'asap' and 'pyvips'
+Openslide is currently the default image backend, but you can easily switch between different image backends in the config file.
 
 For example:
 ```yaml
