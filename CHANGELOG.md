@@ -1,8 +1,50 @@
 # Changelog
 ---
-#### **Upcoming** (0.0.14)  
+#### **Upcoming** (0.0.15)  
 
-### (0.0.13)  (**Latest**)
+
+### (0.0.14) (**Latest**)
+
+**new features:**
+- updated to ASAP2.1
+- cucim image backend
+- tiffslide image backend  (Contributed by Rishi Jumani)
+- s3 asap parser  (Contributed by Rishi Jumani)
+- switched to rtree 
+- updated patch iterator
+- get shape_from_spacing method in wsi
+- loading slides < 2.0 spacing gives warning
+- added check coordinates for point
+- method for annotations and sampling annotations per label
+- grand-challenge annotations to asap format
+- mask patch with annotations
+- load empty files gives warning
+- added writer factory functions
+
+
+**breaking changes**
+- removed redundant shift coordinates method
+
+**docs:**
+- included binder files
+
+**requirements:**
+ - added
+  - jsonschema>=4.4.0
+  - matplotlib>=3.3.1
+  - rtree>=1.0.0
+
+**bug fixes:**
+- count for specific sample labels
+- hed callback  
+- wsi file reference
+- virtum parser
+- areaannotationsampler
+- plotting: fixed plot batch function
+- plotting: scaling in base coordinates in plot annotations (Contributed by Robin Lomans)
+
+
+### (0.0.13) (**Latest**)
 
 **refactoring**
 - renamed orginal_path to original_path in File
