@@ -44,7 +44,7 @@ Wholeslidedata supports various image backends. You will have to install at leas
 |:---------:|:-----------------------------------------------------------------------------------:|
 | ASAP      | [`https://github.com/computationalpathologygroup/ASAP/releases/tag/ASAP-2.1-(Nightly)`](https://github.com/computationalpathologygroup/ASAP/releases/tag/ASAP-2.1-(Nightly)) |
 | Openslide | [`https://openslide.org/download/`](https://openslide.org/download/)                                                     |
-| PyVips    | [`https://pypi.org/project/pyvips`](https://pypi.org/project/pyvips)                                                 |
+| pyvips    | [`https://pypi.org/project/pyvips`](https://pypi.org/project/pyvips)                                                 |
 | tiffslide | [`https://github.com/bayer-science-for-a-better-life/tiffslide`](https://github.com/bayer-science-for-a-better-life/tiffslide)                        |
 | cuCim     | [`https://github.com/rapidsai/cucim`](https://github.com/rapidsai/cucim)                                                  |
 
