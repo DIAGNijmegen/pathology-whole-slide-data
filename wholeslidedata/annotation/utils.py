@@ -73,13 +73,6 @@ def _pixels_per_class(annotations, labels):
     return ppc
 
 
-def shift_coordinates(coordinates, center_x, center_y, width, height, ratio):
-    coordinates -= np.array([int(center_x), int(center_y)])
-    coordinates /= ratio
-    coordinates += np.array([width // 2, height // 2])
-    return coordinates
-
-
 def cv2_polygonize(
     mask, dilation_iterations=0, erose_iterations=0, fill_holes=False, values=None
 ):
