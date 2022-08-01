@@ -94,7 +94,7 @@ class BatchShape(UserDict):
                 count = len(self._labels) - 1
             return tuple(self._shape[:2]+[count])
         if self._y_shape is None:
-            return self._y_shape
+            return tuple(np.array(self.shape)[..., :2].tolist())
         return tuple(self._y_shape)
 
     @property
