@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.1-runtime-ubuntu20.04 
+FROM nvidia/cuda:11.1.1-cudnn8-runtime-ubuntu20.04
 
 # Set time zone
 ENV TZ=Europe/Amsterdam
@@ -28,15 +28,22 @@ RUN : \
 RUN : \
     && apt-get update \
     && apt-get -y install curl \
-    && curl --remote-name --location "https://github.com/computationalpathologygroup/ASAP/releases/download/ASAP-2.0-(Nightly)/ASAP-2.0-py38-Ubuntu2004.deb" \
-    && dpkg --install ASAP-2.0-py38-Ubuntu2004.deb || true \
+    && curl --remote-name --location "https://github.com/computationalpathologygroup/ASAP/releases/download/ASAP-2.1-(Nightly)/ASAP-2.1-Ubuntu2004.deb" \
+    && dpkg --install ASAP-2.1-Ubuntu2004.deb || true \
     && apt-get -f install --fix-missing --fix-broken --assume-yes \
     && ldconfig -v \
     && apt-get clean \
     && echo "/opt/ASAP/bin" > /venv/lib/python3.8/site-packages/asap.pth \
-    && rm ASAP-2.0-py38-Ubuntu2004.deb \
+    && rm ASAP-2.1-Ubuntu2004.deb \
     && :
-
+    
 # Install wholeslidedata
 RUN pip install wholeslidedata
+
+# install jupyter lab
+
+# Download example data
+
+# copy userguide
+
 
