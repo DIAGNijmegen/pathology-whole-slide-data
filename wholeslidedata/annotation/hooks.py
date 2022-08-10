@@ -40,7 +40,9 @@ class TiledAnnotationHook(AnnotationHook):
         index=0
         for annotation in annotations:
             if annotation.label.name not in self._label_names:
+                annotation._index = index
                 new_annotations.append(annotation)
+                index += 1
                 continue
                 
             x1, y1, x2,y2 = annotation.bounds
