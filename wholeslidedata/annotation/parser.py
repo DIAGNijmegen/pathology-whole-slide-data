@@ -139,7 +139,7 @@ class AnnotationParser(RegistrantFactory):
             annotation["index"] = index
             annotation["coordinates"] = np.array(annotation["coordinates"]) 
             annotation["label"] = self._rename_label(annotation["label"])
-            annotations.append(Annotation.create(**annotation))
+            annotations.append(Annotation.create(**annotation, path=path))
 
         for hook in self._hooks:
             annotations = hook(annotations)

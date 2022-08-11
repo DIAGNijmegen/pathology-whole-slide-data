@@ -69,12 +69,12 @@ class Annotation(RegistrantFactory, geometry.base.BaseGeometry):
 
 @Annotation.register(("point", "dot"))
 class Point(geometry.Point, Annotation):
-    def __init__(self, index, label, coordinates):
+    def __init__(self, index, label, coordinates, **kwargs):
         if len(coordinates) == 1 and len(coordinates[0]) == 2:
             coordinates = coordinates[0]
             
         geometry.Point.__init__(self, coordinates)
-        Annotation.__init__(self, index=index, label=label, coordinates=coordinates)
+        Annotation.__init__(self, index=index, label=label, coordinates=coordinates, **kwargs)
 
     def __reduce__(self):
         return (
@@ -105,10 +105,10 @@ class Point(geometry.Point, Annotation):
 
 @Annotation.register(("polygon", "rectangle", "box", "bounding-box"))
 class Polygon(geometry.Polygon, Annotation):
-    def __init__(self, index: int, label, coordinates, holes=[]):
+    def __init__(self, index: int, label, coordinates, holes=[], **kwargs):
         geometry.Polygon.__init__(self, coordinates, holes=holes)
         Annotation.__init__(
-            self, index=index, label=label, coordinates=np.array(self.exterior.xy).T
+            self, index=index, label=label, coordinates=np.array(self.exterior.xy).T, **kwargs
         )
         self._holes = holes
         self._overlapping_annotations = []
