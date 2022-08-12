@@ -199,7 +199,7 @@ def plot_mask(
         mask = fit_data(mask, output_shape)
 
     cmap = colors.ListedColormap(color_values)
-    bounds=list(range(len(color_values)))
+    bounds=list(range(len(color_values)+1))
     norm = colors.BoundaryNorm(bounds, cmap.N, clip=True)
 
     if axes is None:
