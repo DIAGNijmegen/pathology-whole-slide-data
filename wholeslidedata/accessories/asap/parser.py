@@ -38,10 +38,10 @@ class AsapAnnotationParser(AnnotationParser):
 
     def _parse(self, path):
 
-        opened_annotation = self._open_annotation(path)
+        root = self._open_annotation(path)
 
-        labels = self._get_labels(opened_annotation)
-        for parent in opened_annotation:
+        labels = self._get_labels(root)
+        for parent in root:
             for child in parent:
 
                 if child.tag != "Annotation":
@@ -49,7 +49,7 @@ class AsapAnnotationParser(AnnotationParser):
 
                 type = self._get_annotation_type(child)
 
-                label = self._get_label(child, labels, type)
+                label = self._get_label(root, child, labels, type)
                 if label is None:
                     continue
 
@@ -66,16 +66,23 @@ class AsapAnnotationParser(AnnotationParser):
             return AsapAnnotationParser.TYPES[annotation_type]
         raise ValueError(f"unsupported annotation type in {child}")
 
-    def _get_label(self, child, labels: Labels, type):
+    def _get_label(self, root, child, labels: Labels, type):
         name = self._get_label_name(child, labels, type)
+        
+        try:
+            color = root.find(f".//Group[@Name='{name}']").get("Color")
+        except AttributeError:
+            color = None
+
+        name = name.lower().strip()
         if name not in labels.names:
             return None
 
         label = labels.get_label_by_name(name)
         label = label.todict()
-        color = child.attrib.get("Color")
+    
         if 'color' not in label or label['color'] is None:
-            if color:
+            if color is not None:
                 label["color"] = color
 
         return label
@@ -83,7 +90,7 @@ class AsapAnnotationParser(AnnotationParser):
     def _get_label_name(self, child, labels, type) -> str:
         if type in labels.names:
             return type
-        return child.attrib.get("PartOfGroup").lower().strip()
+        return child.attrib.get("PartOfGroup")
 
     def _yield_coordinates(self, child, type):
         coordinates = []
