@@ -127,10 +127,17 @@ class WholeSlideMaskWriter(WholeSlideImageWriterBase):
 
         self.openFile(self._path)
         self.setTileSize(self._tile_shape[0])
-        self.setCompression(mir.Compression_LZW)
-        self.setDataType(mir.DataType_UChar)
-        self.setInterpolation(mir.Interpolation_NearestNeighbor)
-        self.setColorType(mir.ColorType_Monochrome)
+
+        try:
+            self.setCompression(mir.Compression_LZW)
+            self.setDataType(mir.DataType_UChar)
+            self.setInterpolation(mir.Interpolation_NearestNeighbor)
+            self.setColorType(mir.ColorType_Monochrome)
+        except:
+            self.setCompression(mir.LZW)
+            self.setDataType(mir.UChar)
+            self.setInterpolation(mir.NearestNeighbor)
+            self.setColorType(mir.Monochrome)
 
         # set writing spacing
         pixel_size_vec = mir.vector_double()
@@ -316,12 +323,19 @@ def create_writers(
     return writers
 
 
-def write_mask(wsi, wsa, spacing, tile_size=1024, suffix="_gt_mask.tif"):
+def write_mask(wsi, wsa, spacing, tile_size=1024, output_folder=None, suffix="_gt_mask.tif"):
     shape = wsi.shapes[wsi.get_level_from_spacing(spacing)]
     ratio = wsi.get_downsampling_from_spacing(spacing)
     write_spacing = wsi.get_real_spacing(spacing)
 
-    mask_output_path = str(wsa.path).replace(".xml", suffix)
+    if output_folder is None:
+        mask_output_path = str(wsa.path).replace(".xml", suffix)
+    else:
+        mask_output_path = output_folder / (wsa.path.stem + suffix)
+
+    if mask_output_path.exists():
+        print(f'Mask output path already exist: {mask_output_path}')
+        return
 
     wsm_writer = WholeSlideMaskWriter()
     wsm_writer.write(
