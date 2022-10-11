@@ -165,8 +165,10 @@ class WholeSlideImageWriter(WholeSlideImageWriterBase):
 
         self.openFile(self._path)
         self.setTileSize(self._tile_shape[0])
+        self.setCompression(mir.JPEG)
         self.setJPEGQuality(jpeg_quality)
-        
+        self.setInterpolation(mir.NearestNeighbor)
+
         try:
             self.setDataType(mir.DataType_UChar)
             self.setColorType(mir.ColorType_RGB)
