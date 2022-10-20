@@ -8,7 +8,7 @@ from wholeslidedata.annotation.structures import Annotation
 from wholeslidedata.annotation.utils import cv2_polygonize
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.labels import Label
-
+from tqdm import tqdm
 
 def convert_polygons_to_annotations(polygons, inv_label_map, color_map):
     annotation_structures = []
@@ -74,37 +74,48 @@ def main(
     erose_iterations: Path,
     fill_holes: float,
 ):
-    output_path = output_folder / (mask_path.stem + ".xml")
-    if output_path.exists():
-        print(f'xml output path already exist: {output_path}')
-        return
-
-    inv_label_map = {
-        int(value): key
-        for key, value in dict([p.split("=") for p in label_mapping]).items()
-    }
-
-    color_map = dict([p.split("=") for p in color_mapping])
-
-    print(f"inv label map: {inv_label_map}")
+    
     if not mask_path.exists():
         raise ValueError(f"mask path {mask_path} does not exists")
 
-    mask = WholeSlideImage(mask_path, backend="asap")
-    mask_slide = mask.get_slide(spacing).squeeze()
-    scaling = mask.get_downsampling_from_spacing(spacing)
-    polygons = cv2_polygonize(
-        mask_slide,
-        dilation_iterations=dilation_iterations,
-        erose_iterations=erose_iterations,
-        fill_holes=fill_holes,
-        values=list(inv_label_map),
-    )
-    annotations = convert_polygons_to_annotations(
-        polygons=polygons, inv_label_map=inv_label_map, color_map=color_map
-    )
+    if mask_path.is_dir():
+        mask_paths = list(mask_path.glob('*.tif'))
+    else:
+        mask_paths = [mask_path]
+    
+    
+    for mask_path in tqdm(mask_paths):
+        print('processing', mask_path)
+        output_path = output_folder / (mask_path.stem + ".xml")
+        if output_path.exists():
+            print(f'xml output path already exist: {output_path}')
+            return
 
-    write_asap_annotation(annotations=annotations, output_path=output_path, scaling=1/scaling)
+        inv_label_map = {
+            int(value): key
+            for key, value in dict([p.split("=") for p in label_mapping]).items()
+        }
+
+        color_map = dict([p.split("=") for p in color_mapping])
+
+        print(f"inv label map: {inv_label_map}")
+
+        mask = WholeSlideImage(mask_path, backend="asap")
+        mask_slide = mask.get_slide(spacing).squeeze()
+        if scaling is None:
+        ratio = 1/ mask.get_downsampling_from_spacing(spacing)
+        polygons = cv2_polygonize(
+            mask_slide,
+            dilation_iterations=dilation_iterations,
+            erose_iterations=erose_iterations,
+            fill_holes=fill_holes,
+            values=list(inv_label_map),
+        )
+        annotations = convert_polygons_to_annotations(
+            polygons=polygons, inv_label_map=inv_label_map, color_map=color_map
+        )
+        ratio = 1/scaling
+        write_asap_annotation(annotations=annotations, output_path=output_path, scaling=ratio)
 
 
 if __name__ == "__main__":
