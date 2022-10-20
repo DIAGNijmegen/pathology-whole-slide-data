@@ -7,5 +7,15 @@ class TorchBatchIterator(BatchIterator):
     def __next__(self):
         if self._info_queue is not None:
             x_batch, y_batch, info = super().__next__()
-            return torch.from_numpy(x_batch), torch.from_numpy(y_batch), info
+            if len(x_batch.shape) == 5:
+                x_batch = x_batch.transpose(1,0,4,2,3).astype('float32')
+            else:
+                x_batch = x_batch.transpose(0,3,1,2).astype('float32')
+    
+            if len(x_batch.shape) == 5:
+                y_batch = y_batch.transpose(1,0,4,2,3).astype('float32')
+            elif len(x_batch.shape) == 4:
+                y_batch = y_batch.transpose(0,3,1,2).astype('float32')
+    
+            return [torch.from_numpy(x) for x in x_batch], [torch.from_numpy(y) for y in y_batch], info
         return map(torch.from_numpy, super().__next__())
