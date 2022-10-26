@@ -25,6 +25,10 @@ class AperioScanScopeExtension(WholeSlideImageExtension):
 class HamamatsuExtension(WholeSlideImageExtension):
     ...
 
+@WholeSlideImageExtension.register((".dcm",))
+class HamamatsuExtension(WholeSlideImageExtension):
+    ...
+    
 
 class WholeSlideAnnotationExtension(Extension):
     ...
