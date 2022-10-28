@@ -159,7 +159,7 @@ def convert_annotations_to_json(annotations: List[Annotation]):
     return output
 
 
-def write_json_annotations(output_path, data, validate=True):
+def write_json_annotations(output_path, data, validate=False):
     if validate:
         for d in data:
             jsonschema.validate(d, SCHEMA)
