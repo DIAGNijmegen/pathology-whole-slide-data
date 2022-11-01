@@ -8,6 +8,7 @@ from creationism.registration.factory import RegistrantFactory
 from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
 from wholeslidedata.extensions import (
     FolderCoupledExtension,
+    DicomExtension,
     WholeSlideAnnotationExtension,
     WholeSlideImageExtension,
 )
@@ -75,12 +76,13 @@ class WholeSlideImageFile(WholeSlideFile, ImageFile):
     def copy(self, destination_folder) -> None:
         destination_folder = Path(destination_folder) / 'images'
         extension_name = self.path.suffix
-        if WholeSlideImageExtension.is_extension(
-            extension_name, FolderCoupledExtension
-        ):
-            folder = self.path.with_suffix("")
+        if isinstance(self.extension, FolderCoupledExtension):
+            folder = self.extension.get_folder(self.path)
             copy_source(folder, destination_folder)
-        super().copy(destination_folder=destination_folder)
+        if isinstance(self.extension, DicomExtension):
+            self.path = destination_folder / self.path.parent.name / self.path.name
+        else:
+            super().copy(destination_folder=destination_folder)
 
     def open(self):
         return WholeSlideImage(self.path, self._image_backend)

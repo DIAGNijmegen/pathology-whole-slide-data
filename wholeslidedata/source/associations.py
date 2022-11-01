@@ -1,7 +1,7 @@
 from collections import UserDict
 from pathlib import Path
 from typing import Callable, List
-from wholeslidedata.source.files import File
+from wholeslidedata.source.files import File, WholeSlideImageFile
 import warnings
 
 def stem_file_associater(file: File):
@@ -17,6 +17,12 @@ class StemSplitterAssociater:
             association_name = association_name.split(split_symbol)[0]
         return association_name
 
+class DicomAssociater:
+    def __call__(self, file: File):
+        if isinstance(file, WholeSlideImageFile):
+            return file.path.parent.name
+        return file.path.stem
+    
 class AnyOneAssociater:
     def __call__(self, file: File):
         return 'AnyOneAssociater'
