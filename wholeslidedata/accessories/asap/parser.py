@@ -7,6 +7,7 @@ from wholeslidedata.annotation.parser import (
 )
 from wholeslidedata.labels import Labels
 
+
 @AnnotationParser.register(("asap",))
 class AsapAnnotationParser(AnnotationParser):
 
@@ -54,6 +55,8 @@ class AsapAnnotationParser(AnnotationParser):
                     continue
 
                 for coordinates in self._yield_coordinates(child, type):
+                    if coordinates is None:
+                        continue
                     yield {
                         "type": type.value,
                         "coordinates": coordinates,
@@ -98,7 +101,8 @@ class AsapAnnotationParser(AnnotationParser):
         coordinates = self._get_coordinates(coordinate_structure)
         if type is AnnotationType.POLYGON:
             if len(coordinates) < 3:
-                raise InvalidAnnotationParserError(f"Polygon contains < 3 coordinates")
+                print("skipping Polygon contains < 3 coordinates")
+                return None
             yield coordinates
         elif type is AnnotationType.POINT and len(coordinates) > 1:
             for coordinate in coordinates:
