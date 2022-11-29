@@ -5,11 +5,10 @@ import albumentations as A
 import numpy as np
 
 from wholeslidedata.accessories.albumentations import custom
-from wholeslidedata.samplers.callbacks import BatchCallback
+from wholeslidedata.samplers.callbacks import BatchCallback, SampleCallback
 
 
-class AlbumentationsBase(BatchCallback):
-
+class AlbumentationsBase:
     def __init__(self, custom_callbacks=None):
         super(AlbumentationsBase, self).__init__()
         if custom_callbacks:
@@ -17,7 +16,7 @@ class AlbumentationsBase(BatchCallback):
                 setattr(A, cb, getattr(custom, cb))
 
 
-class AlbumentationsDetectionAugmentationsCallback(AlbumentationsBase):
+class AlbumentationsDetectionAugmentationsCallback(AlbumentationsBase, SampleCallback):
     def __init__(self, augmentations, custom_callbacks=None):
         random.seed()
         super(AlbumentationsDetectionAugmentationsCallback, self).__init__(custom_callbacks)
@@ -43,7 +42,7 @@ class AlbumentationsDetectionAugmentationsCallback(AlbumentationsBase):
         pass
 
 
-class AlbumentationsAugmentationsCallback(AlbumentationsBase):
+class AlbumentationsAugmentationsCallback(AlbumentationsBase, BatchCallback):
 
     def __init__(self, augmentations, custom_callbacks=None):
         random.seed()
