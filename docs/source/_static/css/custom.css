@@ -1,0 +1,90 @@
+
+html[data-theme="light"] {
+  --pst-color-primary: #371a4e !important;
+}
+
+
+.cell_input {
+  border-left-color: white !important;
+  border-block-color: white !important;
+  border-right-color: white !important;
+
+}
+
+.highlight {
+  padding: 0 !important;
+}
+
+
+.cell_input pre {
+  background-color: #F8F8F8 !important;
+}
+
+.cell_output {
+  padding-left: 0.2rem !important;
+}
+
+.cell_output::before {
+  content: "Out:";
+  float:left !important;
+  font-size: smaller !important;
+  color: #888888 !important;
+  
+}
+
+.cell_output pre {
+  padding-left: 0.4rem !important;
+  border-left-color: rgb(255, 255, 255) !important;
+  border-block-color: white !important;
+  border-right-color: white !important;
+  background-color: white !important;
+  color: rgb(0, 0, 0) !important;
+  border-color: white!important;
+  box-shadow: none !important;
+  border-style: none !important;
+
+}
+
+
+
+.stderr pre{
+  background-color: #FFDDDD !important;
+}
+
+.sd-card {
+  border-style: none !important;
+}
+
+div.admonition {
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  margin-left: 0px !important;
+  padding-left: 0px !important;
+}
+
+div.admonition p {
+  padding-left: 1.2rem !important;
+}
+
+
+.admonition p {
+  margin-left: 0px !important;
+}
+
+.admonition-title::before {
+  padding: 100% !important;
+}
+
+.admonition-title::after {
+  content: "" !important;
+}
+
+
+.admonition ul {
+  margin-left: 0 !important;
+}
+
+
+.admonition li p {
+  padding-left: 0 !important;
+}

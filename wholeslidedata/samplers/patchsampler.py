@@ -1,7 +1,7 @@
 from typing import Union
 import numpy as np
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
-from wholeslidedata.source.files import WholeSlideImageFile
+from wholeslidedata.files import WholeSlideImageFile
 
 class PatchSampler:
     def __init__(self, center=True, relative=False):

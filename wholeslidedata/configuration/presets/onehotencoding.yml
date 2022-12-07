@@ -1,8 +1,8 @@
 default:
   batch_shape:
-    labels: ${wholeslidedata:labels}
+    labels: ${labels}
 
   sample_callbacks:
       - module: wholeslidedata.samplers.callbacks
         attribute: OneHotEncoding
-        labels: ${wholeslidedata:labels}
+        labels: ${labels}

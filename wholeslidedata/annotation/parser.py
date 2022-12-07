@@ -7,11 +7,14 @@ from typing import Any, List, Optional, Union
 import warnings
 
 import numpy as np
-from creationism.registration.factory import RegistrantFactory
 from wholeslidedata.annotation.hooks import AnnotationHook
-from wholeslidedata.annotation.structures import Annotation
+from wholeslidedata.annotation.types import (
+    Annotation,
+    ANNOTATION_TYPES,
+    create_annotation,
+)
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
-from wholeslidedata.labels import Label, Labels
+from wholeslidedata.labels import Labels, labels_factory, label_factory
 from wholeslidedata.samplers.utils import block_shaped
 from shapely import geometry
 
@@ -56,8 +59,7 @@ class InvalidAnnotationParserError(Exception):
     ...
 
 
-
-class AnnotationParser(RegistrantFactory):
+class AnnotationParser:
     """Base class for parsing annotations. Inherents from RegistrantFactory which allows to register subclasses"""
 
     def __init__(
@@ -66,8 +68,7 @@ class AnnotationParser(RegistrantFactory):
         renamed_labels: Optional[Union[Labels, list, tuple, dict]] = None,
         sample_label_names: Union[list, tuple] = (),
         sample_annotation_types: Union[list, tuple] = ("polygon",),
-        hooks = (),
-        **kwargs,
+        hooks=None,
     ):
         """Init
 
@@ -80,23 +81,22 @@ class AnnotationParser(RegistrantFactory):
 
         self._labels = labels
         if self._labels is not None:
-            self._labels = Labels.create(self._labels)
+            self._labels = labels_factory(self._labels)
 
         self._renamed_labels = renamed_labels
         if self._renamed_labels is not None:
-            self._renamed_labels = Labels.create(self._renamed_labels)
+            self._renamed_labels = labels_factory(self._renamed_labels)
 
         self._sample_annotation_types = [
-            Annotation.get_registrant(annotation_type)
+            ANNOTATION_TYPES[annotation_type]
             for annotation_type in sample_annotation_types
         ]
 
         self._sample_label_names = sample_label_names
-        
-        self._hooks = list(hooks)
-        for key, value in kwargs.items():
-            self._hooks.append(AnnotationHook.create(key, False, value))
-
+        self._hooks = []
+        if hooks is not None:
+            for key, value in hooks.items():
+                self._hooks.append(AnnotationHook.create(key, False, value))
 
     @classmethod
     def _path_exists(cls, path: str):
@@ -137,9 +137,9 @@ class AnnotationParser(RegistrantFactory):
         annotations = []
         for index, annotation in enumerate(self._parse(path)):
             annotation["index"] = index
-            annotation["coordinates"] = np.array(annotation["coordinates"]) 
+            annotation["coordinates"] = np.array(annotation["coordinates"])
             annotation["label"] = self._rename_label(annotation["label"])
-            annotations.append(Annotation.create(**annotation, path=path))
+            annotations.append(create_annotation(**annotation, path=path))
 
         for hook in self._hooks:
             annotations = hook(annotations)
@@ -160,12 +160,13 @@ class AnnotationParser(RegistrantFactory):
         ...
 
 
-@AnnotationParser.register(("wsa",))
 class WholeSlideAnnotationParser(AnnotationParser):
     @staticmethod
     def get_available_labels(opened_annotation: dict):
-        return Labels.create(
-            set([Label.create(annotation["label"]) for annotation in opened_annotation])
+        return labels_factory(
+            set(
+                [label_factory(annotation["label"]) for annotation in opened_annotation]
+            )
         )
 
     def _parse(self, path) -> List[dict]:
@@ -181,11 +182,10 @@ class WholeSlideAnnotationParser(AnnotationParser):
             for key, value in label.todict().items():
                 if key not in annotation["label"] or annotation["label"][key] is None:
                     annotation["label"][key] = value
-                
+
             yield annotation
 
 
-@AnnotationParser.register(("mask",))
 class MaskAnnotationParser(AnnotationParser):
     def __init__(
         self,
@@ -204,7 +204,7 @@ class MaskAnnotationParser(AnnotationParser):
         self._np_check_tissue = np.all if full_coverage else np.any
 
     def get_available_labels(opened_annotation: Any) -> Labels:
-        return Labels.create({'tissue': 1})
+        return labels_factory({"tissue": 1})
 
     def _parse(self, path):
         mask = WholeSlideImage(path, backend=self._backend)
@@ -242,15 +242,15 @@ class MaskAnnotationParser(AnnotationParser):
                     "label": {"name": "tissue", "value": 1},
                 }
 
-
     def _get_coordinates(self, x_pos, y_pos, x_shift, y_shift) -> List:
-        box = geometry.box(x_pos, y_pos, x_pos+x_shift, y_pos+y_shift)
+        box = geometry.box(x_pos, y_pos, x_pos + x_shift, y_pos + y_shift)
         return np.array(box.exterior.xy).T.tolist()
 
     def _check_mask(self, mask_patch):
         if np.any(mask_patch):
             return np.unique(mask_patch, return_counts=True)
         return None, None
+
 
 class CloudAnnotationParser(WholeSlideAnnotationParser):
     ...

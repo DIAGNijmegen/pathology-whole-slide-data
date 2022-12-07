@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import List, Tuple
-from creationism.registration.factory import RegistrantFactory
 import numpy as np
+
 
 class UnsupportedVendorError(KeyError):
     def __init__(self, path, properties):
@@ -36,12 +36,7 @@ class InvalidSpacingError(ValueError):
         )
 
 
-class ImageBackend(RegistrantFactory):
-    """ Image backend abstract class
-    """
-
-
-class WholeSlideImageBackend(ImageBackend):
+class WholeSlideImageBackend:
     def __init__(self, path):
         self._path = path
 
@@ -74,8 +69,7 @@ class WholeSlideImageBackend(ImageBackend):
 
     @abstractmethod
     def close(self):
-        """[summary]
-        """
+        """[summary]"""
 
     @abstractmethod
     def get_patch(

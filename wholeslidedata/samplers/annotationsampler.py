@@ -21,7 +21,6 @@ class AnnotationSampler(Sampler, Iterator):
         pass
 
 
-@AnnotationSampler.register(("ordered",))
 class OrderedAnnotationSampler(AnnotationSampler):
     def __init__(self, counts_per_label, seed):
         super().__init__(counts_per_label=counts_per_label, seed=seed)
@@ -47,7 +46,6 @@ class OrderedAnnotationSampler(AnnotationSampler):
             self._reset_label(label)
 
 
-@AnnotationSampler.register(("balanced",))
 class BalancedAnnotationSampler(AnnotationSampler):
     def __init__(self, counts_per_label, seed, random_reset=False):
         super().__init__(counts_per_label, seed=seed)
@@ -120,7 +118,6 @@ class BalancedAnnotationSampler(AnnotationSampler):
 #         super().set_seed()
 
 
-@AnnotationSampler.register(("area",))
 class AreaAnnotationSampler(AnnotationSampler):
     def __init__(self, counts_per_label, seed, dataset, weight=1.0):
         super().__init__(counts_per_label, seed=seed)

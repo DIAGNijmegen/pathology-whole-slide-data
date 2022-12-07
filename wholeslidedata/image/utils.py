@@ -3,7 +3,7 @@ import cv2
 from bisect import bisect_left
 import numpy as np
 
-from wholeslidedata.annotation.structures import Annotation
+from wholeslidedata.annotation.types import Annotation
 from wholeslidedata.samplers.utils import shift_coordinates
 
 

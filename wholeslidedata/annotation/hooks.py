@@ -1,15 +1,13 @@
 
 from typing import List
 
-from wholeslidedata.annotation.structures import Annotation
+from wholeslidedata.annotation.types import Annotation, create_annotation
 from shapely import geometry
-from creationism.registration.factory import RegistrantFactory
 
-class AnnotationHook(RegistrantFactory):
+class AnnotationHook:
     def __call__(self, annotations: List[Annotation]):
         return annotations
 
-@AnnotationHook.register(('scaling', 'scale'))
 class ScalingAnnotationHook(AnnotationHook):
 
     def __init__(self, scaling):
@@ -23,10 +21,9 @@ class ScalingAnnotationHook(AnnotationHook):
             scaled_annotation["index"] = annotation.index
             scaled_annotation["coordinates"] = annotation.coordinates * self._scaling
             scaled_annotation["label"] = annotation.label.todict()
-            scaled_annotations.append(Annotation.create(**scaled_annotation))
+            scaled_annotations.append(create_annotation(**scaled_annotation))
         return scaled_annotations
 
-@AnnotationHook.register(('tiles', 'tiled'))
 class TiledAnnotationHook(AnnotationHook):
 
     def __init__(self, tile_size, label_names, ratio=1, overlap=0, full_coverage=False):
@@ -50,7 +47,7 @@ class TiledAnnotationHook(AnnotationHook):
                 for y in range(y1, y2, self._tile_size-self._overlap):
                     box_poly = geometry.box(x, y, x+self._tile_size, y+self._tile_size)
                     if not self._full_coverage or box_poly.within(annotation):
-                        new_annotations.append(Annotation.create(
+                        new_annotations.append(create_annotation(
                             index=index,
                             type=annotation.type,
                             coordinates=box_poly.exterior.coords,

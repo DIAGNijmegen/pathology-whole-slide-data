@@ -1,0 +1,247 @@
+@import "https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:700&amp;subset=latin-ext";
+
+body{ display:flex; flex-direction:column; min-height: 100vh; margin:0; }
+
+
+p, .sd-row, .cell, .highlight, .admonition{ 
+  max-width: 900px !important;
+}
+
+.cell {
+  margin: 0 !important;
+}
+
+a {
+  color: hsla(273, 72%, 17%, 0.7) !important;
+}
+
+
+a:hover {
+  color: #371a4e !important;
+}
+
+:root {
+  --sd-color-primary: #371a4e !important;
+  --sd-color-secondary: #6c757d;
+  --sd-color-success: #28a745;
+  --sd-color-info: #17a2b8;
+  --sd-color-warning: #f0b37e;
+  --sd-color-danger: #dc3545;
+  --sd-color-light: #f8f9fa;
+  --sd-color-muted: #6c757d;
+  --sd-color-dark: #212529;
+  --sd-color-primary-highlight: #ead0ff !important;
+  --sd-color-secondary-highlight: #5c636a;
+  --sd-color-success-highlight: #228e3b;
+  --sd-color-info-highlight: #148a9c;
+  --sd-color-warning-highlight: #cc986b;
+  --sd-color-danger-highlight: #bb2d3b;
+  --sd-color-light-highlight: #d3d4d5;
+  --sd-color-muted-highlight: #5c636a;
+  --sd-color-dark-highlight: #1c1f23;
+  --sd-color-primary-text: #fff;
+  --sd-color-secondary-text: #fff;
+  --sd-color-success-text: #fff;
+  --sd-color-info-text: #fff;
+  --sd-color-warning-text: #212529;
+  --sd-color-danger-text: #fff;
+  --sd-color-light-text: #212529;
+  --sd-color-muted-text: #fff;
+  --sd-color-dark-text: #fff;
+  --sd-color-shadow: rgba(0, 0, 0, 0.15);
+  --sd-color-card-border: rgba(0, 0, 0, 0.125);
+  --sd-color-card-border-hover: rgb(0, 255, 76);
+  --sd-color-card-background: transparent;
+  --sd-color-card-text: inherit;
+  --sd-color-card-header: transparent;
+  --sd-color-card-footer: transparent;
+  --sd-color-tabs-label-active: hsl(273, 72%, 17%);
+  --sd-color-tabs-label-hover: hsla(273, 72%, 17%, 1);
+  --sd-color-tabs-label-inactive: hsl(273, 0%, 66%);
+  --sd-color-tabs-underline-active: hsla(273, 99%, 66%, 1);
+  --sd-color-tabs-underline-hover: rgba(178, 206, 245, 0.62);
+  --sd-color-tabs-underline-inactive: transparent;
+  --sd-color-tabs-overline: rgb(222, 222, 222);
+  --sd-color-tabs-underline: rgb(222, 222, 222);
+  --sd-fontsize-tabs-label: 1rem
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    font-weight: 700;
+    /* font-family: "Saira Extra Condensed", Arial, sans-serif; */
+}
+
+
+.cell_input {
+  border-left-color: white !important;
+  border-block-color: white !important;
+  border-right-color: white !important;
+}
+
+
+.cell_input pre {
+  background-color: #F8F8F8 !important;
+}
+
+.cell_output{
+
+  width: auto;
+  height: auto;
+  font-size: small;
+  margin-left: 2rem;
+}
+
+.cell_output pre {
+  padding: 0.8%;
+  border-left-color: rgb(255, 255, 255) !important;
+  border-block-color: white !important;
+  border-right-color: white !important;
+  background-color: white !important;
+  color: rgb(0, 0, 0) !important;
+  border-color: white!important;
+  box-shadow: none !important;
+  border-style: none !important;
+
+}
+
+h1, h2, h3, h4, h5 {
+  padding-bottom: 1% !important;
+  color: rgb(56, 15, 92) !important;
+}
+
+h2, h3, h4, h5 {
+  padding-top: 3% !important;
+}
+
+
+
+#main-content h1 {
+	font-size: 2.0em
+}
+#main-content h2 {
+	font-size: 1.5em
+}
+#main-content h3 {
+	font-size: 1.17em
+}
+#main-content h4 {
+	font-size: 1.0em
+}
+#main-content h5 {
+	font-size: 2.0em
+}
+
+
+.prev-next-title {
+  color: hsla(273, 72%, 17%, 0.7) !important;
+}
+
+.prev-next-title:hover {
+  color: hsla(273, 72%, 17%, 1.0) !important;
+}
+
+
+.sd-card:hover {
+  border-color:  hsla(273, 72%, 17%, 0.5) !important;
+}
+
+.stderr pre{
+  background-color: #FFDDDD !important;
+}
+
+
+
+
+div.admonition {
+  padding: 0 !important;
+  border: none !important;
+}
+
+
+div.admonition p.admonition-title {
+  font-weight: normal;
+  font-size: 14px;
+  color: white !important;
+  margin: 8px !important;
+  text-transform: uppercase !important;
+  padding: 0px !important;
+  background-color: transparent !important;
+}
+
+div.admonition p {
+  padding: 10px !important;
+  background-color: rgb(248, 248, 248) !important;
+}
+
+div.admonition .simple {
+  background-color: rgb(248, 248, 248) !important;
+}
+
+div.admonition ul {
+  margin: 0 !important;
+}
+
+
+p.admonition-title::before{
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin: 1px;
+  margin-right: 6px;
+  -moz-border-radius: 7.5px;
+  -webkit-border-radius: 7.5px;
+  border-radius: 7.5px;
+  background-color: white;
+
+}
+p.admonition-title:after {
+  content: "" !important;
+} 
+
+div.important {
+  background-color: rgb(255, 123, 0);
+}
+
+div.attention {
+  background-color: rgb(231, 85, 247);
+}
+
+div.note {
+  background-color: rgb(0, 187, 181);
+}
+
+div.caution {
+  background-color: rgb(255, 50, 50);
+}
+
+div.seealso {
+  background-color: rgb(126, 0, 205);
+}
+
+.navbar{
+  border-bottom: 1px solid  rgb(56, 15, 92) !important;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+  margin-top: 0;
+}
+.searchbar {
+  padding-top: 5px;
+}
+
+.github-svg{
+  padding: 5px;
+  object-fit: cover;
+}
+
+.navbar li {
+  padding-right: 20px !important;
+}
+.navbar a:hover {
+  text-decoration: none !important; 
+}
+
+

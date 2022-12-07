@@ -1,14 +1,15 @@
 import abc
 from collections import UserDict
 from dataclasses import dataclass
+from enum import Enum
 from pprint import pformat
 from typing import Dict, Tuple
 
+from sourcelib.associations import Associations
+
 from wholeslidedata.annotation import utils as annotation_utils
-from wholeslidedata.labels import Labels
-from wholeslidedata.mode import WholeSlideMode
-from wholeslidedata.source.associations import Associations
-from wholeslidedata.source.files import WholeSlideAnnotationFile, WholeSlideImageFile
+from wholeslidedata.files import WholeSlideAnnotationFile, WholeSlideImageFile
+from wholeslidedata.labels import Labels, labels_factory
 
 
 @dataclass(frozen=True)
@@ -26,16 +27,16 @@ class DataSet(UserDict):
 
     def __init__(
         self,
-        mode,
+        mode: Enum,
         associations: Associations,
         labels: Labels = None,
     ):
-        self._mode = WholeSlideMode.create(mode)
+        self._mode = mode
         self._associations = associations
         self._data = dict(sorted(self._open(self._associations, labels=labels).items()))
         self._labels = self._init_labels()
         self._sample_references = self._init_samples()
-        self._sample_labels = Labels.create(list(self._sample_references.keys()))
+        self._sample_labels = labels_factory(list(self._sample_references.keys()))
         
         if len(self._sample_references) == 0:
             raise ValueError(
@@ -127,13 +128,13 @@ class WholeSlideDataSet(DataSet):
                 self.__class__.IMAGES_KEY: dict(),
                 self.__class__.ANNOTATIONS_KEY: dict(),
             }
-            for wsi_index, wsi_file in enumerate(associated_files[WholeSlideImageFile]):
+            for wsi_index, wsi_file in enumerate(associated_files[WholeSlideImageFile.IDENTIFIER]):
                 data[file_key][self.__class__.IMAGES_KEY][
                     wsi_index
                 ] = self._open_image(wsi_file)
 
             for wsa_index, wsa_file in enumerate(
-                associated_files[WholeSlideAnnotationFile]
+                associated_files[WholeSlideAnnotationFile.IDENTIFIER]
             ):
                 data[file_key][self.__class__.ANNOTATIONS_KEY][
                     wsa_index
@@ -158,7 +159,7 @@ class WholeSlideDataSet(DataSet):
             for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
                 for annotation in wsa._annotations:
                     labels.append(annotation.label)
-        return Labels.create(list(set(labels)))
+        return labels_factory(list(set(labels)))
 
     def _init_samples(self) -> Tuple:
         sample_references = {}

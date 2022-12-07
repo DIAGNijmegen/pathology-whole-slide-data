@@ -1,5 +1,6 @@
 import numpy as np
 from concurrentbuffer.producer import Producer
+from dicfg.factory import build_config
 from wholeslidedata.buffer.batchcommander import (
     MESSAGE_INDEX_IDENTIFIER,
     MESSAGE_MODE_IDENTIFIER,
@@ -8,8 +9,8 @@ from wholeslidedata.buffer.batchcommander import (
 
 
 class BatchProducer(Producer):
-    def __init__(self, config_builder, mode, reset_index=None, update_queue=None):
-        self._config_builder = config_builder
+    def __init__(self, config, mode, reset_index=None, update_queue=None):
+        self._config = config
         self._mode = mode
         self._batch_sampler = None
 
@@ -18,9 +19,8 @@ class BatchProducer(Producer):
         self._update_queue = update_queue
 
     def build(self):
-        build = self._config_builder.build_instances()
-        self._batch_sampler = build["wholeslidedata"][self._mode]["batch_sampler"]
-        return self._batch_sampler
+        builds = build_config(self._config[self._mode])
+        self._batch_sampler = builds["batch_sampler"]
 
     def create_data(self, message: dict) -> np.ndarray:
         index = message[MESSAGE_INDEX_IDENTIFIER]

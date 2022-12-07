@@ -133,3 +133,5 @@ dmypy.json
 **/tests/notebooks
 .idea/
 *.tif
+
+docs/jupyter_execute

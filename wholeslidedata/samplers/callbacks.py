@@ -1,10 +1,10 @@
-import random
-
-from wholeslidedata.samplers.utils import one_hot_encoding, fit_data, block_shaped
-import numpy as np
 from typing import Dict, Tuple
 
+import numpy as np
 import skimage.color
+from wholeslidedata.samplers.utils import (block_shaped, fit_data,
+                                           one_hot_encoding)
+
 
 class SampleCallback:
     """Pass through callback on samples"""

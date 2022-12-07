@@ -3,15 +3,10 @@ from typing import Dict, List, Optional, Union
 from shapely import geometry
 from wholeslidedata.annotation import utils as annotation_utils
 from wholeslidedata.annotation.parser import AnnotationParser
-from wholeslidedata.annotation.structures import Annotation, Polygon
-from wholeslidedata.extensions import (
-    ExtensibleMarkupLanguage,
-    JavaScriptObjectNotation,
-    TaggedImageFileExtension,
-    WholeSlideAnnotationExtension,
-)
+from wholeslidedata.annotation.types import Annotation, Polygon
 from wholeslidedata.labels import Labels
 from rtree import index
+from wholeslidedata.annotation.parsers import PARSERS
 
 
 def area_sort_with_roi(item):
@@ -21,9 +16,10 @@ def area_sort_with_roi(item):
 
 
 DEFAULT_PARSERS = {
-    JavaScriptObjectNotation: "wsa",
-    ExtensibleMarkupLanguage: "asap",
-    TaggedImageFileExtension: "mask",
+    ".json": PARSERS["wsa"],
+    ".xml": PARSERS["asap"],
+    ".tif": PARSERS["mask"],
+    ".tiff": PARSERS["mask"],
 }
 
 
@@ -34,7 +30,7 @@ class WholeSlideAnnotation:
         labels: Optional[Union[Labels, list, tuple, dict]] = None,
         parser: AnnotationParser = None,
         sort_by_overlay_index: bool = False,
-        ignore_overlap: bool = True
+        ignore_overlap: bool = True,
     ):
         """WholeSlideAnnotation contains all annotions of an whole slide image
 
@@ -47,24 +43,14 @@ class WholeSlideAnnotation:
             ignore_overlap (bool, optional): if true overlapping annotations will be not set. Defaults to True.
 
         """
-        self._annotation_path = annotation_path   
-    
-        if parser is None:
-            parser = DEFAULT_PARSERS[
-                WholeSlideAnnotationExtension.get_registrant(
-                    Path(self._annotation_path).suffix
-                )
-            ]
-
-        self._annotation_parser: AnnotationParser = AnnotationParser.create(
-            parser, labels=labels
-        )
-        self._annotations = self._annotation_parser.parse(self._annotation_path)
+        self._annotation_path = Path(annotation_path)
+        self._parser = self._init_parser(parser, self._annotation_path, labels)
+        self._annotations = self._parser.parse(self._annotation_path)
 
         self._sort_by_overlay_index = sort_by_overlay_index
         self._labels = annotation_utils.get_labels_in_annotations(self.annotations)
-        self._sample_labels = self._annotation_parser.sample_label_names
-        self._sample_types = self._annotation_parser.sample_annotation_types
+        self._sample_labels = self._parser.sample_label_names
+        self._sample_types = self._parser.sample_annotation_types
 
         self._sampling_annotations = []
         for annotation in self._annotations:
@@ -78,6 +64,13 @@ class WholeSlideAnnotation:
         self._tree = index.Index()
         for pos, annotation in enumerate(self._annotations):
             self._tree.insert(pos, annotation.bounds)
+
+    def _init_parser(self, parser, annotation_path, labels):
+        if parser is None:
+            return DEFAULT_PARSERS[Path(annotation_path).suffix](labels=labels)
+        elif type(parser) is str:
+            return PARSERS[parser](labels=labels)
+        return parser
 
     @property
     def path(self):
@@ -108,7 +101,9 @@ class WholeSlideAnnotation:
     def sampling_annotations_per_label(self) -> Dict[str, List[Annotation]]:
         return self._get_annotations_per_label(self.sampling_annotations)
 
-    def _get_annotations_per_label(self, annotations: List[Annotation]) -> Dict[str, List[Annotation]]:
+    def _get_annotations_per_label(
+        self, annotations: List[Annotation]
+    ) -> Dict[str, List[Annotation]]:
         annos_per_label = dict()
         for annotation in annotations:
             annos_per_label.setdefault(annotation.label.name, []).append(annotation)
@@ -121,7 +116,7 @@ class WholeSlideAnnotation:
                 annotation_view = self._annotations[annotation_index + 1 :]
                 for pos, annotation in enumerate(annotation_view):
                     tree.insert(pos, annotation.bounds)
-           
+
                 for pos in tree.intersection(annotation.bounds):
                     annotation.add_overlapping_annotations(annotation_view[pos])
 

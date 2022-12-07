@@ -105,6 +105,7 @@ class BatchShape(UserDict):
         spacings = None
         if isinstance(self._spacing, (int, float)):
             spacings = [self._spacing]
+    
         elif isinstance(self._spacing, Iterable):
             spacings = self._spacing
         else:
@@ -113,7 +114,7 @@ class BatchShape(UserDict):
             )
 
         shapes = None
-
+        print(self._shape)
         shapes_is_iterable = isinstance(self._shape, Iterable)
         if shapes_is_iterable and all(isinstance(s, (int, float)) for s in self._shape):
             shapes = [self._shape]

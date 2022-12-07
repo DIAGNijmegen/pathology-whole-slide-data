@@ -10,7 +10,7 @@ import pickle
 import numpy as np
 
 from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
-from wholeslidedata.annotation.wholeslideannotationwriter import convert_annotations
+from wholeslidedata.annotation.annotationwriter import convert_annotations
 
 
 class TestAnnotation(unittest.TestCase):

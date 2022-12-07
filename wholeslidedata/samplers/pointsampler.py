@@ -1,9 +1,8 @@
 import abc
-import random
 
 import numpy as np
 from shapely.affinity import affine_transform
-from shapely.geometry import Point 
+from shapely.geometry import Point
 from shapely.ops import triangulate
 from shapely.prepared import prep
 from wholeslidedata.dataset import DataSet
@@ -24,7 +23,6 @@ class PointSampler(Sampler):
         pass
 
 
-@PointSampler.register(("center",))
 class CenterPointSampler(PointSampler):
     """Samples center point"""
 
@@ -42,7 +40,6 @@ class CenterPointSampler(PointSampler):
         )
 
 
-@PointSampler.register(("centroid",))
 class CentroidPointSampler(PointSampler):
     """Samples centroid point"""
 
@@ -57,7 +54,6 @@ class CentroidPointSampler(PointSampler):
         )
 
 
-@PointSampler.register(("top_left",))
 class TopLeftPointSampler(PointSampler):
     """ Samples top left point"""
 
@@ -72,7 +68,6 @@ class TopLeftPointSampler(PointSampler):
         )
 
 
-@PointSampler.register(("uniform",))
 class UniformPointSampler(PointSampler):
     """Samples uniform point based on triangulation."""
 
@@ -115,10 +110,12 @@ class UniformPointSampler(PointSampler):
         record = self._sample_map[sample_reference]
         if len(record["transforms"]) == 0:
             return record["annotation"].representative_point()
-        
-        transform_idx = self._rng.choice(range(len(record["transforms"])), p=np.array(record["areas"])/sum(record["areas"]), size=1)[
-            0
-        ]
+
+        transform_idx = self._rng.choice(
+            range(len(record["transforms"])),
+            p=np.array(record["areas"]) / sum(record["areas"]),
+            size=1,
+        )[0]
         transform = record["transforms"][transform_idx]
         x, y = self._rng.random(2)
         if x + y > 1:
@@ -126,7 +123,6 @@ class UniformPointSampler(PointSampler):
         return affine_transform(Point(x, y), transform)
 
 
-@PointSampler.register(("random",))
 class RandomPointSampler(PointSampler):
     """Samples random point based on seek attempts. If no point is found, a representative point is returned"""
 

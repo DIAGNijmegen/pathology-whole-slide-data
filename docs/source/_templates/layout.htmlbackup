@@ -1,0 +1,152 @@
+{% extends "!layout.html" %}
+
+{%- block header %}
+  <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+    <a class="navbar-brand" href="/index.html">WholeSlideData</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/installation/index.html">Installation</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="/userguide/index.html" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            User guide
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/userguide/notebooks/wholeslideimage.html">WholeSlideImage</a>
+            <a class="dropdown-item" href="/userguide/notebooks/wholeslideannotation.html">WholeSlideAnnotation</a>
+            <a class="dropdown-item" href="/userguide/notebooks/batchiterator.html">BatchIterator</a>
+          </div>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="/userguide/configuration.html" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           Configuration
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/userguide/cooperation.html">Seed</a>
+            <hr class="dropdown-divider">
+            <a class="dropdown-item" href="/userguide/notebooks/wholeslideimage.html">Modes</a>
+            <a class="dropdown-item" href="/userguide/notebooks/minimaluserconfig.html">Data Config</a>
+            <a class="dropdown-item" href="/userguide/settings.html">Associations</a>
+            <a class="dropdown-item" href="/userguide/cooperation.html">Dataset</a>
+            <hr class="dropdown-divider">
+            <a class="dropdown-item" href="/userguide/notebooks/wholeslideannotation.html">Image Backends</a>
+            <a class="dropdown-item" href="/userguide/notebooks/batchiterator.html">Annotation Parsers</a>
+            <hr class="dropdown-divider">            
+            <a class="dropdown-item" href="/userguide/cooperation.html">Labels</a>
+            <a class="dropdown-item" href="/userguide/cooperation.html">Batch Shape</a>
+            <hr class="dropdown-divider">
+            <a class="dropdown-item" href="/userguide/cooperation.html">Label Sampler</a>
+            <a class="dropdown-item" href="/userguide/cooperation.html">Annotation Sampler</a>
+            <a class="dropdown-item" href="/userguide/cooperation.html">Point Sampler</a>
+            <a class="dropdown-item" href="/userguide/cooperation.html">Patch Sampler</a>
+            <a class="dropdown-item" href="/userguide/cooperation.html">Patch Label Sampler</a>
+            <a class="dropdown-item" href="/userguide/cooperation.html">Sample Sampler</a>
+            <a class="dropdown-item" href="/userguide/cooperation.html">Batch Sampler</a>
+            <hr class="dropdown-divider">
+            <a class="dropdown-item" href="/userguide/cooperation.html">Callbacks</a>
+            <a class="dropdown-item" href="/userguide/cooperation.html">Presets</a>
+          </div>
+        </li>
+
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="/userguide/index.html" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Cooperation
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/userguide/notebooks/wholeslideimage.html">Pytorch</a>
+            <a class="dropdown-item" href="/userguide/notebooks/wholeslideannotation.html">Keras</a>
+            <a class="dropdown-item" href="/userguide/notebooks/batchiterator.html">Albumentations</a>
+            <a class="dropdown-item" href="/userguide/notebooks/minimaluserconfig.html">ASAP</a>
+            <a class="dropdown-item" href="/userguide/settings.html">Openslide</a>
+            <a class="dropdown-item" href="/userguide/cooperation.html">Cucim</a>
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">API</a>
+        </li>
+
+
+
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          <li>
+            <div class="nav-item searchbar" role="search">
+              <form id="rtd-search-form" class="wy-form" action="/search.html" method="get">
+                <input type="text" name="q" placeholder="Search docs">
+                <input type="hidden" name="check_keywords" value="yes">
+                <input type="hidden" name="area" value="default">
+              </form>
+            </div>
+          </li>
+
+
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="bi-github">  </i></a>
+          </li>
+  
+      </ul>
+    </div>
+  </div>
+  </nav>
+
+{% endblock %}
+
+{%- block content %}
+  <div class="container d-flex flex-column h-100" style="margin-top: 5em;">
+    <div class="row">
+      <div class="col-8">
+    {% block body %}{% endblock %}
+  </div>
+  <div class="col-4">
+    {% block right_sidebar %}
+    <div class="toc-sticky toc-scroll">
+      <div class="toc-title-container">
+        <span class="toc-title">
+          {{ _("On this page") }}
+        </span>
+      </div>
+      <div class="toc-tree-container">
+        <div class="toc-tree">
+          {{ toc }}
+        </div>
+      </div>
+    </div>
+    {% endblock right_sidebar %}
+  </div>
+    </div>
+
+  </div>
+
+
+
+
+{% endblock %}
+</div>
+
+
+
+
+{%- block footer %}
+    <div class="container mt-auto">
+      <p class="float-left">
+      {% if show_copyright %}&copy;{{ copyright }}.{% endif %}
+      </p>
+    </div>
+{%- endblock %}
+
+
+
+{% block linktags %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+{% endblock %}

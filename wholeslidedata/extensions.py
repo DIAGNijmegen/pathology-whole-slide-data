@@ -1,43 +1,25 @@
-from creationism.extension import Extension
+from sourcelib.extension import Extension, create_extensions_mapping
 
+MIRX_EXTENSION = Extension((".mrxs",), folder_coupled=True)
+TAGGED_IMAGE_FILE_EXTENSION = Extension((".tif", ".tiff"))
+APERIO_SCAN_SCOPE_EXTENSION = Extension((".svs",))
+HAMAMATSU_EXTENSION = Extension((".ndpi",))
+EXTENSIBLE_MARKUP_LANGUAGE_EXTENSION = Extension((".xml",))
+JAVA_SCRIPT_OBJECT_NOTATATION_EXTENSION = Extension((".json",))
 
-class WholeSlideImageExtension(Extension):
-    ...
+WHOLE_SLIDE_IMAGE_EXTENSIONS = create_extensions_mapping(
+    [
+        MIRX_EXTENSION,
+        TAGGED_IMAGE_FILE_EXTENSION,
+        APERIO_SCAN_SCOPE_EXTENSION,
+        HAMAMATSU_EXTENSION,
+    ]
+)
 
-class FolderCoupledExtension:
-    ...
-
-@WholeSlideImageExtension.register((".mrxs",))
-class MiraxExtension(WholeSlideImageExtension, FolderCoupledExtension):
-    ...
-
-@WholeSlideImageExtension.register((".tif", ".tiff",))
-class TaggedImageFileExtension(WholeSlideImageExtension):
-    ...
-
-
-@WholeSlideImageExtension.register((".svs",))
-class AperioScanScopeExtension(WholeSlideImageExtension):
-    ...
-
-
-@WholeSlideImageExtension.register((".ndpi",))
-class HamamatsuExtension(WholeSlideImageExtension):
-    ...
-
-
-class WholeSlideAnnotationExtension(Extension):
-    ...
-
-
-@WholeSlideAnnotationExtension.register((".xml",))
-class ExtensibleMarkupLanguage(WholeSlideAnnotationExtension):
-    ...
-
-@WholeSlideAnnotationExtension.register((".json",))
-class JavaScriptObjectNotation(WholeSlideAnnotationExtension):
-    ...
-
-@WholeSlideAnnotationExtension.register((".tif",))
-class TaggedImageFileExtension(WholeSlideAnnotationExtension):
-    ...
+WHOLE_SLIDE_ANNOTATION_EXTENSIONS = create_extensions_mapping(
+    [
+        JAVA_SCRIPT_OBJECT_NOTATATION_EXTENSION,
+        EXTENSIBLE_MARKUP_LANGUAGE_EXTENSION,
+        TAGGED_IMAGE_FILE_EXTENSION,
+    ]
+)

@@ -9,7 +9,7 @@ from scipy.ndimage.morphology import binary_dilation, binary_erosion, binary_fil
 from shapely import geometry
 from shapely.strtree import STRtree
 from wholeslidedata.annotation.parser import SCHEMA
-from wholeslidedata.annotation.structures import Annotation, Point, Polygon
+from wholeslidedata.annotation.types import Annotation, Point, Polygon
 from wholeslidedata.labels import Labels
 
 

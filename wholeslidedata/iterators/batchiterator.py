@@ -7,8 +7,10 @@ from concurrentbuffer.iterator import BufferIterator
 from wholeslidedata.buffer.batchcommander import BatchCommander
 from wholeslidedata.buffer.batchproducer import BatchProducer
 from wholeslidedata.buffer.utils import create_buffer_factory
-from wholeslidedata.configuration.config import WholeSlideDataConfiguration
-from wholeslidedata.configuration.utils import get_buffer_shape, get_dataset
+from wholeslidedata.configuration import MAIN_CONFIG_PATH
+from dicfg.reader import ConfigReader
+from dicfg.factory import build_config
+from wholeslidedata.utils import get_buffer_shape
 
 
 class BatchIterator(BufferIterator):
@@ -17,14 +19,14 @@ class BatchIterator(BufferIterator):
         buffer_factory,
         dataset,
         batch_size,
-        redundant,
+        batch_left,
         index=0,
         stop_index=None,
         info_queue=None,
     ):
         self._dataset = dataset
         self._batch_size = batch_size
-        self._redundant = redundant
+        self._batch_left = batch_left
         self._index = index
         self._stop_index = stop_index
         self._info_queue = info_queue
@@ -48,10 +50,10 @@ class BatchIterator(BufferIterator):
         if (
             self._stop_index is not None
             and self._index == self._stop_index
-            and self._redundant > 0
+            and self._batch_left > 0
         ):
-            x_batch = x_batch[: self._redundant]
-            y_batch = y_batch[: self._redundant]
+            x_batch = x_batch[: self._batch_left]
+            y_batch = y_batch[: self._batch_left]
 
         if self._info_queue is not None:
             info = self._info_queue.get()
@@ -75,19 +77,25 @@ class BatchIterator(BufferIterator):
         return self._stop_index
 
 
+def get_number_of_batches(number_of_batches, dataset, batch_size):
 
+    batch_left = 0
+    if number_of_batches is not None:
+        total_annotations = 0
+        for label_name in dataset.sample_labels.names:
+            total_annotations += dataset.annotations_per_label[label_name]
 
-def get_number_of_batches(number_of_batches, total_annotations, batch_size):
-    if number_of_batches == -1:
-        number_of_batches = math.ceil(total_annotations / batch_size)
-        # left over
-        redundant = total_annotations % batch_size
-        return number_of_batches, redundant
+        if number_of_batches == -1:
+            number_of_batches = math.ceil(total_annotations / batch_size)
+            # left over
+            batch_left = total_annotations % batch_size
+            return number_of_batches, batch_left
 
-    if number_of_batches <= 0:
-        raise ValueError("number of batches can only be -1, None or > 0")
+        if number_of_batches <= 0:
+            raise ValueError("number of batches can only be -1, None or > 0")
 
-    return number_of_batches, 0
+        return number_of_batches, 0
+    return number_of_batches, batch_left
 
 
 def create_batch_iterator(
@@ -105,41 +113,29 @@ def create_batch_iterator(
     buffer_dtype=np.uint16,
     iterator_class=BatchIterator,
 ):
-    config_builder = WholeSlideDataConfiguration.build(
-        user_config=user_config,
-        modes=(mode,),
-        build_instances=False,
-        presets=presets,
+
+    config_reader = ConfigReader(
+        name="wholeslidedata",
+        main_config_path=MAIN_CONFIG_PATH,
+        context_keys=(mode,),
         search_paths=search_paths,
     )
+    config = config_reader.read(user_config=user_config, presets=presets)
+    
+    builds = build_config(config[mode])
 
-    builds = WholeSlideDataConfiguration.build(
-        user_config=user_config,
-        modes=(mode,),
-        presets=presets,
-        search_paths=search_paths,
+    batch_shape = builds["batch_shape"]
+    dataset = builds["dataset"]
+    buffer_shapes = get_buffer_shape(batch_shape)
+    number_of_batches, batch_left = get_number_of_batches(
+        number_of_batches, dataset, batch_shape.batch_size
     )
-
-    batch_size, buffer_shapes = get_buffer_shape(builds, mode)
-    dataset = get_dataset(builds, mode)
-
-    redundant = 0
-    if number_of_batches is not None:
-        total_annotations = 0
-        for label_name in dataset.sample_labels.names:
-            total_annotations += dataset.annotations_per_label[label_name]
-
-        number_of_batches, redundant = get_number_of_batches(
-            number_of_batches=number_of_batches,
-            total_annotations=total_annotations,
-            batch_size=batch_size,
-        )
 
     update_queue = Queue() if update_samplers else None
     info_queue = Queue() if return_info else None
 
     batch_commander = BatchCommander(
-        config_builder=config_builder,
+        config=config,
         mode=mode,
         reset_index=number_of_batches,
         update_queue=update_queue,
@@ -147,7 +143,7 @@ def create_batch_iterator(
     )
 
     batch_producer = BatchProducer(
-        config_builder=config_builder,
+        config=config,
         mode=mode,
         reset_index=number_of_batches,
         update_queue=update_queue,
@@ -166,10 +162,9 @@ def create_batch_iterator(
     return iterator_class(
         buffer_factory=buffer_factory,
         dataset=dataset,
-        batch_size=batch_size,
-        redundant=redundant,
+        batch_size=batch_shape.batch_size,
+        batch_left=batch_left,
         index=index,
         stop_index=number_of_batches,
         info_queue=info_queue,
     )
-

@@ -1,15 +1,9 @@
-"""
-Module docstring
-
-"""
-from creationism.registration.factory  import RegistrantFactory
-
 import numpy as np
 
 MAX_RANDOM_SEED_NUMBER = 4294967294
 
-# Abstract Controllers #
-class Sampler(RegistrantFactory):
+
+class Sampler:
     def __init__(self, seed: int):
         self._seed = seed
         self._rng = np.random.RandomState(self._seed)
@@ -35,5 +29,3 @@ class Sampler(RegistrantFactory):
         Returns:
             [type]: [description]
         """
-
-

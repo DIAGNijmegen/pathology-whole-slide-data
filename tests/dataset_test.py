@@ -1,4 +1,4 @@
-from wholeslidedata.source.files import WholeSlideAnnotationFile
+from wholeslidedata.files import WholeSlideAnnotationFile
 from wholeslidedata.source.associations import associate_files
 from wholeslidedata.source.utils import whole_slide_files_from_folder_factory
 from wholeslidedata.dataset import WholeSlideDataSet

@@ -3,7 +3,7 @@ from typing import List, Optional
 import cv2
 import numpy as np
 from skimage.transform import resize
-from wholeslidedata.annotation.structures import Point, Polygon
+from wholeslidedata.annotation.types import Point, Polygon
 from wholeslidedata.samplers.utils import shift_coordinates
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.samplers.sampler import Sampler
@@ -48,7 +48,6 @@ class PatchLabelSampler(Sampler):
         pass
 
 
-@PatchLabelSampler.register(("mask",))
 class MaskPatchLabelSampler(PatchLabelSampler):
     def __init__(self, image_backend, ratio, center, relative, spacing=0.5):
         self._image_backend = image_backend
@@ -101,7 +100,6 @@ class MaskPatchLabelSampler(PatchLabelSampler):
         pass
 
 
-@PatchLabelSampler.register(("segmentation",))
 class SegmentationPatchLabelSampler(PatchLabelSampler):
     def __init__(self):
         pass
@@ -152,7 +150,6 @@ class SegmentationPatchLabelSampler(PatchLabelSampler):
         return mask.astype(np.uint8)
 
 
-@PatchLabelSampler.register(("classification",))
 class ClassificationPatchLabelSampler(PatchLabelSampler):
     def __init__(self):
         pass
@@ -172,7 +169,6 @@ class ClassificationPatchLabelSampler(PatchLabelSampler):
         return np.array([annotations[-1].label.value])
 
 
-@PatchLabelSampler.register(("detection",))
 class DetectionPatchLabelSampler(PatchLabelSampler):
     def __init__(
         self,

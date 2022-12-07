@@ -1,3 +1,0 @@
-module: wholeslidedata.labels
-attribute: Labels.create
-labels: ${wholeslidedata:label_map}

@@ -1,8 +1,7 @@
 from dataclasses import dataclass
-from typing import Any, List
+from typing import Any, List, Union
 from warnings import warn
-
-from creationism.registration.factory import RegistrantFactory
+from functools import singledispatch
 
 
 class CreateLabelsError(Exception):
@@ -18,11 +17,7 @@ class NegativeLabelValueWarning(Warning):
     ...
 
 
-class Label(RegistrantFactory):
-    @classmethod
-    def create(cls, label: Any, *args, **kwargs):
-        return super().create(registrant_name=type(label), label=label, *args, **kwargs)
-
+class Label:
     def __init__(
         self,
         name: str,
@@ -87,26 +82,7 @@ class Label(RegistrantFactory):
         return f"Label({', '.join([f'{key}={value}' for key, value in self.todict().items()])})"
 
 
-@Label.register_func((Label,))
-def label_from_label(label: Label, *args, **kwargs):
-    return label
-
-
-@Label.register_func((dict,))
-def label_from_dict(label: dict, *args, **kwargs):
-    return Label(**label)
-
-
-@Label.register_func((str,))
-def label_from_str(label: str, idx: int, *args, **kwargs):
-    return Label(name=label, value=idx)
-
-
-class Labels(RegistrantFactory):
-    @classmethod
-    def create(cls, labels):
-        return super().create(registrant_name=type(labels), labels=labels)
-
+class Labels:
     def __init__(self, labels: List[Label]):
         self._labels = labels
         self._label_by_name = {label.name: label for label in self._labels}
@@ -157,18 +133,54 @@ class Labels(RegistrantFactory):
             raise KeyError(f"no label with name {name}")
 
 
-@Labels.register_func((Labels,))
-def labels_from_labels(labels: Labels):
+def label_factory(label: Any, **kwargs):
+    return _label_factory(label, **kwargs)
+
+
+@singledispatch
+def _label_factory(label: Any):
+    raise ValueError("Unsupported label type", type(label))
+
+
+@_label_factory.register
+def _label_from_label(label: Label, **kwargs):
+    return label
+
+
+@_label_factory.register
+def _label_from_dict(label: dict, **kwargs):
+    return Label(**label)
+
+
+@_label_factory.register
+def _label_from_str(label: str, idx: int):
+    return Label(name=label, value=idx)
+
+
+def labels_factory(labels: Any):
+    return _labels_factory(labels)
+
+
+@singledispatch
+def _labels_factory(labels: Any):
+    return Labels([Label(key, value) for key, value in labels.items()])
+    raise ValueError("Unsupported labels type", type(labels))
+
+
+@_labels_factory.register
+def _labels_from_labels(labels: Labels):
     return labels
 
 
-@Labels.register_func((dict,))
-def labels_from_dict(labels: dict):
+@_labels_factory.register
+def _labels_from_dict(labels: dict):
     return Labels([Label(key, value) for key, value in labels.items()])
 
 
-@Labels.register_func((tuple, set, list))
-def labels_from_collection(labels):
+@_labels_factory.register(set)
+@_labels_factory.register(tuple)
+@_labels_factory.register(list)
+def _labels_from_collection(labels: Union[set, tuple, list]):
     return Labels(
-        [Label.create(label=label, idx=idx + 1) for idx, label in enumerate(labels)]
+        [label_factory(label, idx=idx + 1) for idx, label in enumerate(labels)]
     )

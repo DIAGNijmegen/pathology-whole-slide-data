@@ -1,20 +1,12 @@
-from creationism.mode import Mode
+from enum import Enum, auto
 
 
-class WholeSlideMode(Mode):
-    ...
+class WholeSlideMode(Enum):
+    default = auto()
+    training = auto()
+    validation = auto()
+    test = auto()
+    inference = auto()
 
-class DefaultMode(WholeSlideMode):
-    ...
 
-class TrainingMode(WholeSlideMode):
-    ...
-
-class ValidationMode(WholeSlideMode):
-    ...
-
-class TestMode(WholeSlideMode):
-    ...
-
-class InferenceMode(WholeSlideMode):
-    ...
+create_mode = lambda name: WholeSlideMode[name]
