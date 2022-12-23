@@ -195,12 +195,14 @@ class MaskAnnotationParser(AnnotationParser):
         shape=(1024, 1024),
         backend="asap",
         full_coverage=False,
+        offset=(0,0),
     ):
         super().__init__(labels=labels)
         self._processing_spacing = processing_spacing
         self._output_spacing = output_spacing
         self._shape = np.array(shape)
         self._backend = backend
+        self._offset = offset
         self._np_check_tissue = np.all if full_coverage else np.any
 
     def get_available_labels(opened_annotation: Any) -> Labels:
@@ -212,12 +214,15 @@ class MaskAnnotationParser(AnnotationParser):
         size = self._shape[0]
         ratio = self._processing_spacing / self._output_spacing
 
+        y_offset = int(self._offset[1] // ratio)
+        x_offset = int(self._offset[0] // ratio)
+
         np_mask = mask.get_slide(self._processing_spacing).squeeze()
         shape = np.array(np_mask.shape)
 
         new_shape = shape + size // ratio - shape % (size // ratio)
         new_mask = np.zeros(new_shape.astype("int"), dtype="uint8")
-        new_mask[: shape[0], : shape[1]] = np_mask
+        new_mask[: shape[0]-y_offset, : shape[1]-x_offset] = np_mask[y_offset:, x_offset:]
 
         for annotation in self._get_annotations(new_mask, size, ratio):
             yield annotation
@@ -235,7 +240,7 @@ class MaskAnnotationParser(AnnotationParser):
                 if not self._np_check_tissue(blocks[region_index]):
                     continue
 
-                box = self._get_coordinates(x * size, y * size, size, size)
+                box = self._get_coordinates((x * size)+self._offset[0], (y * size)+self._offset[1], size, size)
                 yield {
                     "type": AnnotationType.POLYGON.value,
                     "coordinates": np.array(box),
