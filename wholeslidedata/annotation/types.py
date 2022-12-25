@@ -11,6 +11,10 @@ warnings.filterwarnings(
 )
 
 
+
+# overlay_index: int = None,
+# weight: float = None,
+# color: str = None,
 class Annotation(geometry.base.BaseGeometry):
     def __init__(self, index: int, label: Union[Label, dict], coordinates, **kwargs):
         self._index = index

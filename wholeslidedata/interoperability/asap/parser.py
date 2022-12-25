@@ -68,10 +68,10 @@ class AsapAnnotationParser(AnnotationParser):
     def _get_label(self, root, child, labels: Labels, type):
         name = self._get_label_name(child, labels, type)
         
-        try:
-            color = root.find(f".//Group[@Name='{name}']").get("Color")
-        except AttributeError:
-            color = None
+        # try:
+        #     color = root.find(f".//Group[@Name='{name}']").get("Color")
+        # except AttributeError:
+        #     color = None
 
         name = name.lower().strip()
         if name not in labels.names:
@@ -80,9 +80,9 @@ class AsapAnnotationParser(AnnotationParser):
         label = labels.get_label_by_name(name)
         label = label.todict()
     
-        if 'color' not in label or label['color'] is None:
-            if color is not None:
-                label["color"] = color
+        # if 'color' not in label or label['color'] is None:
+        #     if color is not None:
+        #         label["color"] = color
 
         return label
 

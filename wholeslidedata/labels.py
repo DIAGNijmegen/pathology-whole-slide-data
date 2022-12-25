@@ -18,22 +18,9 @@ class NegativeLabelValueWarning(Warning):
 
 
 class Label:
-    def __init__(
-        self,
-        name: str,
-        value: int,
-        overlay_index: int = None,
-        weight: float = None,
-        color: str = None,
-        **kwargs,
-    ):
-
+    def __init__(self, name: str, value: int):
         self._name = str(name).lower()
         self._value = value
-        self._weight = weight
-        self._overlay_index = overlay_index
-        self._color = color
-        self._kwargs = kwargs
 
         if not isinstance(value, int):
             raise LabelValueError(f"label value {value} should be an integer")
@@ -41,11 +28,10 @@ class Label:
         if value < 0:
             warn(NegativeLabelValueWarning())
 
-        if weight is not None and not isinstance(weight, (int, float)):
-            raise LabelValueError(f"label weight {value} should be a number")
-
-        for key, value in kwargs.items():
-            setattr(self, key, value)
+    def __eq__(self, other):
+        if isinstance(other, Label):
+            return self.name == other.name and self.value == other.value
+        return False
 
     @property
     def name(self):
@@ -55,28 +41,8 @@ class Label:
     def value(self):
         return self._value
 
-    @property
-    def weight(self):
-        return self._weight
-
-    @property
-    def overlay_index(self):
-        return self._overlay_index
-
-    @property
-    def color(self):
-        return self._color
-
     def todict(self):
-        label_dict = dict(name=self.name, value=self.value)
-        if self.weight is not None:
-            label_dict["weight"] = self.weight
-        if self.overlay_index is not None:
-            label_dict["overlay_index"] = self.overlay_index
-        if self.color is not None:
-            label_dict["color"] = self.color
-        label_dict.update(self._kwargs)
-        return label_dict
+        return dict(name=self.name, value=self.value)
 
     def __str__(self):
         return f"Label({', '.join([f'{key}={value}' for key, value in self.todict().items()])})"
@@ -92,7 +58,7 @@ class Labels:
         return self._labels[idx]
 
     def __setitem__(self, idx, value):
-        self._labels[idx] = Label.create(value, idx=idx)
+        self._labels[idx] = label_factory(value, idx=idx)
 
     def __len__(self):
         return len(self._labels)
@@ -153,8 +119,8 @@ def _label_from_dict(label: dict, **kwargs):
 
 
 @_label_factory.register
-def _label_from_str(label: str, idx: int):
-    return Label(name=label, value=idx)
+def _label_from_str(label: str, value: int):
+    return Label(name=label, value=value)
 
 
 def labels_factory(labels: Any):
@@ -164,7 +130,6 @@ def labels_factory(labels: Any):
 @singledispatch
 def _labels_factory(labels: Any):
     return Labels([Label(key, value) for key, value in labels.items()])
-    raise ValueError("Unsupported labels type", type(labels))
 
 
 @_labels_factory.register
@@ -182,5 +147,5 @@ def _labels_from_dict(labels: dict):
 @_labels_factory.register(list)
 def _labels_from_collection(labels: Union[set, tuple, list]):
     return Labels(
-        [label_factory(label, idx=idx + 1) for idx, label in enumerate(labels)]
+        [label_factory(label, value=idx + 1) for idx, label in enumerate(labels)]
     )

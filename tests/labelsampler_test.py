@@ -10,6 +10,7 @@ from wholeslidedata.samplers.labelsampler import (
 )
 import numpy as np
 
+
 class TestRandomLabelSampler:
     def test_init(self):
         labels = ["label1", "label2", "label3"]
@@ -192,17 +193,16 @@ class TestWeightedLabelSampler:
         label_sampler.update(batch=[])
 
 
-
 class TestPixelCountedLabelSampler:
     @classmethod
     @pytest.fixture
     def sampler(cls):
-        labels = ['label1', 'label2', 'label3']
+        labels = ["label1", "label2", "label3"]
         return PixelCountedLabelSampler(labels=labels)
 
     def test_init(self, sampler):
-        assert sampler._labels == ['label1', 'label2', 'label3']
-        assert sampler._pixel_count_per_label == {'label1': 1, 'label2': 1, 'label3': 1}
+        assert sampler._labels == ["label1", "label2", "label3"]
+        assert sampler._pixel_count_per_label == {"label1": 1, "label2": 1, "label3": 1}
 
     def test_next(self, sampler):
         # Test that all labels are returned with equal probability
@@ -213,41 +213,42 @@ class TestPixelCountedLabelSampler:
             counts[label] += 1
         for count in counts.values():
             assert abs(count - 333) < 50
-        
+
         # Test that the label with the highest pixel count has the lowest probability
         # of being returned
-        sampler._pixel_count_per_label['label1'] = 100
+        sampler._pixel_count_per_label["label1"] = 100
         counts = {label: 0 for label in sampler._labels}
         for _ in range(1000):
             label = next(sampler)
             counts[label] += 1
-        assert counts['label1'] < 300
-        assert counts['label2'] > 300
-        assert counts['label3'] > 300
-
-
+        assert counts["label1"] < 300
+        assert counts["label2"] > 300
+        assert counts["label3"] > 300
 
     def test_update(self, sampler):
         # Test that the pixel counts are updated correctly
-        y_batch = np.array([
-            [1, 0, 0],
-            [0, 1, 0],
-            [0, 0, 1],
-            [1, 0, 0],
-        ])
+        y_batch = np.array(
+            [
+                [1, 0, 0],
+                [0, 1, 0],
+                [0, 0, 1],
+                [1, 0, 0],
+            ]
+        )
         sampler.update((None, y_batch))
-        assert sampler._pixel_count_per_label == {'label1': 3, 'label2': 2, 'label3': 2}
-        y_batch = np.array([
-            [0, 0, 1],
-            [0, 0, 1],
-        ])
+        assert sampler._pixel_count_per_label == {"label1": 3, "label2": 2, "label3": 2}
+        y_batch = np.array(
+            [
+                [0, 0, 1],
+                [0, 0, 1],
+            ]
+        )
         sampler.update((None, y_batch))
-        assert sampler._pixel_count_per_label == {'label1': 3, 'label2': 2, 'label3': 4}
-
+        assert sampler._pixel_count_per_label == {"label1": 3, "label2": 2, "label3": 4}
 
     def test_one_hot_encoded_count(self, sampler):
         # Create a test case with 3 labels and a batch of size 2
         y_batch = np.array([[1, 0, 0], [0, 0, 1]])
         # Ensure the count is correct for each label
-        expected_count = {'label1': 1, 'label2': 0, 'label3': 1}
+        expected_count = {"label1": 1, "label2": 0, "label3": 1}
         assert sampler._one_hot_encoded_count(y_batch) == expected_count

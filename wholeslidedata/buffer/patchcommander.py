@@ -78,6 +78,17 @@ class SlidingPatchCommander(PatchCommander):
                 messages.append(message)
         return messages
 
+class AnnotationPatchCommander(PatchCommander):
+    def __init__(
+        self,
+        info_queue: Queue,
+        annotations,
+        spacing: float,
+        backend="asap",
+        **kwargs,
+    ):
+
+        pass
 
 class RandomPatchCommander(PatchCommander):
     def __init__(

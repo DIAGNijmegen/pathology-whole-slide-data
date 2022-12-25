@@ -148,7 +148,8 @@ def write_asap_annotation(annotations, output_path, scaling=1.0):
 
     for annotation in annotations:
         label_name = annotation.label.name
-        label_color = annotation.label.color if annotation.label.color is not None else "black"
+        # label_color = annotation.label.color if annotation.label.color is not None else "black"
+        label_color = "black"
         index = annotation.index
         if isinstance(annotation, Polygon):
             coordinates = annotation.coordinates / scaling
@@ -190,9 +191,10 @@ def write_asap_annotation2(old_xml, annotations, output_path, scaling=1.0):
         label_name = annotation.label.name
         if label_name == "none":
             label_name = "None"
-        if annotation.label.weight is not None and annotation.label.weight > 0:
-            label_name = label_name + "-weight=" + str(annotation.label.weight)
-        label_color = annotation.label.color if annotation.label.color else "black"
+        # if annotation.label.weight is not None and annotation.label.weight > 0:
+        #     label_name = label_name + "-weight=" + str(annotation.label.weight)
+        # label_color = annotation.label.color if annotation.label.color else "black"
+        label_color = "black"
         index = annotation.index
         if isinstance(annotation, Polygon):
             coordinates = annotation.coordinates * scaling

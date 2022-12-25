@@ -8,7 +8,7 @@ from botocore.exceptions import ClientError
 boto_resource = boto3.resource("s3")
 boto_resource.meta.client.meta.events.register("choose-signer.s3.*", disable_signing)
 
-from wholeslidedata.accessories.asap.parser import AsapAnnotationParser
+from wholeslidedata.interoperability.asap.parser import AsapAnnotationParser
 from wholeslidedata.annotation.parser import CloudAnnotationParser
 
 

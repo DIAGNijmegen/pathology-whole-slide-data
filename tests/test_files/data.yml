@@ -1,9 +1,0 @@
-training:
-  #  - wsi:
-  #      path: "D:\\Projects\\Radboud Universiteit\\Extended Research Project\\pathology-whole-slide-data\\tests\\test_files\\TCGA-21-5784-01Z-00-DX1.tif"
-  #  - wsa:
-  #      path: "D:\\Projects\\Radboud Universiteit\\Extended Research Project\\pathology-whole-slide-data\\tests\\test_files\\TCGA-21-5784-01Z-00-DX1.xml"
-  - wsi:
-      path: "/mnt/d/Projects/Radboud Universiteit/Extended Research Project/pathology-whole-slide-data/tests/test_files/TCGA-21-5784-01Z-00-DX1.tif"
-  - wsa:
-      path: "/mnt/d/Projects/Radboud Universiteit/Extended Research Project/pathology-whole-slide-data/tests/test_files/TCGA-21-5784-01Z-00-DX1.xml"

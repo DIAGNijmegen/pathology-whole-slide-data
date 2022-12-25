@@ -1,6 +1,5 @@
 from typing import List
 from wholeslidedata.dataset import WholeSlideDataSet, WholeSlideSampleReference
-from wholeslidedata.samplers.structures import Batch
 
 
 class BatchSampler:
@@ -19,7 +18,6 @@ class BatchSampler:
         return batch_data
 
     def _sample_batch(self, batch_data: List[WholeSlideSampleReference], i):
-        # decalare x_batch and y_batch
         x_batch = []
         y_batch = []
         for sample_reference in batch_data:
@@ -28,7 +26,6 @@ class BatchSampler:
             point = sample_reference['point']
             x_samples, y_samples = self._sampler.sample(wsi, wsa, point)
 
-            # append samples to batch
             x_batch.append(x_samples)
             y_batch.append(y_samples)
 

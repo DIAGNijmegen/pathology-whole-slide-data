@@ -77,47 +77,6 @@ class BalancedAnnotationSampler(AnnotationSampler):
             self._reset_label(label)
 
 
-# @AnnotationSampler.register(("weighted",))
-# class WeightedAnnotationSampler(AnnotationSampler):
-#     def __init__(
-#         self,
-#         counts_per_label,
-#         seed,
-#         samples,
-#         standard_weight=0.2,
-#         normalize_value=255.0,
-#     ):
-#         super().__init__(counts_per_label, seed=seed)
-#         self._Annotationes = {
-#             label: list(range(counts))
-#             for label, counts in self._counts_per_label.items()
-#         }
-#         self._Annotation_weights = {}
-#         for label_name, annotations in samples.items():
-#             label_weights = []
-#             for annotation in annotations:
-#                 if annotation.label.weight is not None:
-#                     label_weights.append(annotation.label.weight / normalize_value)
-#                 else:
-#                     label_weights.append(standard_weight)
-#             label_weights = np.array(label_weights)
-#             self._Annotation_weights[label_name] = label_weights / sum(label_weights)
-
-#     def _next(self, label):
-#         return np.random.choice(
-#             self._Annotationes[label], 1, p=self._Annotation_weights[label]
-#         )[0]
-
-#     def update(self, data):
-#         pass
-
-#     def _reset_label(self, label):
-#         pass
-
-#     def reset(self):
-#         super().set_seed()
-
-
 class AreaAnnotationSampler(AnnotationSampler):
     def __init__(self, counts_per_label, seed, dataset, weight=1.0):
         super().__init__(counts_per_label, seed=seed)
