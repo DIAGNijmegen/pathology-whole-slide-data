@@ -5,7 +5,7 @@ from wholeslidedata.annotation.parser import (
     AnnotationType,
     InvalidAnnotationParserError,
 )
-from wholeslidedata.labels import Labels
+from wholeslidedata.annotation.labels import Labels
 
 class AsapAnnotationParser(AnnotationParser):
 
@@ -54,7 +54,6 @@ class AsapAnnotationParser(AnnotationParser):
 
                 for coordinates in self._yield_coordinates(child, type):
                     yield {
-                        "type": type.value,
                         "coordinates": coordinates,
                         "label": label,
                     }

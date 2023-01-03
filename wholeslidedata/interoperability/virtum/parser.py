@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 from wholeslidedata.annotation.parser import AnnotationParser
-from wholeslidedata.labels import Labels
+from wholeslidedata.annotation.labels import Labels
 
 
 

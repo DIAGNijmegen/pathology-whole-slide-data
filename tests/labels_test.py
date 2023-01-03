@@ -1,8 +1,6 @@
-from wholeslidedata.labels import (
+from wholeslidedata.annotation.labels import (
     Label,
     Labels,
-    labels_factory,
-    label_factory,
     LabelValueError,
     NegativeLabelValueWarning,
 )
@@ -11,25 +9,25 @@ import pytest
 
 def test_create_label_with_label():
     label1 = Label(name="label_name", value=1)
-    label2 = label_factory(label1)
+    label2 = Label.create(label1)
     label1 == label2
 
 
 def test_create_label_with_dict():
     label_dict = dict(name="label_name", value=1)
-    label2 = label_factory(label_dict)
+    label2 = Label.create(label_dict)
     assert label_dict["name"] == label2.name
     assert label_dict["value"] == label2.value
 
 
 def test_create_label_with_str():
-    label = label_factory(label="label_name", value=1)
+    label = Label.create(label="label_name", value=1)
     assert "label_name" == label.name
     assert 1 == label.value
 
 
 def test_label_to_dict():
-    label = label_factory(label="label_name", value=1)
+    label = Label.create(label="label_name", value=1)
     label_dict = label.todict()
     label_dict == dict(label="label_name", value=1)
 
@@ -37,13 +35,13 @@ def test_label_to_dict():
 def test_create_labels_with_labels():
     label1 = Label(name="label_name", value=1)
     labels1 = Labels([label1])
-    labels2 = labels_factory(labels1)
+    labels2 = Labels.create(labels1)
     assert labels1 == labels2
 
 
 def test_create_labels_with_dict():
     labels_dict = dict(label1=1, label2=2)
-    labels = labels_factory(labels_dict)
+    labels = Labels.create(labels_dict)
     l1 = labels.get_label_by_name("label1")
     l2 = labels.get_label_by_name("label2")
     assert l1.name == "label1"

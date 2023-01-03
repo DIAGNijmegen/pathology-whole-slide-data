@@ -9,7 +9,7 @@ import multiresolutionimageinterface as mir
 import numpy as np
 from multiresolutionimageinterface import MultiResolutionImageWriter
 from shapely import geometry
-from wholeslidedata.image.wholeslideimage import WholeSlideImage
+from wholeslidedata.image.wsi import WholeSlideImage
 from wholeslidedata.samplers.patchlabelsampler import SegmentationPatchLabelSampler
 
 

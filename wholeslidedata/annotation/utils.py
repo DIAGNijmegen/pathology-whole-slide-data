@@ -6,41 +6,11 @@ import jsonschema
 import numpy as np
 from matplotlib import pyplot as plt
 from scipy.ndimage.morphology import binary_dilation, binary_erosion, binary_fill_holes
-from shapely import geometry
-from shapely.strtree import STRtree
 from wholeslidedata.annotation.parser import SCHEMA
-from wholeslidedata.annotation.types import Annotation, Point, Polygon
-from wholeslidedata.labels import Labels
+from wholeslidedata.annotation.types import Annotation, PointAnnotation, PolygonAnnotation
+from wholeslidedata.annotation.labels import Labels
 
 
-class GeometrySelector:
-    def __init__(self, geometries: List[geometry.base.BaseGeometry]):
-        self._geometries = geometries
-        self._tree = STRtree(geometries)
-
-    def select_annotations(
-        self, center_x: int, center_y: int, width: int, height: int
-    ) -> List[geometry.base.BaseGeometry]:
-
-        """Selects annotations within specific region
-
-        Args:
-            center_x (int): x center of region
-            center_y (int): y center of region
-            width (int): width of region
-            height (int): height of region
-
-        Returns:
-            List[geometry.base.BaseGeometry]: all geometries that overlap with specified region
-        """
-
-        box = geometry.box(
-            center_x - width // 2,
-            center_y - height // 2,
-            center_x + width // 2,
-            center_y + height // 2,
-        )
-        return self._tree.query(box)
 
 
 def get_labels_in_annotations(annotations):
@@ -126,20 +96,16 @@ def plot_annotations(
     ax = ax or plt
 
     for annotation in annotations:
-        color = (
-            color_map[annotation.label.name]
-            if color_map is not None
-            else annotation.label.color
-        )
+        color = 'black'
 
         if use_base_coordinates:
             coordinates = annotation.base_coordinates * scale
         else:
             coordinates = annotation.coordinates * scale
 
-        if isinstance(annotation, Point):
+        if isinstance(annotation, PointAnnotation):
             ax.scatter(*coordinates, color=annotation.label.color)
-        elif isinstance(annotation, Polygon):
+        elif isinstance(annotation, PolygonAnnotation):
             ax.plot(*list(zip(*coordinates)), color=color, linewidth=2)
         else:
             raise ValueError(f"invalid annotation {type(annotation)}")

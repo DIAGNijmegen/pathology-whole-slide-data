@@ -3,10 +3,11 @@ from typing import Dict, List, Optional, Union
 from shapely import geometry
 from wholeslidedata.annotation import utils as annotation_utils
 from wholeslidedata.annotation.parser import AnnotationParser
-from wholeslidedata.annotation.types import Annotation, Polygon
-from wholeslidedata.labels import Labels
+from wholeslidedata.annotation.types import Annotation, PolygonAnnotation
+from wholeslidedata.annotation.labels import Labels
 from rtree import index
-from wholeslidedata.annotation.parsers import PARSERS
+from wholeslidedata.annotation.parser import AnnotationParser, MaskAnnotationParser
+from wholeslidedata.interoperability.asap.parser import AsapAnnotationParser
 
 
 def area_sort_with_roi(item):
@@ -16,10 +17,10 @@ def area_sort_with_roi(item):
 
 
 DEFAULT_PARSERS = {
-    ".json": PARSERS["wsa"],
-    ".xml": PARSERS["asap"],
-    ".tif": PARSERS["mask"],
-    ".tiff": PARSERS["mask"],
+    ".json": AnnotationParser,
+    ".xml": AsapAnnotationParser,
+    ".tif": MaskAnnotationParser,
+    ".tiff": MaskAnnotationParser,
 }
 
 
@@ -31,6 +32,7 @@ class WholeSlideAnnotation:
         parser: AnnotationParser = None,
         sort_by_overlay_index: bool = False,
         ignore_overlap: bool = True,
+        **kwargs
     ):
         """WholeSlideAnnotation contains all annotions of an whole slide image
 
@@ -41,10 +43,11 @@ class WholeSlideAnnotation:
             parser (AnnotationParser, optional): annotation parser. Defaults to "asap".
             sort_by_overlay_index (bool, optional): if true, selecting annotions will be sorted by overlay index when . Defaults to False.
             ignore_overlap (bool, optional): if true overlapping annotations will be not set. Defaults to True.
+            kwargs is reserved for the initialization of the parser
 
         """
         self._annotation_path = Path(annotation_path)
-        self._parser = self._init_parser(parser, self._annotation_path, labels)
+        self._parser = self._init_parser(parser, self._annotation_path, labels, **kwargs)
         self._annotations = self._parser.parse(self._annotation_path)
 
         self._sort_by_overlay_index = sort_by_overlay_index
@@ -55,7 +58,7 @@ class WholeSlideAnnotation:
         self._sampling_annotations = []
         for annotation in self._annotations:
             if not self._sample_labels or annotation.label.name in self._sample_labels:
-                if not self._sample_types or type(annotation) in self._sample_types:
+                if not self._sample_types or annotation.type in self._sample_types:
                     self._sampling_annotations.append(annotation)
 
         if not ignore_overlap:
@@ -65,12 +68,13 @@ class WholeSlideAnnotation:
         for pos, annotation in enumerate(self._annotations):
             self._tree.insert(pos, annotation.bounds)
 
-    def _init_parser(self, parser, annotation_path, labels):
+    def _init_parser(self, parser, annotation_path, labels, **kwargs):
+        if isinstance(parser, AnnotationParser):
+            return parser
         if parser is None:
-            return DEFAULT_PARSERS[Path(annotation_path).suffix](labels=labels)
-        elif type(parser) is str:
-            return PARSERS[parser](labels=labels)
-        return parser
+            return DEFAULT_PARSERS[Path(annotation_path).suffix](labels=labels, **kwargs)
+        return parser(labels=labels, **kwargs)
+
 
     @property
     def path(self):
@@ -86,11 +90,6 @@ class WholeSlideAnnotation:
 
     @property
     def sampling_annotations(self) -> List[Annotation]:
-        """Annotations that will be used for sampling
-
-        Returns:
-            List[Annotation]: list of annotations
-        """
         return self._sampling_annotations
 
     @property
@@ -111,7 +110,7 @@ class WholeSlideAnnotation:
 
     def _set_overlapping_annotations(self):
         for annotation_index, annotation in enumerate(self._annotations[:-1]):
-            if isinstance(annotation, Polygon):
+            if isinstance(annotation, PolygonAnnotation):
                 tree = index.Index()
                 annotation_view = self._annotations[annotation_index + 1 :]
                 for pos, annotation in enumerate(annotation_view):
@@ -146,13 +145,8 @@ class WholeSlideAnnotation:
             self._annotations[pos] for pos in self._tree.intersection(box.bounds)
         ]
 
-        if self._sort_by_overlay_index:
-            return sorted(
-                annotations,
-                key=lambda item: self.labels.get_label_by_name(
-                    item.label.name
-                ).overlay_index,
-            )
+        # add custom sort function, e.g., overlay index
+
         sorted_annotations = sorted(
             annotations,
             key=lambda item: self.labels.get_label_by_name(item.label.name).value,

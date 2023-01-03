@@ -18,7 +18,11 @@ class NegativeLabelValueWarning(Warning):
 
 
 class Label:
-    def __init__(self, name: str, value: int):
+    @staticmethod
+    def create(label: Any, **kwargs):
+        return _label_factory(label, **kwargs)
+    
+    def __init__(self, name: str, value: int, **kwargs):
         self._name = str(name).lower()
         self._value = value
 
@@ -27,6 +31,9 @@ class Label:
 
         if value < 0:
             warn(NegativeLabelValueWarning())
+
+        for key, value in kwargs.items():
+            self.__setattr__(key, value)
 
     def __eq__(self, other):
         if isinstance(other, Label):
@@ -40,6 +47,10 @@ class Label:
     @property
     def value(self):
         return self._value
+    
+    @property
+    def properties(self):
+        return self._properties
 
     def todict(self):
         return dict(name=self.name, value=self.value)
@@ -49,6 +60,11 @@ class Label:
 
 
 class Labels:
+
+    @staticmethod
+    def create(labels: Any):
+        return _labels_factory(labels)
+
     def __init__(self, labels: List[Label]):
         self._labels = labels
         self._label_by_name = {label.name: label for label in self._labels}
@@ -58,7 +74,7 @@ class Labels:
         return self._labels[idx]
 
     def __setitem__(self, idx, value):
-        self._labels[idx] = label_factory(value, idx=idx)
+        self._labels[idx] = Label.create(value, idx=idx)
 
     def __len__(self):
         return len(self._labels)
@@ -92,19 +108,19 @@ class Labels:
         except KeyError:
             raise KeyError(f"no label value {value}")
 
-    def get_label_by_name(self, name):
+    def get_label_by_name(self, name) -> Label:
         try:
             return self._label_by_name[name]
         except KeyError:
             raise KeyError(f"no label with name {name}")
 
 
-def label_factory(label: Any, **kwargs):
+def _label_factory(label: Any, **kwargs):
     return _label_factory(label, **kwargs)
 
 
 @singledispatch
-def _label_factory(label: Any):
+def _label_factory(label: Any, **kwargs):
     raise ValueError("Unsupported label type", type(label))
 
 
@@ -115,15 +131,15 @@ def _label_from_label(label: Label, **kwargs):
 
 @_label_factory.register
 def _label_from_dict(label: dict, **kwargs):
-    return Label(**label)
+    return Label(**label, **kwargs)
 
 
 @_label_factory.register
-def _label_from_str(label: str, value: int):
-    return Label(name=label, value=value)
+def _label_from_str(label: str, value: int,  **kwargs):
+    return Label(name=label, value=value, **kwargs)
 
 
-def labels_factory(labels: Any):
+def _labels_factory(labels: Any):
     return _labels_factory(labels)
 
 
@@ -147,5 +163,5 @@ def _labels_from_dict(labels: dict):
 @_labels_factory.register(list)
 def _labels_from_collection(labels: Union[set, tuple, list]):
     return Labels(
-        [label_factory(label, value=idx + 1) for idx, label in enumerate(labels)]
+        [Label.create(label, value=idx + 1) for idx, label in enumerate(labels)]
     )

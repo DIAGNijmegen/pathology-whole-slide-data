@@ -10,11 +10,9 @@ import numpy as np
 from wholeslidedata.annotation.hooks import AnnotationHook
 from wholeslidedata.annotation.types import (
     Annotation,
-    ANNOTATION_TYPES,
-    create_annotation,
 )
-from wholeslidedata.image.wholeslideimage import WholeSlideImage
-from wholeslidedata.labels import Labels, labels_factory, label_factory
+from wholeslidedata.image.wsi import WholeSlideImage
+from wholeslidedata.annotation.labels import Label, Labels
 from wholeslidedata.samplers.utils import block_shaped
 from shapely import geometry
 
@@ -81,14 +79,14 @@ class AnnotationParser:
 
         self._labels = labels
         if self._labels is not None:
-            self._labels = labels_factory(self._labels)
+            self._labels = Labels.create(self._labels)
 
         self._renamed_labels = renamed_labels
         if self._renamed_labels is not None:
-            self._renamed_labels = labels_factory(self._renamed_labels)
+            self._renamed_labels = Labels.create(self._renamed_labels)
 
         self._sample_annotation_types = [
-            ANNOTATION_TYPES[annotation_type]
+            annotation_type
             for annotation_type in sample_annotation_types
         ]
 
@@ -139,7 +137,7 @@ class AnnotationParser:
             annotation["index"] = index
             annotation["coordinates"] = np.array(annotation["coordinates"])
             annotation["label"] = self._rename_label(annotation["label"])
-            annotations.append(create_annotation(**annotation, path=path))
+            annotations.append(Annotation.create(**annotation, path=path))
 
         for hook in self._hooks:
             annotations = hook(annotations)
@@ -163,9 +161,9 @@ class AnnotationParser:
 class WholeSlideAnnotationParser(AnnotationParser):
     @staticmethod
     def get_available_labels(opened_annotation: dict):
-        return labels_factory(
+        return Labels.create(
             set(
-                [label_factory(annotation["label"]) for annotation in opened_annotation]
+                [Label.create(annotation["label"]) for annotation in opened_annotation]
             )
         )
 
@@ -206,7 +204,7 @@ class MaskAnnotationParser(AnnotationParser):
         self._np_check_tissue = np.all if full_coverage else np.any
 
     def get_available_labels(opened_annotation: Any) -> Labels:
-        return labels_factory({"tissue": 1})
+        return Labels.create({"tissue": 1})
 
     def _parse(self, path):
         mask = WholeSlideImage(path, backend=self._backend)

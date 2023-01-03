@@ -3,12 +3,12 @@ from typing import Union
 
 from sourcelib.file import File
 
-from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
+from wholeslidedata.annotation.wsa import WholeSlideAnnotation
 from wholeslidedata.extensions import (
     WHOLE_SLIDE_ANNOTATION_EXTENSIONS,
     WHOLE_SLIDE_IMAGE_EXTENSIONS,
 )
-from wholeslidedata.image.wholeslideimage import WholeSlideImage
+from wholeslidedata.image.wsi import WholeSlideImage
 from wholeslidedata.mode import WholeSlideMode
 
 

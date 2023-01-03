@@ -1,7 +1,7 @@
 import numpy as np
 from collections import UserDict, Iterable
 import pprint
-from wholeslidedata.labels import Labels
+from wholeslidedata.annotation.labels import Labels
 
 class SpacingTypeError(Exception):
     pass

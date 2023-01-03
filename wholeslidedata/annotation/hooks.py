@@ -1,7 +1,7 @@
 
 from typing import List
 
-from wholeslidedata.annotation.types import Annotation, create_annotation
+from wholeslidedata.annotation.types import Annotation
 from shapely import geometry
 
 class AnnotationHook:
@@ -21,7 +21,7 @@ class ScalingAnnotationHook(AnnotationHook):
             scaled_annotation["index"] = annotation.index
             scaled_annotation["coordinates"] = annotation.coordinates * self._scaling
             scaled_annotation["label"] = annotation.label.todict()
-            scaled_annotations.append(create_annotation(**scaled_annotation))
+            scaled_annotations.append(Annotation.create(**scaled_annotation))
         return scaled_annotations
 
 class TiledAnnotationHook(AnnotationHook):

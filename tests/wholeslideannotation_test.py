@@ -1,37 +1,50 @@
-import pytest
-from typing import Union, Optional, List, Tuple, Dict
-from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
-from wholeslidedata.annotation.types import Annotation
-from wholeslidedata.labels import Labels
 from pathlib import Path
+
+import pytest
+
+from wholeslidedata.annotation.wsa import WholeSlideAnnotation
+from wholeslidedata.interoperability.asap.parser import AsapAnnotationParser
+from wholeslidedata.annotation.labels import Labels
+
+from .downloaddata import download_annotation_data, download_example_data
+
 
 class TestWholeSlideAnnotation:
     @pytest.fixture
     def annotation_path(self):
-        return '/home/mart/Radboudumc/data/lung/TCGA-21-5784-01Z-00-DX1_E50E7F4B-BE37-4171-94A7-E824CFF4B3BB.xml'
+        return download_annotation_data()
 
     @pytest.fixture
-    def labels(self):
-        return ['stroma', 'tumor']
+    def wsa(self, annotation_path):
+        return WholeSlideAnnotation(annotation_path)
 
-    @pytest.fixture
-    def parser(self):
-        return 'asap'
+    def test_parser_initializations(self, annotation_path):
+        WholeSlideAnnotation(annotation_path)
+        WholeSlideAnnotation(annotation_path, parser=AsapAnnotationParser)
+        WholeSlideAnnotation(annotation_path, parser=AsapAnnotationParser())
 
-    @pytest.fixture
-    def sort_by_overlay_index(self):
-        return False
-
-    @pytest.fixture
-    def ignore_overlap(self):
-        return True
-
-    @pytest.fixture
-    def wsa(self, annotation_path, labels, parser, sort_by_overlay_index, ignore_overlap):
-        return WholeSlideAnnotation(annotation_path, labels, parser, sort_by_overlay_index, ignore_overlap)
-
-    def test_path_property(self, wsa):
-        assert isinstance(wsa.path, Path)
+    def test_path_property(self, wsa, annotation_path):
+        assert isinstance(wsa.path, Path) and wsa.path == annotation_path
 
     def test_labels_property(self, wsa):
         assert isinstance(wsa.labels, Labels)
+        label_names = set([label.name for label in wsa.labels])
+        assert label_names == set(["tumor", "stroma", "lymphocytes"])
+
+    def test_sampling_annotations(self, annotation_path):
+        wsa = WholeSlideAnnotation(annotation_path, sample_label_names=["tumor"])
+        label_names = set(
+            [label_name for label_name in wsa.sampling_annotations_per_label]
+        )
+        assert label_names == set(["tumor"])
+
+    def test_annotation_per_label(self, wsa):
+        assert set(wsa.annotations_per_label) == set(["tumor", "stroma", "lymphocytes"])
+
+    def test_select_annotations(self,wsa: WholeSlideAnnotation):
+        annotations = wsa.select_annotations(7500, 15000, 5000, 10000)
+        assert len(annotations) == 5
+        assert set(['tumor']) == set([annotation.label.name for annotation in annotations])
+
+    def test_overlapping_annotations(self, annotation_path):
+        wsa = WholeSlideAnnotation(annotation_path, sample_label_names=["tumor"], ignore_overlap=False)

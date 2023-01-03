@@ -1,7 +1,7 @@
 from re import L
 from concurrentbuffer.producer import Producer
 from pathlib import Path
-from wholeslidedata.image.wholeslideimage import WholeSlideImage
+from wholeslidedata.image.wsi import WholeSlideImage
 import numpy as np
 import cv2
 

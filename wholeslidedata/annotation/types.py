@@ -1,33 +1,60 @@
 import math
-import warnings
-from typing import Union
+from typing import List, Union
 import numpy as np
 from shapely import geometry
-from wholeslidedata.labels import Label, label_factory
-
-warnings.filterwarnings(
-    "ignore",
-    "Setting custom attributes on geometry objects is deprecated, and will raise an AttributeError in Shapely 2.0",
-)
+from wholeslidedata.annotation.labels import Label
 
 
+class UnsupportedGeometryType(ValueError):
+    ...
 
-# overlay_index: int = None,
-# weight: float = None,
-# color: str = None,
-class Annotation(geometry.base.BaseGeometry):
-    def __init__(self, index: int, label: Union[Label, dict], coordinates, **kwargs):
+
+class InvalidCoordinatesError(ValueError):
+    ...
+
+
+def _get_geometry(
+    coordinates: Union[list, dict]
+) -> Union[geometry.Point, geometry.Polygon]:
+    holes = []
+    if isinstance(coordinates, dict):
+        holes = coordinates["holes"]
+        coordinates = coordinates["coordinates"]
+    if len(coordinates) <= 1:
+        raise InvalidCoordinatesError(f"Coordinates {coordinates} are not valid.")
+    if len(coordinates) == 2:
+        return geometry.Point(coordinates)
+    return geometry.Polygon(coordinates, holes)
+
+
+class Annotation:
+    @staticmethod
+    def create(index, label, coordinates, **kwargs):
+        geometry = _get_geometry(coordinates)
+        label = Label.create(label)
+        if geometry.type == "Point":
+            return PointAnnotation(index, label, geometry, **kwargs)
+        if geometry.type == "Polygon":
+            return PolygonAnnotation(index, label, geometry, **kwargs)
+        raise UnsupportedGeometryType(
+            f"Geometry type: {geometry.type} is not supported"
+        )
+
+    def __init__(
+        self,
+        index: int,
+        label: Label,
+        geometry: Union[geometry.Point, geometry.Polygon],
+        **kwargs,
+    ):
         self._index = index
-        self._label = label_factory(label)
-        self._coordinates = coordinates
+        self._label = label
+        self._geometry = geometry
+        self._overlapping_annotations = []
         self._kwargs = kwargs
 
-        for key, value in kwargs.items():
-            setattr(self, key, value)
-
-    @property
-    def type(self):
-        return super().type.lower()
+        for key, value in self._kwargs.items():
+            self.__setattr__(key, value)
 
     @property
     def index(self) -> int:
@@ -38,16 +65,49 @@ class Annotation(geometry.base.BaseGeometry):
         return self._label
 
     @property
-    def coordinates(self):
-        return self._coordinates
+    def type(self):
+        return self._geometry.type.lower()
+
+    @property
+    def coordinates(self) -> List[tuple]:
+        ...
+
+    @property
+    def center(self):
+        ...
+
+    @property
+    def centroid(self):
+        return tuple(map(round, self._geometry.centroid.xy))
+
+    @property
+    def bounds(self):
+        return list(map(round, self._geometry.bounds))
+
+    @property
+    def size(self):
+        xmin, ymin, xmax, ymax = self._geometry.bounds
+        return math.ceil(xmax - xmin), math.ceil(ymax - ymin)
+
+    @property
+    def area(self):
+        return round(self._geometry.area)
+
+    @property
+    def base_coordinates(self):
+        return self.coordinates - self.bounds[:2]
+
+    @property
+    def xy(self):
+        return self._geometry.xy
 
     def todict(self):
         return dict(
             type=self.type,
             index=self.index,
-            coordinates=self.coordinates.tolist(),
+            coordinates=self.coordinates,
             label=self.label.todict(),
-            **self._kwargs
+            **self._kwargs,
         )
 
     def __str__(self):
@@ -65,133 +125,49 @@ class Annotation(geometry.base.BaseGeometry):
         )
 
 
-
-class Point(geometry.Point, Annotation):
-    def __init__(self, index, label, coordinates, **kwargs):
-        if len(coordinates) == 1 and len(coordinates[0]) == 2:
-            coordinates = coordinates[0]
-            
-        geometry.Point.__init__(self, coordinates)
-        Annotation.__init__(self, index=index, label=label, coordinates=coordinates, **kwargs)
-
-    def __reduce__(self):
-        return (
-            self.__class__,
-            (
-                self._index,
-                self._label,
-                self._coordinates,
-            ),
-        )
-
+class PointAnnotation(Annotation):
     @property
-    def coordinates(self):
-        return np.array([self.x, self.y])
+    def coordinates(self) -> List[tuple]:
+        return list(self._geometry.coords)
 
     @property
     def center(self):
-        return self.x, self.y
-
-    @property
-    def centroid(self):
-        return self.center
-
-    @property
-    def area(self):
-        return 1
-
-
-class Polygon(geometry.Polygon, Annotation):
-    def __init__(self, index: int, label, coordinates, holes=[], **kwargs):
-        geometry.Polygon.__init__(self, coordinates, holes=holes)
-        Annotation.__init__(
-            self, index=index, label=label, coordinates=np.array(self.exterior.xy).T, **kwargs
-        )
-        self._holes = holes
-        self._overlapping_annotations = []
-
-    def __reduce__(self):
-        return (
-            self.__class__,
-            (
-                self._index,
-                self._label,
-                self._coordinates,
-                self._holes,
-            ),
-        )
-
-    @property
-    def coordinates(self):
-        return self._coordinates
+        return list(self._geometry.coords)
 
     @property
     def holes(self):
-        return [np.array(interior.xy).T for interior in self.interiors]
+        return []
 
-    @property
-    def base_coordinates(self):
-        return self.coordinates - self.bounds[:2]
 
+class PolygonAnnotation(Annotation):
     @property
-    def bounds(self):
-        x1, y1, x2, y2 = super().bounds
-        return [int(x1), int(y1), int(x2), int(y2)]
-
-    @property
-    def size(self):
-        xmin, ymin, xmax, ymax = super().bounds
-        return math.ceil(xmax - xmin), math.ceil(ymax - ymin)
-
-    @property
-    def centroid(self):
-        c = super().centroid
-        x, y = c.xy
-        return round(x[0]), round(y[0])
+    def coordinates(self) -> List[tuple]:
+        return list(self._geometry.exterior.coords)
 
     @property
     def center(self):
-        xmin, ymin, xmax, ymax = super().bounds
+        xmin, ymin, xmax, ymax = self._geometry.bounds
         return round(xmin + (xmax - xmin) / 2), round(ymin + (ymax - ymin) / 2)
 
     @property
-    def overlapping_annotations(self):
-        return self._overlapping_annotations
+    def holes(self):
+        return [np.array(interior.xy).T for interior in self._geometry.interiors]
 
-    @property
-    def xy(self):
-        return super().xy
-
-    def iou(self, polygon):
-        polygon_intersection = self.intersection(polygon).area
-        polygon_union = self.union(polygon).area
+    def iou(self, annotation: Annotation):
+        polygon_intersection = self._geometry.intersection(annotation._geometry).area
+        polygon_union = self.union(annotation._geometry).area
         return polygon_intersection / polygon_union
 
-    def contains(self, _annotation):
+    def contains(self, annotation: Annotation):
         # use prep ?
         # check overlapping annotations because if within overlapping than it contains not
-        return super().buffer(0).contains(_annotation) and np.all(
+        return self._geometry.buffer(0).contains(annotation._geometry) and np.all(
             [
-                not annotation.buffer(0).contains(_annotation)
-                for annotation in self._overlapping_annotations
-                if not isinstance(annotation, Point)
+                not _annotation.buffer(0).contains(annotation)
+                for _annotation in self._overlapping_annotations
+                if not isinstance(_annotation, PointAnnotation)
             ]
         )
 
     def add_overlapping_annotations(self, overlap_annotations):
-        self._overlapping_annotations.extend(overlap_annotations)
-
-
-
-ANNOTATION_TYPES = {
-    'point': Point,
-    'dot': Point,
-    "polygon": Polygon,
-    "rectangle": Polygon,
-    "box": Polygon,
-    "bounding-box": Polygon
-}
-
-
-def create_annotation(type, **kwargs):
-    return ANNOTATION_TYPES[type](**kwargs)
+        self._overlapping_annotations.append(overlap_annotations)

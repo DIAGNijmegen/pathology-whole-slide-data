@@ -9,7 +9,7 @@ from sourcelib.associations import Associations
 
 from wholeslidedata.annotation import utils as annotation_utils
 from wholeslidedata.files import WholeSlideAnnotationFile, WholeSlideImageFile
-from wholeslidedata.labels import Labels, labels_factory
+from wholeslidedata.annotation.labels import Labels
 
 
 @dataclass(frozen=True)
@@ -36,7 +36,7 @@ class DataSet(UserDict):
         self._data = dict(sorted(self._open(self._associations, labels=labels).items()))
         self._labels = self._init_labels()
         self._sample_references = self._init_samples()
-        self._sample_labels = labels_factory(list(self._sample_references.keys()))
+        self._sample_labels = Labels.create(list(self._sample_references.keys()))
         
         if len(self._sample_references) == 0:
             raise ValueError(

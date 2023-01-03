@@ -1,6 +1,6 @@
 from typing import Union
 import numpy as np
-from wholeslidedata.image.wholeslideimage import WholeSlideImage
+from wholeslidedata.image.wsi import WholeSlideImage
 from wholeslidedata.files import WholeSlideImageFile
 
 class PatchSampler:

@@ -1,11 +1,11 @@
 from wholeslidedata.annotation.structures import Point, Polygon
-from wholeslidedata.labels import Label
+from wholeslidedata.annotation.labels import Label
 from creationism.utils import open_json
 import xml.etree.cElementTree as ET
 from pathlib import Path
 from xml.dom import minidom
 import argparse
-from wholeslidedata.image.wholeslideimage import WholeSlideImage
+from wholeslidedata.image.wsi import WholeSlideImage
 import click
 import numpy as np
 
