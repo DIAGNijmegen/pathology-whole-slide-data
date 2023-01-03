@@ -4,7 +4,7 @@ from typing import Union
 from sourcelib.file import File
 
 from wholeslidedata.annotation.wsa import WholeSlideAnnotation
-from wholeslidedata.extensions import (
+from wholeslidedata.source.extensions import (
     WHOLE_SLIDE_ANNOTATION_EXTENSIONS,
     WHOLE_SLIDE_IMAGE_EXTENSIONS,
 )

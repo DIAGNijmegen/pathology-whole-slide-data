@@ -3,7 +3,7 @@ from typing import List, Optional
 import cv2
 import numpy as np
 from skimage.transform import resize
-from wholeslidedata.annotation.types import Point, Polygon
+from wholeslidedata.annotation.types import PointAnnotation, PolygonAnnotation
 from wholeslidedata.samplers.utils import shift_coordinates
 from wholeslidedata.image.wsi import WholeSlideImage
 from wholeslidedata.samplers.sampler import Sampler
@@ -129,7 +129,7 @@ class SegmentationPatchLabelSampler(PatchLabelSampler):
                 coordinates, center_x, center_y, width, height, ratio
             )
 
-            if isinstance(annotation, Polygon):
+            if isinstance(annotation, PolygonAnnotation):
                 holemask = np.ones((height, width), dtype=np.int32) * -1
                 for hole in annotation.holes:
                     hcoordinates = shift_coordinates(
@@ -144,7 +144,7 @@ class SegmentationPatchLabelSampler(PatchLabelSampler):
                 )
                 mask[holemask != -1] = holemask[holemask != -1]
 
-            elif isinstance(annotation, Point):
+            elif isinstance(annotation, PointAnnotation):
                 mask[int(coordinates[1]), int(coordinates[0])] = annotation.label.value
 
         return mask.astype(np.uint8)
@@ -208,12 +208,12 @@ class DetectionPatchLabelSampler(PatchLabelSampler):
                 if annotation.label.name not in self._detection_labels:
                     continue
 
-            if isinstance(annotation, Point):
+            if isinstance(annotation, PointAnnotation):
                 box_coords = self._get_point_coordinates(
                     annotation, center_x, center_y, width, height, ratio
                 )
 
-            if isinstance(annotation, Polygon):
+            if isinstance(annotation, PolygonAnnotation):
                 box_coords = self._get_polygon_coordinates(
                     annotation, center_x, center_y, width, height, ratio
                 )

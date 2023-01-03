@@ -8,7 +8,7 @@ from typing import Dict, Tuple
 from sourcelib.associations import Associations
 
 from wholeslidedata.annotation import utils as annotation_utils
-from wholeslidedata.files import WholeSlideAnnotationFile, WholeSlideImageFile
+from wholeslidedata.source.files import WholeSlideAnnotationFile, WholeSlideImageFile
 from wholeslidedata.annotation.labels import Labels
 
 
