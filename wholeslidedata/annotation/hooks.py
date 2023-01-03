@@ -47,9 +47,8 @@ class TiledAnnotationHook(AnnotationHook):
                 for y in range(y1, y2, self._tile_size-self._overlap):
                     box_poly = geometry.box(x, y, x+self._tile_size, y+self._tile_size)
                     if not self._full_coverage or box_poly.within(annotation):
-                        new_annotations.append(create_annotation(
+                        new_annotations.append(Annotation.create(
                             index=index,
-                            type=annotation.type,
                             coordinates=box_poly.exterior.coords,
                             label=annotation.label.todict(),
                                 ))
