@@ -4,8 +4,6 @@ from concurrentbuffer.info import BufferInfo
 from concurrentbuffer.state import BufferState
 from concurrentbuffer.system import BufferSystem
 
-
-# move to buffer lib
 def create_buffer_factory(
     cpus,
     batch_commander,
