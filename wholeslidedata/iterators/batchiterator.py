@@ -4,13 +4,12 @@ from typing import Iterable
 
 import numpy as np
 from concurrentbuffer.iterator import BufferIterator
-
-from wholeslidedata.buffer.batchcommander import BatchCommander
-from wholeslidedata.buffer.batchproducer import BatchProducer
-from wholeslidedata.buffer.bufferfactory import create_buffer_factory
-from wholeslidedata.configuration import MAIN_CONFIG_PATH
+from concurrentbuffer.factory import create_buffer_factory
 from dicfg.reader import ConfigReader
 from dicfg.factory import build_config
+from wholeslidedata.buffer.batchcommander import BatchCommander
+from wholeslidedata.buffer.batchproducer import BatchProducer
+from wholeslidedata.configuration import MAIN_CONFIG_PATH
 
 
 class BatchIterator(BufferIterator):
@@ -138,7 +137,7 @@ def create_batch_iterator(
         search_paths=search_paths,
     )
     config = config_reader.read(user_config=user_config, presets=presets)
-    
+
     builds = build_config(config[mode])
 
     batch_shape = builds["batch_shape"]
