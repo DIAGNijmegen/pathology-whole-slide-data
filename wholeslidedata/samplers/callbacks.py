@@ -2,7 +2,7 @@ from typing import Dict, Tuple
 
 import numpy as np
 import skimage.color
-from wholeslidedata.samplers.utils import (block_shaped, fit_data,
+from wholeslidedata.samplers.utils import (block, crop_data,
                                            one_hot_encoding)
 
 
@@ -45,8 +45,8 @@ class BlockShaped(SampleCallback):
         self._ncols = ncols
 
     def __call__(self, x_patch, y_patch):
-        x_patches = block_shaped(x_patch, self._nrows, self._ncols)
-        y_patches = block_shaped(y_patch, self._nrows, self._ncols)
+        x_patches = block(x_patch, self._nrows, self._ncols)
+        y_patches = block(y_patch, self._nrows, self._ncols)
         return x_patches, y_patches
 
 
@@ -92,7 +92,7 @@ class FitOutput(SampleCallback):
     def _fit_data(self, y_patch):
         # cropping
         if y_patch.shape != self._output_shape:
-            y_patch = fit_data(y_patch, self._output_shape)
+            y_patch = crop_data(y_patch, self._output_shape)
         # Reshape
         return y_patch
 

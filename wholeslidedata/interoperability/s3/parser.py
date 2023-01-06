@@ -15,23 +15,17 @@ from wholeslidedata.annotation.parser import CloudAnnotationParser
 class S3AnnotationParser(CloudAnnotationParser):
     @classmethod
     def get_boto_obj(cls, path: str):
-        s3_url_parse = urlparse(path, allow_fragments=False)
-        s3_bucket_name = s3_url_parse.netloc
-        s3_path = s3_url_parse.path.lstrip("/")
+        links = str(path).split('/')
+        s3_bucket_name = links[1]
+        s3_path = '/'.join(links[2:])
         boto_obj = boto_resource.Object(s3_bucket_name, s3_path)
-
         return boto_obj
 
     @classmethod
     def _path_exists(cls, path):
-        try:
-            s3_obj_status_code = cls.get_boto_obj(path).get()["ResponseMetadata"][
-                "HTTPStatusCode"
-            ]
-        except ClientError:
-            raise FileNotFoundError(
-                f"Could not retreive boto object while retreiving status code for path: \n{path}"
-            )
+        s3_obj_status_code = cls.get_boto_obj(path).get()["ResponseMetadata"][
+            "HTTPStatusCode"
+        ]
 
         if s3_obj_status_code == 200:
             return True

@@ -5,6 +5,7 @@ import pytest
 from wholeslidedata.annotation.wsa import WholeSlideAnnotation
 from wholeslidedata.interoperability.asap.parser import AsapAnnotationParser
 from wholeslidedata.annotation.labels import Labels
+from wholeslidedata.annotation.hooks import ScalingAnnotationHook, TiledAnnotationHook
 
 from .downloaddata import download_annotation_data, download_example_data
 
@@ -31,6 +32,12 @@ class TestWholeSlideAnnotation:
         label_names = set([label.name for label in wsa.labels])
         assert label_names == set(["tumor", "stroma", "lymphocytes"])
 
+    def test_rename_labels(self, annotation_path):
+        wsa = WholeSlideAnnotation(annotation_path, labels={'tumor':1, 'stroma': 2, 'lymphocytes': 2}, renamed_labels={'tumor':1, 'other': 2})
+        assert isinstance(wsa.labels, Labels)
+        label_names = set([label.name for label in wsa.labels])
+        assert label_names == set(["tumor", "other"])
+
     def test_sampling_annotations(self, annotation_path):
         wsa = WholeSlideAnnotation(annotation_path, sample_label_names=["tumor"])
         label_names = set(
@@ -48,3 +55,11 @@ class TestWholeSlideAnnotation:
 
     def test_overlapping_annotations(self, annotation_path):
         wsa = WholeSlideAnnotation(annotation_path, sample_label_names=["tumor"], ignore_overlap=False)
+
+    def test_scaling_hook(self, wsa: WholeSlideAnnotation, annotation_path):
+        wsa_scaled = WholeSlideAnnotation(annotation_path, sample_label_names=["tumor"], hooks=(ScalingAnnotationHook(0.5),))
+        assert wsa.annotations[0].coordinates[0][0]/2 == wsa_scaled.annotations[0].coordinates[0][0]
+
+    def test_tiled_hook(self, annotation_path):
+        wsa_tiled = WholeSlideAnnotation(annotation_path, sample_label_names=["tumor"], hooks=(TiledAnnotationHook(tile_size=64, label_names=['tumor']),))
+        assert wsa_tiled.sampling_annotations[0].size == (64,64)

@@ -3,10 +3,11 @@ from multiprocessing import Queue
 from typing import Iterable
 
 import numpy as np
-from concurrentbuffer.iterator import BufferIterator
 from concurrentbuffer.factory import create_buffer_factory
-from dicfg.reader import ConfigReader
+from concurrentbuffer.iterator import BufferIterator
 from dicfg.factory import build_config
+from dicfg.reader import ConfigReader
+
 from wholeslidedata.buffer.batchcommander import BatchCommander
 from wholeslidedata.buffer.batchproducer import BatchProducer
 from wholeslidedata.configuration import MAIN_CONFIG_PATH

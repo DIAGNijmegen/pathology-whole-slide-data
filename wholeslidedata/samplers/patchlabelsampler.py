@@ -25,7 +25,7 @@ class PatchLabelSampler(Sampler):
     def sample(
         self,
         wsa,
-        point: Point,
+        point: PointAnnotation,
         size,
         ratio,
     ):

@@ -1,8 +1,8 @@
-concurrentbuffer==0.0.7
-dicfg==0.0.2
+concurrentbuffer==0.0.8
+dicfg==0.0.6
 sourcelib==0.0.2
 numpy==1.23.4
-opencv-python-headless==4.6.0
+opencv-python-headless==4.6.0.66
 scipy==1.9.3
 scikit-image==0.19.3
 shapely==1.7.1
@@ -11,3 +11,8 @@ PyYAML==6.0
 albumentations==1.2.1
 matplotlib==3.6.2
 rtree==1.0.1
+gdown==4.6.0
+click==8.1.3
+
+# tiffslide
+# boto3

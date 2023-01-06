@@ -1,10 +1,8 @@
 import xml.etree.cElementTree as ET
-from pathlib import Path
 from xml.dom import minidom
 
-from wholeslidedata.annotation.types import Point, Polygon
-from wholeslidedata.annotation.wsa import WholeSlideAnnotation
-
+from wholeslidedata.annotation.types import PointAnnotation, PolygonAnnotation
+from wholeslidedata.visualization.color import get_color
 
 def write_polygon(annos, coordinates, index, label_name, label_color):
     anno = ET.SubElement(annos, "Annotation")
@@ -38,12 +36,9 @@ def write_point(annos, coordinates, index, label_name, label_color):
     anno.set("Color", label_color)
 
     coords = ET.SubElement(anno, "Coordinates")
-    coords_mem = []
     ridx = 0
     for r in coordinates:
-        x = r[0]
-        y = r[1]
-        coords_mem.append((x, y))
+        x, y = r
         coord = ET.SubElement(coords, "Coordinate")
         coord.set("Order", str(ridx))
         coord.set("X", str(x))
@@ -51,7 +46,7 @@ def write_point(annos, coordinates, index, label_name, label_color):
         ridx += 1
 
 
-def write_point_set(annotations, output_path, label_name="tils", label_color="yellow"):
+def write_point_set(points, output_path,label_color="black"):
     # the root of the xml file.
     root = ET.Element("ASAP_Annotations")
 
@@ -65,16 +60,13 @@ def write_point_set(annotations, output_path, label_name="tils", label_color="ye
     anno = ET.SubElement(annos, "Annotation")
     anno.set("Name", "Annotation " + str(index))
     anno.set("Type", "PointSet")
-    anno.set("PartOfGroup", label_name)
+    anno.set("PartOfGroup", points[0].label.name)
     anno.set("Color", label_color)
 
     coords = ET.SubElement(anno, "Coordinates")
-    coords_mem = []
     ridx = 0
-    for annotation in annotations:
+    for annotation in points:
         x, y = annotation.center
-        coords_mem.append((x, y))
-
         coord = ET.SubElement(coords, "Coordinate")
         coord.set("Order", str(ridx))
         coord.set("X", str(x))
@@ -82,7 +74,7 @@ def write_point_set(annotations, output_path, label_name="tils", label_color="ye
         ridx += 1
 
     group = ET.SubElement(anno_groups, "Group")
-    group.set("Name", label_name)
+    group.set("Name", points[0].label.name)
     group.set("PartOfGroup", "None")
     group.set("Color", label_color)
     attr = ET.SubElement(group, "Attributes")
@@ -93,48 +85,8 @@ def write_point_set(annotations, output_path, label_name="tils", label_color="ye
         f.write(xmlstr)
 
 
-def write_point_set2(points, output_path, label_name="detection"):
-    # the root of the xml file.
-    root = ET.Element("ASAP_Annotations")
 
-    # writing each anno one by one.
-    annos = ET.SubElement(root, "Annotations")
-
-    # writing the last groups part
-    anno_groups = ET.SubElement(root, "AnnotationGroups")
-
-    index = 0
-    anno = ET.SubElement(annos, "Annotation")
-    anno.set("Name", "Annotation " + str(index))
-    anno.set("Type", "PointSet")
-    anno.set("PartOfGroup", label_name)
-    anno.set("Color", "black")
-
-    coords = ET.SubElement(anno, "Coordinates")
-    coords_mem = []
-    ridx = 0
-    for point in points:
-        x, y = point.x, point.y
-        coords_mem.append((x, y))
-        coord = ET.SubElement(coords, "Coordinate")
-        coord.set("Order", str(ridx))
-        coord.set("X", str(x))
-        coord.set("Y", str(y))
-        ridx += 1
-
-    group = ET.SubElement(anno_groups, "Group")
-    group.set("Name", label_name)
-    group.set("PartOfGroup", "None")
-    group.set("Color", "black")
-    attr = ET.SubElement(group, "Attributes")
-
-    # writing to the xml file with indentation
-    xmlstr = minidom.parseString(ET.tostring(root)).toprettyxml(indent="    ")
-    with open(output_path, "w") as f:
-        f.write(xmlstr)
-
-
-def write_asap_annotation(annotations, output_path, scaling=1.0):
+def write_asap_annotation(annotations, output_path, scaling=1.0, color_map=None):
     # the root of the xml file.
     root = ET.Element("ASAP_Annotations")
 
@@ -149,14 +101,14 @@ def write_asap_annotation(annotations, output_path, scaling=1.0):
     for annotation in annotations:
         label_name = annotation.label.name
         # label_color = annotation.label.color if annotation.label.color is not None else "black"
-        label_color = "black"
+        label_color = get_color(annotation, color_map)
         index = annotation.index
-        if isinstance(annotation, Polygon):
+        if isinstance(annotation, PolygonAnnotation):
             coordinates = annotation.coordinates / scaling
             write_polygon(annos, coordinates, index, label_name, label_color)
-        elif isinstance(annotation, Point):
+        elif isinstance(annotation, PointAnnotation):
             coordinates = annotation.coordinates / scaling
-            write_point(annos, [coordinates], index, label_name, label_color)
+            write_point(annos, coordinates, index, label_name, label_color)
         else:
             raise ValueError("unsupported geometry", annotation)
 

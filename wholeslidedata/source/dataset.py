@@ -159,7 +159,7 @@ class WholeSlideDataSet(DataSet):
             for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
                 for annotation in wsa._annotations:
                     labels.append(annotation.label)
-        return labels_factory(list(set(labels)))
+        return Labels.create(list(set(labels)))
 
     def _init_samples(self) -> Tuple:
         sample_references = {}
@@ -176,12 +176,6 @@ class WholeSlideDataSet(DataSet):
                     )
 
         return sample_references
-
-    def close_images(self):
-        for image in self._images.values():
-            image.close()
-            del image
-        self._images = {}
 
     @property
     def annotation_counts(self):

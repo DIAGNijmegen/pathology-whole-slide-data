@@ -17,7 +17,6 @@ class ScalingAnnotationHook(AnnotationHook):
         scaled_annotations = []
         for annotation in annotations:
             scaled_annotation = {}
-            scaled_annotation["type"] = annotation.type
             scaled_annotation["index"] = annotation.index
             scaled_annotation["coordinates"] = annotation.coordinates * self._scaling
             scaled_annotation["label"] = annotation.label.todict()

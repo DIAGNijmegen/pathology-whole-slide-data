@@ -1,95 +1,112 @@
 
-from wholeslidedata.dataset import WholeSlideDataSet
+from pathlib import Path
+from wholeslidedata.annotation.types import Annotation
+from wholeslidedata.image.wsi import WholeSlideImage
+from wholeslidedata.source.dataset import WholeSlideDataSet
+from sourcelib.collect import get_files_from_folder
+from sourcelib.associations import associate_files
+from wholeslidedata.source.files import WholeSlideImageFile, WholeSlideAnnotationFile
+from wholeslidedata.source.mode import WholeSlideMode
+from wholeslidedata.interoperability.asap.backend import AsapWholeSlideImageBackend
+from wholeslidedata.interoperability.asap.parser import AsapAnnotationParser
 import pytest
+from .downloaddata import download_example_data
 
 @pytest.fixture
 def associations():
-    # Set up dataset
-    pass
+    download_example_data()
+    image_files =get_files_from_folder(file_cls=WholeSlideImageFile, folder='/tmp/', mode=WholeSlideMode.training, excludes=['mask'], image_backend=AsapWholeSlideImageBackend)
+    annotation_files =get_files_from_folder(file_cls=WholeSlideAnnotationFile, folder='/tmp/', mode=WholeSlideMode.training, filters=['xml'], annotation_parser=AsapAnnotationParser)
+    return associate_files(image_files, annotation_files)
 
+@pytest.fixture
+def dataset(associations):
+    return WholeSlideDataSet(mode=WholeSlideMode.training, associations=associations)
 
-# def test_init(dataset):
-#     # wsd = WholeSlideDataSet(mode='train', associations=associations, labels=labels)
-#     assert dataset.mode == 'train'
-#     assert dataset.associations == associations
-#     assert dataset.labels == labels
+def test_dataset_data(dataset):
+    assert len(list(dataset.keys())) == 1
+    assert "TCGA-21-5784-01Z-00-DX1" in list(dataset.keys())
 
-# def test__open(associations, labels):
-#     wsd = WholeSlideDataSet(mode='train', associations=associations, labels=labels)
-#     data = wsd._open(associations, labels)
-#     # Assert that data is a dictionary with the expected keys and values
+def test_dataset_labels(dataset):
+    assert len(dataset.sample_labels) == 3
+    assert set(dataset.sample_labels.names) == set(['tumor', 'stroma', 'lymphocytes'])
 
-# def test__open_image(associations, labels):
-#     wsd = WholeSlideDataSet(mode='train', associations=associations, labels=labels)
-#     wsi_file = WholeSlideImageFile(...)
-#     image = wsd._open_image(wsi_file)
-#     # Assert that image is the expected object
+def test_dataset_mode(dataset):
+    assert dataset.mode == WholeSlideMode.training
 
-# def test__open_annotation(associations, labels):
-#     wsd = WholeSlideDataSet(mode='train', associations=associations, labels=labels)
-#     wsa_file = WholeSlideAnnotationFile(...)
-#     annotation = wsd._open_annotation(wsa_file, labels)
-#     # Assert that annotation is the expected object
+def test_dataset_load_images(associations):
+    dataset =  WholeSlideDataSet(mode=WholeSlideMode.training, associations=associations, load_images=True)
+    assert isinstance(dataset.get_wsi_from_reference(dataset.sample_references['tumor'][0]), WholeSlideImage)
 
-# def test__init_labels(associations, labels):
-#     wsd = WholeSlideDataSet(mode='train', associations=associations, labels=labels)
-#     wsd._data = {...}  # Set up test data
-#     init_labels = wsd._init_labels()
-#     # Assert that init_labels is the expected object
+    dataset =  WholeSlideDataSet(mode=WholeSlideMode.training, associations=associations, load_images=False)
+    assert isinstance(dataset.get_wsi_from_reference(dataset.sample_references['tumor'][0]), WholeSlideImageFile)
 
-# def test__init_samples(associations, labels):
-#     wsd = WholeSlideDataSet(mode='train', associations=associations, labels=labels)
-#     wsd._data = {...}  # Set up test data
-#     sample_references = wsd._init_samples()
-#     # Assert that sample_references is the expected object
+def test_copy(associations):
+    _ = WholeSlideDataSet(mode=WholeSlideMode.training, associations=associations, load_images=True, copy_path="/tmp/copy")
+    assert Path('/tmp/copy/images/TCGA-21-5784-01Z-00-DX1.tif').exists()
+    assert Path('/tmp/copy/annotations/TCGA-21-5784-01Z-00-DX1.xml').exists() 
+    Path('/tmp/copy/images/TCGA-21-5784-01Z-00-DX1.tif').unlink()
+    Path('/tmp/copy/annotations/TCGA-21-5784-01Z-00-DX1.xml').unlink()
 
-# def test_close_images(associations, labels):
-#     wsd = WholeSlideDataSet(mode='train', associations=associations, labels=labels)
-#     wsd._images = {...}  # Set up test data
-#     wsd.close_images()
-#     # Assert that wsd._images is an empty dictionary
+def test_get_wsi(dataset):
+    assert dataset.get_wsi_from_reference(dataset.sample_references['tumor'][0]).path.name == "TCGA-21-5784-01Z-00-DX1.tif"
 
-# def test_annotation_counts(associations, labels):
-#     wsd = WholeSlideDataSet(mode='train', associations=associations, labels=labels)
-#     wsd._data = {...}  # Set up test data
-#     annotation_counts = wsd.annotation_counts
-#     # Assert that annotation
+def test_get_wsa(dataset):
+    assert dataset.get_wsa_from_reference(dataset.sample_references['tumor'][0]).path.name == "TCGA-21-5784-01Z-00-DX1.xml"
 
-# def test_annotations_per_label(associations, labels):
-#     wsd = WholeSlideDataSet(mode='train', associations=associations, labels=labels)
-#     wsd._data = {...}  # Set up test data
-#     annotations_per_label = wsd.annotations_per_label
-#     # Assert that annotations_per_label is the expected dictionary
+def test_get_annotation(dataset):
+    assert isinstance(dataset.get_annotation_from_reference(dataset.sample_references['tumor'][0]), Annotation)
 
-# def test_labels(associations, labels):
-#     wsd = WholeSlideDataSet(mode='train', associations=associations, labels=labels)
-#     wsd._data = {...}  # Set up test data
-#     wsd._labels = [...}  # Set up test labels
-#     labels_ = wsd.labels
-#     # Assert that labels_ is the expected object
+def test_annotation_counts(dataset):
+    assert dataset.annotation_counts == 10
 
-# def test_samples(associations, labels):
-#     wsd = WholeSlideDataSet(mode='train', associations=associations, labels=labels)
-#     wsd._data = {...}  # Set up test data
-#     wsd._sample_references = {...}  # Set up test sample references
-#     samples = wsd.samples
-#     # Assert that samples is the expected object
+def test_annotations_per_label(dataset):
+    for key, value in dataset.annotations_per_label.items():
+        assert key in ['tumor', 'stroma', 'lymphocytes']
+        if key == 'tumor':
+            assert value == 5
+        if key == 'stroma':
+            assert value == 2
+        if key == 'lymphocytes':
+            assert value == 3
 
-# def test_get_image(associations, labels):
-#     wsd = WholeSlideDataSet(mode='train', associations=associations, labels=labels)
-#     wsd._data = {...}  # Set up test data
-#     image = wsd.get_image(file_index=0, wsi_index=0)
-#     # Assert that image is the expected object
+def test_annnotations_per_key(dataset: WholeSlideDataSet):
+    assert dataset.annotations_per_key['TCGA-21-5784-01Z-00-DX1'] == 10 
 
-# def test_get_annotation(associations, labels):
-#     wsd = WholeSlideDataSet(mode='train', associations=associations, labels=labels)
-#     wsd._data = {...}  # Set up test data
-#     annotation = wsd.get_annotation(file_index=0, wsa_index=0)
-#     # Assert that annotation is the expected object
+def test_annotations_per_label_per_key(dataset: WholeSlideDataSet):
+    for key, value in dataset.annotations_per_label_per_key['TCGA-21-5784-01Z-00-DX1'].items():
+        assert key in ['tumor', 'stroma', 'lymphocytes']
+        if key == 'tumor':
+            assert value == 5
+        if key == 'stroma':
+            assert value == 2
+        if key == 'lymphocytes':
+            assert value == 3
 
-# def test_get_sample(associations, labels):
-#     wsd = WholeSlideDataSet(mode='train', associations=associations, labels=labels)
-#     wsd._data = {...}  # Set up test data
-#     wsd._sample_references = {...}  # Set up test sample references
-#     sample = wsd.get_sample(label_name='label1', sample_index=0)
-#     # Assert that sample is the expected object
+def test_pixel_count(dataset: WholeSlideDataSet):
+    assert dataset.pixels_count == 2016854
+                                     
+
+def test_pixels_per_label(dataset: WholeSlideDataSet):
+    for key, value in dataset.pixels_per_label.items():
+        assert key in ['tumor', 'stroma', 'lymphocytes']
+        if key == 'tumor':
+            assert value == 1303963
+        if key == 'stroma':
+            assert value == 155316
+        if key == 'lymphocytes':
+            assert value == 557575
+
+def test_pixels_per_key(dataset: WholeSlideDataSet):
+    assert dataset.pixels_per_key["TCGA-21-5784-01Z-00-DX1"] == 2016854
+
+def test_pixels_per_label_per_key(dataset: WholeSlideDataSet):
+    for key, value in dataset.pixels_per_label_per_key["TCGA-21-5784-01Z-00-DX1"].items():
+        assert key in ['tumor', 'stroma', 'lymphocytes']
+        if key == 'tumor':
+            assert value == 1303963
+        if key == 'stroma':
+            assert value == 155316
+        if key == 'lymphocytes':
+            assert value == 557575
+

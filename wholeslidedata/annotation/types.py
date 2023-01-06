@@ -54,6 +54,7 @@ class Annotation:
         self._kwargs = kwargs
 
         for key, value in self._kwargs.items():
+            print(key, value)
             self.__setattr__(key, value)
 
     @property
@@ -65,16 +66,28 @@ class Annotation:
         return self._label
 
     @property
+    def geometry(self) -> Label:
+        return self._geometry
+
+    @property
     def type(self):
         return self._geometry.type.lower()
 
     @property
     def coordinates(self) -> List[tuple]:
-        ...
+        """_summary_
+
+        Returns:
+            List[tuple]: _description_
+        """
 
     @property
     def center(self):
-        ...
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
 
     @property
     def centroid(self):
@@ -82,7 +95,7 @@ class Annotation:
 
     @property
     def bounds(self):
-        return list(map(round, self._geometry.bounds))
+        return np.array(list(map(round, self._geometry.bounds)))
 
     @property
     def size(self):
@@ -103,9 +116,8 @@ class Annotation:
 
     def todict(self):
         return dict(
-            type=self.type,
             index=self.index,
-            coordinates=self.coordinates,
+            coordinates=self.coordinates.tolist(),
             label=self.label.todict(),
             **self._kwargs,
         )
@@ -128,11 +140,11 @@ class Annotation:
 class PointAnnotation(Annotation):
     @property
     def coordinates(self) -> List[tuple]:
-        return list(self._geometry.coords)
+        return np.array(list(self._geometry.coords))
 
     @property
     def center(self):
-        return list(self._geometry.coords)
+        return tuple(self._geometry.coords[0])
 
     @property
     def holes(self):
@@ -142,7 +154,7 @@ class PointAnnotation(Annotation):
 class PolygonAnnotation(Annotation):
     @property
     def coordinates(self) -> List[tuple]:
-        return list(self._geometry.exterior.coords)
+        return np.array(list(self._geometry.exterior.coords))
 
     @property
     def center(self):

@@ -4,23 +4,17 @@ from typing import Tuple
 import albumentations as A
 import numpy as np
 
-from wholeslidedata.accessories.albumentations import custom
 from wholeslidedata.samplers.callbacks import BatchCallback
 
 
 class AlbumentationsBase(BatchCallback):
-
-    def __init__(self, custom_callbacks=None):
-        super(AlbumentationsBase, self).__init__()
-        if custom_callbacks:
-            for cb in custom_callbacks:
-                setattr(A, cb, getattr(custom, cb))
-
+    def __init__(self):
+        super().__init__()
 
 class AlbumentationsDetectionAugmentationsCallback(AlbumentationsBase):
-    def __init__(self, augmentations, custom_callbacks=None):
+    def __init__(self, augmentations):
         random.seed()
-        super(AlbumentationsDetectionAugmentationsCallback, self).__init__(custom_callbacks)
+        super(AlbumentationsDetectionAugmentationsCallback, self).__init__()
         self._augmentations = A.Compose(
             [
                 getattr(A, class_name)(**params)
@@ -43,11 +37,11 @@ class AlbumentationsDetectionAugmentationsCallback(AlbumentationsBase):
         pass
 
 
-class AlbumentationsAugmentationsCallback(AlbumentationsBase):
+class AlbumentationsSegmentationAugmentationsCallback(AlbumentationsBase):
 
-    def __init__(self, augmentations, custom_callbacks=None):
+    def __init__(self, augmentations):
         random.seed()
-        super(AlbumentationsAugmentationsCallback, self).__init__(custom_callbacks)
+        super().__init__()
         self.augmentations = augmentations
 
     def __call__(

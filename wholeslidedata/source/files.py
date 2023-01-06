@@ -9,7 +9,7 @@ from wholeslidedata.source.extensions import (
     WHOLE_SLIDE_IMAGE_EXTENSIONS,
 )
 from wholeslidedata.image.wsi import WholeSlideImage
-from wholeslidedata.mode import WholeSlideMode
+from wholeslidedata.source.mode import WholeSlideMode
 
 
 class WholeSlideImageFile(File):

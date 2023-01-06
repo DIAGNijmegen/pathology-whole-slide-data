@@ -36,6 +36,7 @@ class Label:
             self.__setattr__(key, value)
 
     def __eq__(self, other):
+        # TODO check kwargs
         if isinstance(other, Label):
             return self.name == other.name and self.value == other.value
         return False
@@ -47,15 +48,15 @@ class Label:
     @property
     def value(self):
         return self._value
-    
-    @property
-    def properties(self):
-        return self._properties
-
+        
     def todict(self):
         return dict(name=self.name, value=self.value)
 
+    def __hash__(self):
+        return hash(str(self))
+
     def __str__(self):
+        # TODO add kwargs
         return f"Label({', '.join([f'{key}={value}' for key, value in self.todict().items()])})"
 
 

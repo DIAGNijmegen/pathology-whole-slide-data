@@ -1,23 +1,17 @@
 from pathlib import Path
 from typing import Dict, List, Optional, Union
-from shapely import geometry
-from wholeslidedata.annotation import utils as annotation_utils
-from wholeslidedata.annotation.parser import AnnotationParser
-from wholeslidedata.annotation.types import Annotation, PolygonAnnotation
-from wholeslidedata.annotation.labels import Labels
+
 from rtree import index
-from wholeslidedata.annotation.parser import AnnotationParser, MaskAnnotationParser
+
+from wholeslidedata.annotation import utils as annotation_utils
+from wholeslidedata.annotation.labels import Labels
+from wholeslidedata.annotation.parser import AnnotationParser, WholeSlideAnnotationParser, MaskAnnotationParser
+from wholeslidedata.annotation.selector import AnnotationSelector
+from wholeslidedata.annotation.types import Annotation, PolygonAnnotation
 from wholeslidedata.interoperability.asap.parser import AsapAnnotationParser
 
-
-def area_sort_with_roi(item):
-    if item.label.name in ["roi", "rois", "none"]:
-        return 100000 * 100000
-    return item.area
-
-
 DEFAULT_PARSERS = {
-    ".json": AnnotationParser,
+    ".json": WholeSlideAnnotationParser,
     ".xml": AsapAnnotationParser,
     ".tif": MaskAnnotationParser,
     ".tiff": MaskAnnotationParser,
@@ -47,7 +41,9 @@ class WholeSlideAnnotation:
 
         """
         self._annotation_path = Path(annotation_path)
-        self._parser = self._init_parser(parser, self._annotation_path, labels, **kwargs)
+        self._parser = self._init_parser(
+            parser, self._annotation_path, labels, **kwargs
+        )
         self._annotations = self._parser.parse(self._annotation_path)
 
         self._sort_by_overlay_index = sort_by_overlay_index
@@ -64,17 +60,16 @@ class WholeSlideAnnotation:
         if not ignore_overlap:
             self._set_overlapping_annotations()
 
-        self._tree = index.Index()
-        for pos, annotation in enumerate(self._annotations):
-            self._tree.insert(pos, annotation.bounds)
+        self._annotation_selector = AnnotationSelector(self._annotations)
 
     def _init_parser(self, parser, annotation_path, labels, **kwargs):
         if isinstance(parser, AnnotationParser):
             return parser
         if parser is None:
-            return DEFAULT_PARSERS[Path(annotation_path).suffix](labels=labels, **kwargs)
+            return DEFAULT_PARSERS[Path(annotation_path).suffix](
+                labels=labels, **kwargs
+            )
         return parser(labels=labels, **kwargs)
-
 
     @property
     def path(self):
@@ -134,24 +129,6 @@ class WholeSlideAnnotation:
             List[Annotation]: all annotations that overlap with specified region
         """
 
-        box = geometry.box(
-            center_x - width // 2,
-            center_y - height // 2,
-            center_x + width // 2,
-            center_y + height // 2,
+        return self._annotation_selector.select_annotations(
+            center_x, center_y, width, height
         )
-
-        annotations = [
-            self._annotations[pos] for pos in self._tree.intersection(box.bounds)
-        ]
-
-        # add custom sort function, e.g., overlay index
-
-        sorted_annotations = sorted(
-            annotations,
-            key=lambda item: self.labels.get_label_by_name(item.label.name).value,
-        )
-        sorted_annotations = sorted(
-            sorted_annotations, key=lambda item: area_sort_with_roi(item), reverse=True
-        )
-        return sorted_annotations

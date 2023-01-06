@@ -5,7 +5,7 @@ from multiresolutionimageinterface import (
     MultiResolutionImage,
     MultiResolutionImageReader,
 )
-from wholeslidedata.image.backend import InvalidSpacingError, WholeSlideImageBackend
+from wholeslidedata.image.backend import WholeSlideImageBackend
 
 
 class AsapWholeSlideImageBackend(MultiResolutionImage, WholeSlideImageBackend):
@@ -40,12 +40,9 @@ class AsapWholeSlideImageBackend(MultiResolutionImage, WholeSlideImageBackend):
         ]
 
     def _init_spacings(self, downsamplings: List) -> List[float]:
-        try:
-            return [
-                self.getSpacing()[0] * downsampling for downsampling in downsamplings
-            ]
-        except:
-            raise InvalidSpacingError(self._path, 0, [], 0)
+        return [
+            self.getSpacing()[0] * downsampling for downsampling in downsamplings
+        ]
 
     def close(self):
         try:

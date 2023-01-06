@@ -3,7 +3,7 @@ import pytest
 from wholeslidedata.samplers.patchsampler import PatchSampler
 from shapely.geometry import Point
 from wholeslidedata.image.wsi import WholeSlideImage
-from wholeslidedata.files import WholeSlideImageFile
+from wholeslidedata.source.files import WholeSlideImageFile
 from wholeslidedata.interoperability.openslide.backend import OpenSlideWholeSlideImageBackend
 
 image_path  = "/home/mart/Radboudumc/data/lung/TCGA-21-5784-01Z-00-DX1_E50E7F4B-BE37-4171-94A7-E824CFF4B3BB.tif"

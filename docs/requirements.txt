@@ -3,6 +3,8 @@ myst-parser
 pydata_sphinx_theme
 sphinxcontrib-napoleon
 sphinx-autodoc-typehints
+sphinx-copybutton
+sphinx-design
 nbsphinx
 ipython
 jupytext

@@ -1,4 +1,4 @@
-from wholeslidedata.mode import WholeSlideMode, create_mode
+from wholeslidedata.source.mode import WholeSlideMode, create_mode
 import pytest
 
 class TestWholeSlideMode:

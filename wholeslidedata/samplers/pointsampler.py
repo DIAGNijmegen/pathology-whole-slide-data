@@ -11,7 +11,6 @@ from wholeslidedata.samplers.sampler import Sampler
 
 class PointSampler(Sampler):
     def __init__(self, seed: int, dataset):
-        self._seed = seed
         self._dataset = dataset
         super().__init__(seed=seed)
 
@@ -81,8 +80,8 @@ class UniformPointSampler(PointSampler):
                     sample_reference=sample_reference
                 )
 
-                prepped = prep(annotation.buffer(buffer).simplify(simplify))
-                triangles = triangulate(annotation.buffer(buffer).simplify(simplify))
+                prepped = prep(annotation.geometry.buffer(buffer).simplify(simplify))
+                triangles = triangulate(annotation.geometry.buffer(buffer).simplify(simplify))
 
                 tmp = {
                     tuple(triangle.centroid.coords[0]): triangle
@@ -109,7 +108,7 @@ class UniformPointSampler(PointSampler):
     def sample(self, sample_reference):
         record = self._sample_map[sample_reference]
         if len(record["transforms"]) == 0:
-            return record["annotation"].representative_point()
+            return record["annotation"].geometry.representative_point()
 
         transform_idx = self._rng.choice(
             range(len(record["transforms"])),
@@ -135,10 +134,10 @@ class RandomPointSampler(PointSampler):
                     sample_reference=sample_reference
                 )
                 self._sample_map[sample_reference] = (
-                    annotation.buffer(buffer).bounds,
-                    prep(annotation.buffer(buffer)),
+                    annotation.geometry.buffer(buffer).bounds,
+                    prep(annotation.geometry.buffer(buffer)),
                     seek_attempts,
-                    annotation.representative_point(),
+                    annotation.geometry.representative_point(),
                 )
 
     def sample(self, sample_reference):

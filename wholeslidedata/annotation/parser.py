@@ -13,39 +13,9 @@ from wholeslidedata.annotation.types import (
 )
 from wholeslidedata.image.wsi import WholeSlideImage
 from wholeslidedata.annotation.labels import Label, Labels
-from wholeslidedata.samplers.utils import block_shaped
+from wholeslidedata.samplers.utils import block
+from wholeslidedata.interoperability.asap.backend import AsapWholeSlideImageBackend
 from shapely import geometry
-
-SCHEMA = {
-    "type": "object",
-    "required": ["type", "label", "coordinates"],
-    "additionalProperties": False,
-    "properties": {
-        "type": {"enum": ["polygon", "point"]},
-        "coordinates": {
-            "type": "array",
-            "items": {
-                "type": "array",
-                "contains": {"type": "number"},
-                "minContains": 2,
-                "maxContains": 2,
-            },
-        },
-        "label": {
-            "type": "object",
-            "required": ["name", "value"],
-            "properties": {
-                "name": {"type": "string"},
-                "value": {"type": "integer", "minimum": 0},
-                "color": {"type": "string"},
-                "weight": {"type": "number"},
-                "confidence": {"type": "number"},
-                "overlay_index": {"type": "integer"},
-            },
-        },
-        "index": {"type": "integer", "minimum": 0},
-    },
-}
 
 
 class AnnotationType(Enum):
@@ -91,10 +61,8 @@ class AnnotationParser:
         ]
 
         self._sample_label_names = sample_label_names
-        self._hooks = []
-        if hooks is not None:
-            for key, value in hooks.items():
-                self._hooks.append(AnnotationHook.create(key, False, value))
+        self._hooks = hooks if hooks is not None else []
+            
 
     @classmethod
     def _path_exists(cls, path: str):
@@ -124,9 +92,6 @@ class AnnotationParser:
 
     def parse(self, path) -> List[Annotation]:
 
-        if not self._path_exists(path):
-            raise FileNotFoundError(path)
-
         if self._empty_file(path):
             warn = f"Loading empty file: {path}"
             warnings.warn(warn)
@@ -137,7 +102,7 @@ class AnnotationParser:
             annotation["index"] = index
             annotation["coordinates"] = np.array(annotation["coordinates"])
             annotation["label"] = self._rename_label(annotation["label"])
-            annotations.append(Annotation.create(**annotation, path=path))
+            annotations.append(Annotation.create(**annotation))
 
         for hook in self._hooks:
             annotations = hook(annotations)
@@ -167,9 +132,15 @@ class WholeSlideAnnotationParser(AnnotationParser):
             )
         )
 
-    def _parse(self, path) -> List[dict]:
+    def _open_annotation(self, path):
         with open(path) as json_file:
-            data = json.load(json_file)
+            return json.load(json_file)
+
+    def _parse(self, path) -> List[dict]:
+        if not self._path_exists(path):
+            raise FileNotFoundError(path)
+            
+        data = self._open_annotation(path)
         labels = self._get_labels(data)
         for annotation in data:
             label_name = annotation["label"]["name"]
@@ -191,7 +162,7 @@ class MaskAnnotationParser(AnnotationParser):
         processing_spacing=4.0,
         output_spacing=0.5,
         shape=(1024, 1024),
-        backend="asap",
+        backend=AsapWholeSlideImageBackend,
         full_coverage=False,
         offset=(0,0),
     ):
@@ -231,7 +202,7 @@ class MaskAnnotationParser(AnnotationParser):
 
     def _get_annotations(self, new_mask, size, ratio):
         region_index = -1
-        blocks = block_shaped(new_mask, int(size // ratio), int(size // ratio))
+        blocks = block(new_mask, int(size // ratio), int(size // ratio))
         for y in range(new_mask.shape[0] // (int(size // ratio))):
             for x in range(new_mask.shape[1] // int((size // ratio))):
                 region_index += 1
@@ -240,7 +211,6 @@ class MaskAnnotationParser(AnnotationParser):
 
                 box = self._get_coordinates((x * size)+self._offset[0], (y * size)+self._offset[1], size, size)
                 yield {
-                    "type": AnnotationType.POLYGON.value,
                     "coordinates": np.array(box),
                     "label": {"name": "tissue", "value": 1},
                 }
