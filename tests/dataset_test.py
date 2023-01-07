@@ -1,12 +1,12 @@
 
 from pathlib import Path
 from wholeslidedata.annotation.types import Annotation
-from wholeslidedata.image.wsi import WholeSlideImage
-from wholeslidedata.source.dataset import WholeSlideDataSet
+from wholeslidedata.image.wholeslideimage import WholeSlideImage
+from wholeslidedata.data.dataset import WholeSlideDataSet
 from sourcelib.collect import get_files_from_folder
 from sourcelib.associations import associate_files
-from wholeslidedata.source.files import WholeSlideImageFile, WholeSlideAnnotationFile
-from wholeslidedata.source.mode import WholeSlideMode
+from wholeslidedata.data.files import WholeSlideImageFile, WholeSlideAnnotationFile
+from wholeslidedata.data.mode import WholeSlideMode
 from wholeslidedata.interoperability.asap.backend import AsapWholeSlideImageBackend
 from wholeslidedata.interoperability.asap.parser import AsapAnnotationParser
 import pytest

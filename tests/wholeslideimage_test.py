@@ -1,7 +1,7 @@
 import pytest
 from pathlib import Path
 from typing import Union, List, Tuple
-from wholeslidedata.image.wsi import WholeSlideImage
+from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.annotation.types import Annotation
 import numpy as np
 from wholeslidedata.annotation.labels import Label

@@ -5,7 +5,7 @@ from shapely.affinity import affine_transform
 from shapely.geometry import Point
 from shapely.ops import triangulate
 from shapely.prepared import prep
-from wholeslidedata.source.dataset import DataSet
+from wholeslidedata.data.dataset import DataSet
 from wholeslidedata.samplers.sampler import Sampler
 
 

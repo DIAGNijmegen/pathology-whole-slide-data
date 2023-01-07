@@ -1,5 +1,5 @@
 from pathlib import Path
-from wholeslidedata.annotation.wsa import WholeSlideAnnotation
+from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
 from wholeslidedata.interoperability.asap.imagewriter import (
     WholeSlideImageWriter,
     WholeSlideMaskWriter,
@@ -7,7 +7,7 @@ from wholeslidedata.interoperability.asap.imagewriter import (
 )
 from wholeslidedata.interoperability.asap.backend import AsapWholeSlideImageBackend
 from wholeslidedata.iterators.patchiterator import create_patch_iterator
-from wholeslidedata.image.wsi import WholeSlideImage
+from wholeslidedata.image.wholeslideimage import WholeSlideImage
 import pytest
 
 

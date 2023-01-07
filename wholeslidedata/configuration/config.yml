@@ -1,7 +1,7 @@
 default:
   seed: 123
   mode:
-    "*object": wholeslidedata.source.mode.create_mode
+    "*object": wholeslidedata.data.mode.create_mode
     name: default
   yaml_source: None
   labels: None
@@ -13,14 +13,14 @@ default:
     "*object": wholeslidedata.interoperability.asap.parser.AsapAnnotationParser
     labels: ${_labels}
     sample_annotation_types: ["polygon"]
-  wsi_file_cls: ${$wholeslidedata.source.files.WholeSlideImageFile}
+  wsi_file_cls: ${$wholeslidedata.data.files.WholeSlideImageFile}
   image_sources: 
     "*object": sourcelib.collect.get_files_from_yaml
     yaml_source: ${yaml_source}
     file_cls: ${wsi_file_cls}
     mode: ${mode}
     image_backend: ${image_backend}
-  wsa_file_cls: ${$wholeslidedata.source.files.WholeSlideAnnotationFile}
+  wsa_file_cls: ${$wholeslidedata.data.files.WholeSlideAnnotationFile}
   annotation_sources:
     "*object": sourcelib.collect.get_files_from_yaml
     yaml_source: ${yaml_source}
@@ -32,7 +32,7 @@ default:
     files1: ${image_sources}
     files2: ${annotation_sources}
   dataset: 
-    "*object": wholeslidedata.source.dataset.WholeSlideDataSet
+    "*object": wholeslidedata.data.dataset.WholeSlideDataSet
     mode: ${mode}
     associations: ${associations} 
     load_images: True

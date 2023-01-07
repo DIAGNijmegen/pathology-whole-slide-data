@@ -10,7 +10,6 @@ from wholeslidedata.annotation.types import (
     PolygonAnnotation,
 )
 
-
 def plot_annotations(
     annotations: List[Annotation],
     ax=None,
@@ -38,9 +37,11 @@ def plot_annotations(
 
     if ax == plt:
         plt.axis("equal")
+        plt.gca().invert_yaxis()
         plt.show()
     else:
         ax.axis("equal")
+        ax.invert_yaxis()
         ax.set_title(title)
 
 
@@ -174,19 +175,3 @@ def plot_one_hot_batch(x_batch, y_batch, label_map):
             )
         plt.show()
 
-
-def plot_annotations(annotations, axes=None):
-    for annotation in annotations:
-        if axes == None:
-            if annotation.type == "Point":
-                plt.scatter(*annotation.coordinates)
-            else:
-                plt.plot(*list(zip(*annotation.coordinates)))
-            plt.gca().invert_yax.datais()
-            plt.axis("equal")
-            plt.show()
-        else:
-            if annotation.type == "Point":
-                axes.scatter(*annotation.coordinates)
-            else:
-                axes.plot(*list(zip(*annotation.coordinates)))

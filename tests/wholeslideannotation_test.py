@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from wholeslidedata.annotation.wsa import WholeSlideAnnotation
+from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
 from wholeslidedata.interoperability.asap.parser import AsapAnnotationParser
 from wholeslidedata.annotation.labels import Labels
 from wholeslidedata.annotation.hooks import ScalingAnnotationHook, TiledAnnotationHook

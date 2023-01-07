@@ -1,5 +1,5 @@
 from pathlib import Path
-from wholeslidedata.annotation.wsa import WholeSlideAnnotation
+from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
 from wholeslidedata.annotation.parser import MaskAnnotationParser
 from wholeslidedata.annotation.utils import (
     convert_annotations_to_json,

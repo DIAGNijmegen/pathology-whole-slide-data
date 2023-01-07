@@ -1,4 +1,4 @@
-from wholeslidedata.image.wsi import WholeSlideImage
+from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.interoperability.asap.imagewriter import WholeSlideMaskWriter
 from wholeslidedata.annotation.parser import MaskAnnotationParser
 from wholeslidedata.interoperability.asap.annotationwriter import write_asap_annotation

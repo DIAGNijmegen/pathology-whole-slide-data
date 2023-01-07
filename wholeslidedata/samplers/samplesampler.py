@@ -1,7 +1,7 @@
 from typing import List, Union
 
-from wholeslidedata.annotation.wsa import WholeSlideAnnotation
-from wholeslidedata.image.wsi import WholeSlideImage
+from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
+from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.samplers.patchlabelsampler import PatchLabelSampler
 from wholeslidedata.samplers.patchsampler import PatchSampler
 from wholeslidedata.samplers.batchshape import BatchShape

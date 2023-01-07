@@ -1,5 +1,5 @@
 from typing import List
-from wholeslidedata.source.dataset import WholeSlideDataSet, WholeSlideSampleReference
+from wholeslidedata.data.dataset import WholeSlideDataSet, WholeSlideSampleReference
 
 
 class BatchSampler:

@@ -1,7 +1,0 @@
---- 
-training: 
-  - 
-    wsa: 
-      path: /home/user/training/wsirois/wsi-level-annotations/annotations-tissue-cells-xmls/100B.xml
-    wsi: 
-      path: /home/user/training/wsirois/wsi-level-annotations/images/100B.tif

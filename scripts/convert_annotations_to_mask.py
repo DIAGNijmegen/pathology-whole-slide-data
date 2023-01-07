@@ -1,8 +1,8 @@
 import click
 from pathlib import Path
 from wholeslidedata.accessories.asap.imagewriter import write_mask
-from wholeslidedata.image.wsi import WholeSlideImage
-from wholeslidedata.annotation.wsa import WholeSlideAnnotation
+from wholeslidedata.image.wholeslideimage import WholeSlideImage
+from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
 
 
 @click.command()

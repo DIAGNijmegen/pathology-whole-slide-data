@@ -6,7 +6,7 @@ from shapely import geometry
 from wholeslidedata.accessories.asap.annotationwriter import write_asap_annotation
 from wholeslidedata.annotation.structures import Annotation
 from wholeslidedata.annotation.utils import cv2_polygonize
-from wholeslidedata.image.wsi import WholeSlideImage
+from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.annotation.labels import Label
 from tqdm import tqdm
 

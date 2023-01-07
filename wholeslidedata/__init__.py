@@ -1,3 +1,3 @@
 from wholeslidedata.version import __version__
-from wholeslidedata.image.wsi import WholeSlideImage
-from wholeslidedata.annotation.wsa import WholeSlideAnnotation
+from wholeslidedata.image.wholeslideimage import WholeSlideImage
+from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation

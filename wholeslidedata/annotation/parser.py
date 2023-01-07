@@ -7,11 +7,10 @@ from typing import Any, List, Optional, Union
 import warnings
 
 import numpy as np
-from wholeslidedata.annotation.hooks import AnnotationHook
 from wholeslidedata.annotation.types import (
     Annotation,
 )
-from wholeslidedata.image.wsi import WholeSlideImage
+from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.annotation.labels import Label, Labels
 from wholeslidedata.samplers.utils import block
 from wholeslidedata.interoperability.asap.backend import AsapWholeSlideImageBackend

@@ -5,7 +5,7 @@ from wholeslidedata.samplers.patchlabelsampler import (
     SegmentationPatchLabelSampler,
 )
 from wholeslidedata.interoperability.asap.backend import AsapWholeSlideImageBackend
-from wholeslidedata.annotation.wsa import WholeSlideAnnotation
+from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
 from shapely.geometry import Point
 import numpy as np
 

@@ -4,7 +4,7 @@ from concurrentbuffer.commander import Commander
 
 import numpy as np
 
-from wholeslidedata.image.wsi import WholeSlideImage
+from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.interoperability.openslide.backend import OpenSlideWholeSlideImageBackend
 
 def get_number_of_tiles(x_dims, y_dims, tile_shape, ratio):

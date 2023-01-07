@@ -13,7 +13,7 @@ wholeslidedata:
                   wsa: 
                     path: /tmp/TCGA-21-5784-01Z-00-DX1.xml   
 
-        label_map:
+        labels:
             stroma: 1
             tumor: 2
             lymphocytes: 3

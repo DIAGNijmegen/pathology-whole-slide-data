@@ -4,7 +4,7 @@ from pathlib import Path
 from wholeslidedata.annotation.labels import Label
 from wholeslidedata.annotation.types import Annotation
 from wholeslidedata.interoperability.asap.annotationwriter import write_asap_annotation, write_point_set
-from wholeslidedata.annotation.wsa import WholeSlideAnnotation
+from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
 import random
 
 def test_write_asap_annotations():

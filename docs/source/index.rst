@@ -11,6 +11,8 @@ WholeSlideData
 
    </div>
 
+
+
 .. grid:: 1
 
     .. grid-item::
@@ -48,9 +50,8 @@ WholeSlideData
 .. toctree::
     :hidden:
 
-    self
     ./installation/index
     ./userguide/index
     ./userguide/examples
-    ./userguide/cooperation
+    ./userguide/interoperability
     ./api

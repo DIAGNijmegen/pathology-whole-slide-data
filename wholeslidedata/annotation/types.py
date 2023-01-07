@@ -165,11 +165,6 @@ class PolygonAnnotation(Annotation):
     def holes(self):
         return [np.array(interior.xy).T for interior in self._geometry.interiors]
 
-    def iou(self, annotation: Annotation):
-        polygon_intersection = self._geometry.intersection(annotation._geometry).area
-        polygon_union = self.union(annotation._geometry).area
-        return polygon_intersection / polygon_union
-
     def contains(self, annotation: Annotation):
         # use prep ?
         # check overlapping annotations because if within overlapping than it contains not

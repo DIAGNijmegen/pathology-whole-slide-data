@@ -1,5 +1,5 @@
 from pathlib import Path
-from wholeslidedata.image.wsi import WholeSlideImage
+from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.interoperability.openslide.backend import (
     OpenSlideWholeSlideImageBackend,
 )

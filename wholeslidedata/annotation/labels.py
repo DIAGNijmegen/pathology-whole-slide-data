@@ -132,7 +132,7 @@ def _label_from_label(label: Label, **kwargs):
 
 @_label_factory.register
 def _label_from_dict(label: dict, **kwargs):
-    return Label(**label, **kwargs)
+    return Label(**label)
 
 
 @_label_factory.register

@@ -5,7 +5,7 @@ import numpy as np
 from skimage.transform import resize
 from wholeslidedata.annotation.types import PointAnnotation, PolygonAnnotation
 from wholeslidedata.samplers.utils import shift_coordinates
-from wholeslidedata.image.wsi import WholeSlideImage
+from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.samplers.sampler import Sampler
 
 

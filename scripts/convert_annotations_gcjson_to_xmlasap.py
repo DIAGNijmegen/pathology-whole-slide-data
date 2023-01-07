@@ -5,7 +5,7 @@ import xml.etree.cElementTree as ET
 from pathlib import Path
 from xml.dom import minidom
 import argparse
-from wholeslidedata.image.wsi import WholeSlideImage
+from wholeslidedata.image.wholeslideimage import WholeSlideImage
 import click
 import numpy as np
 

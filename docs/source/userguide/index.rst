@@ -108,10 +108,9 @@ This entails the images and image backend used to read from the images and the a
    :hidden:
    :caption: Data Loading
 
-   ./notebooks/components/dataconfig
+   ./notebooks/components/data
    ./notebooks/components/imagebackend
    ./notebooks/components/annotationparser
-   ./notebooks/components/associations
    
 
 
@@ -122,7 +121,6 @@ This entails the images and image backend used to read from the images and the a
    ./notebooks/components/modes
    ./notebooks/components/labels
    ./notebooks/components/batchshape
-   ./notebooks/components/dataset
 
 .. toctree::
    :hidden:
