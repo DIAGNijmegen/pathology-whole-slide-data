@@ -33,14 +33,6 @@ Interoperability
 
 .. toctree::
    :hidden:
-   :caption: Configuration
-
-   ./notebooks/cooperation/dicfg
-   ./notebooks/cooperation/hydra
-
-
-.. toctree::
-   :hidden:
    :caption: Cloud
 
    ./notebooks/cooperation/aws

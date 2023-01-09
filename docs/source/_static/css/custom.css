@@ -12,6 +12,10 @@ html[data-theme="dark"] {
 }
 
 
+.bd-links__title{
+    display: none
+}
+
 .sd-btn-primary:hover, .sd-btn-outline-primary:hover, .sd-btn-outline-primary:hover {
 
     color: var(--color-on-blue) !important;

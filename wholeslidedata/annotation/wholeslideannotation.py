@@ -6,7 +6,7 @@ from rtree import index
 from wholeslidedata.annotation import utils as annotation_utils
 from wholeslidedata.annotation.labels import Labels
 from wholeslidedata.annotation.parser import AnnotationParser, WholeSlideAnnotationParser, MaskAnnotationParser
-from wholeslidedata.annotation.selector import AnnotationSelector
+from wholeslidedata.annotation.selector import AnnotationSelector, sort_by_label_value
 from wholeslidedata.annotation.types import Annotation, PolygonAnnotation
 from wholeslidedata.interoperability.asap.parser import AsapAnnotationParser
 
@@ -24,8 +24,8 @@ class WholeSlideAnnotation:
         annotation_path: Union[Path, str],
         labels: Optional[Union[Labels, list, tuple, dict]] = None,
         parser: AnnotationParser = None,
-        sort_by_overlay_index: bool = False,
         ignore_overlap: bool = True,
+        sorters = (sort_by_label_value, ),
         **kwargs
     ):
         """WholeSlideAnnotation contains all annotions of an whole slide image
@@ -45,8 +45,6 @@ class WholeSlideAnnotation:
             parser, self._annotation_path, labels, **kwargs
         )
         self._annotations = self._parser.parse(self._annotation_path)
-
-        self._sort_by_overlay_index = sort_by_overlay_index
         self._labels = annotation_utils.get_labels_in_annotations(self.annotations)
         self._sample_labels = self._parser.sample_label_names
         self._sample_types = self._parser.sample_annotation_types
@@ -60,7 +58,7 @@ class WholeSlideAnnotation:
         if not ignore_overlap:
             self._set_overlapping_annotations()
 
-        self._annotation_selector = AnnotationSelector(self._annotations)
+        self._annotation_selector = AnnotationSelector(self._annotations, sorters=sorters)
 
     def _init_parser(self, parser, annotation_path, labels, **kwargs):
         if isinstance(parser, AnnotationParser):

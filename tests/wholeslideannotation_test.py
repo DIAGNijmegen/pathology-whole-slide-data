@@ -5,7 +5,7 @@ import pytest
 from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
 from wholeslidedata.interoperability.asap.parser import AsapAnnotationParser
 from wholeslidedata.annotation.labels import Labels
-from wholeslidedata.annotation.hooks import ScalingAnnotationHook, TiledAnnotationHook
+from wholeslidedata.annotation.callbacks import ScalingAnnotationCallback, TiledAnnotationCallback
 
 from .downloaddata import download_annotation_data, download_example_data
 
@@ -56,10 +56,10 @@ class TestWholeSlideAnnotation:
     def test_overlapping_annotations(self, annotation_path):
         wsa = WholeSlideAnnotation(annotation_path, sample_label_names=["tumor"], ignore_overlap=False)
 
-    def test_scaling_hook(self, wsa: WholeSlideAnnotation, annotation_path):
-        wsa_scaled = WholeSlideAnnotation(annotation_path, sample_label_names=["tumor"], hooks=(ScalingAnnotationHook(0.5),))
+    def test_scaling_callback(self, wsa: WholeSlideAnnotation, annotation_path):
+        wsa_scaled = WholeSlideAnnotation(annotation_path, sample_label_names=["tumor"], callbacks=(ScalingAnnotationCallback(0.5),))
         assert wsa.annotations[0].coordinates[0][0]/2 == wsa_scaled.annotations[0].coordinates[0][0]
 
-    def test_tiled_hook(self, annotation_path):
-        wsa_tiled = WholeSlideAnnotation(annotation_path, sample_label_names=["tumor"], hooks=(TiledAnnotationHook(tile_size=64, label_names=['tumor']),))
+    def test_tiled_callback(self, annotation_path):
+        wsa_tiled = WholeSlideAnnotation(annotation_path, sample_label_names=["tumor"], callbacks=(TiledAnnotationCallback(tile_size=64, label_names=['tumor']),))
         assert wsa_tiled.sampling_annotations[0].size == (64,64)

@@ -69,7 +69,7 @@ default:
   patch_label_sampler:
     module: wholeslidedata.samplers.patchlabelsampler.${patch_label_sampler_name}
   sample_callbacks@replace=false:
-    - object*: wholeslidedata.samplers.callbacks.SampleCallback
+    - object*: wholeslidedata.samplers.hooks.SampleHook
   sample_sampler: 
     object*: wholeslidedata.samplers.samplesampler.SampleSampler
     patch_sampler: ${patch_sampler}
@@ -77,8 +77,8 @@ default:
     batch_shape: ${batch_shape}
     sample_callbacks: ${sample_callbacks}
   batch_callbacks@replace=false: 
-    - object*: wholeslidedata.samplers.callbacks.BatchCallback
-    - object*: wholeslidedata.samplers.callbacks.BatchCallback
+    - object*: wholeslidedata.samplers.hooks.BatchHook
+    - object*: wholeslidedata.samplers.hooks.BatchHook
       return_dict: False
   batch_reference_sampler:
     object*: wholeslidedata.samplers.batchreferencesampler.BatchReferenceSampler

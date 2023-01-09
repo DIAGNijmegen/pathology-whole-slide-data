@@ -4,11 +4,11 @@ from typing import List
 from wholeslidedata.annotation.types import Annotation
 from shapely import geometry
 
-class AnnotationHook:
+class AnnotationCallback:
     def __call__(self, annotations: List[Annotation]):
         return annotations
 
-class ScalingAnnotationHook(AnnotationHook):
+class ScalingAnnotationCallback(AnnotationCallback):
 
     def __init__(self, scaling):
         self._scaling = scaling
@@ -23,7 +23,7 @@ class ScalingAnnotationHook(AnnotationHook):
             scaled_annotations.append(Annotation.create(**scaled_annotation))
         return scaled_annotations
 
-class TiledAnnotationHook(AnnotationHook):
+class TiledAnnotationCallback(AnnotationCallback):
 
     def __init__(self, tile_size, label_names, ratio=1, overlap=0, full_coverage=False):
         self._tile_size = tile_size*ratio

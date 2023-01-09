@@ -1,5 +1,14 @@
 # Changelog
 ---
+
+### ** 0.1.0 **
+
+ - label_map -> labels
+ - parser hooks-> callbacks
+ - explicit backend/parser (no string anymore)
+ - creating of objects, see dicfg documentation
+  
+
 #### **Upcoming** (0.0.16)  
 
 

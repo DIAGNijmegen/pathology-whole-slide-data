@@ -110,7 +110,7 @@ class WeightedLabelSampler(LabelSampler):
         self, labels: dict, replace=True, seed: int = 123
     ):
         labels = dict(sorted(labels.items()))
-        self._weights= list(labels.values())
+        self._weights = list(labels.values())
         super().__init__(labels=list(labels.keys()), seed=seed)
         
     def __next__(self):

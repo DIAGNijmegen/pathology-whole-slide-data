@@ -35,7 +35,7 @@ class AnnotationParser:
         renamed_labels: Optional[Union[Labels, list, tuple, dict]] = None,
         sample_label_names: Union[list, tuple] = (),
         sample_annotation_types: Union[list, tuple] = ("polygon",),
-        hooks=None,
+        callbacks=None,
     ):
         """Init
 
@@ -60,7 +60,7 @@ class AnnotationParser:
         ]
 
         self._sample_label_names = sample_label_names
-        self._hooks = hooks if hooks is not None else []
+        self._callbacks = callbacks if callbacks is not None else []
             
 
     @classmethod
@@ -103,8 +103,8 @@ class AnnotationParser:
             annotation["label"] = self._rename_label(annotation["label"])
             annotations.append(Annotation.create(**annotation))
 
-        for hook in self._hooks:
-            annotations = hook(annotations)
+        for callback in self._callbacks:
+            annotations = callback(annotations)
         return annotations
 
     def _get_labels(self, opened_annotation):

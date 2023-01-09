@@ -1,4 +1,3 @@
-
 from typing import List
 
 from shapely import geometry
@@ -7,15 +6,21 @@ from rtree import index
 from wholeslidedata.annotation.types import Annotation
 
 
-def area_sort_with_roi(item):
-    if item.label.name in ["roi", "rois", "none"]:
-        return 100000 * 100000
-    return item.area
+def sort_by_area_with_roi(annotations):
+    def sort(item):
+        if item.label.name in ["roi", "rois", "none"]:
+            return 100000 * 100000
+        return item.area
+    return sorted(annotations, key=lambda item: sort(item), reverse=True)
+
+def sort_by_label_value(annotations):
+    return sorted(annotations, key=lambda item: item.label.value)
 
 
 class AnnotationSelector:
-    def __init__(self, annotations: List[Annotation]):
+    def __init__(self, annotations: List[Annotation], sorters):
         self._annotations = annotations
+        self._sorters = sorters
         self._tree = index.Index()
         for pos, annotation in enumerate(annotations):
             self._tree.insert(pos, annotation.bounds)
@@ -46,13 +51,6 @@ class AnnotationSelector:
             self._annotations[pos] for pos in self._tree.intersection(box.bounds)
         ]
 
-        # TODO add custom sort function, e.g., overlay index
-
-        # sort by label value
-        sorted_annotations = sorted(annotations, key=lambda item: item.label.value)
-
-        # sort by area, (roi,rois,none lowest)
-        sorted_annotations = sorted(
-            sorted_annotations, key=lambda item: area_sort_with_roi(item), reverse=True
-        )
-        return sorted_annotations
+        for sorter in self._sorters:
+            annotations = sorter(annotations)
+        return annotations

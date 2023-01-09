@@ -7,7 +7,7 @@ from wholeslidedata.samplers.utils import (block, crop_data,
 
 
 class SampleCallback:
-    """Pass through callback on samples"""
+    """Pass through Callback on samples"""
 
     def __init__(self):
         pass
@@ -23,7 +23,7 @@ class SampleCallback:
 
 
 class BatchCallback:
-    """Pass through callback on batches"""
+    """Pass through Callback on batches"""
 
     def __init__(self, *args, **kwargs):
         pass
@@ -37,7 +37,7 @@ class BatchCallback:
         pass
 
 
-class BlockShaped(SampleCallback):
+class BlockShapedSampleCallback(SampleCallback):
     """Reshapes samples into blocks"""
 
     def __init__(self, nrows, ncols):
@@ -50,7 +50,7 @@ class BlockShaped(SampleCallback):
         return x_patches, y_patches
 
 
-class OneHotEncoding(SampleCallback):
+class OneHotEncodingSampleCallback(SampleCallback):
     """One-hot encodes y sample"""
 
     def __init__(self, labels, ignore_zero=True):
@@ -62,7 +62,7 @@ class OneHotEncoding(SampleCallback):
         return x_patch, y_patch
 
 
-class Reshape(SampleCallback):
+class ReshapeSampleCallback(SampleCallback):
     """Flattens first and second dimension in y sample"""
 
     def __call__(self, x_patch, y_patch):
@@ -71,7 +71,7 @@ class Reshape(SampleCallback):
         return x_patch, y_patch
 
 
-class ChannelsFirst(SampleCallback):
+class ChannelsFirstSampleCallback(SampleCallback):
     """Tranposes x sample from channels last to channels first"""
 
     def __call__(self, x_patch, y_patch):
@@ -79,7 +79,7 @@ class ChannelsFirst(SampleCallback):
         return x_patch, y_patch
 
 
-class FitOutput(SampleCallback):
+class CropSampleCallback(SampleCallback):
     """Crops y patch to fit output shape"""
 
     def __init__(self, output_shape):
@@ -97,7 +97,7 @@ class FitOutput(SampleCallback):
         return y_patch
 
 
-class HedCallback(BatchCallback):
+class HedAugmentationBatchCallback(BatchCallback):
     def __init__(self, hem=0.02, eos=0.02, dab=0.02, probability=0.5):
         self._hem = hem
         self._eos = eos

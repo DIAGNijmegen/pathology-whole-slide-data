@@ -52,7 +52,7 @@ class PatchProducer(Producer):
             spacing=message["spacing"],
             center=False,
         )
-        for hook in self._hooks:
-            patch = hook(patch)
+        for callback in self._hooks:
+            patch = callback(patch)
 
         return np.array([patch])

@@ -60,10 +60,10 @@ Minimal BatchIterator Configuration
          yaml_source:
             training:
             - wsi:
-               path: /tmp/TCGA-21-5784-01Z-00-DX1.tif
-            wsa:
-               path: /tmp/TCGA-21-5784-01Z-00-DX1.xml
-         label_map:
+                 path: /tmp/TCGA-21-5784-01Z-00-DX1.tif
+              wsa:
+                 path: /tmp/TCGA-21-5784-01Z-00-DX1.xml
+         labels:
             stroma: 1
             tumor: 2
             lymphocytes: 3
@@ -73,24 +73,6 @@ Minimal BatchIterator Configuration
             shape: [512, 512, 3]
 
 
-BatchIterator Components
-***************************
-
-Image backends
-**************
-
-To specify an image backend for the full dataset
-
-This entails the images and image backend used to read from the images and the annotations and the parser that convert the annotations to the internal representations used in the batch iterator. The default image backend is 'openslide' and does not need to be configured. However, if you want to change the image backend, you can configure it as follows. 
-
-.. button-link:: notebooks/components/dataconfig.html
-    :color: primary
-    :outline:
-    :shadow:
-    :align: right
-    :class: sd-width-10, sd-height-10
-
-    :octicon:`arrow-right;1em;` Image backends 
 
 
 
@@ -129,16 +111,12 @@ This entails the images and image backend used to read from the images and the a
    ./notebooks/components/labelsampler
    ./notebooks/components/annotationsampler
    ./notebooks/components/pointsampler
-   ./notebooks/components/patchsampler
    ./notebooks/components/patchlabelsampler
-   ./notebooks/components/samplesampler
-   ./notebooks/components/batchsampler
 
 .. toctree::
    :hidden:
    :caption: Customization
 
-   ./notebooks/components/seed
    ./notebooks/components/presets
    ./notebooks/components/hooks
 
