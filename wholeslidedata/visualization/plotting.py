@@ -10,6 +10,8 @@ from wholeslidedata.annotation.types import (
     PolygonAnnotation,
 )
 
+import numpy as np
+
 def plot_annotations(
     annotations: List[Annotation],
     ax=None,
@@ -20,13 +22,14 @@ def plot_annotations(
 ):
     ax = ax or plt
 
+    if use_base_coordinates:
+        min_x = min(annotation.bounds[0] for annotation in annotations)
+        min_y = min(annotation.bounds[1] for annotation in annotations)
+        annotations = [annotation.translate((min_x, min_y)) for annotation in annotations]
+
     for annotation in annotations:
         color = get_color(annotation, color_map)
-
-        if use_base_coordinates:
-            coordinates = annotation.base_coordinates * scale
-        else:
-            coordinates = annotation.coordinates * scale
+        coordinates = np.array(annotation.coordinates) * scale
 
         if isinstance(annotation, PointAnnotation):
             ax.scatter(*coordinates, color=color)

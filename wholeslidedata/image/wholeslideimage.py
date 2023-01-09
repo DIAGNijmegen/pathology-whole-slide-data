@@ -88,7 +88,7 @@ class WholeSlideImage:
         return self.get_patch(0, 0, *shape, spacing, center=False)
 
     def get_annotation(
-        self, annotation: Annotation, spacing: float, margin: int = 0, masked=True
+        self, annotation: Annotation, spacing: float, margin: int = 0, masked=False
     ):
         scaling = self._spacings[0] / self.get_real_spacing(spacing)
         size = np.array(annotation.size) + margin
@@ -101,7 +101,25 @@ class WholeSlideImage:
             return patch
 
         return mask_patch_with_annotation(patch, annotation, scaling)
+    
+    def get_region_from_annotations(self, annotations, spacing,margin int = 0):
+        
+        scaling = self._spacings[0] / self.get_real_spacing(spacing)
+        
+        min_x = min(annotation.bounds[0] for annotation in annotations)
+        min_y = min(annotation.bounds[1] for annotation in annotations)
+        max_x = max(annotation.bounds[2] for annotation in annotations)
+        max_y = max(annotation.bounds[3] for annotation in annotations)
+        width = (max_x - min_x)* scaling
+        height = (max_y - min_y)* scaling
 
+        return self.get_patch(
+            min_x, min_y, width, height,
+            spacing=spacing,
+            center=False,
+        )
+        
+        
     def get_downsampling_from_spacing(self, spacing: float) -> float:
         level = self.get_level_from_spacing(spacing)
         return self.get_downsampling_from_level(level)

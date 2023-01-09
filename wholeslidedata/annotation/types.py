@@ -3,7 +3,7 @@ from typing import List, Union
 import numpy as np
 from shapely import geometry
 from wholeslidedata.annotation.labels import Label
-
+from shapely.affinity import translate
 
 class UnsupportedGeometryType(ValueError):
     ...
@@ -16,6 +16,10 @@ class InvalidCoordinatesError(ValueError):
 def _get_geometry(
     coordinates: Union[list, dict]
 ) -> Union[geometry.Point, geometry.Polygon]:
+    
+    if isinstance(coordinates, (geometry.Point, geometry.Polygon)):
+        return coordinates
+    
     holes = []
     if isinstance(coordinates, dict):
         holes = coordinates["holes"]
@@ -113,6 +117,9 @@ class Annotation:
     @property
     def xy(self):
         return self._geometry.xy
+    
+    def translate(self, offset):
+        return Annotation.create(self._index, self._label, translate(self._geometry, -offset[0], -offset[1]), **self._kwargs)
 
     def todict(self):
         return dict(
