@@ -12,9 +12,10 @@ Examples
 
 .. toctree::
    :hidden:
-   :caption: Models
+   :caption: Deep Learning
 
-   ./notebooks/examples/unet
-   ./notebooks/examples/fasterrcnn
-   ./notebooks/examples/hooknet
+   ./notebooks/examples/pytorch
+   ./notebooks/examples/tensorflow
+   ./notebooks/examples/detectron2
+   ./notebooks/examples/albumentations
 

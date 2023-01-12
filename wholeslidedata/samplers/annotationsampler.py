@@ -2,7 +2,7 @@ from typing import Callable, Dict, Iterator
 import abc
 import numpy as np
 from wholeslidedata.samplers.sampler import Sampler
-
+from wholeslidedata.data.dataset import WholeSlideDataSet
 
 class AnnotationSampler(Sampler, Iterator):
     def __init__(self, counts_per_label: Dict, seed: int):
@@ -78,9 +78,8 @@ class BalancedAnnotationSampler(AnnotationSampler):
 
 
 class AreaAnnotationSampler(AnnotationSampler):
-    def __init__(self, counts_per_label, seed, dataset, weight=1.0):
+    def __init__(self, counts_per_label: dict, seed, dataset: WholeSlideDataSet, weight: float=1.0):
         super().__init__(counts_per_label, seed=seed)
-        self._dataset = dataset
         self._weight = weight
         self._area_annotation_map = {label: {} for label in counts_per_label}
         self._total_area = {label: 0 for label in counts_per_label}
@@ -91,8 +90,7 @@ class AreaAnnotationSampler(AnnotationSampler):
 
         for label, sample_references in dataset.sample_references.items():
             for annotation_index, sample_reference in enumerate(sample_references):
-                annotation = self._dataset.get_annotation_from_reference(sample_reference)
-                # make map dict where every increase value has its own range
+                annotation = dataset.get_annotation_from_reference(sample_reference)
                 self._area_annotation_map[label][self._total_area[label]] = annotation_index
                 self._area_annotations[label][annotation_index] = self._total_area[label]
                 self._total_area[label] += annotation.area ** self._weight

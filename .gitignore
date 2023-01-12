@@ -136,3 +136,4 @@ dmypy.json
 
 docs/jupyter_execute
 docs/source/_autosummary
+docs/source/userguide/notebooks/examples/stuff

@@ -36,6 +36,7 @@ class AnnotationParser:
         sample_label_names: Union[list, tuple] = (),
         sample_annotation_types: Union[list, tuple] = ("polygon",),
         callbacks=None,
+        **kwargs
     ):
         """Init
 
@@ -61,6 +62,7 @@ class AnnotationParser:
 
         self._sample_label_names = sample_label_names
         self._callbacks = callbacks if callbacks is not None else []
+        self._kwargs = kwargs
             
 
     @classmethod
@@ -101,6 +103,7 @@ class AnnotationParser:
             annotation["index"] = index
             annotation["coordinates"] = np.array(annotation["coordinates"])
             annotation["label"] = self._rename_label(annotation["label"])
+            annotation.update(self._kwargs)
             annotations.append(Annotation.create(**annotation))
 
         for callback in self._callbacks:

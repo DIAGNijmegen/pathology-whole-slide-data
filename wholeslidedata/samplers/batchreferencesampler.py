@@ -38,7 +38,10 @@ class BatchReferenceSampler:
             # get new sample to samples
             sample = self._dataset.sample_references[label][index]
 
-            point = self._point_sampler.sample(sample)
+            # get annotation from reference
+            annotation = self._dataset.get_annotation_from_reference(sample)
+
+            point = self._point_sampler.sample(annotation)
 
             # add new sample to samples
             batch.append({'reference': sample, 'point': point})

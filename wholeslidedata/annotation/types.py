@@ -1,9 +1,13 @@
+from functools import lru_cache
 import math
 from typing import List, Union
 import numpy as np
 from shapely import geometry
 from wholeslidedata.annotation.labels import Label
 from shapely.affinity import translate
+from shapely.prepared import prep
+from shapely.ops import triangulate
+
 
 class UnsupportedGeometryType(ValueError):
     ...
@@ -16,10 +20,10 @@ class InvalidCoordinatesError(ValueError):
 def _get_geometry(
     coordinates: Union[list, dict]
 ) -> Union[geometry.Point, geometry.Polygon]:
-    
+
     if isinstance(coordinates, (geometry.Point, geometry.Polygon)):
         return coordinates
-    
+
     holes = []
     if isinstance(coordinates, dict):
         holes = coordinates["holes"]
@@ -29,6 +33,28 @@ def _get_geometry(
     if len(coordinates) == 2:
         return geometry.Point(coordinates)
     return geometry.Polygon(coordinates, holes)
+
+
+def _triangulate(simplified_geometry, prepped_geometry):
+    triangles = triangulate(simplified_geometry)
+
+    tmp = {tuple(triangle.centroid.coords[0]): triangle for triangle in triangles}
+    triangle_points = [triangle.centroid for triangle in triangles]
+    filtered_points = list(filter(prepped_geometry.contains, triangle_points))
+    filtered_triangles = [tmp[tuple(p.coords[0])] for p in filtered_points]
+
+    areas = []
+    transforms = []
+    for t in filtered_triangles:
+        areas.append(t.area)
+        (x0, y0), (x1, y1), (x2, y2) = t.exterior.coords[:3]
+        transforms.append([x1 - x0, x2 - x0, y1 - y0, y2 - y0, x0, y0])
+
+    return {
+        "transforms": transforms,
+        "areas": areas,
+        "triangles": filtered_triangles,
+    }
 
 
 class Annotation:
@@ -58,7 +84,6 @@ class Annotation:
         self._kwargs = kwargs
 
         for key, value in self._kwargs.items():
-            print(key, value)
             self.__setattr__(key, value)
 
     @property
@@ -95,7 +120,7 @@ class Annotation:
 
     @property
     def centroid(self):
-        return tuple(map(round, self._geometry.centroid.xy))
+        return tuple(map(round, [a[0] for a in self._geometry.centroid.xy]))
 
     @property
     def bounds(self):
@@ -117,9 +142,21 @@ class Annotation:
     @property
     def xy(self):
         return self._geometry.xy
-    
+
     def translate(self, offset):
-        return Annotation.create(self._index, self._label, translate(self._geometry, -offset[0], -offset[1]), **self._kwargs)
+        return Annotation.create(
+            self._index,
+            self._label,
+            translate(self._geometry, -offset[0], -offset[1]),
+            **self._kwargs,
+        )
+    def scale(self, scaling):
+        return Annotation.create(
+            self._index,
+            self._label,
+            self.coordinates * scaling,
+            **self._kwargs,
+        )
 
     def todict(self):
         return dict(
@@ -139,7 +176,7 @@ class Annotation:
         return (
             self.type == other.type
             and self.index == other.index
-            and self.coordinates == other.coordinates
+            and np.all(self.coordinates == other.coordinates)
             and self.label == other.label
         )
 
@@ -185,3 +222,9 @@ class PolygonAnnotation(Annotation):
 
     def add_overlapping_annotations(self, overlap_annotations):
         self._overlapping_annotations.append(overlap_annotations)
+
+    @lru_cache
+    def triangles(self, buffer=0, simplify=2.0):
+        simplified_geometry = self._geometry.buffer(buffer).simplify(simplify)
+        prepped_geometry = prep(simplified_geometry)
+        return _triangulate(simplified_geometry, prepped_geometry)

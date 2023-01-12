@@ -71,8 +71,7 @@ class BatchShape(UserDict):
             )
 
         inputs = {}
-
-        # # TODO python has zip strict argument maybe use that instead
+        
         if len(spacings) != len(shapes):
             raise ShapeMismatchError(
                 f"spacings {spacings} and shapes {shapes} do not have same lengths"

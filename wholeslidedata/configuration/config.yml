@@ -50,12 +50,11 @@ default:
   annotation_sampler_name: BalancedAnnotationSampler
   annotation_sampler:
     "*object": wholeslidedata.samplers.annotationsampler.${annotation_sampler_name}
-    counts_per_label: ${dataset.annotations_per_label}
+    counts_per_label: ${dataset.counts_per_label}
     seed: ${seed}
   point_sampler_name: RandomPointSampler
   point_sampler:
     "*object": wholeslidedata.samplers.pointsampler.${point_sampler_name}
-    dataset: ${dataset}
     seed: ${seed}
   patch_sampler:
     "*object": wholeslidedata.samplers.patchsampler.PatchSampler

@@ -48,7 +48,7 @@ class TestWholeSlideImage:
         spacing = 2.0
         assert isinstance(wsi.get_slide(spacing), np.ndarray)
 
-    def test_get_annotation(self, wsi):
+    def test_get_region(self, wsi: WholeSlideImage):
         annotation = Annotation.create(
             index=0,
             label=Label("label1", 1),
@@ -58,7 +58,7 @@ class TestWholeSlideImage:
         margin = 0
         masked = True
         assert isinstance(
-            wsi.get_annotation(annotation, spacing, margin, masked), np.ndarray
+            wsi.get_region_from_annotations([annotation], spacing, margin, masked), np.ndarray
         )
 
     def test_get_downsampling_from_spacing(self, wsi):

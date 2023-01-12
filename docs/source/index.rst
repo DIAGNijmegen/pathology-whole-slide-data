@@ -36,7 +36,7 @@ WholeSlideData
 
         **Ease**
 
-        WholeSlideData uses a configuration system called `Creationism <https://github.com/martvanrijthoven/creationism>`_ that allows users to configure the batch terator in a single config file. Using multiple configuration files is also possible to create a clean and well-structured configuration for your project. Creationism has some parallels with Hydra. So if you are familiar with Hydra, it should be straightforward to make your configuration file for the batch iterator. Creationism lets you configure any setting, build instances, and insert these instances as dependencies for other functions or classes directly in the config file. Furthermore, users can build on top of base classes and will only need to change the configuration file to use custom code without the need to change any part of the batch iterator.
+        WholeSlideData uses a configuration system called `Dicfg <https://github.com/martvanrijthoven/dicfg>`_ that allows users to configure the batch terator in a single config file. Using multiple configuration files is also possible to create a clean and well-structured configuration for your project. Dicfg has some parallels with Hydra. So if you are familiar with Hydra, it should be straightforward to make your configuration file for the batch iterator. Dicfg lets you configure any setting, build instances, and insert these instances as dependencies for other functions or classes directly in the config file. Furthermore, users can build on top of base classes and will only need to change the configuration file to use custom code without the need to change any part of the batch iterator.
 
 
 
