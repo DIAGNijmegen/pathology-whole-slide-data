@@ -12,6 +12,19 @@ from wholeslidedata.annotation.types import (
 
 import numpy as np
 
+MASK_COLOR_VALUES = [
+        "white",
+        "red",
+        "blue",
+        "green",
+        "orange",
+        "brown",
+        "yellow",
+        "purple",
+        "pink",
+        "grey",
+    ]
+
 def plot_annotations(
     annotations: List[Annotation],
     ax=None,
@@ -51,11 +64,11 @@ def plot_annotations(
 """Plotting"""
 
 
-def plot_batch(x_batch, y_batch, alpha=0.4, size=(20, 5)):
+def plot_batch(x_batch, y_batch, alpha=0.4, size=(20, 5), color_values=None):
     fig, axes = plt.subplots(1, len(x_batch), figsize=size)
     for batch_index in range(len(x_batch)):
         axes[batch_index].imshow(x_batch[batch_index])
-        plot_mask(y_batch[batch_index], axes=axes[batch_index], alpha=alpha)
+        plot_mask(y_batch[batch_index], axes=axes[batch_index], alpha=alpha, color_values=color_values)
     plt.tight_layout()
     plt.show()
 
@@ -126,23 +139,15 @@ def plot_patch(patch, axes=None, title="my_patch", output_size=None, alpha=1.0):
 
 def plot_mask(
     mask,
-    color_values=[
-        "white",
-        "red",
-        "blue",
-        "green",
-        "orange",
-        "brown",
-        "yellow",
-        "purple",
-        "pink",
-        "grey",
-    ],
+    color_values=None,
     axes=None,
     title="",
     alpha=1.0,
 ):
-
+    
+    if color_values is None:
+        color_values = MASK_COLOR_VALUES
+    
     cmap = colors.ListedColormap(color_values)
     bounds = list(range(len(color_values) + 1))
     norm = colors.BoundaryNorm(bounds, cmap.N, clip=True)
@@ -159,22 +164,20 @@ def plot_mask(
         plt.show()
 
 
-def plot_one_hot_batch(x_batch, y_batch, label_map):
-    for batch_index in range(2):
+def plot_one_hot_batch(x_batch, y_batch, color_map, label_value_map):
+    for batch_index in range(x_batch.shape[0]):
         fig, axes = plt.subplots(
             1, y_batch[batch_index].shape[-1] + 1, figsize=(20, 60)
         )
         axes[0].imshow(x_batch[batch_index])
         for one_hot_index in range(y_batch[batch_index].shape[-1]):
-            axes[one_hot_index + 1].imshow(y_batch[batch_index][:, :, one_hot_index])
-            axes[one_hot_index + 1].set_title(
-                list(
-                    map(
-                        lambda label: label_map[label],
-                        np.unique(y_batch[batch_index][:, :, one_hot_index])
-                        * (one_hot_index + 1),
-                    )
-                )
-            )
+            
+            mask = y_batch[batch_index][:, :, one_hot_index]
+            # create another mask to place color in white regions
+            im = np.zeros((mask.shape)+(3,), np.uint8)
+            im[mask == 1] = color_map[one_hot_index]
+            
+            axes[one_hot_index + 1].imshow(im)
+            axes[one_hot_index + 1].set_title(label_value_map[one_hot_index].name)
         plt.show()
 

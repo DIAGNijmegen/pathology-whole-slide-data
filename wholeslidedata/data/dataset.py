@@ -40,7 +40,7 @@ class WholeSlideDataSet(UserDict):
         self._data = dict(sorted(self._open(self._associations, labels=labels).items()))
         self._labels = self._init_labels()
         self._sample_references = self._init_samples()
-        self._sample_labels = Labels.create(list(self._sample_references.keys()))
+        self._sample_labels = Labels.create([label for label in self._labels if label.name in list(self._sample_references.keys())])
         
         if len(self._sample_references) == 0:
             raise ValueError(
@@ -58,6 +58,10 @@ class WholeSlideDataSet(UserDict):
     def sample_references(self):
         return self._sample_references
 
+    @property
+    def labels(self):
+        return self._labels
+    
     @property
     def sample_labels(self):
         return self._sample_labels
