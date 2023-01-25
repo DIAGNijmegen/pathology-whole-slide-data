@@ -4,7 +4,7 @@ MAX_RANDOM_SEED_NUMBER = 4294967294
 
 
 class Sampler:
-    def __init__(self, seed: int):
+    def __init__(self, seed: int = 123):
         self._seed = seed
         self._rng = np.random.RandomState(self._seed)
 

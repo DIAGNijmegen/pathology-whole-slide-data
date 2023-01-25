@@ -19,7 +19,7 @@ def image_file():
 
 @pytest.fixture
 def point():
-    return Point(500,500)
+    return 500,500
 
 def test_init():
     ps = PatchSampler()

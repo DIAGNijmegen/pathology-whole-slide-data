@@ -7,47 +7,20 @@ texttexttexttexttexttexttexttexttexttexttext
 texttexttexttexttexttexttexttexttexttextv
 texttexttexttexttexttexttexttexttexttexttexttexttexttexttext
 
-Get started
+Get Started
 ***********
 
-Download example data
+texttexttexttexttexttexttexttexttexttexttext
+
+texttexttexttexttexttexttexttexttexttextv
+texttexttexttexttexttexttexttexttexttexttexttexttexttexttext
 
 
+* `Example Data <notebooks/components/downloaddata.html>`_
+* `WholeSlideImage <notebooks/components/downloaddata.html>`_
+* `WholeSlideAnnotation <notebooks/components/downloaddata.html>`_
+* `BatchIterator <notebooks/components/downloaddata.html>`_
 
-.. grid:: 1
-
-   .. grid-item-card:: WholeSlideImage
-      :link: notebooks/components/wholeslideimage.html
-      :margin: 3 0 0 0
-      
-
-      texttexttexttexttexttextt
-      texttexttexttexttexttextt
-      texttexttexttexttexttextt
-
-
-   .. grid-item-card:: WholeSlideAnnotation
-      :link: notebooks/components/wholeslideannotation.html
-      :margin: 3 0 0 0
-      
-      texttexttexttexttexttextt
-      texttexttexttexttexttextt
-      texttexttexttexttexttextt
-      
-
-
-   .. grid-item-card:: BatchIterator
-      :link: notebooks/components/batchiterator.html
-      :margin: 3 0 0 0
-      
-      texttexttexttexttexttextt
-      texttexttexttexttexttextt
-      texttexttexttexttexttextt
-      
-
-
-BatchIterator Configuration
-***************************
 
 
 Minimal BatchIterator Configuration
@@ -71,8 +44,6 @@ Minimal BatchIterator Configuration
             batch_size: 4
             spacing: 1.0
             shape: [512, 512, 3]
-
-
 
 
 
@@ -118,5 +89,5 @@ Minimal BatchIterator Configuration
    :caption: Customization
 
    ./notebooks/components/presets
-   ./notebooks/components/hooks
+   ./notebooks/components/callbacks
 

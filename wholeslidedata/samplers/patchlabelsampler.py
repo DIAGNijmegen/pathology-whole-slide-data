@@ -64,7 +64,7 @@ class MaskPatchLabelSampler(PatchLabelSampler):
         size,
         ratio,
     ):
-        x, y = point.x, point.y
+        x, y = point
         width, height = size
         mask = WholeSlideImage(wsa.path, backend=self._image_backend)
         spacing = mask.spacings[0]
@@ -101,8 +101,6 @@ class MaskPatchLabelSampler(PatchLabelSampler):
 
 
 class SegmentationPatchLabelSampler(PatchLabelSampler):
-    def __init__(self):
-        pass
 
     # annotation should be coupled to image_annotation. how?
     def sample(
@@ -112,7 +110,7 @@ class SegmentationPatchLabelSampler(PatchLabelSampler):
         size,
         ratio,
     ):
-        center_x, center_y = point.x, point.y
+        center_x, center_y = point
         width, height = size
 
         # get annotations
@@ -151,17 +149,14 @@ class SegmentationPatchLabelSampler(PatchLabelSampler):
 
 
 class ClassificationPatchLabelSampler(PatchLabelSampler):
-    def __init__(self):
-        pass
-
     def sample(
         self,
         wsa,
         point,
         size,
-        ratio,
+        ratio,  
     ):
-        center_x, center_y = point.x, point.y
+        center_x, center_y = point
 
         # get annotations
         annotations = wsa.select_annotations(center_x, center_y, 1, 1)
@@ -187,7 +182,7 @@ class DetectionPatchLabelSampler(PatchLabelSampler):
         size,
         ratio,
     ):
-        center_x, center_y = point.x, point.y
+        center_x, center_y = point
         width, height = size
 
         # Get annotations

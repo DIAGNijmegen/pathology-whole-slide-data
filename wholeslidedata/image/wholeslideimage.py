@@ -175,3 +175,7 @@ class WholeSlideImage:
             patch = mask_patch_with_annotation(patch, annotation, scaling)
 
         return patch
+
+
+    def __repr__(self):
+        return str(self.path)

@@ -61,7 +61,7 @@ def test_annotation_counts(dataset):
     assert dataset.annotation_counts == 10
 
 def test_annotations_per_label(dataset):
-    for key, value in dataset.annotations_per_label.items():
+    for key, value in dataset.annotation_counts_per_label.items():
         assert key in ['tumor', 'stroma', 'lymphocytes']
         if key == 'tumor':
             assert value == 5
@@ -71,10 +71,10 @@ def test_annotations_per_label(dataset):
             assert value == 3
 
 def test_annnotations_per_key(dataset: WholeSlideDataSet):
-    assert dataset.annotations_per_key['TCGA-21-5784-01Z-00-DX1'] == 10 
+    assert dataset.annotation_counts_per_key['TCGA-21-5784-01Z-00-DX1'] == 10 
 
 def test_annotations_per_label_per_key(dataset: WholeSlideDataSet):
-    for key, value in dataset.annotations_per_label_per_key['TCGA-21-5784-01Z-00-DX1'].items():
+    for key, value in dataset.annotation_counts_per_label_per_key['TCGA-21-5784-01Z-00-DX1'].items():
         assert key in ['tumor', 'stroma', 'lymphocytes']
         if key == 'tumor':
             assert value == 5
@@ -84,7 +84,7 @@ def test_annotations_per_label_per_key(dataset: WholeSlideDataSet):
             assert value == 3
 
 def test_pixel_count(dataset: WholeSlideDataSet):
-    assert dataset.pixels_count == 2016854
+    assert dataset.pixels == 2016854
                                      
 
 def test_pixels_per_label(dataset: WholeSlideDataSet):

@@ -42,15 +42,14 @@ def test_albumentation_callback():
         "/tmp/TCGA-21-5784-01Z-00-DX1.tif", backend=AsapWholeSlideImageBackend
     )
     wsa = WholeSlideAnnotation("/tmp/TCGA-21-5784-01Z-00-DX1.xml")
-    point = Annotation.create(1, {"name": "p", "value": 1}, (15770, 13260))
     aug = AlbumentationsSegmentationBatchCallback(augmentations=augmentations)
     x_target = wsi.get_patch(x=15770, y=13260, width=284, height=284, spacing=0.5)
     x_context = wsi.get_patch(x=15770, y=13260, width=284, height=284, spacing=4.0)
     y_target = SegmentationPatchLabelSampler().sample(
-        wsa, point=point.geometry, size=(284, 284), ratio=1
+        wsa, point= (15770, 13260), size=(284, 284), ratio=1
     )
     y_context = SegmentationPatchLabelSampler().sample(
-        wsa, point=point.geometry, size=(284, 284), ratio=8
+        wsa, point= (15770, 13260), size=(284, 284), ratio=8
     )
     aug_x_batch, aug_y_batch = aug(
         np.stack([x_target, x_context])[np.newaxis],

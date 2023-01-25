@@ -1,20 +1,18 @@
 default:
-    image_sources@replace=true:
-        module: wholeslidedata.source.utils
-        attribute: whole_slide_files_from_folder_factory
-        file_type: wsi
-        mode: ${wholeslidedata:mode.name}
+    image_sources@replace(true):
+        "*object": sourcelib.collect.get_files_from_folder
+        file_cls: ${$wholeslidedata.data.files.WholeSlideImageFile}
+        mode: ${mode}
         folder: /input/
-        image_backend: ${wholeslidedata:image_backend}
         filters: []
         excludes: []
+        image_backend: ${image_backend}
 
-    annotation_sources@replace=true:
-        module: wholeslidedata.source.utils
-        attribute: whole_slide_files_from_folder_factory
-        file_type: wsa
-        mode: ${wholeslidedata:mode.name}
+    annotation_sources@replace(true):
+        "*object": sourcelib.collect.get_files_from_folder
+        file_cls: ${$wholeslidedata.data.files.WholeSlideAnnotationFile}
+        mode: ${mode}
         folder: /input/
-        annotation_parser: ${wholeslidedata:annotation_parser}
         filters: []
         excludes: []
+        annotation_parser: ${annotation_parser}

@@ -160,7 +160,7 @@ class WholeSlideDataSet(UserDict):
         return sum(_counts)
 
     @property
-    def counts_per_label(self) -> Dict[str, int]:
+    def annotation_counts_per_label(self) -> Dict[str, int]:
         _counts_per_label_ = {label.name: 0 for label in self._labels}
         for values in self._data.values():
             for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
@@ -172,7 +172,7 @@ class WholeSlideDataSet(UserDict):
         return _counts_per_label_
 
     @property
-    def counts_per_key(self):
+    def annotation_counts_per_key(self):
         _counts_per_key = {}
         for file_key, values in self._data.items():
             _counts_per_key[file_key] = 0
@@ -183,7 +183,7 @@ class WholeSlideDataSet(UserDict):
         return _counts_per_key
 
     @property
-    def counts_per_label_per_key(self):
+    def annotation_counts_per_label_per_key(self):
         _counts_per_label_per_key_ = {}
         for file_key, values in self._data.items():
             _counts_per_label_per_key_[file_key] = {}
@@ -197,7 +197,7 @@ class WholeSlideDataSet(UserDict):
         return _counts_per_label_per_key_
 
     @property
-    def pixels_count(self):
+    def pixels(self):
         _counts = []
         for values in self._data.values():
             for wsa in values[self.__class__.ANNOTATIONS_KEY].values():

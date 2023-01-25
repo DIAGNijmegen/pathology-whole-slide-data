@@ -78,10 +78,10 @@ html_theme_options = {
             "type": "fontawesome",
         }
     ],
-    "logo": {
-        "image_light": "wsd_logo.png",
-#         "image_dark": "logo-darkgrey.svg",
-    },
+    # "logo": {
+    #     "image_light": "wsd_logo.png",
+    #     "image_dark": "logo-darkgrey.svg",
+    # },
 }
 
 
@@ -106,4 +106,4 @@ html_css_files = ["css/custom.css"]
 
 html_title = "WholeSlideData"
 nb_execution_mode = "off"
-html_logo = "_static/wsd_logo.png"
+# html_logo = "_static/wsd_logo.png"

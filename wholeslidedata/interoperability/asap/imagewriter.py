@@ -175,7 +175,7 @@ def write_mask(
         for x_pos in range(0, shape[0], tile_size):
             mask = label_sampler.sample(
                 wsa,
-                geometry.Point(
+                (
                     (x_pos + tile_size // 2) * ratio,
                     (y_pos + tile_size // 2) * ratio,
                 ),

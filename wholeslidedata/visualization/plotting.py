@@ -57,7 +57,6 @@ def plot_annotations(
         plt.show()
     else:
         ax.axis("equal")
-        ax.invert_yaxis()
         ax.set_title(title)
 
 
@@ -126,14 +125,15 @@ def plot_boxes(
         plt.show()
 
 
-def plot_patch(patch, axes=None, title="my_patch", output_size=None, alpha=1.0):
-    if axes is None:
+def plot_patch(patch, ax=None, alpha=1.0):
+    if ax is None:
         _, ax = plt.subplots(1, 1)
     else:
-        ax = axes
+        ax = ax
 
     ax.imshow(patch, alpha=alpha)
-    if axes is None:
+
+    if ax is None:
         plt.show()
 
 

@@ -130,3 +130,6 @@ class WholeSlideAnnotation:
         return self._annotation_selector.select_annotations(
             center_x, center_y, width, height
         )
+
+    def __repr__(self):
+        return str(self.path)

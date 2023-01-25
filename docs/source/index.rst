@@ -1,15 +1,8 @@
 :html_theme.sidebar_secondary.remove:
 
-.. raw:: html
-
-   <div style="display: none; ">
 
 WholeSlideData
 ==============
-
-.. raw:: html
-
-   </div>
 
 
 
