@@ -5,17 +5,11 @@ from rtree import index
 
 from wholeslidedata.annotation import utils as annotation_utils
 from wholeslidedata.annotation.labels import Labels
-from wholeslidedata.annotation.parser import AnnotationParser, WholeSlideAnnotationParser, MaskAnnotationParser
+from wholeslidedata.annotation.parser import AnnotationParser
 from wholeslidedata.annotation.selector import AnnotationSelector, sort_by_label_value
 from wholeslidedata.annotation.types import Annotation, PolygonAnnotation
-from wholeslidedata.interoperability.asap.parser import AsapAnnotationParser
+from wholeslidedata.annotation.parsers import PARSERS, DEFAULT_PARSERS
 
-DEFAULT_PARSERS = {
-    ".json": WholeSlideAnnotationParser,
-    ".xml": AsapAnnotationParser,
-    ".tif": MaskAnnotationParser,
-    ".tiff": MaskAnnotationParser,
-}
 
 
 class WholeSlideAnnotation:
@@ -63,6 +57,8 @@ class WholeSlideAnnotation:
     def _init_parser(self, parser, annotation_path, labels, **kwargs):
         if isinstance(parser, AnnotationParser):
             return parser
+        if isinstance(parser, str):
+            return PARSERS[parser]
         if parser is None:
             return DEFAULT_PARSERS[Path(annotation_path).suffix](
                 labels=labels, **kwargs

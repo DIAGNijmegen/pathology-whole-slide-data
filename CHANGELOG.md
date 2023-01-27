@@ -22,16 +22,22 @@ ASAP<2.0 depreciation warnings
 Added tests
 Addded documentation
 
-#### **Upcoming** (0.0.16)  
 
+#### 0.0.16 (**Latest**)
+- dicom support 
+- improved sliding window hook annotations and index
+- added path property to annotation
+- ASAP v1.9 compatibilty fix (contributed by Leander van Eekelen)
+- added ASAP interpolation argument  (contributed by Witali Aswolinskiy)
+- added save normal image as pyramidal tif (contributed by Witali Aswolinskiy)
 
-### (0.0.15) (**Latest**)
+### 0.0.15
 
 **bug fixes:**
 - install of 0.0.14 failed due to not ruamel import error. 
 
 
-### (0.0.14)
+### 0.0.14
 
 **new features:**
 - updated to ASAP2.1

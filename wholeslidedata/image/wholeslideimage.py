@@ -1,10 +1,11 @@
 import warnings
 from pathlib import Path
-from typing import List, Tuple, Union
+from typing import List, Tuple, Type, Union
 
 import numpy as np
 from wholeslidedata.annotation.types import Annotation
 from wholeslidedata.image.backend import WholeSlideImageBackend
+from wholeslidedata.image.backends import get_backend
 
 from wholeslidedata.image.utils import mask_patch_with_annotation, take_closest_level
 
@@ -15,7 +16,7 @@ class WholeSlideImage:
     def __init__(
         self,
         path: Union[Path, str],
-        backend: WholeSlideImageBackend,
+        backend: Union[Type[WholeSlideImageBackend], str],
     ) -> None:
 
         """WholeSlideImage that can open en sample from whole slide images
@@ -26,7 +27,7 @@ class WholeSlideImage:
         """
 
         self._path = path
-        self._backend = backend(path=self._path)
+        self._backend = get_backend(backend)(path=self._path)
         self._shapes = self._backend._init_shapes()
         self._downsamplings = self._backend._init_downsamplings()
         self._spacings = self._backend._init_spacings(self._downsamplings)

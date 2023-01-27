@@ -11,6 +11,7 @@ from wholeslidedata.annotation.types import (
 )
 
 import numpy as np
+import cv2
 
 MASK_COLOR_VALUES = [
         "white",
@@ -24,6 +25,26 @@ MASK_COLOR_VALUES = [
         "pink",
         "grey",
     ]
+
+def plot_coordinates(image, coordinates, border_rgb, thickness=1, fill_rgb=None, alpha=1):
+    overlay = image.copy()
+    overlay = cv2.polylines(overlay, [np.int32(coordinates)], True, color=border_rgb, thickness=thickness)
+    if fill_rgb is not None:
+        overlay = cv2.fillPoly(overlay,  [np.int32(coordinates)], color=fill_rgb)
+    return cv2.addWeighted(overlay, alpha, image, 1 - alpha, 0)
+    
+
+# do offset and ratio outside this function
+def annotations_to_mask(image, annotations, offset, color_map, ratio, fill=False):
+    for annotation in annotations:
+        rgb_color = color_map[annotation.label.name]
+        coordinates = (annotation.coordinates -np.array(offset)) /ratio
+        if fill:
+            image = plot_coordinates(image, coordinates, border_rgb=rgb_color, fill_rgb=rgb_color)
+        else:
+            image = plot_coordinates(image, coordinates, border_rgb=rgb_color)
+    return image
+
 
 def plot_annotations(
     annotations: List[Annotation],

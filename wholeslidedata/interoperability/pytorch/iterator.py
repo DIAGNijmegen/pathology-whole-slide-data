@@ -5,6 +5,7 @@ from wholeslidedata.iterators.batchiterator import BatchIterator
 class TorchBatchIterator(BatchIterator):
     def __next__(self):
         x_batch, y_batch, info = super().__next__()
+        x_batch = x_batch / 255.0
         x_batch = x_batch.transpose(1, 0, 4, 2, 3).astype("float32")
         y_batch = y_batch.transpose(1, 0, 4, 2, 3).astype("float32")
         return (

@@ -20,11 +20,12 @@ setup(
         "opencv-python-headless>=4.4.0",
         "scipy>=1.5.2",
         "scikit-image>=0.17.2",
-        "shapely>=1.7.1",
+        "shapely==1.7.1",
         "openslide-python>=1.1.1",
         "PyYAML>=5.4.1",
         "jsonschema>=4.4.0",
         "rtree==1.0.0",
+        "matplotlib>=3.6.2",
     ],
     long_description="Package for working with whole slide images.",
 )
