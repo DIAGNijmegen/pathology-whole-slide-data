@@ -8,9 +8,9 @@ Get Started
 
 
 * `Example Data <notebooks/components/downloaddata.html>`_
-* `WholeSlideImage <notebooks/components/downloaddata.html>`_
-* `WholeSlideAnnotation <notebooks/components/downloaddata.html>`_
-* `BatchIterator <notebooks/components/downloaddata.html>`_
+* `WholeSlideImage <notebooks/components/wholeslideimage.html>`_
+* `WholeSlideAnnotation <notebooks/components/wholeslideannotation.html>`_
+* `BatchIterator <notebooks/components/batchiterator.html>`_
 
 
 
