@@ -15,7 +15,6 @@ Please checkout the [CHANGELOG](https://github.com/DIAGNijmegen/pathology-whole-
   - [Whole-slide images](#whole-slide-images)
   - [Whole-slide annotations](#whole-slide-annotations)
   - [Batch iterator](#batch-iterator)
-- [Examples and Video Tutorials](#examples-and-video-tutorials)
   - [Acknowledgements](#acknowledgements)
 
 
@@ -98,7 +97,7 @@ wholeslidedata:
           wsi: 
             path: /tmp/TCGA-21-5784-01Z-00-DX1.tif
             
-    label_map: 
+    labels: 
       stroma: 1
       tumor: 2
       lymphocytes: 3
@@ -121,12 +120,6 @@ with create_batch_iterator(mode='training',
     for x_batch, y_batch, batch_info in training_iterator:
         pass
 ```
-
------
-## Examples and Video Tutorials
-- [Notebook examples](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/notebooks)
-- [Video tutorials](https://github.com/DIAGNijmegen/pathology-whole-slide-data/tree/main/tutorials)
-
 
 ### Acknowledgements
 
