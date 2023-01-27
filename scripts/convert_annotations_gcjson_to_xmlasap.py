@@ -1,5 +1,5 @@
 from wholeslidedata.annotation.structures import Point, Polygon
-from wholeslidedata.labels import Label
+from wholeslidedata.annotation.labels import Label
 from creationism.utils import open_json
 import xml.etree.cElementTree as ET
 from pathlib import Path

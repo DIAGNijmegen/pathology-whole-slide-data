@@ -1,7 +1,0 @@
-default:
-    image_sources@replace=true: 
-        _: _
-    associations@replace=true: 
-        _: _
-
-  

@@ -1,0 +1,24 @@
+wholeslidedata:
+    default:
+        image_backend: ${$wholeslidedata.interoperability.asap.backend.AsapWholeSlideImageBackend}
+        
+        yaml_source:
+            training:
+                - wsi: 
+                    path: /tmp/TCGA-21-5784-01Z-00-DX1.tif
+                  wsa: 
+                    path: /tmp/TCGA-21-5784-01Z-00-DX1.xml       
+            validation:
+                - wsi: 
+                    path: /tmp/TCGA-21-5784-01Z-00-DX1.tif
+                  wsa: 
+                    path: /tmp/TCGA-21-5784-01Z-00-DX1.xml 
+        labels:
+            stroma: 1
+            tumor: 2
+            lymphocytes: 3
+            
+        batch_shape:
+            batch_size: 4
+            spacing: 1.0
+            shape: [512, 512, 3]

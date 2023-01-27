@@ -6,6 +6,7 @@ import numpy as np
 from wholeslidedata.samplers.sampler import Sampler
 
 
+
 class LabelSampler(Sampler, Iterator):
     def __init__(self, labels: List, seed: int):
         super().__init__(seed=seed)
@@ -13,7 +14,6 @@ class LabelSampler(Sampler, Iterator):
         self._size = len(self._labels)
 
 
-@LabelSampler.register(("random",))
 class RandomLabelSampler(LabelSampler):
     def __init__(self, labels, seed: int = 123):
         super().__init__(labels, seed=seed)
@@ -25,7 +25,6 @@ class RandomLabelSampler(LabelSampler):
         self.set_seed()
 
 
-@LabelSampler.register(("ordered",))
 class OrderedLabelSampler(LabelSampler):
     def __init__(self, labels: List[str], seed: int = 123):
         super().__init__(labels, seed=seed)
@@ -42,7 +41,6 @@ class OrderedLabelSampler(LabelSampler):
         pass
 
 
-@LabelSampler.register(("annotation_counted",))
 class AnnotationCountedLabelSampler(LabelSampler):
     def __init__(
         self,
@@ -81,7 +79,6 @@ class AnnotationCountedLabelSampler(LabelSampler):
         pass
 
 
-@LabelSampler.register(("balanced",))
 class BalancedLabelSampler(LabelSampler):
     def __init__(self, labels: List[str], seed: int = 123, random_reset=False):
         super().__init__(labels=labels, seed=seed)
@@ -108,13 +105,12 @@ class BalancedLabelSampler(LabelSampler):
         pass
 
 
-@LabelSampler.register(("weighted",))
 class WeightedLabelSampler(LabelSampler):
     def __init__(
         self, labels: dict, replace=True, seed: int = 123
     ):
         labels = dict(sorted(labels.items()))
-        self._weights= list(labels.values())
+        self._weights = list(labels.values())
         super().__init__(labels=list(labels.keys()), seed=seed)
         
     def __next__(self):
@@ -127,7 +123,6 @@ class WeightedLabelSampler(LabelSampler):
         pass
 
 
-@LabelSampler.register(("pixel_counted",))
 class PixelCountedLabelSampler(LabelSampler):
     def __init__(self, labels: List[str], seed: int = 123):
         super().__init__(labels=labels, seed=seed)

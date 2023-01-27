@@ -1,13 +1,18 @@
-concurrentbuffer>=0.0.7
-creationism>=0.0.3
-numpy>=1.20.2
-opencv-python-headless>=4.4.0
-scipy>=1.5.2
-scikit-image>=0.17.2
+concurrentbuffer==0.0.8
+dicfg==0.0.6
+sourcelib==0.0.2
+numpy==1.23.4
+opencv-python-headless==4.6.0.66
+scipy==1.9.3
+scikit-image==0.19.3
 shapely==1.7.1
-openslide-python>=1.1.1
-PyYAML>=5.4.1
-albumentations>=1.1.0
-jsonschema>=4.4.0
-matplotlib>=3.3.1
-rtree>=1.0.0
+openslide-python==1.2.0
+PyYAML==6.0
+albumentations==1.2.1
+matplotlib==3.6.2
+rtree==1.0.1
+gdown==4.6.0
+click==8.1.3
+
+# tiffslide
+# boto3

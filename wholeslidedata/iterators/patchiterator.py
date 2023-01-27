@@ -5,6 +5,7 @@ from concurrentbuffer.iterator import BufferIterator, buffer_iterator_factory
 
 from wholeslidedata.buffer.patchcommander import SlidingPatchCommander
 from wholeslidedata.buffer.patchproducer import PatchProducer
+from wholeslidedata.interoperability.openslide.backend import OpenSlideWholeSlideImageBackend
 
 class PatchBufferIterator(BufferIterator):
     def __init__(self, buffer_factory, info_queue, size):
@@ -32,7 +33,7 @@ def create_patch_iterator(
     cpus=1,
     context="fork",
     tile_shape=(512, 512, 3),
-    backend="asap",
+    backend=OpenSlideWholeSlideImageBackend,
     commander_class=SlidingPatchCommander,
     producer_class=PatchProducer,
     **kwargs,

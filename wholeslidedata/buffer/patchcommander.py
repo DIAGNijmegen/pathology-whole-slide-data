@@ -5,7 +5,7 @@ from concurrentbuffer.commander import Commander
 import numpy as np
 
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
-
+from wholeslidedata.interoperability.openslide.backend import OpenSlideWholeSlideImageBackend
 
 def get_number_of_tiles(x_dims, y_dims, tile_shape, ratio):
     return len(range(0, y_dims, int(tile_shape[0]*ratio))) * len(
@@ -19,7 +19,7 @@ class PatchCommander(Commander):
         info_queue: Queue,
         image_path,
         spacing: float,
-        backend="asap",
+        backend=OpenSlideWholeSlideImageBackend,
         tile_shape: int = (512, 512, 3),
         **kwargs,
     ):
@@ -78,6 +78,17 @@ class SlidingPatchCommander(PatchCommander):
                 messages.append(message)
         return messages
 
+class AnnotationPatchCommander(PatchCommander):
+    def __init__(
+        self,
+        info_queue: Queue,
+        annotations,
+        spacing: float,
+        backend="asap",
+        **kwargs,
+    ):
+
+        pass
 
 class RandomPatchCommander(PatchCommander):
     def __init__(
@@ -101,8 +112,8 @@ class RandomPatchCommander(PatchCommander):
  
     def get_patch_messages(self):
         messages = []
-        rows = self._rng.randint(0, self._y_dims - self._tile_shape[1]*self._ratio, self._number_of_tiles)
-        cols = self._rng.randint(0, self._x_dims - self._tile_shape[0]*self._ratio,  self._number_of_tiles)
+        rows = self._rng.randint(0, self._y_dims - self._tile_shape[1]//self._ratio, self._number_of_tiles)
+        cols = self._rng.randint(0, self._x_dims - self._tile_shape[0]//self._ratio,  self._number_of_tiles)
         for row, col in zip(rows, cols):
                 message = {
                     "x": col,

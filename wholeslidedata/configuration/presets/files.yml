@@ -1,21 +1,16 @@
 default:
-    image_sources@replace=true:
-        module: wholeslidedata.source.utils
-        attribute: factory_sources_from_path
-        file_type: wsi
-        mode: ${wholeslidedata:mode.name} 
-        path: 'not set.tif'
-        image_backend: ${wholeslidedata:image_backend} 
+    image_sources@replace(true):
+        "*object": sourcelib.collect.get_files_from_path
+        file_cls: ${$wholeslidedata.data.files.WholeSlideImageFile}
+        mode: ${mode}
+        image_backend: ${image_backend} 
 
-    annotation_sources@replace=true:
-        module: wholeslidedata.source.utils
-        attribute: factory_sources_from_path
-        file_type: wsa
-        mode: ${wholeslidedata:mode.name} 
-        path: 'not set.tif'
-        annotation_parser: ${wholeslidedata:annotation_parser} 
+    annotation_sources@replace(true):
+        "*object": sourcelib.collect.get_files_from_path
+        file_cls: ${$wholeslidedata.data.files.WholeSlideAnnotationFile}
+        mode: ${mode} 
+        annotation_parser: ${annotation_parser} 
 
     associations:
-        associator:             
-            module: wholeslidedata.source.associations
-            attribute: AnyOneAssociater
+        associator: 
+            "*object": sourcelib.associations.AnyOneAssociater

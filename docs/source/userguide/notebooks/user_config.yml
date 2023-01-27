@@ -1,0 +1,110 @@
+default:
+  seed: 123
+  mode:
+    object*: wholeslidedata.mode.create_mode
+    name: default
+  yaml_source: None
+  labels: None
+  _labels: 
+    object*: wholeslidedata.labels.labels_factory
+    labels: ${labels}
+  image_backend: openslide
+  annotation_parser:
+    object*: wholeslidedata.accessories.asap.parser.AsapAnnotationParser
+    labels: ${_labels}
+    sample_annotation_types: ["polygon"]
+  wsi_file_cls: 
+    object*: wholeslidedata.files.WholeSlideImageFile
+    _return_type_: True
+  image_sources: 
+    object*: sourcelib.collect.get_files_from_yaml
+    yaml_source: ${yaml_source}
+    file_cls: ${wsi_file_cls}
+    mode: ${mode}
+    image_backend: ${image_backend}
+  wsa_file_cls: 
+    object*: wholeslidedata.files.WholeSlideAnnotationFile
+    _return_type_: True
+  annotation_sources:
+    object*: sourcelib.collect.get_files_from_yaml
+    yaml_source: ${yaml_source}
+    file_cls: ${wsa_file_cls}
+    mode: ${mode}
+    annotation_parser: ${annotation_parser}
+  associations:
+    object*: sourcelib.associations.associate_files
+    files1: ${image_sources}
+    files2: ${annotation_sources}
+  dataset: 
+    object*: wholeslidedata.dataset.WholeSlideDataSet
+    mode: ${mode}
+    associations: ${associations} 
+    load_images: True
+    copy_path: False
+  batch_shape:
+    object*: wholeslidedata.samplers.structures.BatchShape
+    batch_size: None
+    spacing: None
+    shape: None
+  label_sampler_name: BalancedLabelSampler
+  label_sampler:
+    object*: wholeslidedata.samplers.labelsampler.${label_sampler_name}
+    labels: ${dataset.sample_labels.names}
+    seed: ${seed}
+  annotation_sampler_name: BalancedAnnotationSampler
+  annotation_sampler:
+    object*: wholeslidedata.samplers.annotationsampler.${annotation_sampler_name}
+    counts_per_label: ${dataset.annotations_per_label}
+    seed: ${seed}
+  point_sampler_name: RandomPointSampler
+  point_sampler:
+    object*: wholeslidedata.samplers.pointsampler.${point_sampler_name}
+    dataset: ${dataset}
+    seed: ${seed}
+  patch_sampler:
+    object*: wholeslidedata.samplers.patchsampler.PatchSampler
+    center: True
+    relative: False
+  patch_label_sampler_name: SegmentationPatchLabelSampler
+  patch_label_sampler:
+    module: wholeslidedata.samplers.patchlabelsampler.${patch_label_sampler_name}
+  sample_callbacks@replace=false:
+    - object*: wholeslidedata.samplers.hooks.SampleHook
+  sample_sampler: 
+    object*: wholeslidedata.samplers.samplesampler.SampleSampler
+    patch_sampler: ${patch_sampler}
+    patch_label_sampler: ${patch_label_sampler}
+    batch_shape: ${batch_shape}
+    sample_callbacks: ${sample_callbacks}
+  batch_callbacks@replace=false: 
+    - object*: wholeslidedata.samplers.hooks.BatchHook
+    - object*: wholeslidedata.samplers.hooks.BatchHook
+      return_dict: False
+  batch_reference_sampler:
+    object*: wholeslidedata.samplers.batchreferencesampler.BatchReferenceSampler
+    dataset: ${dataset}
+    batch_size: ${batch_shape.batch_size}
+    label_sampler: ${label_sampler}
+    annotation_sampler: ${annotation_sampler}
+    point_sampler: ${point_sampler}
+  batch_sampler: 
+    object*: wholeslidedata.samplers.batchsampler.BatchSampler
+    dataset: ${dataset}
+    sampler: ${sample_sampler}
+    batch_callbacks: ${batch_callbacks}
+        
+training:
+  mode:
+    name: training
+
+validation:
+  mode:
+    name: validation
+
+test:
+  mode:
+    name: test
+
+inference:
+  mode:
+    name: inference

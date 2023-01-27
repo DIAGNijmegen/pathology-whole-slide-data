@@ -4,7 +4,7 @@ from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.samplers.patchlabelsampler import PatchLabelSampler
 from wholeslidedata.samplers.patchsampler import PatchSampler
-from wholeslidedata.samplers.structures import BatchShape
+from wholeslidedata.samplers.batchshape import BatchShape
 
 
 class SampleSampler:

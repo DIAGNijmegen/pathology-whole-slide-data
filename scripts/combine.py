@@ -1,7 +1,7 @@
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
-from wholeslidedata.accessories.asap.imagewriter import WholeSlideMaskWriter
+from wholeslidedata.interoperability.asap.imagewriter import WholeSlideMaskWriter
 from wholeslidedata.annotation.parser import MaskAnnotationParser
-from wholeslidedata.accessories.asap.annotationwriter import write_asap_annotation
+from wholeslidedata.interoperability.asap.annotationwriter import write_asap_annotation
 from shapely.ops import unary_union
 import click
 from pathlib import Path

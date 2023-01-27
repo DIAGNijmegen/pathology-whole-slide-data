@@ -1,7 +1,0 @@
-module: wholeslidedata.samplers.batchreferencesampler
-attribute: BatchReferenceSampler
-dataset: ${wholeslidedata:dataset}
-batch_size: ${wholeslidedata:batch_shape.batch_size}
-label_sampler: ${wholeslidedata:label_sampler}
-annotation_sampler: ${wholeslidedata:annotation_sampler}
-point_sampler: ${wholeslidedata:point_sampler}

@@ -1,13 +1,5 @@
-import subprocess
-import sys
 from pathlib import Path
-
-from black import main
-
-try:
-    import gdown
-except ImportError:
-    raise ImportError('gdown not installed. Install gdown with pip or use install_gdown() from downloaddata.py')
+import gdown
 
 WSI_DOWNLOAD_LINK = "https://drive.google.com/uc?id=1noRtbC5fxBlnO7YnvktjIDhFI61PdOSB"
 WSI_NAME = Path("TCGA-21-5784-01Z-00-DX1.tif")
@@ -23,10 +15,9 @@ def _download(output_folder, download_link, name):
     if not output_path.exists():
         gdown.download(download_link, str(output_path))
 
-def install_gdown():
-    subprocess.check_call(
-        [sys.executable, "-m", "pip", "install", "gdown"], stdout=subprocess.DEVNULL
-    )
+def download_image_data(output_folder=Path("/tmp/")):
+    _download(output_folder, WSI_DOWNLOAD_LINK, WSI_NAME)
+    return Path(output_folder) / WSI_NAME
 
 def download_example_data(output_folder=Path("/tmp/")):
     _download(output_folder, WSI_DOWNLOAD_LINK, WSI_NAME)

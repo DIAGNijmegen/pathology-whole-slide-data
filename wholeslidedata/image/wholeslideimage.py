@@ -1,12 +1,13 @@
 import warnings
-
 from pathlib import Path
-from typing import List, Tuple, Union
-from wholeslidedata.image.utils import mask_patch_with_annotation, take_closest_level
-from wholeslidedata.image.backend import WholeSlideImageBackend
-from wholeslidedata.extensions import WholeSlideImageExtension
-from wholeslidedata.annotation.structures import Annotation
+from typing import List, Tuple, Type, Union
+
 import numpy as np
+from wholeslidedata.annotation.types import Annotation
+from wholeslidedata.image.backend import WholeSlideImageBackend
+from wholeslidedata.image.backends import get_backend
+
+from wholeslidedata.image.utils import mask_patch_with_annotation, take_closest_level
 
 
 class WholeSlideImage:
@@ -15,10 +16,10 @@ class WholeSlideImage:
     def __init__(
         self,
         path: Union[Path, str],
-        backend: Union[WholeSlideImageBackend, str] = "openslide",
+        backend: Union[Type[WholeSlideImageBackend], str],
     ) -> None:
 
-        """ WholeSlideImage that can open en sample from whole slide images
+        """WholeSlideImage that can open en sample from whole slide images
 
         Args:
             path (Union[Path, str]): path to whole slide image file
@@ -26,8 +27,7 @@ class WholeSlideImage:
         """
 
         self._path = path
-        self._backend = WholeSlideImageBackend.create(backend, path=self._path)
-        self._extension = WholeSlideImageExtension.create(Path(self._path).suffix)
+        self._backend = get_backend(backend)(path=self._path)
         self._shapes = self._backend._init_shapes()
         self._downsamplings = self._backend._init_downsamplings()
         self._spacings = self._backend._init_spacings(self._downsamplings)
@@ -44,10 +44,6 @@ class WholeSlideImage:
     @property
     def path(self) -> Path:
         return self._path
-
-    @property
-    def extension(self) -> WholeSlideImageExtension:
-        return self._extension
 
     @property
     def spacings(self) -> List[float]:
@@ -83,29 +79,6 @@ class WholeSlideImage:
         level = self.get_level_from_spacing(spacing)
         return self._spacings[level]
 
-    def get_slide(self, spacing):
-        if spacing < 2.0:
-            warnings.warn(
-                f"Trying to load slide at spacing<2.0...",
-            )
-
-        level = self.get_level_from_spacing(spacing)
-        shape = self.shapes[level]
-        return self.get_patch(0, 0, *shape, spacing, center=False)
-
-    def get_annotation(self, annotation: Annotation, spacing: float, margin: int=0, masked=True):
-        scaling = self._spacings[0] / self.get_real_spacing(spacing)
-        size = np.array(annotation.size) + margin
-        patch =  self.get_patch(
-            *np.array(annotation.center),
-            *np.array(size) * scaling,
-            spacing=spacing,
-        )
-        if not masked:
-            return patch
-
-        return mask_patch_with_annotation(patch, annotation, scaling)
-
     def get_downsampling_from_spacing(self, spacing: float) -> float:
         level = self.get_level_from_spacing(spacing)
         return self.get_downsampling_from_level(level)
@@ -125,7 +98,7 @@ class WholeSlideImage:
         relative: bool = False,
     ) -> np.ndarray:
 
-        """ Extracts a patch/region from the wholeslideimage
+        """Extracts a patch/region from the wholeslideimage
 
         Args:
             x (int): x value
@@ -139,7 +112,6 @@ class WholeSlideImage:
         Returns:
             np.ndarray: numpy patch
         """
-
 
         if relative and type(relative) in (float, int):
             rel_downsampling = int(self.get_downsampling_from_spacing(relative))
@@ -155,3 +127,56 @@ class WholeSlideImage:
             x, y = x - downsampling * (width // 2), y - downsampling * (height // 2)
 
         return self._backend.get_patch(x, y, width, height, level)
+
+    def get_slide(self, spacing):
+        if spacing < 2.0:
+            warnings.warn(
+                f"Trying to load slide at spacing<2.0...",
+            )
+
+        level = self.get_level_from_spacing(spacing)
+        shape = self.shapes[level]
+        return self.get_patch(0, 0, *shape, spacing, center=False)
+
+    def get_region_from_annotations(
+        self,
+        annotations: List[Annotation],
+        spacing: float,
+        margin: int = 0,
+        masked=False,
+    ):
+
+        scaling = self._spacings[0] / self.get_real_spacing(spacing)
+
+        bounds = np.array([
+            [annotation.bounds[i] for i in range(4)] for annotation in annotations
+        ])
+
+        min_x = min(bounds[..., 0])
+        min_y = min(bounds[..., 1])
+        max_x = max(bounds[..., 2])
+        max_y = max(bounds[..., 3])
+
+        width = ((max_x - min_x) + margin) * scaling
+        height = ((max_y - min_y) + margin) * scaling
+
+        patch = self.get_patch(
+            min_x,
+            min_y,
+            width,
+            height,
+            spacing=spacing,
+            center=False,
+        )
+
+        if not masked:
+            return patch
+
+        for annotation in annotations:
+            patch = mask_patch_with_annotation(patch, annotation, scaling)
+
+        return patch
+
+
+    def __repr__(self):
+        return str(self.path)

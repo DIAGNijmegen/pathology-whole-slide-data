@@ -2,7 +2,7 @@ from pathlib import Path
 
 import click
 import numpy as np
-from wholeslidedata.accessories.asap.imagewriter import WholeSlideMaskWriter
+from wholeslidedata.interoperability.asap.imagewriter import WholeSlideMaskWriter
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.iterators import create_patch_iterator
 from tqdm import tqdm

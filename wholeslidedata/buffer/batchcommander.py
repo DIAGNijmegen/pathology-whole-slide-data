@@ -2,6 +2,7 @@ import copy
 from queue import Empty
 
 from concurrentbuffer.commander import Commander
+from dicfg.factory import build_config
 
 MESSAGE_MODE_IDENTIFIER = "mode"
 MESSAGE_SAMPLE_REFERENCES_IDENTIFIER = "sample_references"
@@ -10,9 +11,9 @@ MESSAGE_INDEX_IDENTIFIER = "index"
 
 class BatchCommander(Commander):
     def __init__(
-        self, config_builder, mode, reset_index=None, update_queue=None, info_queue=None
+        self, config, mode, reset_index=None, update_queue=None, info_queue=None
     ):
-        self._config_builder = config_builder
+        self._config = config
         self._mode = mode
         self._batch_reference_sampler = None
         self._reset_index = reset_index
@@ -21,10 +22,9 @@ class BatchCommander(Commander):
         self._info_queue = info_queue
 
     def build(self):
-        mode = self._mode
         self._index = 0
-        build = self._config_builder.build_instances()
-        self._batch_reference_sampler = build["wholeslidedata"][mode]["batch_reference_sampler"]
+        builds = build_config(self._config[self._mode])
+        self._batch_reference_sampler = builds["batch_reference_sampler"]
 
     def create_message(self) -> dict:
         self._update()

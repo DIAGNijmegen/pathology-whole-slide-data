@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import List, Tuple
-from creationism.registration.factory import RegistrantFactory
 import numpy as np
+
 
 class UnsupportedVendorError(KeyError):
     def __init__(self, path, properties):
@@ -17,31 +17,7 @@ class UnsupportedVendorError(KeyError):
         return (UnsupportedVendorError, (self._path, self._properties))
 
 
-class InvalidSpacingError(ValueError):
-    def __init__(self, path, spacing, spacings, margin):
-
-        super().__init__(
-            f"Image: '{path}', with available pixels spacings: {spacings}, does not contain a level corresponding to a pixel spacing of {spacing} +- {margin}"
-        )
-
-        self._path = path
-        self._spacing = spacing
-        self._spacings = spacings
-        self._margin = margin
-
-    def __reduce__(self):
-        return (
-            InvalidSpacingError,
-            (self._path, self._spacing, self._spacings, self._margin),
-        )
-
-
-class ImageBackend(RegistrantFactory):
-    """ Image backend abstract class
-    """
-
-
-class WholeSlideImageBackend(ImageBackend):
+class WholeSlideImageBackend:
     def __init__(self, path):
         self._path = path
 
@@ -74,8 +50,7 @@ class WholeSlideImageBackend(ImageBackend):
 
     @abstractmethod
     def close(self):
-        """[summary]
-        """
+        """[summary]"""
 
     @abstractmethod
     def get_patch(
