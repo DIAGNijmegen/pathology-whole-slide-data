@@ -1,27 +1,26 @@
 # Changelog
 ---
 
-### ** 0.1.0 **
+### ** 0.1.0 ** (Upcoming)
+
+Added tests (WIP)
+Addded documentation (WIP)
+Switched from creationism to dicfg confiuguration support, including command line interface and environment ways to configure the batch iterator
+File collection is now based on sourcelib
+ASAP<2.1 depreciation warnings 
 
 Breaking changes
- - label_map -> labels
- - parser hooks-> callbacks
- - explicit backend/parser (no string anymore)
- - creating of objects, see dicfg documentation
- - wsi.get_annotation(Annotation) -> wsi.get_region_from_annotations([Annotation])
- - dataset.annotations_* -> annotation_counts_*
- - dataset.pixel_counts -> dataset.pixels
- - removed jsonschema (too slow)
+  - renamed
+    - accessoires -> interoperability
+    - label_map -> labels
+    - parser hooks-> callbacks
+    - dataset.annotations_* -> annotation_counts_*
+    - dataset.pixel_counts -> dataset.pixels
+    - wsi.get_annotation(Annotation) -> wsi.get_region_from_annotations([Annotation])
+  
+ - Creating of objects in user config, see [dicfg documentation](https://martvanrijthoven.github.io/dicfg/)
  - Shapely2.0 support: Annotations are now based on composition instead of inheritance, so the actual geometry should be accessed by annotation.geometry
-
-Added support for different interpolations (#Witali)
-Switched from creationism to dicfg confiuguration support, including command line interface and environment ways to configure the batch iterator
-file collection is now based on sourcelib
-ASAP<2.0 depreciation warnings 
-
-Added tests
-Addded documentation
-
+ - removed jsonschema 
 
 #### 0.0.16 (**Latest**)
 - dicom support 
