@@ -133,6 +133,8 @@ dmypy.json
 **/tests/notebooks
 .idea/
 *.tif
+*.mrxs
+*.xml
 
 docs/jupyter_execute
 docs/source/_autosummary
