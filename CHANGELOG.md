@@ -3,13 +3,14 @@
 
 ### ** 0.1.0 ** (Upcoming)
 
-Added tests (WIP)
-Addded documentation (WIP)
-Switched from creationism to dicfg confiuguration support, including command line interface and environment ways to configure the batch iterator
-File collection is now based on sourcelib
-ASAP<2.1 depreciation warnings 
+**New features:**
+- Added tests (WIP)
+- Addded documentation (WIP)
+- Switched from creationism to dicfg confiuguration support, including command line interface and environment ways to configure the batch iterator
+- File collection is now based on sourcelib
+- ASAP<2.1 depreciation warnings 
 
-Breaking changes
+**Breaking changes**
   - renamed
     - accessoires -> interoperability
     - label_map -> labels
