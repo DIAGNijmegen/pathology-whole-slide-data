@@ -1,0 +1,78 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "401e4246-57a3-4b08-8960-5b07b269c4bc",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from wholeslidedata.annotation.parsers import MaskAnnotationParser\n",
+    "from wholeslidedata.image.wholeslideimage import WholeSlideImage\n",
+    "from wholeslidedata.interoperability.asap.annotationwriter import write_asap_annotation"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "380c3c0c-ba94-4133-8632-4fb7289ae33b",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0\n",
+      "0\n"
+     ]
+    }
+   ],
+   "source": [
+    "parser = MaskAnnotationParser(output_spacing=0.5)\n",
+    "image_annotations = parser.parse(\"/home/mart/Radboudumc/data/breast/breast_data/images/tissue_mask.tif\")\n",
+    "\n",
+    "# parser = MaskAnnotationParser(output_spacing=2.0)\n",
+    "# mask_annotations = parser.parse(\"/home/mart/Radboudumc/data/breast/breast_data/images/tissue_mask.tif\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "bff1a5c8-d8d7-41eb-b4ef-9c2fa4d1f50e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "write_asap_annotation(image_annotations, \"/home/mart/Radboudumc/data/breast/breast_data/images/annotations_offset_0.xml\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "82f0cbe3-4f7b-4544-9e2b-384ec8fd7240",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.0"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

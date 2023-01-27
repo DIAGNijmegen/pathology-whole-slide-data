@@ -1,0 +1,132 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Download Example Data\n",
+    "\n",
+    "----\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Requirement already satisfied: gdown in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (4.6.0)\n",
+      "Requirement already satisfied: six in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from gdown) (1.16.0)\n",
+      "Requirement already satisfied: beautifulsoup4 in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from gdown) (4.11.1)\n",
+      "Requirement already satisfied: tqdm in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from gdown) (4.64.1)\n",
+      "Requirement already satisfied: filelock in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from gdown) (3.9.0)\n",
+      "Requirement already satisfied: requests[socks] in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from gdown) (2.28.1)\n",
+      "Requirement already satisfied: soupsieve>1.2 in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from beautifulsoup4->gdown) (2.3.2.post1)\n",
+      "Requirement already satisfied: certifi>=2017.4.17 in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from requests[socks]->gdown) (2022.12.7)\n",
+      "Requirement already satisfied: urllib3<1.27,>=1.21.1 in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from requests[socks]->gdown) (1.26.13)\n",
+      "Requirement already satisfied: charset-normalizer<3,>=2 in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from requests[socks]->gdown) (2.1.1)\n",
+      "Requirement already satisfied: idna<4,>=2.5 in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from requests[socks]->gdown) (3.4)\n",
+      "Requirement already satisfied: PySocks!=1.5.7,>=1.5.6 in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from requests[socks]->gdown) (1.7.1)\n"
+     ]
+    }
+   ],
+   "source": [
+    "!pip install gdown\n",
+    "import gdown\n",
+    "import sys\n",
+    "from pathlib import Path\n",
+    "\n",
+    "def _download(output_folder, download_link, name):\n",
+    "    output_path = Path(output_folder) / name\n",
+    "    if not output_path.exists():\n",
+    "        gdown.download(download_link, str(output_path))\n",
+    "    \n",
+    "def download_example_data(output_folder=Path(\"/tmp/\")):\n",
+    "    _download(output_folder, WSI_DOWNLOAD_LINK, WSI_NAME)\n",
+    "    _download(output_folder, WSA_DOWNLOAD_LINK, WSA_NAME)\n",
+    "    _download(output_folder, WSM_DOWNLOAD_LINK, WSM_NAME)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Download Segmentation Data"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "Downloading...\n",
+      "From: https://drive.google.com/uc?id=1noRtbC5fxBlnO7YnvktjIDhFI61PdOSB\n",
+      "To: /tmp/TCGA-21-5784-01Z-00-DX1.tif\n",
+      "100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 363M/363M [00:09<00:00, 39.7MB/s]\n",
+      "Downloading...\n",
+      "From: https://drive.google.com/uc?id=1jkTp0IJHHpmLd1yDO1L3KRFJgm0STh0d\n",
+      "To: /tmp/TCGA-21-5784-01Z-00-DX1.xml\n",
+      "100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 9.67k/9.67k [00:00<00:00, 11.7MB/s]\n",
+      "Downloading...\n",
+      "From: https://drive.google.com/uc?id=1nLdKzSLq79mon1RCevgEmG59E8Oq9JhZ\n",
+      "To: /tmp/TCGA-21-5784-01Z-00-DX1_tb_mask.tif\n",
+      "100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 318k/318k [00:00<00:00, 10.6MB/s]\n"
+     ]
+    }
+   ],
+   "source": [
+    "\n",
+    "WSI_DOWNLOAD_LINK = \"https://drive.google.com/uc?id=1noRtbC5fxBlnO7YnvktjIDhFI61PdOSB\"\n",
+    "WSI_NAME = Path(\"TCGA-21-5784-01Z-00-DX1.tif\")\n",
+    "\n",
+    "WSA_DOWNLOAD_LINK = \"https://drive.google.com/uc?id=1jkTp0IJHHpmLd1yDO1L3KRFJgm0STh0d\"\n",
+    "WSA_NAME = Path(\"TCGA-21-5784-01Z-00-DX1.xml\")\n",
+    "\n",
+    "WSM_DOWNLOAD_LINK = \"https://drive.google.com/uc?id=1nLdKzSLq79mon1RCevgEmG59E8Oq9JhZ\"\n",
+    "WSM_NAME = Path(\"TCGA-21-5784-01Z-00-DX1_tb_mask.tif\")\n",
+    "\n",
+    "def download_segmentation_data(output_folder=Path(\"/tmp/\")):\n",
+    "    _download(output_folder, WSI_DOWNLOAD_LINK, WSI_NAME)\n",
+    "    _download(output_folder, WSA_DOWNLOAD_LINK, WSA_NAME)\n",
+    "    _download(output_folder, WSM_DOWNLOAD_LINK, WSM_NAME)\n",
+    "    \n",
+    "download_segmentation_data()\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.15"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

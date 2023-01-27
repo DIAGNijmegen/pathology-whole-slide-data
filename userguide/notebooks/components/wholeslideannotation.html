@@ -1,0 +1,608 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>WholeSlideAnnotation &#8212; WholeSlideData</title>
+  <script>
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+
+  
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'userguide/notebooks/components/wholeslideannotation';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="BatchIterator" href="batchiterator.html" />
+    <link rel="prev" title="WholeSlideImage" href="wholeslideimage.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+    <p class="title logo__title">WholeSlideData</p>
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../../../installation/index.html">
+                        Installation
+                    </a>
+                </li>
+                
+
+                <li class="nav-item current active">
+                    <a class="nav-link" href="../../index.html">
+                        User Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../examples.html">
+                        Examples
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../../api.html">
+                        API
+                    </a>
+                </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      <div class="navbar-end-item navbar-end__search-button-container">
+        
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/DIAGNijmegen/pathology-whole-slide-data" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  <div class="search-button-container--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+  </div>
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../../../installation/index.html">
+                        Installation
+                    </a>
+                </li>
+                
+
+                <li class="nav-item current active">
+                    <a class="nav-link" href="../../index.html">
+                        User Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../examples.html">
+                        Examples
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../../api.html">
+                        API
+                    </a>
+                </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/DIAGNijmegen/pathology-whole-slide-data" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="downloaddata.html">Download Example Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wholeslideimage.html">WholeSlideImage</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">WholeSlideAnnotation</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="batchiterator.html">BatchIterator</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Loading</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imagebackend.html">ImageBackend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotationparser.html">AnnotationParser</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Settings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="modes.html">Modes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="labels.html">Labels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="batchshape.html">BatchShape</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Samplers</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="labelsampler.html">LabelSampler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotationsampler.html">AnnotationSampler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pointsampler.html">PointSampler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="patchlabelsampler.html">PatchLabelSampler</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Customization</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="presets.html">Presets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="callbacks.html">Callbacks</a></li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+      </div>
+      <main class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <section id="wholeslideannotation">
+<h1>WholeSlideAnnotation<a class="headerlink" href="#wholeslideannotation" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wholeslidedata</span> <span class="kn">import</span> <span class="n">WholeSlideAnnotation</span>
+<span class="kn">from</span> <span class="nn">wholeslidedata.visualization.plotting</span> <span class="kn">import</span> <span class="n">plot_annotations</span>
+<span class="kn">from</span> <span class="nn">colour</span> <span class="kn">import</span> <span class="n">Color</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wsa</span> <span class="o">=</span> <span class="n">WholeSlideAnnotation</span><span class="p">(</span><span class="s1">&#39;/tmp/TCGA-21-5784-01Z-00-DX1.xml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">wsa</span><span class="o">.</span><span class="n">annotations</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">wsa</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">names</span><span class="p">)</span>
+<span class="n">color_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">label_name</span><span class="p">:</span> <span class="n">Color</span><span class="p">(</span><span class="n">pick_for</span><span class="o">=</span><span class="n">label_name</span><span class="p">)</span><span class="o">.</span><span class="n">hex_l</span> <span class="k">for</span> <span class="n">label_name</span> <span class="ow">in</span> <span class="n">wsa</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">names</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>10
+[&#39;lymphocytes&#39;, &#39;stroma&#39;, &#39;tumor&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_annotations</span><span class="p">(</span><span class="n">wsa</span><span class="o">.</span><span class="n">annotations</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="n">color_map</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/7b5a8e0eb09d0ba2b28c10602d4a76571e7373be734feec46ceb7ad4debc8c0f.png" src="../../../_images/7b5a8e0eb09d0ba2b28c10602d4a76571e7373be734feec46ceb7ad4debc8c0f.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">selected_annotations</span> <span class="o">=</span> <span class="n">wsa</span><span class="o">.</span><span class="n">select_annotations</span><span class="p">(</span><span class="n">center_x</span><span class="o">=</span><span class="mi">7500</span><span class="p">,</span> <span class="n">center_y</span><span class="o">=</span><span class="mi">15000</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+<span class="n">lymphocyte_annotations</span> <span class="o">=</span> <span class="p">[</span><span class="n">annotation</span> <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">wsa</span><span class="o">.</span><span class="n">annotations</span> <span class="k">if</span> <span class="n">annotation</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;lymphocytes&quot;</span><span class="p">]</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plot_annotations</span><span class="p">(</span><span class="n">selected_annotations</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color_map</span><span class="o">=</span><span class="n">color_map</span><span class="p">)</span>
+<span class="n">plot_annotations</span><span class="p">(</span><span class="n">lymphocyte_annotations</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color_map</span><span class="o">=</span><span class="n">color_map</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/2327bea0856201116a5f85cc267be628e72b03b7d2a37679afa3055cc55605b2.png" src="../../../_images/2327bea0856201116a5f85cc267be628e72b03b7d2a37679afa3055cc55605b2.png" />
+</div>
+</div>
+</section>
+<section id="label-names">
+<h1>Label names<a class="headerlink" href="#label-names" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wsa</span> <span class="o">=</span> <span class="n">WholeSlideAnnotation</span><span class="p">(</span><span class="s1">&#39;/tmp/TCGA-21-5784-01Z-00-DX1.xml&#39;</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;tumor&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;stroma&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;lymphocytes&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">},</span> <span class="n">renamed_labels</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;tumor&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;other&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">wsa</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">names</span><span class="p">)</span>
+<span class="n">color_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">label_name</span><span class="p">:</span> <span class="n">Color</span><span class="p">(</span><span class="n">pick_for</span><span class="o">=</span><span class="n">label_name</span><span class="p">)</span><span class="o">.</span><span class="n">hex_l</span> <span class="k">for</span> <span class="n">label_name</span> <span class="ow">in</span> <span class="n">wsa</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">names</span><span class="p">}</span>
+<span class="n">plot_annotations</span><span class="p">(</span><span class="n">wsa</span><span class="o">.</span><span class="n">annotations</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="n">color_map</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;other&#39;, &#39;tumor&#39;]
+</pre></div>
+</div>
+<img alt="../../../_images/55f23ce39bbab6f88e66ff4a26ec088caf1523178d2b7419a277b86ece9a4303.png" src="../../../_images/55f23ce39bbab6f88e66ff4a26ec088caf1523178d2b7419a277b86ece9a4303.png" />
+</div>
+</div>
+</section>
+<section id="callbacks">
+<h1>Callbacks<a class="headerlink" href="#callbacks" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wholeslidedata.annotation.hooks</span> <span class="kn">import</span> <span class="n">ScalingAnnotationHook</span><span class="p">,</span> <span class="n">TiledAnnotationHook</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wsa</span> <span class="o">=</span> <span class="n">WholeSlideAnnotation</span><span class="p">(</span><span class="s1">&#39;/tmp/TCGA-21-5784-01Z-00-DX1.xml&#39;</span><span class="p">,</span> <span class="n">hooks</span><span class="o">=</span><span class="p">(</span><span class="n">ScalingAnnotationHook</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">color_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">label_name</span><span class="p">:</span> <span class="n">Color</span><span class="p">(</span><span class="n">pick_for</span><span class="o">=</span><span class="n">label_name</span><span class="p">)</span><span class="o">.</span><span class="n">hex_l</span> <span class="k">for</span> <span class="n">label_name</span> <span class="ow">in</span> <span class="n">wsa</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">names</span><span class="p">}</span>
+<span class="n">plot_annotations</span><span class="p">(</span><span class="n">wsa</span><span class="o">.</span><span class="n">annotations</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="n">color_map</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/7f155cae046ea6f7463de3575152604b34f9a1b42bbf711c3dc034b90dc678b3.png" src="../../../_images/7f155cae046ea6f7463de3575152604b34f9a1b42bbf711c3dc034b90dc678b3.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;tumor&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;stroma&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;lymphocytes&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">}</span>
+<span class="n">wsa</span> <span class="o">=</span> <span class="n">WholeSlideAnnotation</span><span class="p">(</span><span class="s1">&#39;/tmp/TCGA-21-5784-01Z-00-DX1.xml&#39;</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">hooks</span><span class="o">=</span><span class="p">(</span><span class="n">TiledAnnotationHook</span><span class="p">(</span><span class="n">tile_size</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">label_names</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">labels</span><span class="p">)),))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">color_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">label_name</span><span class="p">:</span> <span class="n">Color</span><span class="p">(</span><span class="n">pick_for</span><span class="o">=</span><span class="n">label_name</span><span class="p">)</span><span class="o">.</span><span class="n">hex_l</span> <span class="k">for</span> <span class="n">label_name</span> <span class="ow">in</span> <span class="n">wsa</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">names</span><span class="p">}</span>
+<span class="n">plot_annotations</span><span class="p">(</span><span class="n">wsa</span><span class="o">.</span><span class="n">annotations</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="n">color_map</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/a691aa689a762efd48eaff2472b78c9a7d55d81ab92452742e96c08e7dc48006.png" src="../../../_images/a691aa689a762efd48eaff2472b78c9a7d55d81ab92452742e96c08e7dc48006.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">selected_annotations</span> <span class="o">=</span> <span class="n">wsa</span><span class="o">.</span><span class="n">select_annotations</span><span class="p">(</span><span class="n">center_x</span><span class="o">=</span><span class="mi">7500</span><span class="p">,</span> <span class="n">center_y</span><span class="o">=</span><span class="mi">15000</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+<span class="n">plot_annotations</span><span class="p">(</span><span class="n">selected_annotations</span><span class="p">,</span> <span class="n">color_map</span><span class="o">=</span><span class="n">color_map</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/ca33034d0cb7185b9509657da9a5617d8db76d88565f2d7c04600cac627a78d1.png" src="../../../_images/ca33034d0cb7185b9509657da9a5617d8db76d88565f2d7c04600cac627a78d1.png" />
+</div>
+</div>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="wholeslideimage.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">WholeSlideImage</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="batchiterator.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">BatchIterator</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   WholeSlideAnnotation
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#label-names">
+   Label names
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#callbacks">
+   Callbacks
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
+<div id="searchbox"></div>
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2022, Mart van Rijthoven.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>

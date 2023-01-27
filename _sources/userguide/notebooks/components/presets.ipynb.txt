@@ -1,0 +1,235 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "54faeab0",
+   "metadata": {},
+   "source": [
+    "# Presets"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "0a928cc3-caf4-4fe4-92ff-16f85f8858de",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from pathlib import Path\n",
+    "from wholeslidedata.iterators.batchiterator import create_batch_iterator\n",
+    "from pprint import pprint"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "eda955f3-a7ef-4311-9562-21cfdfa508c3",
+   "metadata": {},
+   "source": [
+    "## Files"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "4a930f5e-47f9-4a3b-97cd-75a02ff5658c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "user_config = {\n",
+    "    'wholeslidedata': {\n",
+    "        'default': {\n",
+    "            'image_sources@replace(false)': {\n",
+    "                'path': '/tmp/TCGA-21-5784-01Z-00-DX1.tif'\n",
+    "            },\n",
+    "            'annotation_sources@replace(false)': {\n",
+    "                'path': '/tmp/TCGA-21-5784-01Z-00-DX1.xml'\n",
+    "            },\n",
+    "            'labels': {\n",
+    "                'stroma': 1,\n",
+    "                'tumor': 2,\n",
+    "                'lymphocytes': 3,\n",
+    "            },\n",
+    "            'batch_shape': {\n",
+    "                'batch_size': 4,\n",
+    "                'spacing': 1.0,\n",
+    "                'shape': [512,512,3],\n",
+    "            }\n",
+    "        }\n",
+    "    }\n",
+    "}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "7c950a18-c2f9-4fba-bc34-79184f49e0d7",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Dataset:\n",
+      "{'AnyOneAssociater': {'annotations': {0: /tmp/TCGA-21-5784-01Z-00-DX1.xml},\n",
+      "                      'images': {0: /tmp/TCGA-21-5784-01Z-00-DX1.tif}}}\n"
+     ]
+    }
+   ],
+   "source": [
+    "with create_batch_iterator(user_config, mode='training', presets=('files.yml',)) as batch_iterator:\n",
+    "    print('Dataset:')\n",
+    "    pprint(batch_iterator.dataset)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "82d5508d-0e69-4c6d-a0b8-450dc4061ec0",
+   "metadata": {},
+   "source": [
+    "## Folders"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "1704fe22-107c-4f05-a9ca-6bc58a794fe7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "user_config = {\n",
+    "    'wholeslidedata': {\n",
+    "        'default': {\n",
+    "            'image_sources@replace(false)': {\n",
+    "                'folder': '/tmp/',\n",
+    "                'filters': ['.tif'],\n",
+    "                'excludes': ['mask'],\n",
+    "            \n",
+    "            },\n",
+    "            'annotation_sources@replace(false)': {\n",
+    "                'folder': '/tmp/',\n",
+    "                'filters': ['.xml'],\n",
+    "            },\n",
+    "            'labels': {\n",
+    "                'stroma': 1,\n",
+    "                'tumor': 2,\n",
+    "                'lymphocytes': 3,\n",
+    "            },\n",
+    "            'batch_shape': {\n",
+    "                'batch_size': 4,\n",
+    "                'spacing': 1.0,\n",
+    "                'shape': [512,512,3],\n",
+    "            }\n",
+    "        }\n",
+    "    }\n",
+    "}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "c1919fb9-174f-40f9-8cae-cff0c1263042",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Dataset:\n",
+      "{'TCGA-21-5784-01Z-00-DX1': {'annotations': {0: /tmp/TCGA-21-5784-01Z-00-DX1.xml},\n",
+      "                             'images': {0: /tmp/TCGA-21-5784-01Z-00-DX1.tif}}}\n"
+     ]
+    }
+   ],
+   "source": [
+    "with create_batch_iterator(user_config, mode='training', presets=('folders.yml',)) as batch_iterator:\n",
+    "    print('Dataset:')\n",
+    "    pprint(batch_iterator.dataset)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "005e7809-f87a-4033-9746-96cdb84d4e40",
+   "metadata": {},
+   "source": [
+    "## One-hot-encoding"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "50453df4-a400-4cbe-95e0-0c429f2512fa",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "wholeslidedata:\n",
+      "    default:\n",
+      "        yaml_source:\n",
+      "            training:\n",
+      "                - wsi: \n",
+      "                    path: /tmp/TCGA-21-5784-01Z-00-DX1.tif\n",
+      "                  wsa: \n",
+      "                    path: /tmp/TCGA-21-5784-01Z-00-DX1.xml       \n",
+      "\n",
+      "        labels:\n",
+      "            stroma: 1\n",
+      "            tumor: 2\n",
+      "            lymphocytes: 3\n",
+      "            \n",
+      "        batch_shape:\n",
+      "            batch_size: 4\n",
+      "            spacing: 1.0\n",
+      "            shape: [512, 512, 3]"
+     ]
+    }
+   ],
+   "source": [
+    "user_config = './configs/user_config.yml'\n",
+    "!cat $user_config"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "3c1ddd5c-9a51-436b-a254-88ae925ef664",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(4, 512, 512, 3)\n"
+     ]
+    }
+   ],
+   "source": [
+    "with create_batch_iterator(user_config, mode='training', presets=('onehotencoding.yml',)) as batch_iterator:\n",
+    "    x_batch, y_batch, info = next(batch_iterator)\n",
+    "    print(y_batch.shape)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.15"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

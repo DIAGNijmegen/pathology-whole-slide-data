@@ -1,6 +1,0 @@
-wholeslidedata.labels.labels\_from\_labels
-==========================================
-
-.. currentmodule:: wholeslidedata.labels
-
-.. autofunction:: labels_from_labels

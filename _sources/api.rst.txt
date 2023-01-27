@@ -1,5 +1,5 @@
-Welcome to the wholeslidedata API!
-=================================
+API 
+===
 
 .. autosummary::
    :toctree: _autosummary 

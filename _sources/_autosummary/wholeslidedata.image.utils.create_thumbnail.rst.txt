@@ -1,6 +1,0 @@
-wholeslidedata.image.utils.create\_thumbnail
-============================================
-
-.. currentmodule:: wholeslidedata.image.utils
-
-.. autofunction:: create_thumbnail

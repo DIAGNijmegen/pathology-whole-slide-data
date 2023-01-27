@@ -1,0 +1,258 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "eaf2b086",
+   "metadata": {},
+   "source": [
+    "# ImageBackend"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "a4df0797",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from wholeslidedata.image.backend import WholeSlideImageBackend\n",
+    "from wholeslidedata.interoperability.asap.backend import AsapWholeSlideImageBackend\n",
+    "from wholeslidedata import WholeSlideImage\n",
+    "from wholeslidedata.iterators import create_batch_iterator"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6c5726f2",
+   "metadata": {},
+   "source": [
+    "For opening Whole-slide images, the wholeslidedata package relies on well-known and established python libraries such as multiresolutionimageinterface (ASAP), openslide (openslide-python) and pyvips.\n",
+    "At least one of these backends needs to be installed. \n",
+    "\n",
+    ":::{seealso}\n",
+    "Please see the installation instructions for the image backends [here]().\n",
+    ":::\n",
+    "\n",
+    "\n",
+    "\n",
+    ":::{warning}\n",
+    "Monochrome mask files can **not** be opened with the openslide image backend\n",
+    ":::\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b9ad8d95",
+   "metadata": {},
+   "source": [
+    "The image backend can be specified via the 'backend' argument when instantiating WholeSlideImage"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "d51e1503",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<wholeslidedata.interoperability.asap.backend.AsapWholeSlideImageBackend; proxy of <Swig Object of type 'MultiResolutionImage *' at 0x7f37c1dd99c0> >"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "wsi = WholeSlideImage('/tmp/TCGA-21-5784-01Z-00-DX1.tif', backend=AsapWholeSlideImageBackend)\n",
+    "wsi._backend"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "48983d50",
+   "metadata": {},
+   "source": [
+    "## Specifying Backend in user config\n",
+    "\n",
+    ":::{note}\n",
+    "There are multiple ways to specify the image backend in the user config. The most straightforward is globally. In rare situations, you can also specify the image backend for each image separately\n",
+    ":::"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "55513c98-3ff0-4dde-9d3e-138d10f4d702",
+   "metadata": {},
+   "source": [
+    "### Global"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "id": "47ade554",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "wholeslidedata:\n",
+      "    default:\n",
+      "        image_backend: ${$wholeslidedata.interoperability.asap.backend.AsapWholeSlideImageBackend}\n",
+      "        \n",
+      "        yaml_source:\n",
+      "            training:\n",
+      "                - wsi: \n",
+      "                    path: /tmp/TCGA-21-5784-01Z-00-DX1.tif\n",
+      "                  wsa: \n",
+      "                    path: /tmp/TCGA-21-5784-01Z-00-DX1.xml       \n",
+      "            validation:\n",
+      "                - wsi: \n",
+      "                    path: /tmp/TCGA-21-5784-01Z-00-DX1.tif\n",
+      "                  wsa: \n",
+      "                    path: /tmp/TCGA-21-5784-01Z-00-DX1.xml \n",
+      "        labels:\n",
+      "            stroma: 1\n",
+      "            tumor: 2\n",
+      "            lymphocytes: 3\n",
+      "            \n",
+      "        batch_shape:\n",
+      "            batch_size: 4\n",
+      "            spacing: 1.0\n",
+      "            shape: [512, 512, 3]"
+     ]
+    }
+   ],
+   "source": [
+    "user_config_global_backend = './configs/user_config_global_backend.yml'\n",
+    "!cat {user_config_global_backend}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "id": "94f6aefe",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<wholeslidedata.interoperability.asap.backend.AsapWholeSlideImageBackend; proxy of <Swig Object of type 'MultiResolutionImage *' at 0x7f37c14cf150> >\n",
+      "<wholeslidedata.interoperability.asap.backend.AsapWholeSlideImageBackend; proxy of <Swig Object of type 'MultiResolutionImage *' at 0x7f37aa16bc00> >\n"
+     ]
+    }
+   ],
+   "source": [
+    "training_iterator = create_batch_iterator(mode='training', user_config=user_config_global_backend)\n",
+    "validation_iterator = create_batch_iterator(mode='validation', user_config=user_config_global_backend)\n",
+    "print(training_iterator.dataset['TCGA-21-5784-01Z-00-DX1']['images'][0]._backend)\n",
+    "print(validation_iterator.dataset['TCGA-21-5784-01Z-00-DX1']['images'][0]._backend)\n",
+    "training_iterator.stop()\n",
+    "validation_iterator.stop()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "300a761c",
+   "metadata": {},
+   "source": [
+    "\n",
+    "\n",
+    "### Per image\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "74d75faf",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "wholeslidedata:\n",
+      "    default:\n",
+      "        yaml_source:\n",
+      "            training:\n",
+      "                - wsi: \n",
+      "                    path: /tmp/TCGA-21-5784-01Z-00-DX1.tif\n",
+      "                    image_backend: ${$wholeslidedata.interoperability.openslide.backend.OpenSlideWholeSlideImageBackend}\n",
+      "                  wsa: \n",
+      "                    path: /tmp/TCGA-21-5784-01Z-00-DX1.xml       \n",
+      "            validation:\n",
+      "                - wsi: \n",
+      "                    path: /tmp/TCGA-21-5784-01Z-00-DX1.tif\n",
+      "                    image_backend: ${$wholeslidedata.interoperability.asap.backend.AsapWholeSlideImageBackend}\n",
+      "                  wsa: \n",
+      "                    path: /tmp/TCGA-21-5784-01Z-00-DX1.xml \n",
+      "        labels:\n",
+      "            stroma: 1\n",
+      "            tumor: 2\n",
+      "            lymphocytes: 3\n",
+      "            \n",
+      "        batch_shape:\n",
+      "            batch_size: 4\n",
+      "            spacing: 1.0\n",
+      "            shape: [512, 512, 3]"
+     ]
+    }
+   ],
+   "source": [
+    "user_config_backend_per_image = './configs/user_config_backend_per_image.yml'\n",
+    "!cat {user_config_backend_per_image}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "id": "5e45fd2c",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "OpenSlideWholeSlideImageBackend('/tmp/TCGA-21-5784-01Z-00-DX1.tif')\n",
+      "<wholeslidedata.interoperability.asap.backend.AsapWholeSlideImageBackend; proxy of <Swig Object of type 'MultiResolutionImage *' at 0x7f37a7738900> >\n"
+     ]
+    }
+   ],
+   "source": [
+    "training_iterator = create_batch_iterator(mode='training', user_config=user_config_backend_per_image)\n",
+    "validation_iterator = create_batch_iterator(mode='validation', user_config=user_config_backend_per_image)\n",
+    "print(training_iterator.dataset['TCGA-21-5784-01Z-00-DX1']['images'][0]._backend)\n",
+    "print(validation_iterator.dataset['TCGA-21-5784-01Z-00-DX1']['images'][0]._backend)\n",
+    "training_iterator.stop()\n",
+    "validation_iterator.stop()"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.15"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
