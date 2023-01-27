@@ -24,7 +24,7 @@ Installation
 
 .. code-block:: bash
    
-   pip install wholeslidedata
+   pip install git+https://github.com/DIAGNijmegen/pathology-whole-slide-data@main
 
 
 
