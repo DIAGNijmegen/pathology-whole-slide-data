@@ -2,18 +2,9 @@
 User Guide
 ==========
 
-texttexttexttexttexttexttexttexttexttexttext
-
-texttexttexttexttexttexttexttexttexttextv
-texttexttexttexttexttexttexttexttexttexttexttexttexttexttext
 
 Get Started
 ***********
-
-texttexttexttexttexttexttexttexttexttexttext
-
-texttexttexttexttexttexttexttexttexttextv
-texttexttexttexttexttexttexttexttexttexttexttexttexttexttext
 
 
 * `Example Data <notebooks/components/downloaddata.html>`_
