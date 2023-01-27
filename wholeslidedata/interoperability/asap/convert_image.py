@@ -1,9 +1,8 @@
 import numpy as np
 from PIL import Image
-from pathlib import Path
 
 from wholeslidedata import WholeSlideImage
-from wholeslidedata.accessories.asap.imagewriter import WholeSlideMaskWriter, WholeSlideImageWriter
+from wholeslidedata.interoperability.asap.imagewriter import WholeSlideMaskWriter, WholeSlideImageWriter
 
 def take_closest_number(l, number):
     return min(l, key=lambda x: abs(x - number))

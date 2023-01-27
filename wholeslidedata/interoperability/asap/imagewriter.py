@@ -104,7 +104,7 @@ class WholeSlideImageWriter(WholeSlideImageWriterBase):
         super().__init__()
         self._suffix = suffix
 
-    def write(self, path, spacing, dimensions, tile_shape, jpeg_quality=80):
+    def write(self, path, spacing, dimensions, tile_shape, jpeg_quality=80, interpolation='nearest'):
         self._path = str(path).replace(Path(path).suffix, self._suffix)
         self._spacing = spacing
         self._dimensions = dimensions
@@ -118,18 +118,25 @@ class WholeSlideImageWriter(WholeSlideImageWriterBase):
         self.openFile(self._path)
         self.setTileSize(self._tile_shape[0])
 
-        self.setJPEGQuality(jpeg_quality)
 
         try:
+            if interpolation=='nearest':
+                self.setInterpolation(mir.Interpolation_NearestNeighbor)
+            else:
+                self.setInterpolation(mir.Interpolation_Linear)
             self.setDataType(mir.DataType_UChar)
             self.setColorType(mir.ColorType_RGB)
             self.setCompression(mir.Compression_JPEG)
-            self.setInterpolation(mir.Interpolation_NearestNeighbor)
         except:
+            if interpolation=='nearest':
+                self.setInterpolation(mir.NearestNeighbor)
+            else:
+                self.setInterpolation(mir.Linear)
             self.setDataType(mir.UChar)
             self.setColorType(mir.RGB)
             self.setCompression(mir.JPEG)
-            self.setInterpolation(mir.NearestNeighbor)
+
+        self.setJPEGQuality(jpeg_quality)
 
         # set writing spacing
         pixel_size_vec = mir.vector_double()
