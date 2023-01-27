@@ -16,7 +16,7 @@ class WholeSlideImage:
     def __init__(
         self,
         path: Union[Path, str],
-        backend: Union[Type[WholeSlideImageBackend], str],
+        backend: Union[Type[WholeSlideImageBackend], str] = "openslide",
     ) -> None:
 
         """WholeSlideImage that can open en sample from whole slide images
