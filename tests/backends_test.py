@@ -14,7 +14,6 @@ def path():
     return Path("/tmp/TCGA-21-5784-01Z-00-DX1.tif")
 
 
-
 def test_wsi_openslide(path):
     wsi = WholeSlideImage(path, backend=OpenSlideWholeSlideImageBackend)
     wsi.spacings
