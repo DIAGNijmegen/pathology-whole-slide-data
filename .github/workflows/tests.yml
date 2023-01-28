@@ -28,7 +28,7 @@ jobs:
       - name: Install ASAP
         shell: bash
         run: |
-          mkdir /home/runner/.local/lib/python3.8/site-packages
+          mkdir -p /home/runner/.local/lib/python3.8/site-packages
           sudo .github/scripts/install_asap.sh
 
       - name: Install Openslide
