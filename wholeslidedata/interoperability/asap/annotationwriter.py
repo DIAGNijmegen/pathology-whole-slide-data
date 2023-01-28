@@ -104,10 +104,10 @@ def write_asap_annotation(annotations, output_path, scaling=1.0, color_map=None)
         label_color = get_color(annotation, color_map)
         index = annotation.index
         if isinstance(annotation, PolygonAnnotation):
-            coordinates = annotation.coordinates / scaling
+            coordinates = annotation.coordinates * scaling
             write_polygon(annos, coordinates, index, label_name, label_color)
         elif isinstance(annotation, PointAnnotation):
-            coordinates = annotation.coordinates / scaling
+            coordinates = annotation.coordinates * scaling
             write_point(annos, coordinates, index, label_name, label_color)
         else:
             raise ValueError("unsupported geometry", annotation)

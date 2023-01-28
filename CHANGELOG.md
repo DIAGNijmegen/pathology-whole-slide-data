@@ -10,6 +10,9 @@
 - File collection is now based on sourcelib
 - ASAP<2.1 depreciation warnings 
 
+**bug fixes:**
+ - asap annotation writer scaling
+
 **Breaking changes**
   - renamed
     - accessoires -> interoperability

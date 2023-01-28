@@ -1,0 +1,29 @@
+name: CI Tests
+
+on:
+  push:
+    paths:
+      - "wholeslidedata/**"
+      - "tests/**"
+      - .github/workflows/tests.yml
+      - .github/workflows/ci_tests.yml
+      - pyproject.toml
+      - "!wholeslidedata/_version.py"
+      
+  pull_request:
+    paths:
+      - "wholeslidedata/**"
+      - "tests/**"
+      - .github/workflows/tests.yml
+      - .github/workflows/ci_tests.yml
+      - pyproject.toml
+      - "!wholeslidedata/_version.py"
+
+jobs:
+  call-tests:
+
+    concurrency: 
+      group: ${{ github.workflow }}-${{ github.ref }}-ci-test
+      cancel-in-progress: true
+
+    uses: ./.github/workflows/tests.yml
