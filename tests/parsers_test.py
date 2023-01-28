@@ -5,7 +5,7 @@ from wholeslidedata.annotation.utils import (
     convert_annotations_to_json,
     write_json_annotations,
 )
-from wholeslidedata.interoperability.s3.parser import S3AsapAnnotationParser
+# from wholeslidedata.interoperability.s3.parser import S3AsapAnnotationParser
 
 
 def test_json_annotations():
