@@ -6,7 +6,7 @@ from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.data.files import WholeSlideImageFile
 from wholeslidedata.interoperability.openslide.backend import OpenSlideWholeSlideImageBackend
 
-image_path  = "/home/mart/Radboudumc/data/lung/TCGA-21-5784-01Z-00-DX1_E50E7F4B-BE37-4171-94A7-E824CFF4B3BB.tif"
+image_path  = "/tmp/TCGA-21-5784-01Z-00-DX1.tif"
 
 @pytest.fixture
 def image():

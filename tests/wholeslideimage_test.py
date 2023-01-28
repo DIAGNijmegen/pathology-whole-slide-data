@@ -14,13 +14,13 @@ class TestWholeSlideImage:
     @pytest.fixture
     def wsi(self):
         path = Path(
-            "/home/mart/Radboudumc/data/lung/TCGA-21-5784-01Z-00-DX1_E50E7F4B-BE37-4171-94A7-E824CFF4B3BB.tif"
+            "/tmp/TCGA-21-5784-01Z-00-DX1.tif"
         )
         return WholeSlideImage(path, backend=OpenSlideWholeSlideImageBackend)
 
     def test_path_property(self, wsi):
         assert wsi.path == Path(
-            "/home/mart/Radboudumc/data/lung/TCGA-21-5784-01Z-00-DX1_E50E7F4B-BE37-4171-94A7-E824CFF4B3BB.tif"
+            "/tmp/TCGA-21-5784-01Z-00-DX1.tif"
         )
 
     def test_spacings_property(self, wsi):
@@ -82,7 +82,7 @@ class TestWholeSlideImage:
 
     def test_enter_exit(self, wsi):
         with WholeSlideImage(
-            "/home/mart/Radboudumc/data/lung/TCGA-21-5784-01Z-00-DX1_E50E7F4B-BE37-4171-94A7-E824CFF4B3BB.tif",
+            "/tmp/TCGA-21-5784-01Z-00-DX1.tif",
             backend=OpenSlideWholeSlideImageBackend,
         ) as slide:
             assert isinstance(slide, WholeSlideImage)
