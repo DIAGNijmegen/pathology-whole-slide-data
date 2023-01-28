@@ -8,7 +8,7 @@
 
 This repository contains software at a major version zero. Anything MAY change at any time. The public API SHOULD NOT be considered stable.
 
-Please checkout the [CHANGELOG](https://github.com/DIAGNijmegen/pathology-whole-slide-data/blob/main/CHANGELOG.md) and the [Documentation](https://diagnijmegen.github.io/pathology-whole-slide-data/).
+Please checkout the [Documentation](https://diagnijmegen.github.io/pathology-whole-slide-data/) and the [CHANGELOG](https://github.com/DIAGNijmegen/pathology-whole-slide-data/blob/main/CHANGELOG.md).
 
 **Overview**
 
