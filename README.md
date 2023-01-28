@@ -18,7 +18,7 @@ Please checkout the [Documentation](https://diagnijmegen.github.io/pathology-who
   - [Whole-slide images](#whole-slide-images)
   - [Whole-slide annotations](#whole-slide-annotations)
   - [Batch iterator](#batch-iterator)
-  - [Acknowledgements](#acknowledgements)
+  - [Acknowledgments](#acknowledgments)
 
 
 ----
@@ -124,6 +124,6 @@ with create_batch_iterator(mode='training',
         pass
 ```
 
-### Acknowledgements
+### Acknowledgments
 
 Created in the [#EXAMODE](https://www.examode.eu/) project
