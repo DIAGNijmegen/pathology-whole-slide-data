@@ -23,6 +23,7 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
+          python -m site
           sudo apt-get install -y openslide-tools
           sudo .github/scripts/install_asap.sh
           pip install -r requirements.txt
