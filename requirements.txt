@@ -11,3 +11,4 @@ matplotlib>=3.6.2
 scipy>=1.9.3
 scikit-image>=0.19.3
 gdown>=4.6.0
+albumentations==1.2.1
