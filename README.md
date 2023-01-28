@@ -2,6 +2,9 @@
 # WholeSlideData
 
 [![PyPI version](https://badge.fury.io/py/wholeslidedata.svg)](https://badge.fury.io/py/wholeslidedata)
+[![CI Tests](https://github.com/DIAGNijmegen/pathology-whole-slide-data/actions/workflows/ci_tests.yml/badge.svg)](https://github.com/DIAGNijmegen/pathology-whole-slide-data/actions/workflows/ci_tests.yml)
+[![Coverage Status](https://coveralls.io/repos/github/DIAGNijmegen/pathology-whole-slide-data/badge.svg?branch=main)](https://coveralls.io/github/DIAGNijmegen/pathology-whole-slide-data?branch=main)
+[![docs](https://github.com/DIAGNijmegen/pathology-whole-slide-data/actions/workflows/docs.yml/badge.svg)](https://github.com/DIAGNijmegen/pathology-whole-slide-data/actions/workflows/docs.yml)
 
 This repository contains software at a major version zero. Anything MAY change at any time. The public API SHOULD NOT be considered stable.
 
