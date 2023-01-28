@@ -51,7 +51,7 @@ jobs:
           pip install pytest
           pip install pytest-cov===2.8.1
           pip install coveralls
-          pytest tests tests --cov=wholeslidedata --cov-report term-missing
+          pytest tests tests --cov wholeslidedata --cov-report term-missing
 
       - name: Upload coverage
         env:
