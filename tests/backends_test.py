@@ -5,7 +5,7 @@ from wholeslidedata.interoperability.openslide.backend import (
 )
 from wholeslidedata.interoperability.asap.backend import AsapWholeSlideImageBackend
 # from wholeslidedata.interoperability.pyvips.backend import PyVipsImageBackend
-# from wholeslidedata.interoperability.tiffslide.backend import TiffSlideImageBackend
+from wholeslidedata.interoperability.tiffslide.backend import TiffSlideImageBackend
 import pytest
 
 
@@ -29,18 +29,18 @@ def test_wsi_asap(path):
     wsi.get_patch(0, 0, 64, 64, 8.0)
 
 
+def test_wsi_tiffslide(path):
+    wsi = WholeSlideImage(path, backend=TiffSlideImageBackend)
+    wsi.spacings
+    wsi.shapes
+    wsi.get_patch(0, 0, 64, 64, 8.0)
+
+
 # def test_wsi_pyvips(path):
 #     wsi = WholeSlideImage(path, backend=PyVipsImageBackend)
 #     wsi.spacings
 #     wsi.shapes
 #     wsi.get_patch(512, 512, 64, 64, 8.0)
-
-
-# def test_wsi_tiffslide(path):
-#     wsi = WholeSlideImage(path, backend=TiffSlideImageBackend)
-#     wsi.spacings
-#     wsi.shapes
-#     wsi.get_patch(0, 0, 64, 64, 8.0)
 
 
 # def test_wsi_cucim(path):
