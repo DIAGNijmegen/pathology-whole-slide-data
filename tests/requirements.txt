@@ -9,3 +9,6 @@ PyYAML>=6.0
 rtree>=1.0.0
 matplotlib>=3.6.2
 scikit-image>=0.19.3
+gdown>=4.6.0
+click>=8.1.3
+albumentations==1.2.1

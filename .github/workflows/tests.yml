@@ -39,7 +39,7 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
-          pip install -r requirements.txt
+          pip install -r tests/requirements.txt
 
       - name: Download data
         shell: bash
