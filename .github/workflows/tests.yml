@@ -23,7 +23,7 @@ jobs:
       - name: Print site packages folder
         shell: bash
         run: |
-          echo python -m site
+          python -m site
 
       - name: Install ASAP
         shell: bash
