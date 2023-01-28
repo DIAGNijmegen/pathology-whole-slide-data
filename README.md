@@ -2,9 +2,9 @@
 # WholeSlideData
 
 <!-- ![PyPI](https://img.shields.io/pypi/v/wholeslidedata) -->
-[![CI Tests](https://github.com/DIAGNijmegen/pathology-whole-slide-data/actions/workflows/ci_tests.yml/badge.svg)](https://github.com/DIAGNijmegen/pathology-whole-slide-data/actions/workflows/ci_tests.yml)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/DIAGNijmegen/pathology-whole-slide-data/ci_tests.yml?label=ci%20test)
 ![Coveralls](https://img.shields.io/coverallsCoverage/github/DIAGNijmegen/pathology-whole-slide-data)
-[![docs](https://github.com/DIAGNijmegen/pathology-whole-slide-data/actions/workflows/docs.yml/badge.svg)](https://github.com/DIAGNijmegen/pathology-whole-slide-data/actions/workflows/docs.yml)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/DIAGNijmegen/pathology-whole-slide-data/docs.yml?label=docs)
 
 This repository contains software at a major version zero. Anything MAY change at any time. The public API SHOULD NOT be considered stable.
 
