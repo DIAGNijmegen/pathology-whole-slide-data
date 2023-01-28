@@ -76,14 +76,16 @@ html_theme_options = {
             "icon": "fa-brands fa-square-github",
             # The type of image to be used (see below for details)
             "type": "fontawesome",
-        }
+            
+        },
+
     ],
+    "announcement": "<p>This documentation site is still in the process of being developed and is not yet complete. Thank you for your patience as we continue to improve it.</p>",
     # "logo": {
     #     "image_light": "wsd_logo.png",
     #     "image_dark": "logo-darkgrey.svg",
     # },
 }
-
 
 # -- Options for HTML output -------------------------------------------------
 
