@@ -1,7 +1,7 @@
 ----
 # WholeSlideData
 
-[![PyPI version](https://badge.fury.io/py/wholeslidedata.svg)](https://badge.fury.io/py/wholeslidedata)
+![PyPI](https://img.shields.io/pypi/v/wholeslidedata)
 [![CI Tests](https://github.com/DIAGNijmegen/pathology-whole-slide-data/actions/workflows/ci_tests.yml/badge.svg)](https://github.com/DIAGNijmegen/pathology-whole-slide-data/actions/workflows/ci_tests.yml)
 [![Coverage Status](https://coveralls.io/repos/github/DIAGNijmegen/pathology-whole-slide-data/badge.svg?branch=main)](https://coveralls.io/github/DIAGNijmegen/pathology-whole-slide-data?branch=main)
 [![docs](https://github.com/DIAGNijmegen/pathology-whole-slide-data/actions/workflows/docs.yml/badge.svg)](https://github.com/DIAGNijmegen/pathology-whole-slide-data/actions/workflows/docs.yml)
