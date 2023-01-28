@@ -26,7 +26,7 @@
  - Shapely2.0 support: Annotations are now based on composition instead of inheritance, so the actual geometry should be accessed by annotation.geometry
  - removed jsonschema 
 
-#### 0.0.16 (**Latest**)
+### 0.0.16 (**Latest**)
 - dicom support 
 - improved sliding window hook annotations and index
 - added path property to annotation
