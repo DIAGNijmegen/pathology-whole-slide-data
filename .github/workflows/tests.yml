@@ -48,9 +48,10 @@ jobs:
 
       - name: Generate coverage report
         run: |
-          pip install pytest pytest-cov coveralls
-          cd tests
-          pytest -s . --cov --cov-report term-missing
+          pip install pytest
+          pip install pytest-cov===2.8.1
+          pip install coveralls
+          pytest tests tests --cov --cov-report term-missing
 
       - name: Upload coverage
         env:
@@ -59,7 +60,6 @@ jobs:
         shell: bash
         run: |
           pip install coveralls
-          cd tests
           coveralls --service=github || echo "!! intermittent coveralls failure"
 
   coveralls:
