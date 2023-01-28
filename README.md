@@ -2,7 +2,7 @@
 # WholeSlideData
 
 <!-- ![PyPI](https://img.shields.io/pypi/v/wholeslidedata) -->
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/DIAGNijmegen/pathology-whole-slide-data/ci_tests.yml?label=ci%20test)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/DIAGNijmegen/pathology-whole-slide-data/ci_tests.yml?label=ci%20tests)
 ![Coveralls](https://img.shields.io/coverallsCoverage/github/DIAGNijmegen/pathology-whole-slide-data)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/DIAGNijmegen/pathology-whole-slide-data/docs.yml?label=docs)
 
