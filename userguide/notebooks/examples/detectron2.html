@@ -1027,33 +1027,35 @@ The checkpoint state_dict contains keys that are not used by the model:
     <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;training&#39;</span><span class="p">,</span>
     <span class="n">cpus</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
 <span class="p">)</span> <span class="k">as</span> <span class="n">training_batch_generator</span><span class="p">:</span>
-    
-    <span class="n">batch_x</span><span class="p">,</span> <span class="n">batch_y</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">training_batch_generator</span><span class="p">)</span>
-    <span class="n">batch_x</span><span class="p">,</span> <span class="n">batch_y</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">training_batch_generator</span><span class="p">)</span>
-    <span class="n">predicted_batch</span> <span class="o">=</span> <span class="n">predictor</span><span class="o">.</span><span class="n">predict_on_batch</span><span class="p">(</span><span class="n">batch_x</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-    <span class="n">patch</span> <span class="o">=</span> <span class="n">batch_x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-    <span class="n">boxes</span> <span class="o">=</span>  <span class="n">predicted_batch</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;boxes&#39;</span><span class="p">]</span>
-    <span class="n">confidences</span> <span class="o">=</span> <span class="n">predicted_batch</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;confidences&#39;</span><span class="p">]</span>
-    <span class="n">filtered_boxes</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">box</span><span class="p">,</span> <span class="n">confidence</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">boxes</span><span class="p">,</span> <span class="n">confidences</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">confidence</span> <span class="o">&gt;</span> <span class="mf">0.3</span><span class="p">:</span>
-            <span class="n">filtered_boxes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
-    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
-    <span class="n">plot_boxes</span><span class="p">(</span><span class="n">filtered_boxes</span><span class="p">,</span> <span class="n">max_width</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">max_height</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+        <span class="n">batch_x</span><span class="p">,</span> <span class="n">batch_y</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">training_batch_generator</span><span class="p">)</span>
+        <span class="n">predicted_batch</span> <span class="o">=</span> <span class="n">predictor</span><span class="o">.</span><span class="n">predict_on_batch</span><span class="p">(</span><span class="n">batch_x</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+            <span class="n">patch</span> <span class="o">=</span> <span class="n">batch_x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">boxes</span> <span class="o">=</span>  <span class="n">predicted_batch</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;boxes&#39;</span><span class="p">]</span>
+            <span class="n">confidences</span> <span class="o">=</span> <span class="n">predicted_batch</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;confidences&#39;</span><span class="p">]</span>
+            <span class="n">filtered_boxes</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">box</span><span class="p">,</span> <span class="n">confidence</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">boxes</span><span class="p">,</span> <span class="n">confidences</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">confidence</span> <span class="o">&gt;</span> <span class="mf">0.3</span><span class="p">:</span>
+                    <span class="n">filtered_boxes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
+            <span class="n">plot_boxes</span><span class="p">(</span><span class="n">filtered_boxes</span><span class="p">,</span> <span class="n">max_width</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">max_height</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
+<img alt="../../../_images/eddd1c3f97c3b2b62f48c6d822f6f8cdce9ac2ea42afd6838548ca89d84319f9.png" src="../../../_images/eddd1c3f97c3b2b62f48c6d822f6f8cdce9ac2ea42afd6838548ca89d84319f9.png" />
 <img alt="../../../_images/89bcae0970972865fdef574039f17ec604ea67101b640f6508560b898f27fee0.png" src="../../../_images/89bcae0970972865fdef574039f17ec604ea67101b640f6508560b898f27fee0.png" />
+<img alt="../../../_images/b95b0a582f5f119600f6b1413d45742ed881e5f429d9e73fff8e86d8cd9a878f.png" src="../../../_images/b95b0a582f5f119600f6b1413d45742ed881e5f429d9e73fff8e86d8cd9a878f.png" />
+<img alt="../../../_images/e3902759fd5c14eb35094e071199ba1ea5c3ef050e4136c3347f9a616f5583b1.png" src="../../../_images/e3902759fd5c14eb35094e071199ba1ea5c3ef050e4136c3347f9a616f5583b1.png" />
+<img alt="../../../_images/3034e2f3c2577f3af9c6dd3d57db0e5170e1b1cc6995f6056c82cc5d1ea9f3a1.png" src="../../../_images/3034e2f3c2577f3af9c6dd3d57db0e5170e1b1cc6995f6056c82cc5d1ea9f3a1.png" />
+<img alt="../../../_images/52881114703271eb3f20b3db8f0e4a751ddb316d6f6f6a0fe6d21900378b87e0.png" src="../../../_images/52881114703271eb3f20b3db8f0e4a751ddb316d6f6f6a0fe6d21900378b87e0.png" />
+<img alt="../../../_images/466133e98ea4915e212b5bc3db306a0c64e8f0db30bbc3e11fc8f06faeec8845.png" src="../../../_images/466133e98ea4915e212b5bc3db306a0c64e8f0db30bbc3e11fc8f06faeec8845.png" />
+<img alt="../../../_images/42eb5094e1591509cee9de7d28a29749a38441ff1147d6408d8d848d67a06341.png" src="../../../_images/42eb5094e1591509cee9de7d28a29749a38441ff1147d6408d8d848d67a06341.png" />
+<img alt="../../../_images/aea0b6d38917f2f2545e0dea99197d44398635bd08738d783156d517373967c2.png" src="../../../_images/aea0b6d38917f2f2545e0dea99197d44398635bd08738d783156d517373967c2.png" />
+<img alt="../../../_images/f35fb120a84afc59b97e10fc25dd88e1d5b60f149e15804e7997a14d4b4aa1ab.png" src="../../../_images/f35fb120a84afc59b97e10fc25dd88e1d5b60f149e15804e7997a14d4b4aa1ab.png" />
 </div>
 </div>
 </section>
