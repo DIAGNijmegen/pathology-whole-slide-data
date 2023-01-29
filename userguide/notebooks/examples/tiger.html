@@ -481,6 +481,76 @@
 <img alt="../../../_images/f4eca9093c56b914039f11391d8ddb3b371a31f7daa9b95cd4108494738b9139.png" src="../../../_images/f4eca9093c56b914039f11391d8ddb3b371a31f7daa9b95cd4108494738b9139.png" />
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wholeslidedata.iterators</span> <span class="kn">import</span> <span class="n">create_batch_iterator</span>
+<span class="kn">from</span> <span class="nn">wholeslidedata.visualization.plotting</span> <span class="kn">import</span> <span class="n">plot_batch</span>
+<span class="kn">import</span> <span class="nn">time</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">user_config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;wholeslidedata&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;yaml_source&#39;</span><span class="p">:</span> <span class="s2">&quot;/home/user/pathology-whole-slide-data/docs/source/userguide/notebooks/examples/configs/tigersegmentationdata.yml&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;labels&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;roi&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;invasive tumor&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="s2">&quot;tumor-associated stroma&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="s2">&quot;in-situ tumor&quot;</span><span class="p">:</span> <span class="mi">3</span> <span class="p">,</span>
+                <span class="s2">&quot;healthy glands&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+                <span class="s2">&quot;necrosis not in-situ&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                <span class="s2">&quot;inflamed stroma&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+                <span class="s2">&quot;rest&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+            <span class="p">},</span>
+            
+            <span class="s2">&quot;annotation_parser&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;sample_label_names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;roi&#39;</span><span class="p">]</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;batch_shape&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+                <span class="s1">&#39;spacing&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+                <span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">512</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;point_sampler_name&#39;</span><span class="p">:</span> <span class="s2">&quot;RandomPointSampler&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;point_sampler&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;buffer&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;spacing&#39;</span><span class="p">:</span> <span class="s2">&quot;$</span><span class="si">{batch_shape.spacing}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">256</span><span class="p">},</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">tiger_batch_iterator</span> <span class="o">=</span> <span class="n">create_batch_iterator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;training&quot;</span><span class="p">,</span> <span class="n">user_config</span><span class="o">=</span><span class="n">user_config</span><span class="p">,</span> <span class="n">cpus</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>88.77838516235352
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_batch</span><span class="p">,</span> <span class="n">y_batch</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span>  <span class="nb">next</span><span class="p">(</span><span class="n">tiger_batch_iterator</span><span class="p">)</span>
+<span class="n">plot_batch</span><span class="p">(</span><span class="n">x_batch</span><span class="p">,</span> <span class="n">y_batch</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/41bf496c0eee17779c5bdc4b30c21468b1bfb374b0bf15169d30e52b5afe24dc.png" src="../../../_images/41bf496c0eee17779c5bdc4b30c21468b1bfb374b0bf15169d30e52b5afe24dc.png" />
+</div>
+</div>
 </section>
 </section>
 
