@@ -35,10 +35,11 @@ class WholeSlideAnnotation:
 
         """
         self._annotation_path = Path(annotation_path)
+        self._spacing  = kwargs.pop('spacing', None)
         self._parser = self._init_parser(
             parser, self._annotation_path, labels, **kwargs
         )
-        self._annotations = self._parser.parse(self._annotation_path)
+        self._annotations = self._parser.parse(self._annotation_path, self._spacing)
         self._labels = annotation_utils.get_labels_in_annotations(self.annotations)
         self._sample_labels = self._parser.sample_label_names
         self._sample_types = self._parser.sample_annotation_types

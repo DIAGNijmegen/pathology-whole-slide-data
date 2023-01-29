@@ -90,7 +90,7 @@ class AnnotationParser:
                 renamed_label[key] = value
         return renamed_label
 
-    def parse(self, path) -> List[Annotation]:
+    def parse(self, path, spacing=None) -> List[Annotation]:
 
         if self._empty_file(path):
             warn = f"Loading empty file: {path}"
@@ -102,6 +102,8 @@ class AnnotationParser:
             annotation["index"] = index
             annotation["coordinates"] = np.array(annotation["coordinates"])
             annotation["label"] = self._rename_label(annotation["label"])
+            if spacing is not None:
+                annotation["spacing"] = spacing
             annotation.update(self._kwargs)
             annotations.append(Annotation.create(**annotation))
 
