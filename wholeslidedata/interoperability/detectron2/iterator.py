@@ -1,6 +1,6 @@
 import torch
 from detectron2.structures import Boxes, Instances
-from wholeslidedata.iterators import BatchIterator
+from wholeslidedata.iterators.batchiterator import BatchIterator
 import numpy as np
 
 class WholeSlideDetectron2Iterator(BatchIterator):

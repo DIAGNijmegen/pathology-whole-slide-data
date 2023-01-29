@@ -14,7 +14,6 @@ class BatchPredictor(DefaultPredictor):
             if self.input_format == "RGB":
                 image = image[:, :, ::-1]
             height, width = image.shape[:2]
-            image = self.aug.get_transform(image).apply_image(image)
             image = torch.as_tensor(image.astype("float32").transpose(2, 0, 1))
             input_images.append({"image": image, "height": height, "width": width})
 
