@@ -15,5 +15,6 @@ Examples
    ./notebooks/examples/pytorch
    ./notebooks/examples/tensorflow
    ./notebooks/examples/detectron2
+   ./notebooks/examples/hooknet
    ./notebooks/examples/albumentations
 
