@@ -43,8 +43,6 @@ class BatchReferenceSampler:
 
             point = self._point_sampler.sample(annotation)
 
-            # add new sample to samples
-            point = (point.x, point.y)
             batch.append({'reference': sample, 'point': point})
 
         return batch

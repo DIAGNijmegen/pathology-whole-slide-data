@@ -15,19 +15,19 @@ class PointSampler(Sampler):
 class CenterPointSampler(PointSampler):
     """Samples center point"""
     def sample(self, annotation):
-        return Point(annotation.center)
+        return annotation.center
 
 
 class CentroidPointSampler(PointSampler):
     def sample(self, annotation):
-        return Point(annotation.centroid)
+        return annotation.centroid
 
 
 class TopLeftPointSampler(PointSampler):
     """ Samples top left point"""
 
     def sample(self, annotation):
-        return Point(annotation.bounds[:2])
+        return annotation.bounds[:2]
 
 class RandomPointSampler(PointSampler):
     """Samples uniform point based on triangulation. (based on https://codereview.stackexchange.com/a/204289)
@@ -60,5 +60,7 @@ class RandomPointSampler(PointSampler):
         transform = record["transforms"][transform_idx]
         x, y = self._rng.random(2)
         if x + y > 1:
-            return affine_transform(Point(1 - x, 1 - y), transform)
-        return affine_transform(Point(x, y), transform)
+            p = affine_transform(Point(1 - x, 1 - y), transform)
+        else:
+            p = affine_transform(Point(x, y), transform)
+        return p.x, p.y

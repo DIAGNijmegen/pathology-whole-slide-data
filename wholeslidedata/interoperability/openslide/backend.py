@@ -10,6 +10,11 @@ class OpenSlideWholeSlideImageBackend(OpenSlide, WholeSlideImageBackend):
     def __init__(self, path: str) -> None:
         OpenSlide.__init__(self, str(path))
         WholeSlideImageBackend.__init__(self, path)
+        try:
+            from openslide import OpenSlideCache
+            self.set_cache(OpenSlideCache(0))
+        except:
+            pass
 
     def get_patch(
         self, x: int, y: int, width: int, height: int, level: int

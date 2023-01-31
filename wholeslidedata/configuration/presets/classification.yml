@@ -2,6 +2,5 @@ default:
   batch_shape:
     y_shape: 
       - 1
-  patch_label_sampler:
-    attribute: ClassificationPatchLabelSampler
+  patch_label_sampler_name: ClassificationPatchLabelSampler
       
