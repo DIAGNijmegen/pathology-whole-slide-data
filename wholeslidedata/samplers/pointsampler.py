@@ -50,7 +50,8 @@ class RandomPointSampler(PointSampler):
         record = annotation.triangles(buffer, self._simplify)
 
         if len(record["transforms"]) == 0:
-            return annotation.geometry.representative_point()
+            p = annotation.geometry.representative_point()
+            return (p.x, p.y)
 
         transform_idx = self._rng.choice(
             range(len(record["transforms"])),
