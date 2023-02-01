@@ -62,12 +62,12 @@ class Annotation:
     def create(index, label, coordinates, **kwargs):
         geometry = _get_geometry(coordinates)
         label = Label.create(label)
-        if geometry.type == "Point":
+        if geometry.geom_type == "Point":
             return PointAnnotation(index, label, geometry, **kwargs)
-        if geometry.type == "Polygon":
+        if geometry.geom_type == "Polygon":
             return PolygonAnnotation(index, label, geometry, **kwargs)
         raise UnsupportedGeometryType(
-            f"Geometry type: {geometry.type} is not supported"
+            f"Geometry type: {geometry.geom_type} is not supported"
         )
 
     def __init__(
@@ -100,7 +100,7 @@ class Annotation:
 
     @property
     def type(self):
-        return self._geometry.type.lower()
+        return self._geometry.geom_type.lower()
 
     @property
     def coordinates(self) -> List[tuple]:

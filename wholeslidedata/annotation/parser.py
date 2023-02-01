@@ -12,7 +12,9 @@ from wholeslidedata.annotation.types import (
 )
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
 from wholeslidedata.annotation.labels import Label, Labels
+from wholeslidedata.annotation.selector import sort_by_label_value
 from wholeslidedata.samplers.utils import block
+
 from shapely import geometry
 
 
@@ -35,6 +37,7 @@ class AnnotationParser:
         sample_label_names: Union[list, tuple] = (),
         sample_annotation_types: Union[list, tuple] = ("polygon",),
         callbacks=None,
+        sorters=(sort_by_label_value, ),
         **kwargs
     ):
         """Init
@@ -61,6 +64,7 @@ class AnnotationParser:
 
         self._sample_label_names = sample_label_names
         self._callbacks = callbacks if callbacks is not None else []
+        self._sorters = sorters
         self._kwargs = kwargs
             
 
@@ -72,6 +76,10 @@ class AnnotationParser:
     def _empty_file(cls, path: str):
         return os.stat(path).st_size == 0
 
+    @property
+    def sorters(self):
+        return self._sorters
+    
     @property
     def sample_label_names(self):
         return self._sample_label_names
