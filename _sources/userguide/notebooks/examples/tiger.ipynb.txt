@@ -224,6 +224,14 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "id": "fd111f5b-a731-4f69-a448-ba3cfae6d0a8",
+   "metadata": {},
+   "source": [
+    "## Data Loading - Batch Iterator"
+   ]
+  },
+  {
    "cell_type": "code",
    "execution_count": 1,
    "id": "d039c5ae-3c72-45e6-90c0-3ddda0767ec7",
@@ -317,14 +325,6 @@
     "x_batch, y_batch, info =  next(tiger_batch_iterator)\n",
     "plot_batch(x_batch, y_batch, alpha=0.2)"
    ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "fd992e26-ee77-4770-9ee7-e87870c9d165",
-   "metadata": {},
-   "outputs": [],
-   "source": []
   }
  ],
  "metadata": {
