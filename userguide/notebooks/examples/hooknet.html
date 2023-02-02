@@ -345,8 +345,21 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hooknet.training.trainer</span> <span class="kn">import</span> <span class="n">Trainer</span>
+<span class="kn">from</span> <span class="nn">hooknet.model</span> <span class="kn">import</span> <span class="n">create_hooknet</span>
 <span class="kn">from</span> <span class="nn">wholeslidedata.iterators</span> <span class="kn">import</span> <span class="n">create_batch_iterator</span>
 <span class="kn">from</span> <span class="nn">wholeslidedata.visualization.plotting</span> <span class="kn">import</span> <span class="n">plot_batch</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">gc</span>
+<span class="kn">from</span> <span class="nn">wholeslidedata.samplers.utils</span> <span class="kn">import</span> <span class="n">crop_data</span>
+<span class="kn">from</span> <span class="nn">wholeslidedata.visualization.plotting</span> <span class="kn">import</span> <span class="n">plot_mask</span>
+
+<span class="k">def</span> <span class="nf">plot_inference</span><span class="p">(</span><span class="n">patch</span><span class="p">,</span> <span class="n">ground_truth</span><span class="p">,</span> <span class="n">prediction</span><span class="p">):</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;pink&#39;</span><span class="p">,</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;yellow&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;grey&#39;</span><span class="p">]</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
+    <span class="n">plot_mask</span><span class="p">(</span><span class="n">ground_truth</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color_values</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
+    <span class="n">plot_mask</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">color_values</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -360,6 +373,7 @@
         <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="mi">123</span><span class="p">,</span>
             <span class="s2">&quot;yaml_source&quot;</span><span class="p">:</span> <span class="s2">&quot;/home/user/pathology-whole-slide-data/docs/source/userguide/notebooks/examples/configs/tigersegmentationdata.yml&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;image_backend&quot;</span><span class="p">:</span> <span class="s1">&#39;asap&#39;</span><span class="p">,</span>
             <span class="s1">&#39;labels&#39;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;roi&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
                 <span class="s2">&quot;invasive tumor&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
@@ -371,7 +385,8 @@
                 <span class="s2">&quot;rest&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
             <span class="p">},</span>
             <span class="s2">&quot;annotation_parser&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;sample_label_names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;roi&#39;</span><span class="p">]</span>
+                <span class="s2">&quot;sample_label_names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;roi&#39;</span><span class="p">],</span>
+                <span class="s2">&quot;sorters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;${$wholeslidedata.annotation.selector.sort_by_area_with_roi}&quot;</span><span class="p">],</span>
             <span class="p">},</span>
             <span class="s2">&quot;batch_shape&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;batch_size&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
@@ -403,11 +418,8 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(5, 284, 284, 3)
-</pre></div>
-</div>
-<img alt="../../../_images/f0f3ba67eda270c61a55db249574c1de85b2e150905e24adfcfc121afa2d8499.png" src="../../../_images/f0f3ba67eda270c61a55db249574c1de85b2e150905e24adfcfc121afa2d8499.png" />
-<img alt="../../../_images/c69c717f7b2bcec83c1ba1a5803cf607a5c780af9834c2c317e462c08f1e904c.png" src="../../../_images/c69c717f7b2bcec83c1ba1a5803cf607a5c780af9834c2c317e462c08f1e904c.png" />
+<img alt="../../../_images/f49c0d61d6e9344e3978ace55d727644dd4db7efbd8e291a16f592a1b3f04c8a.png" src="../../../_images/f49c0d61d6e9344e3978ace55d727644dd4db7efbd8e291a16f592a1b3f04c8a.png" />
+<img alt="../../../_images/a012b73d8a9855ac85d5cc836526ce891f3535646216d988a2c1485c76c9e698.png" src="../../../_images/a012b73d8a9855ac85d5cc836526ce891f3535646216d988a2c1485c76c9e698.png" />
 </div>
 </div>
 </section>
@@ -420,22 +432,32 @@
         <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="mi">123</span><span class="p">,</span>
             <span class="s2">&quot;yaml_source&quot;</span><span class="p">:</span> <span class="s2">&quot;/home/user/pathology-whole-slide-data/docs/source/userguide/notebooks/examples/configs/tigersegmentationdata.yml&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;image_backend&quot;</span><span class="p">:</span> <span class="s1">&#39;asap&#39;</span><span class="p">,</span>
             <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;roi&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
                 <span class="s2">&quot;invasive tumor&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
                 <span class="s2">&quot;tumor-associated stroma&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
                 <span class="s2">&quot;in-situ tumor&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-                <span class="s2">&quot;healthy glands&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-                <span class="s2">&quot;necrosis not in-situ&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-                <span class="s2">&quot;inflamed stroma&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
-                <span class="s2">&quot;rest&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+                <span class="s2">&quot;healthy glands&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                <span class="s2">&quot;necrosis not in-situ&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                <span class="s2">&quot;inflamed stroma&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                <span class="s2">&quot;rest&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
             <span class="p">},</span>
-            <span class="s2">&quot;annotation_parser&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;sample_label_names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;roi&quot;</span><span class="p">]},</span>
+            <span class="s2">&quot;annotation_parser&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;renamed_labels&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;roi&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s1">&#39;invasive tumor&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="s1">&#39;tumor-associated stroma&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                    <span class="s1">&#39;rest&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> 
+                <span class="p">},</span>
+                <span class="s2">&quot;sample_label_names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;roi&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;sorters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;${$wholeslidedata.annotation.selector.sort_by_area_with_roi}&quot;</span><span class="p">],</span>
+            <span class="p">},</span>
             <span class="s2">&quot;batch_shape&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;batch_size&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                <span class="s2">&quot;batch_size&quot;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
                 <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="mi">284</span><span class="p">,</span> <span class="mi">284</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">284</span><span class="p">,</span> <span class="mi">284</span><span class="p">,</span> <span class="mi">3</span><span class="p">]],</span>
                 <span class="s2">&quot;spacing&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">],</span>
-                <span class="s2">&quot;y_shape&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+                <span class="s2">&quot;y_shape&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
             <span class="p">},</span>
             <span class="s2">&quot;point_sampler_name&quot;</span><span class="p">:</span> <span class="s2">&quot;RandomPointSampler&quot;</span><span class="p">,</span>
             <span class="s2">&quot;point_sampler&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -459,13 +481,14 @@
     <span class="s1">&#39;hooknet&#39;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;n_classes&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
-                <span class="s1">&#39;n_filters&#39;</span><span class="p">:</span> <span class="mi">32</span>
+                <span class="s1">&#39;n_classes&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                <span class="s1">&#39;n_filters&#39;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span>
+                <span class="s1">&#39;learning_rate&#39;</span><span class="p">:</span> <span class="mf">0.0001</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
-<span class="n">EPOCHS</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">EPOCHS</span> <span class="o">=</span> <span class="mi">50</span>
 <span class="n">STEPS</span> <span class="o">=</span> <span class="mi">100</span> 
 <span class="n">CPUS</span> <span class="o">=</span> <span class="mi">4</span>
 <span class="n">PROJECT</span> <span class="o">=</span> <span class="s2">&quot;HookNet-TIGER&quot;</span> 
@@ -476,7 +499,13 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="n">iterator_config</span><span class="o">=</span><span class="n">ITERATOR_CONFIG</span><span class="p">,</span> <span class="n">hooknet_config</span><span class="o">=</span><span class="n">HOOKNET_CONFIG</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="n">EPOCHS</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">STEPS</span><span class="p">,</span> <span class="n">cpus</span><span class="o">=</span><span class="n">CPUS</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">PROJECT</span><span class="p">,</span> <span class="n">log_path</span><span class="o">=</span><span class="n">LOG_PATH</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="n">iterator_config</span><span class="o">=</span><span class="n">ITERATOR_CONFIG</span><span class="p">,</span> 
+                  <span class="n">hooknet_config</span><span class="o">=</span><span class="n">HOOKNET_CONFIG</span><span class="p">,</span> 
+                  <span class="n">epochs</span><span class="o">=</span><span class="n">EPOCHS</span><span class="p">,</span> 
+                  <span class="n">steps</span><span class="o">=</span><span class="n">STEPS</span><span class="p">,</span> 
+                  <span class="n">cpus</span><span class="o">=</span><span class="n">CPUS</span><span class="p">,</span> 
+                  <span class="n">project</span><span class="o">=</span><span class="n">PROJECT</span><span class="p">,</span> 
+                  <span class="n">log_path</span><span class="o">=</span><span class="n">LOG_PATH</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -495,32 +524,19 @@
 </div>
 <div class="output text_html">
                 Tracking run with wandb version 0.10.32<br/>
-                Syncing run <strong style="color:#cdcd00">radiant-noodles-7</strong> to <a href="https://wandb.ai" target="_blank">Weights & Biases</a> <a href="https://docs.wandb.com/integrations/jupyter.html" target="_blank">(Documentation)</a>.<br/>
+                Syncing run <strong style="color:#cdcd00">beaming-peony-21</strong> to <a href="https://wandb.ai" target="_blank">Weights & Biases</a> <a href="https://docs.wandb.com/integrations/jupyter.html" target="_blank">(Documentation)</a>.<br/>
                 Project page: <a href="https://wandb.ai/mart-vanrijthoven/HookNet-TIGER" target="_blank">https://wandb.ai/mart-vanrijthoven/HookNet-TIGER</a><br/>
-                Run page: <a href="https://wandb.ai/mart-vanrijthoven/HookNet-TIGER/runs/1qmf9q4a" target="_blank">https://wandb.ai/mart-vanrijthoven/HookNet-TIGER/runs/1qmf9q4a</a><br/>
-                Run data is saved locally in <code>/home/user/HookNet-TIGER/wandb/run-20230130_133715-1qmf9q4a</code><br/><br/>
+                Run page: <a href="https://wandb.ai/mart-vanrijthoven/HookNet-TIGER/runs/1ea6h9lj" target="_blank">https://wandb.ai/mart-vanrijthoven/HookNet-TIGER/runs/1ea6h9lj</a><br/>
+                Run data is saved locally in <code>/home/user/HookNet-TIGER/wandb/run-20230201_234029-1ea6h9lj</code><br/><br/>
             </div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold -Color-Bold-Blue">wandb</span>: <span class=" -Color -Color-Yellow">WARNING</span> Symlinked 0 file into the W&amp;B run directory, call wandb.save again to sync new files.
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>training labels [&#39;invasive tumor&#39;, &#39;roi&#39;, &#39;healthy glands&#39;, &#39;tumor-associated stroma&#39;, &#39;rest&#39;]
-validation labels [&#39;inflamed stroma&#39;, &#39;invasive tumor&#39;, &#39;roi&#39;, &#39;healthy glands&#39;, &#39;tumor-associated stroma&#39;, &#39;rest&#39;]
-updated learning rate=2.499999936844688e-05
-updated learning rate=1.249999968422344e-05
-0 {&#39;training_Loss+L2&#39;: 12.346719512939453, &#39;training_accuracy&#39;: 0.535345713943243, &#39;training_Loss&#39;: 1.2586879688501358}
-0 {&#39;validation_Loss&#39;: 1.7213694873244176}
-new best metric:  1.7213694873244176
-Saving weights to: /home/user/HookNet-TIGER/hooknet_weights.h5
-1 {&#39;training_Loss+L2&#39;: 11.673761405944823, &#39;training_accuracy&#39;: 0.5520351028442383, &#39;training_Loss&#39;: 1.124651048183441}
-1 {&#39;validation_Loss&#39;: 1.760683101116851}
-2 {&#39;training_Loss+L2&#39;: 10.993405075073243, &#39;training_accuracy&#39;: 0.6131404103338718, &#39;training_Loss&#39;: 0.9264786133170128}
-2 {&#39;validation_Loss&#39;: 1.7334623463435255}
-3 {&#39;training_Loss+L2&#39;: 10.558499584197998, &#39;training_accuracy&#39;: 0.594308572858572, &#39;training_Loss&#39;: 0.9182338577508926}
-3 {&#39;validation_Loss&#39;: 1.7289710949733945}
-4 {&#39;training_Loss+L2&#39;: 9.977332410812378, &#39;training_accuracy&#39;: 0.7083142863214016, &#39;training_Loss&#39;: 0.7150723424553871}
-4 {&#39;validation_Loss&#39;: 1.5970712058074445}
-new best metric:  1.5970712058074445
-Saving weights to: /home/user/HookNet-TIGER/hooknet_weights.h5
-updated learning rate=6.24999984211172e-06
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>training labels [&#39;tumor-associated stroma&#39;, &#39;rest&#39;, &#39;invasive tumor&#39;, &#39;roi&#39;]
+validation labels [&#39;tumor-associated stroma&#39;, &#39;rest&#39;, &#39;invasive tumor&#39;, &#39;roi&#39;]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/user/pathology-whole-slide-data/wholeslidedata/image/wholeslideimage.py:72: UserWarning: spacing 8.0 outside margin (0.3%) for [0.6574764640761666, 1.3149529281523331, 2.6299058563046662, 5.2598117126093324, 10.519623425218665, 21.03924685043733, 42.07849370087466], returning closest spacing: 10.519623425218665
+  warnings.warn(
 </pre></div>
 </div>
 </div>
@@ -528,6 +544,108 @@ updated learning rate=6.24999984211172e-06
 </section>
 <section id="patch-inference">
 <h2>Patch Inference<a class="headerlink" href="#patch-inference" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ITERATOR_CONFIG</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;wholeslidedata&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="mi">123</span><span class="p">,</span>
+            <span class="s2">&quot;yaml_source&quot;</span><span class="p">:</span> <span class="s2">&quot;/home/user/pathology-whole-slide-data/docs/source/userguide/notebooks/examples/configs/tigersegmentationdata.yml&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;image_backend&quot;</span><span class="p">:</span> <span class="s2">&quot;asap&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;roi&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;invasive tumor&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="s2">&quot;tumor-associated stroma&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="s2">&quot;in-situ tumor&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                <span class="s2">&quot;healthy glands&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                <span class="s2">&quot;necrosis not in-situ&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                <span class="s2">&quot;inflamed stroma&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                <span class="s2">&quot;rest&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;annotation_parser&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;renamed_labels&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;roi&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s1">&#39;invasive tumor&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="s1">&#39;tumor-associated stroma&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                    <span class="s1">&#39;rest&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> 
+                <span class="p">},</span>
+                <span class="s2">&quot;sample_label_names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;roi&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;sorters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;${$wholeslidedata.annotation.selector.sort_by_area_with_roi}&quot;</span><span class="p">],</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;batch_shape&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;batch_size&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="mi">1244</span><span class="p">,</span> <span class="mi">1244</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1244</span><span class="p">,</span> <span class="mi">1244</span><span class="p">,</span> <span class="mi">3</span><span class="p">]],</span>
+                <span class="s2">&quot;spacing&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">],</span>
+                <span class="s2">&quot;y_shape&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1244</span><span class="p">,</span> <span class="mi">1244</span><span class="p">],</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;point_sampler_name&quot;</span><span class="p">:</span> <span class="s2">&quot;RandomPointSampler&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;point_sampler&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;buffer&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;spacing&quot;</span><span class="p">:</span> <span class="s2">&quot;$</span><span class="si">{batch_shape.spacing}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">515</span><span class="p">},</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">HOOKNET_CONFIG</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;hooknet&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;input_shape&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="mi">1244</span><span class="p">,</span><span class="mi">1244</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1244</span><span class="p">,</span><span class="mi">1244</span><span class="p">,</span><span class="mi">3</span><span class="p">]],</span>
+                <span class="s1">&#39;n_classes&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                <span class="s1">&#39;n_filters&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
+                <span class="s1">&#39;model_weights&#39;</span><span class="p">:</span> <span class="s1">&#39;/home/user/HookNet-TIGER/hooknet_weights.h5&#39;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+     
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hooknet</span> <span class="o">=</span> <span class="n">create_hooknet</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">HOOKNET_CONFIG</span><span class="p">)</span>
+
+
+<span class="k">with</span> <span class="n">create_batch_iterator</span><span class="p">(</span>
+    <span class="n">user_config</span><span class="o">=</span><span class="n">ITERATOR_CONFIG</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;validation&#39;</span><span class="p">,</span>
+    <span class="n">cpus</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">validation_batch_generator</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+        <span class="n">x_batch</span><span class="p">,</span> <span class="n">y_batch</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">validation_batch_generator</span><span class="p">)</span>
+        <span class="n">x_batch</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">x_batch</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+        <span class="n">predictions</span> <span class="o">=</span> <span class="n">hooknet</span><span class="o">.</span><span class="n">predict_on_batch</span><span class="p">(</span><span class="n">x_batch</span><span class="p">)</span>
+        <span class="n">x_patch</span> <span class="o">=</span> <span class="n">crop_data</span><span class="p">(</span><span class="n">x_batch</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">hooknet</span><span class="o">.</span><span class="n">_out_shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">y_patch</span> <span class="o">=</span> <span class="n">crop_data</span><span class="p">(</span><span class="n">y_batch</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">hooknet</span><span class="o">.</span><span class="n">_out_shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">plot_inference</span><span class="p">(</span><span class="n">x_patch</span><span class="p">,</span> <span class="n">y_patch</span><span class="p">,</span> <span class="n">predictions</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>loading weights... /home/user/HookNet-TIGER/hooknet_weights.h5
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/user/pathology-whole-slide-data/wholeslidedata/image/wholeslideimage.py:72: UserWarning: spacing 0.5 outside margin (0.3%) for [0.6574764640761666, 1.3149529281523331, 2.6299058563046662, 5.2598117126093324, 10.519623425218665, 21.03924685043733, 42.07849370087466], returning closest spacing: 0.6574764640761666
+  warnings.warn(
+/home/user/pathology-whole-slide-data/wholeslidedata/image/wholeslideimage.py:72: UserWarning: spacing 8.0 outside margin (0.3%) for [0.6574764640761666, 1.3149529281523331, 2.6299058563046662, 5.2598117126093324, 10.519623425218665, 21.03924685043733, 42.07849370087466], returning closest spacing: 10.519623425218665
+  warnings.warn(
+</pre></div>
+</div>
+<img alt="../../../_images/79a6e963516164bc172394beee361515b173c2a90387efa2efb66e262983f551.png" src="../../../_images/79a6e963516164bc172394beee361515b173c2a90387efa2efb66e262983f551.png" />
+<img alt="../../../_images/a88ce23cfaf689a1e04852ca1bd87593d750e9d576d62a3c410f63e3de3da792.png" src="../../../_images/a88ce23cfaf689a1e04852ca1bd87593d750e9d576d62a3c410f63e3de3da792.png" />
+<img alt="../../../_images/dfbefac6e9169dbeb90296e7cef07298d33298492f1d60a67212036469d5f5ab.png" src="../../../_images/dfbefac6e9169dbeb90296e7cef07298d33298492f1d60a67212036469d5f5ab.png" />
+<img alt="../../../_images/62102fbbcc9c0922facb8bc6fe0772f8c8cbbfe953d6e4260b77e4e160b6f637.png" src="../../../_images/62102fbbcc9c0922facb8bc6fe0772f8c8cbbfe953d6e4260b77e4e160b6f637.png" />
+<img alt="../../../_images/4aae876f3e2a114f649262ca29e0d0b57e0610fef67b38b565217144a5aed43b.png" src="../../../_images/4aae876f3e2a114f649262ca29e0d0b57e0610fef67b38b565217144a5aed43b.png" />
+<img alt="../../../_images/acd96a771c608d0c382e4148a3032e03733a58426bea76590d19a875fa9892eb.png" src="../../../_images/acd96a771c608d0c382e4148a3032e03733a58426bea76590d19a875fa9892eb.png" />
+<img alt="../../../_images/f9a86e5cdba960358ecec729ec5b75f113fa38859b6f336abc6d477413e86d81.png" src="../../../_images/f9a86e5cdba960358ecec729ec5b75f113fa38859b6f336abc6d477413e86d81.png" />
+<img alt="../../../_images/95c31cc572f002057581f00c88833c2ce95f46356fea062e940437656346bf75.png" src="../../../_images/95c31cc572f002057581f00c88833c2ce95f46356fea062e940437656346bf75.png" />
+<img alt="../../../_images/50d79d5d4acd4827f1dcf44ed3b29dee12e83673dc1689d57d50b8ab13b79d8e.png" src="../../../_images/50d79d5d4acd4827f1dcf44ed3b29dee12e83673dc1689d57d50b8ab13b79d8e.png" />
+<img alt="../../../_images/a6d4183ca0669dd3a13dd1810df883a8d2e9c71202ca8833bb1f6147666044c0.png" src="../../../_images/a6d4183ca0669dd3a13dd1810df883a8d2e9c71202ca8833bb1f6147666044c0.png" />
+</div>
+</div>
 </section>
 </section>
 
