@@ -32,9 +32,9 @@ def main(
         output_folder = output_folder / mode
         output_folder.mkdir(exist_ok=True, parents=True)
 
-        for index, batch in enumerate(iterator):
+        for index, (x_batch, y_batch, info) in enumerate(iterator):
             output_path = output_folder / f"{index}_batch.npz"
-            np.savez(output_path,  np.asanyarray(batch))
+            np.savez(output_path, x_batch=x_batch, y_batch=y_batch, info=info)
 
 
 if __name__ == "__main__":
