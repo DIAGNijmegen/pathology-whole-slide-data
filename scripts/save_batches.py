@@ -34,7 +34,7 @@ def main(
 
         for index, batch in enumerate(iterator):
             output_path = output_folder / f"{index}_batch.npz"
-            np.savez(output_path, batch)
+            np.savez(output_path,  np.asanyarray(batch))
 
 
 if __name__ == "__main__":
