@@ -1,7 +1,9 @@
 from pathlib import Path
+import time
 
 import click
 import numpy as np
+
 
 from wholeslidedata.iterators import create_batch_iterator
 
@@ -21,6 +23,7 @@ def main(
     number_of_batches: int,
     dtype: str,
 ):
+    print("Initializing Batch Iterator...")
     with create_batch_iterator(
         mode=mode,
         user_config=config,
@@ -30,10 +33,12 @@ def main(
     ) as iterator:
 
         output_folder = output_folder / mode
+        print(f"Creating output folder: {output_folder}")
         output_folder.mkdir(exist_ok=True, parents=True)
-
+        print("Initializing Batch Producers...")
         for index, (x_batch, y_batch, info) in enumerate(iterator):
             output_path = output_folder / f"{index}_batch.npz"
+            print(f"Writing Batch {index}: {output_path}")
             np.savez(output_path, x_batch=x_batch, y_batch=y_batch, info=info)
 
 
