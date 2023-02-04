@@ -40,16 +40,13 @@ def main(
         output_folder.mkdir(exist_ok=True, parents=True)
 
         print("Initializing Batch Producers...")
-        t1_batch_collection = None
         for index, (x_batch, y_batch, info) in enumerate(iterator):
             if index == 0:
                 print("INIT producers time:", time.time() - t1_init_producers)
-            t1_batch_collection = time.time()
             output_path = output_folder / f"{index}_batch.npz"
             print(f"Writing Batch {index}: {output_path}")
             np.savez(output_path, x_batch=x_batch, y_batch=y_batch, info=info)
-        print("Batch collection time", time.time() - t1_batch_collection)
-
+        
 
 if __name__ == "__main__":
     main()
