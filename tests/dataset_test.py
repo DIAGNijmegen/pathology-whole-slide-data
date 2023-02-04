@@ -38,7 +38,7 @@ def test_dataset_load_images(associations):
     dataset =  WholeSlideDataSet(mode=WholeSlideMode.training, associations=associations, load_images=True)
     assert isinstance(dataset.get_wsi_from_reference(dataset.sample_references['tumor'][0]), WholeSlideImage)
 
-    dataset =  WholeSlideDataSet(mode=WholeSlideMode.training, associations=associations, load_images=False)
+    dataset =  WholeSlideDataSet(mode=WholeSlideMode.training, associations=associations, load_images=False, spacing=0.5)
     assert isinstance(dataset.get_wsi_from_reference(dataset.sample_references['tumor'][0]), WholeSlideImageFile)
 
 def test_copy(associations):
