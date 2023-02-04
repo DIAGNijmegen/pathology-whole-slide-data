@@ -31,9 +31,11 @@ class WholeSlideDataSet(UserDict):
         labels: Labels = None,
         load_images=True,
         copy_path=None,
+        spacing=None,
     ):
 
         self._mode = mode
+        self._spacing = spacing
         self._load_images = load_images
         self._copy_path = copy_path
         self._associations = associations
@@ -44,9 +46,8 @@ class WholeSlideDataSet(UserDict):
         
         if len(self._sample_references) == 0:
             raise ValueError(
-                f"No samples found in {self.mode.name} DataSet: \n{pformat(self.annotations_per_label_per_key)}"
+                f"No samples found in {self.mode.name} DataSet: \n{pformat(self.annotation_counts_per_label_per_key)}"
             )
-
         super().__init__(self._data)
 
 
@@ -81,8 +82,6 @@ class WholeSlideDataSet(UserDict):
             sample_reference=sample_reference
         ).annotations[sample_reference.annotation_index]
 
- 
-
     def _open(self, associations, labels):
         data = dict()
         for file_key, associated_files in associations.items():
@@ -109,16 +108,14 @@ class WholeSlideDataSet(UserDict):
         if self._copy_path:
             wsi_file.copy(self._copy_path)
 
+        if not self._load_images:
+            if self._spacing is None:
+                raise ValueError('Load images is False, but no spacing is set')
+            return wsi_file, self._spacing
+
         wsi = wsi_file.open()
         spacing = wsi.spacings[0]
-        
-        if self._load_images:
-            return wsi, spacing
-
-        wsi.close()
-        wsi = None
-        del wsi
-        return wsi_file, spacing
+        return wsi, spacing
 
     def _open_annotation(self, wsa_file: WholeSlideAnnotationFile, labels, spacing=None):
         if self._copy_path:

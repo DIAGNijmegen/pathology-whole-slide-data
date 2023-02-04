@@ -1,4 +1,4 @@
-import xml.etree.ElementTree as ET
+import lxml.etree as ET
 
 from wholeslidedata.annotation.parser import (
     AnnotationParser,
@@ -29,7 +29,7 @@ class AsapAnnotationParser(AnnotationParser):
 
     def _open_annotation(self, path):
 
-        tree = ET.parse(path)
+        tree = ET.parse(str(path))
         opened_annotation = tree.getroot()
 
         return opened_annotation

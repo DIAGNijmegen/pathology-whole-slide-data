@@ -160,7 +160,7 @@ class WholeSlideAnnotationParser(AnnotationParser):
             label = labels.get_label_by_name(label_name)
 
             for key, value in label.todict().items():
-                if key not in annotation["label"] or annotation["label"][key] is None:
+                if key == 'value' or key not in annotation["label"] or annotation["label"][key] is None:
                     annotation["label"][key] = value
 
             yield annotation

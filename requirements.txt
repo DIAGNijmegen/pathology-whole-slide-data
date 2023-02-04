@@ -9,3 +9,4 @@ PyYAML>=6.0
 rtree>=1.0.0
 matplotlib>=3.6.2
 scikit-image>=0.19.3
+lxml>=4.6.3
