@@ -37,7 +37,7 @@ wholeslidedata:
         spacing: "${batch_shape.spacing}"
         value: -35
     sample_callbacks:
-      - *object: wholeslidedata.samplers.callbacks.CropSampleCallback
+      - "*object": wholeslidedata.samplers.callbacks.CropSampleCallback
         output_shape: [70, 70]
-      - *object: wholeslidedata.samplers.callbacks.OneHotEncodingSampleCallback
+      - "*object": wholeslidedata.samplers.callbacks.OneHotEncodingSampleCallback
         labels: "${dataset.labels}"
