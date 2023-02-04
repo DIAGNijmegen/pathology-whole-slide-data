@@ -1,0 +1,43 @@
+wholeslidedata:
+  default:
+    seed: 123
+    yaml_source: "/home/user/pathology-whole-slide-data/docs/source/userguide/notebooks/examples/configs/tigersegmentationdata.yml"
+    image_backend: asap
+    labels:
+      "roi": 0
+      "invasive tumor": 1
+      "tumor-associated stroma": 2
+      "in-situ tumor": 3
+      "healthy glands": 3
+      "necrosis not in-situ": 3
+      "inflamed stroma": 3
+      "rest": 3
+    annotation_parser:
+      renamed_labels:
+        "roi": 0
+        "invasive tumor": 1
+        "tumor-associated stroma": 2
+        "rest": 3
+      sample_label_names:
+        - roi
+      sorters:
+        - "${$wholeslidedata.annotation.selector.sort_by_area_with_roi}"
+    batch_shape:
+      batch_size: 32
+      shape:
+        - [284, 284, 3]
+        - [284, 284, 3]
+      spacing:
+        - 0.5
+        - 8.0
+      y_shape: [2, 70, 70, 3]
+    point_sampler_name: RandomPointSampler
+    point_sampler:
+      buffer:
+        spacing: "${batch_shape.spacing}"
+        value: -35
+    sample_callbacks:
+      - *object: wholeslidedata.samplers.callbacks.CropSampleCallback
+        output_shape: [70, 70]
+      - *object: wholeslidedata.samplers.callbacks.OneHotEncodingSampleCallback
+        labels: "${dataset.labels}"
