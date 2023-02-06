@@ -21,8 +21,7 @@
     - dataset.annotations_* -> annotation_counts_*
     - dataset.pixel_counts -> dataset.pixels
     - wsi.get_annotation(Annotation) -> wsi.get_region_from_annotations([Annotation])
-    - in the sample method of the samplers, point is now a tuple instead of a shapely.geometry.Point
-  
+ - in the sample method of the samplers, point is now a tuple instead of a shapely.geometry.Point 
  - Creating of objects in user config, see [dicfg documentation](https://martvanrijthoven.github.io/dicfg/)
  - Shapely2.0 support: Annotations are now based on composition instead of inheritance, so the actual geometry should be accessed by annotation.geometry
  - removed jsonschema 
