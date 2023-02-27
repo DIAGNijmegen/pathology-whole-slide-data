@@ -6,10 +6,10 @@ class TorchBatchIterator(BatchIterator):
     def __next__(self):
         x_batch, y_batch, info = super().__next__()
         x_batch = x_batch / 255.0
-        x_batch = x_batch.transpose(1, 0, 4, 2, 3).astype("float32")
-        y_batch = y_batch.transpose(1, 0, 2, 3).astype("float32")
+        x_batch = x_batch.transpose(0, 3, 1, 2).astype("float32")
+        y_batch = y_batch.astype("float32")
         return (
-            [torch.from_numpy(x).cuda() for x in x_batch],
-            [torch.from_numpy(y).cuda() for y in y_batch],
+            torch.from_numpy(x_batch).cuda(),
+            torch.from_numpy(y_batch).cuda(),
             info,
         )
