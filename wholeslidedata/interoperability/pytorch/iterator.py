@@ -10,6 +10,6 @@ class TorchBatchIterator(BatchIterator):
         y_batch = y_batch.astype("float32")
         return (
             torch.from_numpy(x_batch).cuda(),
-            torch.from_numpy(y_batch).cuda(),
+            torch.from_numpy(y_batch).cuda().long(),
             info,
         )
