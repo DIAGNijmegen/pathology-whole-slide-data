@@ -96,7 +96,12 @@ class CropSampleCallback(SampleCallback):
         # Reshape
         return y_patch
 
-
+    
+class NormalizeSampleCallback(BatchCallback):
+    def __call__(self, x_patch, y_patch):
+        return x_patch/255.0, y_patch
+    
+    
 class HedAugmentationBatchCallback(BatchCallback):
     def __init__(self, hem=0.02, eos=0.02, dab=0.02, probability=0.5):
         self._hem = hem
@@ -134,6 +139,7 @@ class HedAugmentationBatchCallback(BatchCallback):
         ihc_rgb = skimage.color.hed2rgb(x_batch_hed)
         ihc = np.clip(a=ihc_rgb * 255, a_min=0, a_max=255)
         return _type(ihc), y_batch
+
 
 class Resolver(BatchCallback):
     """Resolves shape of batch"""
