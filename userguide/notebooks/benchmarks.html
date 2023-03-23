@@ -44,7 +44,7 @@
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script src="../../_static/design-tabs.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'userguide/notebooks/Untitled';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'userguide/notebooks/benchmarks';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -313,35 +313,80 @@
             
             <article class="bd-article" role="main">
               
-  <div class="cell docutils container">
+  <!-- wholeslidedata:
+    default:
+        yaml_source:
+            training:
+                - wsi: 
+                    path: /tmp/TCGA-21-5784-01Z-00-DX1.tif
+                  wsa: 
+                    path: /tmp/TCGA-21-5784-01Z-00-DX1.xml       
+
+        image_backed: asap
+        labels:
+            stroma: 1
+            tumor: 2
+            lymphocytes: 3
+            
+        batch_shape:
+            batch_size: 10
+            spacing: 1.0
+            shape: [1024, 1024, 3]
+ --><div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wholeslidedata.annotation.parsers</span> <span class="kn">import</span> <span class="n">MaskAnnotationParser</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.image.wholeslideimage</span> <span class="kn">import</span> <span class="n">WholeSlideImage</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.interoperability.asap.annotationwriter</span> <span class="kn">import</span> <span class="n">write_asap_annotation</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wholeslidedata.iterators</span> <span class="kn">import</span> <span class="n">create_batch_iterator</span>
+<span class="kn">from</span> <span class="nn">wholeslidedata.visualization.plotting</span> <span class="kn">import</span> <span class="n">plot_batch</span>
+<span class="kn">import</span> <span class="nn">gc</span>
+<span class="kn">from</span>  <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
+<span class="kn">from</span> <span class="nn">experimart.interoperability.torch.dataloader</span> <span class="kn">import</span> <span class="n">SegmentationDataLoader</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">statistics</span> <span class="kn">import</span> <span class="n">mean</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">MaskAnnotationParser</span><span class="p">(</span><span class="n">output_spacing</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-<span class="n">image_annotations</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;/home/mart/Radboudumc/data/breast/breast_data/images/tissue_mask.tif&quot;</span><span class="p">)</span>
-
-<span class="c1"># parser = MaskAnnotationParser(output_spacing=2.0)</span>
-<span class="c1"># mask_annotations = parser.parse(&quot;/home/mart/Radboudumc/data/breast/breast_data/images/tissue_mask.tif&quot;)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">user_config</span> <span class="o">=</span> <span class="s1">&#39;/home/user/pathology-whole-slide-data/docs/source/userguide/notebooks/components/configs/user_config.yml&#39;</span>
+<span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;training&#39;</span>
+<span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">training_batch_generator</span> <span class="o">=</span> <span class="n">create_batch_iterator</span><span class="p">(</span><span class="n">user_config</span><span class="o">=</span><span class="n">user_config</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">cpus</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">buffer_dtype</span><span class="o">=</span><span class="s1">&#39;uint8&#39;</span><span class="p">)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">):</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">training_batch_generator</span><span class="p">)</span>
+    <span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">times</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0
-0
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.07482558965682984
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">write_asap_annotation</span><span class="p">(</span><span class="n">image_annotations</span><span class="p">,</span> <span class="s2">&quot;/home/mart/Radboudumc/data/breast/breast_data/images/annotations_offset_0.xml&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainset</span> <span class="o">=</span> <span class="n">SegmentationDataLoader</span><span class="p">(</span><span class="s1">&#39;/home/user/data/training&#39;</span><span class="p">)</span>
+<span class="n">loader</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">trainset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">9</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">):</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">loader</span><span class="p">)</span>
+    <span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">times</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.011541856527328491
 </pre></div>
 </div>
 </div>
