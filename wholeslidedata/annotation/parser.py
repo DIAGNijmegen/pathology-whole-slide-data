@@ -176,8 +176,9 @@ class MaskAnnotationParser(AnnotationParser):
         backend='asap',
         full_coverage=False,
         offset=(0,0),
+        callbacks=None,
     ):
-        super().__init__(labels=labels)
+        super().__init__(labels=labels, callbacks=callbacks)
         self._processing_spacing = processing_spacing
         self._output_spacing = output_spacing
         self._shape = np.array(shape)
