@@ -98,6 +98,54 @@ class WholeSlideMaskWriter(WholeSlideImageWriterBase):
         self.setSpacing(pixel_size_vec)
         self.writeImageInformation(self._dimensions[0], self._dimensions[1])
 
+class WholeSlideIndexedMaskWriter(WholeSlideImageWriterBase):
+    def __init__(self, suffix=".tif"):
+        super().__init__()
+        self._suffix = suffix
+
+    def _set_monochrome_channels(self, dimensions):
+        if len(dimensions) > 2:
+            return len(dimensions)
+        elif len(dimensions) == 2:
+            return 1
+        else:
+            raise Exception("Invalid dimensions")
+
+    def write(self, path, spacing, dimensions, tile_shape):
+        self._path = str(path).replace(Path(path).suffix, self._suffix)
+        self._spacing = spacing
+        self._dimensions = dimensions
+        self._tile_shape = tile_shape
+        self._channels = self._set_monochrome_channels(dimensions)
+
+        print(f"Creating: {self._path}....")
+        print(f"Spacing: {self._spacing}")
+        print(f"Dimensions: {self._dimensions}")
+        print(f"Tile_shape: {self._tile_shape}")
+        print(f"Indexed channels: {self._channels}")
+
+        self.openFile(self._path)
+        self.setTileSize(self._tile_shape[0])
+
+        try:
+            self.setCompression(mir.Compression_LZW)
+            self.setDataType(mir.DataType_UChar)
+            self.setInterpolation(mir.Interpolation_NearestNeighbor)
+            self.setColorType(mir.ColorType_Indexed)
+            self.setNumberOfIndexedColors(self._channels)
+        except:
+            self.setCompression(mir.LZW)
+            self.setDataType(mir.UChar)
+            self.setInterpolation(mir.NearestNeighbor)
+            self.setColorType(mir.Indexed)
+            self.setNumberOfIndexedColors(self._channels)
+
+        # set writing spacing
+        pixel_size_vec = mir.vector_double()
+        pixel_size_vec.push_back(self._spacing)
+        pixel_size_vec.push_back(self._spacing)
+        self.setSpacing(pixel_size_vec)
+        self.writeImageInformation(self._dimensions[0], self._dimensions[1])
 
 class WholeSlideImageWriter(WholeSlideImageWriterBase):
     def __init__(self, suffix=".tif"):
