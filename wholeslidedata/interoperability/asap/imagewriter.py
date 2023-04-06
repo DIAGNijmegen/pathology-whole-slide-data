@@ -116,7 +116,7 @@ class WholeSlideIndexedMaskWriter(WholeSlideImageWriterBase):
         self._spacing = spacing
         self._dimensions = dimensions
         self._tile_shape = tile_shape
-        self._channels = self._set_monochrome_channels(dimensions)
+        self._channels = self._set_indexed_channels(dimensions)
 
         print(f"Creating: {self._path}....")
         print(f"Spacing: {self._spacing}")
