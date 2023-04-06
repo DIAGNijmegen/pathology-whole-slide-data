@@ -103,7 +103,7 @@ class WholeSlideIndexedMaskWriter(WholeSlideImageWriterBase):
         super().__init__()
         self._suffix = suffix
 
-    def _set_monochrome_channels(self, dimensions):
+    def _set_indexed_channels(self, dimensions):
         if len(dimensions) > 2:
             return len(dimensions)
         elif len(dimensions) == 2:
