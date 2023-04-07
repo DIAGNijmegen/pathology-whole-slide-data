@@ -1,11 +1,10 @@
 import abc
+import warnings
 from pathlib import Path
 
 import multiresolutionimageinterface as mir
 import numpy as np
 from multiresolutionimageinterface import MultiResolutionImageWriter
-from shapely import geometry
-from warnings import warn
 
 from wholeslidedata.samplers.patchlabelsampler import \
     SegmentationPatchLabelSampler
@@ -61,7 +60,7 @@ class WholeSlideImageWriterBase(Writer, MultiResolutionImageWriter):
         self.finishImage()
 
 
-class WholeSlideMaskWriter(WholeSlideImageWriterBase):
+class WholeSlideMonochromeMaskWriter(WholeSlideImageWriterBase):
     def __init__(self, suffix=".tif"):
         super().__init__()
         self._suffix = suffix
@@ -98,6 +97,13 @@ class WholeSlideMaskWriter(WholeSlideImageWriterBase):
         self.setSpacing(pixel_size_vec)
         self.writeImageInformation(self._dimensions[0], self._dimensions[1])
 
+
+class WholeSlideMaskWriter(WholeSlideMonochromeMaskWriter):
+    def __init__(self, suffix=".tif"):
+        warnings.warn("WholeSlideMaskWriter will be deprecated, use WholeSlideMonochromeMaskWriter instead", DeprecationWarning)
+        super().__init__(suffix=suffix)
+
+
 class WholeSlideIndexedMaskWriter(WholeSlideImageWriterBase):
     def __init__(self, suffix=".tif"):
         super().__init__()
@@ -106,10 +112,9 @@ class WholeSlideIndexedMaskWriter(WholeSlideImageWriterBase):
     def _set_indexed_channels(self, dimensions):
         if len(dimensions) > 2:
             return len(dimensions)
-        elif len(dimensions) == 2:
+        if len(dimensions) == 2:
             return 1
-        else:
-            raise Exception("Invalid dimensions")
+        raise Exception("Invalid dimensions")
 
     def write(self, path, spacing, dimensions, tile_shape):
         self._path = str(path).replace(Path(path).suffix, self._suffix)
@@ -147,6 +152,7 @@ class WholeSlideIndexedMaskWriter(WholeSlideImageWriterBase):
         self.setSpacing(pixel_size_vec)
         self.writeImageInformation(self._dimensions[0], self._dimensions[1])
 
+
 class WholeSlideImageWriter(WholeSlideImageWriterBase):
     def __init__(self, suffix=".tif"):
         super().__init__()
@@ -165,7 +171,6 @@ class WholeSlideImageWriter(WholeSlideImageWriterBase):
 
         self.openFile(self._path)
         self.setTileSize(self._tile_shape[0])
-
 
         try:
             if interpolation=='nearest':
@@ -214,7 +219,7 @@ def write_mask(
 
     if mask_output_path.exists():
         warning_text = f"Mask output path already exist: {mask_output_path}"
-        warn(warning_text, UserWarning)
+        warnings.warn(warning_text, UserWarning)
         return
 
     wsm_writer = WholeSlideMaskWriter()
