@@ -2,6 +2,7 @@ from typing import Dict, Tuple
 
 import numpy as np
 import skimage.color
+import cv2
 from wholeslidedata.samplers.utils import (block, crop_data,
                                            one_hot_encoding)
 
@@ -140,6 +141,24 @@ class HedAugmentationBatchCallback(BatchCallback):
         ihc = np.clip(a=ihc_rgb * 255, a_min=0, a_max=255)
         return _type(ihc), y_batch
 
+class DeepSupervisionBatchCallback(BatchCallback):
+    """ Generates downsampled representation from y_batch. 
+        This Batch callback is not compatible with one-hot-encoding
+    """
+
+    def __init__(self, sizes):
+        self._sizes = sizes
+
+    def __call__(self, x_batch: np.ndarray, y_batch: np.ndarray):
+        y_batch = np.array(y_batch)
+        resized_y_batches = [self.resize(y_batch, size) for size in self._sizes]
+        return x_batch, y_batch, *resized_y_batches
+    
+
+    def resize(self, y_batch, size):
+        return cv2.resize(y_batch.transpose(1,2,0), 
+                          size, 0, 0, 
+                          interpolation = cv2.INTER_NEAREST).transpose(2,0,1)
 
 class Resolver(BatchCallback):
     """Resolves shape of batch"""
