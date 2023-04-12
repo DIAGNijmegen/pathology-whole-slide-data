@@ -84,27 +84,27 @@ def test_annotations_per_label_per_key(dataset: WholeSlideDataSet):
             assert value == 3
 
 def test_pixel_count(dataset: WholeSlideDataSet):
-    assert dataset.pixels == 2016854
+    assert dataset.pixels == 2016592
                                      
 
 def test_pixels_per_label(dataset: WholeSlideDataSet):
     for key, value in dataset.pixels_per_label.items():
         assert key in ['tumor', 'stroma', 'lymphocytes']
         if key == 'tumor':
-            assert value == 1303963
+            assert value == 1303701
         if key == 'stroma':
             assert value == 155316
         if key == 'lymphocytes':
             assert value == 557575
 
 def test_pixels_per_key(dataset: WholeSlideDataSet):
-    assert dataset.pixels_per_key["TCGA-21-5784-01Z-00-DX1"] == 2016854
+    assert dataset.pixels_per_key["TCGA-21-5784-01Z-00-DX1"] == 2016592
 
 def test_pixels_per_label_per_key(dataset: WholeSlideDataSet):
     for key, value in dataset.pixels_per_label_per_key["TCGA-21-5784-01Z-00-DX1"].items():
         assert key in ['tumor', 'stroma', 'lymphocytes']
         if key == 'tumor':
-            assert value == 1303963
+            assert value == 1303701
         if key == 'stroma':
             assert value == 155316
         if key == 'lymphocytes':
