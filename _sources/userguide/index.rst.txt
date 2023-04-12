@@ -13,9 +13,48 @@ Get Started
 * `BatchIterator <notebooks/components/batchiterator.html>`_
 
 
+BatchIterator Overview
+**********************
+
+The BatchIterator is designed to extract patches from Whole Slide Images (WSIs) and their corresponding annotations, in order to generate labeled training data for machine learning models. The system works by defining a sampling strategy, which involves sampling labels, annotations, and points within the annotations. Based on this strategy, the system selects a patch to extract from the WSI and creates a corresponding label.
+
+Data Preparation
+^^^^^^^^^^^^^^^^
+
+To prepare the data for sampling, the following steps are taken:
+
+* **Associations**
+      * WSIs and their corresponding annotation files (WSAs) are matched and stored as "associations".
+      * Each association consists of a matched WSI file and WSA file.
+      * Each WSI file has an image backend
+      * Each WSA file has an annotation parser.
+
+* **Parsing annotations:** All WSAs are parsed by their annotation parsers to extract a list of annotations (polygons, points).
+* **Labels**: All available labels are gathered from all annotations.
+* **Annotation mapping**: All annotations are mapped to their respective labels.
+
+
+Sampling Strategy
+^^^^^^^^^^^^^^^^^
+The sampling strategy consists of three sampler components:
+
+* **label_sampler**: samples a label from the available labels.
+* **annotation_sampler**: samples an annotation from the list of annotations that corresponds to the label sampled in step 1.
+* **point_sampler**: samples a point within the annotation sampled in step 2.
+
+
+Sampling Data
+^^^^^^^^^^^^^
+The data sampling consists of two sampler components
+
+* **patch_sampler**: selects a patch with a center point based on the point sampled in step 3 of the *sampling strategy*.
+* **patch_label_sampler**: creates a label (classification, detection, or segmentation) based on the point sampled in step 3 of the *sampling strategy*.
+
+By repeating the above steps, the BatchIterator generates a patches and corresponding labels for use in machine learning models.
+
 
 Minimal BatchIterator Configuration
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+***********************************
 
 .. code-block::
 
