@@ -37,13 +37,12 @@ def write_point(annos, coordinates, index, label_name, label_color):
 
     coords = ET.SubElement(anno, "Coordinates")
     ridx = 0
-    for r in coordinates:
-        x, y = r
-        coord = ET.SubElement(coords, "Coordinate")
-        coord.set("Order", str(ridx))
-        coord.set("X", str(x))
-        coord.set("Y", str(y))
-        ridx += 1
+    x, y = coordinates[0]
+    coord = ET.SubElement(coords, "Coordinate")
+    coord.set("Order", str(ridx))
+    coord.set("X", str(x))
+    coord.set("Y", str(y))
+    ridx += 1
 
 
 def write_point_set(points, output_path,label_color="black"):
