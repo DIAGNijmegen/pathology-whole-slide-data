@@ -1,5 +1,6 @@
 import numpy as np
-from collections import UserDict, Iterable
+from collections.abc import Iterable
+from collections import UserDict
 import pprint
 
 class SpacingTypeError(Exception):
