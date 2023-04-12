@@ -50,7 +50,7 @@ The data sampling consists of two sampler components
 * **patch_sampler**: selects a patch with a center point based on the point sampled in step 3 of the *sampling strategy*.
 * **patch_label_sampler**: creates a label (classification, detection, or segmentation) based on the point sampled in step 3 of the *sampling strategy*.
 
-By repeating the above steps, the BatchIterator generates a patches and corresponding labels for use in machine learning models.
+By repeating the above steps, the BatchIterator generates patches and corresponding labels for use in machine learning models.
 
 
 Minimal BatchIterator Configuration
