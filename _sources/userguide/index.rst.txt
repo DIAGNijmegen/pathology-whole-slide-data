@@ -38,17 +38,17 @@ Sampling Strategy
 ^^^^^^^^^^^^^^^^^
 The sampling strategy consists of three sampler components:
 
-* **label_sampler**: samples a label from the available labels.
-* **annotation_sampler**: samples an annotation from the list of annotations that corresponds to the label sampled in step 1.
-* **point_sampler**: samples a point within the annotation sampled in step 2.
+* **Step 1 - label_sampler**: samples a label from the available labels.
+* **Step 2 - annotation_sampler**: samples an annotation from the list of annotations that corresponds to the label sampled in step 1.
+* **Step 3 - point_sampler**: samples a point within the annotation sampled in step 2.
 
 
 Sampling Data
 ^^^^^^^^^^^^^
 The data sampling consists of two sampler components
 
-* **patch_sampler**: selects a patch with a center point based on the point sampled in step 3 of the *sampling strategy*.
-* **patch_label_sampler**: creates a label (classification, detection, or segmentation) based on the point sampled in step 3 of the *sampling strategy*.
+* **Step 4 - patch_sampler**: selects a patch with a center point based on the point sampled in step 3 of the *sampling strategy*.
+* **Step 5 - patch_label_sampler**: creates a label (classification, detection, or segmentation) based on the point sampled in step 3 of the *sampling strategy*.
 
 By repeating the above steps, the BatchIterator generates patches and corresponding labels for use in machine learning models.
 

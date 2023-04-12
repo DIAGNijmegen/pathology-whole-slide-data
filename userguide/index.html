@@ -397,17 +397,17 @@
 <h3>Sampling Strategy<a class="headerlink" href="#sampling-strategy" title="Permalink to this heading">#</a></h3>
 <p>The sampling strategy consists of three sampler components:</p>
 <ul class="simple">
-<li><p><strong>label_sampler</strong>: samples a label from the available labels.</p></li>
-<li><p><strong>annotation_sampler</strong>: samples an annotation from the list of annotations that corresponds to the label sampled in step 1.</p></li>
-<li><p><strong>point_sampler</strong>: samples a point within the annotation sampled in step 2.</p></li>
+<li><p><strong>Step 1 - label_sampler</strong>: samples a label from the available labels.</p></li>
+<li><p><strong>Step 2 - annotation_sampler</strong>: samples an annotation from the list of annotations that corresponds to the label sampled in step 1.</p></li>
+<li><p><strong>Step 3 - point_sampler</strong>: samples a point within the annotation sampled in step 2.</p></li>
 </ul>
 </section>
 <section id="sampling-data">
 <h3>Sampling Data<a class="headerlink" href="#sampling-data" title="Permalink to this heading">#</a></h3>
 <p>The data sampling consists of two sampler components</p>
 <ul class="simple">
-<li><p><strong>patch_sampler</strong>: selects a patch with a center point based on the point sampled in step 3 of the <em>sampling strategy</em>.</p></li>
-<li><p><strong>patch_label_sampler</strong>: creates a label (classification, detection, or segmentation) based on the point sampled in step 3 of the <em>sampling strategy</em>.</p></li>
+<li><p><strong>Step 4 - patch_sampler</strong>: selects a patch with a center point based on the point sampled in step 3 of the <em>sampling strategy</em>.</p></li>
+<li><p><strong>Step 5 - patch_label_sampler</strong>: creates a label (classification, detection, or segmentation) based on the point sampled in step 3 of the <em>sampling strategy</em>.</p></li>
 </ul>
 <p>By repeating the above steps, the BatchIterator generates patches and corresponding labels for use in machine learning models.</p>
 </section>
