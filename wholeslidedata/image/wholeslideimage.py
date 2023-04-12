@@ -152,13 +152,13 @@ class WholeSlideImage:
             [annotation.bounds[i] for i in range(4)] for annotation in annotations
         ])
 
-        min_x = min(bounds[..., 0])
-        min_y = min(bounds[..., 1])
-        max_x = max(bounds[..., 2])
-        max_y = max(bounds[..., 3])
+        min_x = min(bounds[..., 0]) - margin // 2
+        min_y = min(bounds[..., 1]) - margin // 2
+        max_x = max(bounds[..., 2]) + margin // 2
+        max_y = max(bounds[..., 3]) + margin // 2
 
-        width = ((max_x - min_x) + margin) * scaling
-        height = ((max_y - min_y) + margin) * scaling
+        width = (max_x - min_x) * scaling
+        height = (max_y - min_y) * scaling
 
         patch = self.get_patch(
             min_x,
@@ -172,10 +172,11 @@ class WholeSlideImage:
         if not masked:
             return patch
 
+        new_patch = np.zeros(shape=patch.shape, dtype='uint8')
         for annotation in annotations:
-            patch = mask_patch_with_annotation(patch, annotation, scaling)
+            new_patch += mask_patch_with_annotation(patch, annotation, scaling, offset=(min_x, min_y))
 
-        return patch
+        return new_patch
 
 
     def __repr__(self):
