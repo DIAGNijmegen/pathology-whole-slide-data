@@ -1,6 +1,6 @@
 from typing import List
 from wholeslidedata.data.dataset import WholeSlideDataSet, WholeSlideSampleReference
-
+import numpy as np
 
 class BatchSampler:
     def __init__(self, dataset: WholeSlideDataSet, sampler, batch_callbacks=None):
@@ -15,7 +15,7 @@ class BatchSampler:
     def batch(self, batch_data: List[WholeSlideSampleReference], i=None):
         batch_data = self._sample_batch(batch_data, i)
         batch_data = self._apply_batch_callbacks(batch_data)
-        return batch_data
+        return tuple(map(np.array, batch_data))
 
     def _sample_batch(self, batch_data: List[WholeSlideSampleReference], i):
         x_batch = []

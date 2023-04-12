@@ -1,3 +1,4 @@
+from copy import deepcopy
 import math
 from multiprocessing import Queue
 from typing import Iterable
@@ -11,6 +12,7 @@ from dicfg.reader import ConfigReader
 from wholeslidedata.buffer.batchcommander import BatchCommander
 from wholeslidedata.buffer.batchproducer import BatchProducer
 from wholeslidedata.configuration import MAIN_CONFIG_PATH
+from wholeslidedata.samplers.batchshape import BatchShape
 
 
 class BatchIterator(BufferIterator):
@@ -45,7 +47,7 @@ class BatchIterator(BufferIterator):
         if self._stop():
             raise StopIteration()
 
-        x_batch, y_batch = super().__next__()
+        x_batch, y_batch, *extras = super().__next__()
 
         if (
             self._stop_index is not None
@@ -54,11 +56,15 @@ class BatchIterator(BufferIterator):
         ):
             x_batch = x_batch[: self._batch_left]
             y_batch = y_batch[: self._batch_left]
+            
+            for idx, extra in enumerate(extras):
+                extras[idx] = extra[: self._batch_left]
 
+        data = [x_batch, y_batch, *extras]
         if self._info_queue is not None:
-            info = self._info_queue.get()
-            return x_batch, y_batch, info
-        return x_batch, y_batch
+            data.append(self._info_queue.get())
+
+        return data
 
     def _stop(self) -> bool:
         if self._stop_index is None:
@@ -95,7 +101,6 @@ def get_buffer_shape(batch_shape) -> tuple:
 
 
 def get_number_of_batches(number_of_batches, dataset, batch_size):
-
     batch_left = 0
     if number_of_batches is not None:
         total_annotations = 0
@@ -127,9 +132,11 @@ def create_batch_iterator(
     cpus=1,
     context="fork",
     determinstic=True,
+    extras_shapes=(),
     buffer_dtype=np.uint16,
     iterator_class=BatchIterator,
 ):
+    dataset = None
 
     config_reader = ConfigReader(
         name="wholeslidedata",
@@ -137,16 +144,23 @@ def create_batch_iterator(
         context_keys=(mode,),
         search_paths=search_paths,
     )
+
     config = config_reader.read(user_config=user_config, presets=presets)
-
-    builds = build_config(config[mode])
-
-    batch_shape = builds["batch_shape"]
-    dataset = builds["dataset"]
+    batch_shape_args = deepcopy(config[mode]["batch_shape"])
+    batch_shape_args.pop("*object")
+    batch_shape = BatchShape(**batch_shape_args)
     buffer_shapes = get_buffer_shape(batch_shape)
-    number_of_batches, batch_left = get_number_of_batches(
-        number_of_batches, dataset, batch_shape.batch_size
-    )
+    
+    if len(extras_shapes) > 0:
+        buffer_shapes = buffer_shapes + extras_shapes
+
+    if number_of_batches is not None and number_of_batches > 0:
+        batch_left = 0
+    else:
+        dataset = build_config(config[mode])["dataset"]
+        number_of_batches, batch_left = get_number_of_batches(
+            number_of_batches, dataset, batch_shape.batch_size
+        )
 
     update_queue = Queue() if update_samplers else None
     info_queue = Queue() if return_info else None
@@ -175,6 +189,9 @@ def create_batch_iterator(
         buffer_shapes=buffer_shapes,
         buffer_dtype=buffer_dtype,
     )
+
+    if dataset is None:
+        dataset = build_config(config[mode])["dataset"]
 
     return iterator_class(
         buffer_factory=buffer_factory,

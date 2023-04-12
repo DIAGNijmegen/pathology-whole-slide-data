@@ -31,11 +31,8 @@ class BatchProducer(Producer):
         return batch
 
     def _create_batch(self, sample_references):
-        x_batch, y_batch = self._batch_sampler.batch(sample_references)
-        x_batch = np.array(x_batch)
-        y_batch = np.array(y_batch)
-        return x_batch, y_batch
-
+        return self._batch_sampler.batch(sample_references)
+    
     def _reset(self, index):
         if self._reset_index is None:
             return
@@ -44,6 +41,6 @@ class BatchProducer(Producer):
             self._batch_sampler.reset()
             self._resets += 1
 
-    def _update(self, x_batch, y_batch):
+    def _update(self, x_batch, y_batch, *extras):
         if self._update_queue is not None:
             self._update_queue.put((x_batch, y_batch), block=False)
