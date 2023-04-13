@@ -35,10 +35,8 @@ Image Backend Installation
 The wholeslidedata packages requires an image backend to open whole-slide images.
 
 .. attention::
-   * Whole-slide data comes with **writing capabilties** for which the **ASAP** is required.
+   * Whole-slide data comes with **writing capabilties** for which **ASAP** is required.
 
 
-Wholeslidedata supports three image backends based on `Openslide <https://openslide.org/api/python/>`_, `ASAP <https://computationalpathologygroup.github.io/ASAP/>`_, or `PyVips <https://libvips.github.io/pyvips/>`_. For these packages, additional software needs to be installed. 
-Below we show the installation instructions.
-
+Wholeslidedata supports three image backends based on `Openslide <https://openslide.org/api/python/>`_, `ASAP <https://computationalpathologygroup.github.io/ASAP/>`_, or `PyVips <https://libvips.github.io/pyvips/>`_. For these packages, additional software needs to be installed.
 
