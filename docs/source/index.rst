@@ -46,5 +46,5 @@ WholeSlideData
     ./installation/index
     ./userguide/index
     ./userguide/examples
-    ./userguide/interoperability
     ./api
+    ./support
