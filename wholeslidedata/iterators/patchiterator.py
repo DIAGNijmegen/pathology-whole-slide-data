@@ -60,7 +60,6 @@ def create_patch_iterator(
         **kwargs,
     )
 
-    print(producer.shapes)
     buffer_iterator = buffer_iterator_factory(
         cpus=cpus,
         buffer_shapes=producer.shapes,
