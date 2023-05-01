@@ -1,15 +1,15 @@
 from abc import abstractmethod
 from multiprocessing import Queue
+from pathlib import Path
 from concurrentbuffer.commander import Commander
 
 import numpy as np
 
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
-from wholeslidedata.interoperability.openslide.backend import OpenSlideWholeSlideImageBackend
 
 def get_number_of_tiles(x_dims, y_dims, tile_shape, ratio):
-    return len(range(0, y_dims, int(tile_shape[0]*ratio))) * len(
-        range(0, x_dims, int(tile_shape[1]*ratio))
+    return len(range(0, y_dims, int(tile_shape[0] * ratio))) * len(
+        range(0, x_dims, int(tile_shape[1] * ratio))
     )
 
 
@@ -19,12 +19,16 @@ class PatchCommander(Commander):
         info_queue: Queue,
         image_path,
         spacing: float,
-        backend=OpenSlideWholeSlideImageBackend,
+        backend="asap",
         tile_shape: int = (512, 512, 3),
+        mask_path: Path = None,
         **kwargs,
     ):
-
         self._wsi = WholeSlideImage(image_path, backend=backend)
+        self._mask = None
+        if mask_path is not None:
+            self._mask = WholeSlideImage(mask_path, backend=backend, auto_resample=True)
+
         self._spacing = spacing
         self._ratio = int(self._wsi.get_downsampling_from_spacing(spacing))
         self._x_dims, self._y_dims = self._wsi.shapes[0][:2]
@@ -33,7 +37,7 @@ class PatchCommander(Commander):
             x_dims=self._x_dims,
             y_dims=self._y_dims,
             tile_shape=tile_shape,
-            ratio=self._ratio
+            ratio=self._ratio,
         )
 
         self._wsi.close()
@@ -68,6 +72,20 @@ class SlidingPatchCommander(PatchCommander):
         messages = []
         for row in range(0, self._y_dims, int(self._tile_shape[0] * self._ratio)):
             for col in range(0, self._x_dims, int(self._tile_shape[1] * self._ratio)):
+                if self._mask is not None:
+                    mask = self._mask.get_patch(
+                        x=col,
+                        y=row,
+                        width=self._tile_shape[1],
+                        height=self._tile_shape[0],
+                        spacing=self._spacing,
+                        center=False,
+                        relative=self._wsi.spacings[0],
+                    )
+
+                    if np.all(mask==0):
+                        continue
+
                 message = {
                     "x": col,
                     "y": row,
@@ -78,17 +96,6 @@ class SlidingPatchCommander(PatchCommander):
                 messages.append(message)
         return messages
 
-class AnnotationPatchCommander(PatchCommander):
-    def __init__(
-        self,
-        info_queue: Queue,
-        annotations,
-        spacing: float,
-        backend="asap",
-        **kwargs,
-    ):
-
-        pass
 
 class RandomPatchCommander(PatchCommander):
     def __init__(
@@ -96,6 +103,7 @@ class RandomPatchCommander(PatchCommander):
         info_queue: Queue,
         image_path,
         spacing: float,
+        mask_path,
         tile_shape: int = (512, 512, 3),
         seed: int = 123,
         number_of_tiles: int = 10,
@@ -104,25 +112,30 @@ class RandomPatchCommander(PatchCommander):
         super().__init__(
             info_queue=info_queue,
             image_path=image_path,
+            mask_path=mask_path,
             spacing=spacing,
             tile_shape=tile_shape,
         )
         self._number_of_tiles = number_of_tiles
         self._seed = seed
- 
+
     def get_patch_messages(self):
         messages = []
-        rows = self._rng.randint(0, self._y_dims - self._tile_shape[1]//self._ratio, self._number_of_tiles)
-        cols = self._rng.randint(0, self._x_dims - self._tile_shape[0]//self._ratio,  self._number_of_tiles)
+        rows = self._rng.randint(
+            0, self._y_dims - self._tile_shape[1] // self._ratio, self._number_of_tiles
+        )
+        cols = self._rng.randint(
+            0, self._x_dims - self._tile_shape[0] // self._ratio, self._number_of_tiles
+        )
         for row, col in zip(rows, cols):
-                message = {
-                    "x": col,
-                    "y": row,
-                    "tile_shape": self._tile_shape,
-                    "spacing": self._spacing,
-                }
-                self._info_queue.put(message)
-                messages.append(message)
+            message = {
+                "x": col,
+                "y": row,
+                "tile_shape": self._tile_shape,
+                "spacing": self._spacing,
+            }
+            self._info_queue.put(message)
+            messages.append(message)
         return messages
 
     def reset(self):

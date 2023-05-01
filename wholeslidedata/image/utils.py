@@ -1,21 +1,8 @@
 import cv2
-
-from bisect import bisect_left
 import numpy as np
 
 from wholeslidedata.annotation.types import Annotation
 from wholeslidedata.samplers.utils import shift_coordinates
-
-
-def take_closest_level(spacings, spacing):
-    pos = bisect_left(spacings, spacing)
-    if pos == 0:
-        return pos
-    if pos == len(spacings):
-        return pos - 1
-    if spacings[pos] - spacing < spacing - spacings[pos - 1]:
-        return pos
-    return pos - 1
 
 
 def create_thumbnail(wsi, output_folder, spacing=8.0):

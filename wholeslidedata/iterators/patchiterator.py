@@ -5,7 +5,7 @@ from concurrentbuffer.iterator import BufferIterator, buffer_iterator_factory
 
 from wholeslidedata.buffer.patchcommander import SlidingPatchCommander
 from wholeslidedata.buffer.patchproducer import PatchProducer
-from wholeslidedata.interoperability.openslide.backend import OpenSlideWholeSlideImageBackend
+
 
 class PatchBufferIterator(BufferIterator):
     def __init__(self, buffer_factory, info_queue, size):
@@ -22,18 +22,20 @@ class PatchBufferIterator(BufferIterator):
             self._index = 0
             raise StopIteration()
         self._index += 1
-        return super().__next__(), self._info_queue.get()
+        return *super().__next__(), self._info_queue.get()
 
     def reset(self):
         self._buffer_factory._commander.reset()
 
+
 def create_patch_iterator(
     image_path,
     spacing,
+    mask_path=None,
     cpus=1,
     context="fork",
     tile_shape=(512, 512, 3),
-    backend=OpenSlideWholeSlideImageBackend,
+    backend='asap',
     commander_class=SlidingPatchCommander,
     producer_class=PatchProducer,
     **kwargs,
@@ -46,12 +48,19 @@ def create_patch_iterator(
         backend=backend,
         spacing=spacing,
         tile_shape=tile_shape,
+        mask_path=mask_path,
         **kwargs,
     )
+
     producer = producer_class(
-        image_path=image_path, tile_shape=tile_shape, backend=backend, **kwargs
+        image_path=image_path,
+        mask_path=mask_path,
+        tile_shape=tile_shape,
+        backend=backend,
+        **kwargs,
     )
 
+    print(producer.shapes)
     buffer_iterator = buffer_iterator_factory(
         cpus=cpus,
         buffer_shapes=producer.shapes,
