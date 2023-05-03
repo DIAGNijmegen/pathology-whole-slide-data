@@ -1,14 +1,19 @@
 from pathlib import Path
+
+import pytest
+
 from wholeslidedata.annotation.wholeslideannotation import WholeSlideAnnotation
+from wholeslidedata.image.wholeslideimage import WholeSlideImage
+from wholeslidedata.interoperability.asap.backend import AsapWholeSlideImageBackend
 from wholeslidedata.interoperability.asap.imagewriter import (
     WholeSlideImageWriter,
     WholeSlideMaskWriter,
     write_mask,
 )
-from wholeslidedata.interoperability.asap.backend import AsapWholeSlideImageBackend
-from wholeslidedata.iterators.patchiterator import create_patch_iterator
-from wholeslidedata.image.wholeslideimage import WholeSlideImage
-import pytest
+from wholeslidedata.iterators.patchiterator import (
+    PatchConfiguration,
+    create_patch_iterator,
+)
 
 
 @pytest.fixture
@@ -27,8 +32,10 @@ def test_write_image(wsi: WholeSlideImage):
         wsi.get_shape_from_spacing(32),
         tile_shape=(512, 512, 3),
     )
+
     with create_patch_iterator(
-        "/tmp/TCGA-21-5784-01Z-00-DX1.tif", spacing=32.0
+        "/tmp/TCGA-21-5784-01Z-00-DX1.tif",
+        patch_configuration=PatchConfiguration(spacing=32.0),
     ) as iterator:
         for patch, info in iterator:
             print(patch[0][0].shape)
@@ -50,7 +57,8 @@ def test_write_mask(wsi: WholeSlideImage):
         tile_shape=(512, 512),
     )
     with create_patch_iterator(
-        "/tmp/TCGA-21-5784-01Z-00-DX1.tif", spacing=32.0
+        "/tmp/TCGA-21-5784-01Z-00-DX1.tif",
+        patch_configuration=PatchConfiguration(spacing=32.0),
     ) as iterator:
         for patch, info in iterator:
             patch = patch[0][0]
