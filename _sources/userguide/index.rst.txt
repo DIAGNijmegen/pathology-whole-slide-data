@@ -85,6 +85,11 @@ Minimal BatchIterator Configuration
    ./notebooks/components/downloaddata
    ./notebooks/components/wholeslideimage
    ./notebooks/components/wholeslideannotation
+
+.. toctree::
+   :hidden:
+   :caption: Iterators
+
    ./notebooks/components/batchiterator
    ./notebooks/components/patchiterator
 
@@ -96,8 +101,6 @@ Minimal BatchIterator Configuration
    ./notebooks/components/imagebackend
    ./notebooks/components/annotationparser
    
-
-
 .. toctree::
    :hidden:
    :caption: Data Settings
