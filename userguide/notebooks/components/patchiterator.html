@@ -1,0 +1,873 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>PatchIterator &#8212; WholeSlideData</title>
+  <script>
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1e1de1a1873e13ef5536" rel="stylesheet">
+
+  
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'userguide/notebooks/components/patchiterator';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Data" href="data.html" />
+    <link rel="prev" title="BatchIterator" href="batchiterator.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div><div class="bd-header-announcement container-fluid" id="header-announcement">
+    
+
+
+<div class="bd-header-announcement__content"><p>This documentation site is still in the process of being developed and is not yet complete. Thank you for your patience as we continue to improve it.</p></div>
+
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+    <p class="title logo__title">WholeSlideData</p>
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../../../installation/index.html">
+                        Installation
+                    </a>
+                </li>
+                
+
+                <li class="nav-item current active">
+                    <a class="nav-link" href="../../index.html">
+                        User Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../examples.html">
+                        Examples
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../../api.html">
+                        API
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../../support.html">
+                        Support
+                    </a>
+                </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      <div class="navbar-end-item navbar-end__search-button-container">
+        
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/DIAGNijmegen/pathology-whole-slide-data" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  <div class="search-button-container--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+  </div>
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="../../../installation/index.html">
+                        Installation
+                    </a>
+                </li>
+                
+
+                <li class="nav-item current active">
+                    <a class="nav-link" href="../../index.html">
+                        User Guide
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../examples.html">
+                        Examples
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../../api.html">
+                        API
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../../support.html">
+                        Support
+                    </a>
+                </li>
+                
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <span class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" data-toggle="tooltip">
+    <a class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="fa-regular fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/DIAGNijmegen/pathology-whole-slide-data" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="downloaddata.html">Download Example Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wholeslideimage.html">WholeSlideImage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wholeslideannotation.html">WholeSlideAnnotation</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="batchiterator.html">BatchIterator</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">PatchIterator</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Loading</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imagebackend.html">ImageBackend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotationparser.html">AnnotationParser</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data Settings</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="modes.html">Modes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="labels.html">Labels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="batchshape.html">BatchShape</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Samplers</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="labelsampler.html">LabelSampler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotationsampler.html">AnnotationSampler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pointsampler.html">PointSampler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="patchlabelsampler.html">PatchLabelSampler</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Customization</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="presets.html">Presets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="callbacks.html">Callbacks</a></li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+      </div>
+      <main class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <section id="patchiterator">
+<h1>PatchIterator<a class="headerlink" href="#patchiterator" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wholeslidedata.iterators</span> <span class="kn">import</span> <span class="n">create_patch_iterator</span><span class="p">,</span> <span class="n">PatchConfiguration</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="creating-a-patch-iterator">
+<h2>Creating a Patch Iterator<a class="headerlink" href="#creating-a-patch-iterator" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">patch_configuration</span> <span class="o">=</span> <span class="n">PatchConfiguration</span><span class="p">(</span><span class="n">patch_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span><span class="mi">1024</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span>
+                                         <span class="n">spacing</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                                         <span class="n">overlap</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>
+                                         <span class="n">offset</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>
+                                         <span class="n">center</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">create_patch_iterator</span><span class="p">(</span><span class="n">image_path</span><span class="o">=</span><span class="s1">&#39;/tmp/TCGA-21-5784-01Z-00-DX1.tif&#39;</span><span class="p">,</span>
+                           <span class="n">mask_path</span><span class="o">=</span><span class="s1">&#39;/tmp/TCGA-21-5784-01Z-00-DX1_tb_mask.tif&#39;</span><span class="p">,</span>
+                           <span class="n">patch_configuration</span><span class="o">=</span><span class="n">patch_configuration</span><span class="p">,</span>
+                           <span class="n">cpus</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="k">as</span> <span class="n">patch_iterator</span><span class="p">:</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of patches </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">patch_iterator</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="n">patch</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">patch_iterator</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">patch</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">mask</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of patches 352
+
+0 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 30720, &#39;y&#39;: 1024, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+1 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 31744, &#39;y&#39;: 1024, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+2 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 32768, &#39;y&#39;: 1024, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+3 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 27648, &#39;y&#39;: 2048, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+4 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 28672, &#39;y&#39;: 2048, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+5 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 29696, &#39;y&#39;: 2048, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+6 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 30720, &#39;y&#39;: 2048, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+7 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 31744, &#39;y&#39;: 2048, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+8 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 32768, &#39;y&#39;: 2048, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+9 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 18432, &#39;y&#39;: 3072, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+10 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 19456, &#39;y&#39;: 3072, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+11 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 20480, &#39;y&#39;: 3072, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+12 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 21504, &#39;y&#39;: 3072, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+13 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 22528, &#39;y&#39;: 3072, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+14 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 23552, &#39;y&#39;: 3072, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+15 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 24576, &#39;y&#39;: 3072, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+16 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 25600, &#39;y&#39;: 3072, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+17 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 26624, &#39;y&#39;: 3072, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+18 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 27648, &#39;y&#39;: 3072, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+19 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 28672, &#39;y&#39;: 3072, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+20 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 29696, &#39;y&#39;: 3072, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+21 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 30720, &#39;y&#39;: 3072, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+22 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 31744, &#39;y&#39;: 3072, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+23 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 32768, &#39;y&#39;: 3072, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+24 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 14336, &#39;y&#39;: 4096, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+25 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 15360, &#39;y&#39;: 4096, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+26 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 16384, &#39;y&#39;: 4096, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+27 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 17408, &#39;y&#39;: 4096, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+28 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 18432, &#39;y&#39;: 4096, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+29 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 19456, &#39;y&#39;: 4096, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+30 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 20480, &#39;y&#39;: 4096, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+31 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 21504, &#39;y&#39;: 4096, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+32 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 22528, &#39;y&#39;: 4096, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+33 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 23552, &#39;y&#39;: 4096, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+34 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 24576, &#39;y&#39;: 4096, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+35 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 25600, &#39;y&#39;: 4096, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+36 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 26624, &#39;y&#39;: 4096, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+37 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 27648, &#39;y&#39;: 4096, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+38 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 28672, &#39;y&#39;: 4096, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+39 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 29696, &#39;y&#39;: 4096, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+40 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 30720, &#39;y&#39;: 4096, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+41 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 13312, &#39;y&#39;: 5120, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+42 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 14336, &#39;y&#39;: 5120, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+43 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 15360, &#39;y&#39;: 5120, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+44 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 16384, &#39;y&#39;: 5120, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+45 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 17408, &#39;y&#39;: 5120, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+46 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 18432, &#39;y&#39;: 5120, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+47 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 19456, &#39;y&#39;: 5120, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+48 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 20480, &#39;y&#39;: 5120, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+49 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 21504, &#39;y&#39;: 5120, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+50 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 22528, &#39;y&#39;: 5120, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+51 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 23552, &#39;y&#39;: 5120, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+52 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 24576, &#39;y&#39;: 5120, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+53 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 25600, &#39;y&#39;: 5120, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+54 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 26624, &#39;y&#39;: 5120, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+55 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 27648, &#39;y&#39;: 5120, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+56 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 28672, &#39;y&#39;: 5120, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+57 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 11264, &#39;y&#39;: 6144, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+58 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 12288, &#39;y&#39;: 6144, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+59 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 13312, &#39;y&#39;: 6144, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+60 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 14336, &#39;y&#39;: 6144, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+61 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 15360, &#39;y&#39;: 6144, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+62 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 16384, &#39;y&#39;: 6144, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+63 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 17408, &#39;y&#39;: 6144, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+64 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 18432, &#39;y&#39;: 6144, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+65 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 19456, &#39;y&#39;: 6144, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+66 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 20480, &#39;y&#39;: 6144, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+67 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 21504, &#39;y&#39;: 6144, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+68 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 22528, &#39;y&#39;: 6144, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+69 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 23552, &#39;y&#39;: 6144, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+70 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 24576, &#39;y&#39;: 6144, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+71 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 25600, &#39;y&#39;: 6144, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+72 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 26624, &#39;y&#39;: 6144, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+73 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 27648, &#39;y&#39;: 6144, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+74 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 28672, &#39;y&#39;: 6144, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+75 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 11264, &#39;y&#39;: 7168, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+76 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 12288, &#39;y&#39;: 7168, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+77 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 13312, &#39;y&#39;: 7168, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+78 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 14336, &#39;y&#39;: 7168, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+79 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 15360, &#39;y&#39;: 7168, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+80 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 16384, &#39;y&#39;: 7168, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+81 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 17408, &#39;y&#39;: 7168, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+82 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 18432, &#39;y&#39;: 7168, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+83 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 19456, &#39;y&#39;: 7168, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+84 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 20480, &#39;y&#39;: 7168, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+85 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 21504, &#39;y&#39;: 7168, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+86 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 22528, &#39;y&#39;: 7168, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+87 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 23552, &#39;y&#39;: 7168, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+88 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 24576, &#39;y&#39;: 7168, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+89 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 25600, &#39;y&#39;: 7168, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+90 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 26624, &#39;y&#39;: 7168, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+91 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 27648, &#39;y&#39;: 7168, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+92 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 28672, &#39;y&#39;: 7168, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+93 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 29696, &#39;y&#39;: 7168, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+94 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 10240, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+95 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 11264, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+96 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 12288, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+97 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 13312, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+98 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 14336, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+99 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 15360, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+100 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 16384, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+101 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 17408, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+102 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 18432, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+103 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 19456, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+104 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 20480, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+105 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 21504, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+106 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 22528, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+107 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 23552, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+108 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 24576, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+109 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 25600, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+110 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 26624, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+111 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 27648, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+112 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 28672, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+113 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 29696, &#39;y&#39;: 8192, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+114 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 8192, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+115 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 9216, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+116 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 10240, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+117 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 11264, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+118 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 12288, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+119 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 13312, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+120 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 14336, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+121 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 15360, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+122 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 16384, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+123 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 17408, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+124 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 18432, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+125 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 19456, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+126 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 20480, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+127 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 21504, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+128 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 22528, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+129 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 23552, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+130 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 25600, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+131 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 26624, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+132 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 27648, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+133 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 28672, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+134 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 29696, &#39;y&#39;: 9216, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+135 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 7168, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+136 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 8192, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+137 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 9216, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+138 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 10240, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+139 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 11264, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+140 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 12288, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+141 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 13312, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+142 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 14336, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+143 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 15360, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+144 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 16384, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+145 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 17408, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+146 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 18432, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+147 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 19456, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+148 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 20480, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+149 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 21504, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+150 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 22528, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+151 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 23552, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+152 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 25600, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+153 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 26624, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+154 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 27648, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+155 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 28672, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+156 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 29696, &#39;y&#39;: 10240, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+157 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 5120, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+158 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 6144, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+159 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 7168, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+160 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 8192, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+161 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 9216, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+162 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 10240, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+163 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 11264, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+164 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 12288, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+165 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 13312, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+166 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 14336, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+167 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 15360, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+168 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 16384, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+169 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 17408, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+170 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 18432, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+171 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 19456, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+172 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 20480, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+173 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 21504, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+174 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 22528, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+175 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 25600, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+176 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 26624, &#39;y&#39;: 11264, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+177 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 4096, &#39;y&#39;: 12288, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+178 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 5120, &#39;y&#39;: 12288, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+179 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 6144, &#39;y&#39;: 12288, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+180 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 7168, &#39;y&#39;: 12288, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+181 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 8192, &#39;y&#39;: 12288, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+182 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 9216, &#39;y&#39;: 12288, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+183 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 10240, &#39;y&#39;: 12288, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+184 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 11264, &#39;y&#39;: 12288, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+185 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 12288, &#39;y&#39;: 12288, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+186 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 13312, &#39;y&#39;: 12288, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+187 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 14336, &#39;y&#39;: 12288, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+188 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 15360, &#39;y&#39;: 12288, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+189 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 16384, &#39;y&#39;: 12288, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+190 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 17408, &#39;y&#39;: 12288, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+191 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 18432, &#39;y&#39;: 12288, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+192 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 19456, &#39;y&#39;: 12288, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+193 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 20480, &#39;y&#39;: 12288, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+194 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 21504, &#39;y&#39;: 12288, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+195 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 22528, &#39;y&#39;: 12288, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+196 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 4096, &#39;y&#39;: 13312, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+197 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 5120, &#39;y&#39;: 13312, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+198 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 6144, &#39;y&#39;: 13312, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+199 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 7168, &#39;y&#39;: 13312, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+200 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 8192, &#39;y&#39;: 13312, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+201 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 9216, &#39;y&#39;: 13312, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+202 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 10240, &#39;y&#39;: 13312, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+203 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 11264, &#39;y&#39;: 13312, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+204 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 12288, &#39;y&#39;: 13312, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+205 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 13312, &#39;y&#39;: 13312, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+206 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 14336, &#39;y&#39;: 13312, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+207 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 15360, &#39;y&#39;: 13312, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+208 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 16384, &#39;y&#39;: 13312, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+209 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 17408, &#39;y&#39;: 13312, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+210 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 18432, &#39;y&#39;: 13312, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+211 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 19456, &#39;y&#39;: 13312, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+212 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 20480, &#39;y&#39;: 13312, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+213 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 21504, &#39;y&#39;: 13312, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+214 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 4096, &#39;y&#39;: 14336, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+215 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 5120, &#39;y&#39;: 14336, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+216 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 6144, &#39;y&#39;: 14336, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+217 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 7168, &#39;y&#39;: 14336, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+218 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 8192, &#39;y&#39;: 14336, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+219 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 9216, &#39;y&#39;: 14336, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+220 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 10240, &#39;y&#39;: 14336, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+221 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 11264, &#39;y&#39;: 14336, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+222 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 12288, &#39;y&#39;: 14336, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+223 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 13312, &#39;y&#39;: 14336, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+224 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 14336, &#39;y&#39;: 14336, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+225 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 15360, &#39;y&#39;: 14336, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+226 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 16384, &#39;y&#39;: 14336, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+227 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 17408, &#39;y&#39;: 14336, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+228 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 18432, &#39;y&#39;: 14336, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+229 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 19456, &#39;y&#39;: 14336, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+230 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 4096, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+231 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 5120, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+232 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 6144, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+233 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 7168, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+234 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 8192, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+235 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 9216, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+236 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 10240, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+237 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 11264, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+238 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 12288, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+239 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 13312, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+240 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 14336, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+241 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 15360, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+242 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 16384, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+243 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 17408, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+244 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 18432, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+245 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 21504, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+246 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 22528, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+247 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 23552, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+248 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 24576, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+249 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 25600, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+250 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 26624, &#39;y&#39;: 15360, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+251 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 4096, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+252 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 5120, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+253 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 6144, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+254 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 7168, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+255 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 8192, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+256 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 9216, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+257 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 10240, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+258 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 11264, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+259 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 12288, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+260 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 13312, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+261 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 14336, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+262 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 15360, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+263 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 21504, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+264 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 22528, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+265 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 23552, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+266 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 24576, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+267 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 25600, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+268 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 26624, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+269 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 27648, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+270 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 28672, &#39;y&#39;: 16384, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+271 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 5120, &#39;y&#39;: 17408, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+272 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 6144, &#39;y&#39;: 17408, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+273 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 7168, &#39;y&#39;: 17408, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+274 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 8192, &#39;y&#39;: 17408, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+275 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 9216, &#39;y&#39;: 17408, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+276 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 10240, &#39;y&#39;: 17408, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+277 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 11264, &#39;y&#39;: 17408, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+278 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 20480, &#39;y&#39;: 17408, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+279 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 21504, &#39;y&#39;: 17408, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+280 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 22528, &#39;y&#39;: 17408, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+281 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 23552, &#39;y&#39;: 17408, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+282 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 24576, &#39;y&#39;: 17408, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+283 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 25600, &#39;y&#39;: 17408, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+284 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 26624, &#39;y&#39;: 17408, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+285 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 27648, &#39;y&#39;: 17408, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+286 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 28672, &#39;y&#39;: 17408, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+287 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 5120, &#39;y&#39;: 18432, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+288 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 6144, &#39;y&#39;: 18432, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+289 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 7168, &#39;y&#39;: 18432, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+290 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 8192, &#39;y&#39;: 18432, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+291 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 9216, &#39;y&#39;: 18432, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+292 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 17408, &#39;y&#39;: 18432, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+293 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 18432, &#39;y&#39;: 18432, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+294 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 19456, &#39;y&#39;: 18432, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+295 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 20480, &#39;y&#39;: 18432, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+296 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 21504, &#39;y&#39;: 18432, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+297 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 22528, &#39;y&#39;: 18432, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+298 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 23552, &#39;y&#39;: 18432, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+299 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 24576, &#39;y&#39;: 18432, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+300 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 25600, &#39;y&#39;: 18432, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+301 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 26624, &#39;y&#39;: 18432, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+302 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 27648, &#39;y&#39;: 18432, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+303 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 28672, &#39;y&#39;: 18432, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+304 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 29696, &#39;y&#39;: 18432, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+305 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 17408, &#39;y&#39;: 19456, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+306 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 18432, &#39;y&#39;: 19456, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+307 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 19456, &#39;y&#39;: 19456, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+308 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 20480, &#39;y&#39;: 19456, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+309 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 21504, &#39;y&#39;: 19456, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+310 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 22528, &#39;y&#39;: 19456, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+311 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 23552, &#39;y&#39;: 19456, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+312 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 24576, &#39;y&#39;: 19456, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+313 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 25600, &#39;y&#39;: 19456, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+314 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 26624, &#39;y&#39;: 19456, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+315 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 27648, &#39;y&#39;: 19456, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+316 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 28672, &#39;y&#39;: 19456, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+317 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 29696, &#39;y&#39;: 19456, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+318 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 2048, &#39;y&#39;: 20480, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+319 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 3072, &#39;y&#39;: 20480, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+320 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 17408, &#39;y&#39;: 20480, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+321 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 18432, &#39;y&#39;: 20480, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+322 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 19456, &#39;y&#39;: 20480, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+323 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 20480, &#39;y&#39;: 20480, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+324 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 21504, &#39;y&#39;: 20480, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+325 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 22528, &#39;y&#39;: 20480, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+326 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 23552, &#39;y&#39;: 20480, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+327 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 24576, &#39;y&#39;: 20480, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+328 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 25600, &#39;y&#39;: 20480, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+329 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 26624, &#39;y&#39;: 20480, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+330 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 27648, &#39;y&#39;: 20480, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+331 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 28672, &#39;y&#39;: 20480, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+332 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 29696, &#39;y&#39;: 20480, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+333 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 18432, &#39;y&#39;: 21504, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+334 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 19456, &#39;y&#39;: 21504, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+335 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 20480, &#39;y&#39;: 21504, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+336 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 21504, &#39;y&#39;: 21504, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+337 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 22528, &#39;y&#39;: 21504, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+338 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 23552, &#39;y&#39;: 21504, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+339 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 24576, &#39;y&#39;: 21504, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+340 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 25600, &#39;y&#39;: 21504, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+341 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 26624, &#39;y&#39;: 21504, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+342 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 27648, &#39;y&#39;: 21504, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+343 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 28672, &#39;y&#39;: 21504, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+344 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 29696, &#39;y&#39;: 21504, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+345 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 1024, &#39;y&#39;: 22528, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+346 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 22528, &#39;y&#39;: 22528, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+347 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 23552, &#39;y&#39;: 22528, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+348 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 24576, &#39;y&#39;: 22528, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+349 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 25600, &#39;y&#39;: 22528, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+350 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 26624, &#39;y&#39;: 22528, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+351 (1024, 1024, 3) (1024, 1024) {&#39;x&#39;: 27648, &#39;y&#39;: 22528, &#39;tile_shape&#39;: (1024, 1024, 3), &#39;spacing&#39;: 0.5, &#39;center&#39;: False}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="batchiterator.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">BatchIterator</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="data.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Data</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#creating-a-patch-iterator">
+   Creating a Patch Iterator
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
+<div id="searchbox"></div>
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1e1de1a1873e13ef5536"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2022, Mart van Rijthoven.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>
