@@ -38,8 +38,7 @@ def test_write_image(wsi: WholeSlideImage):
         patch_configuration=PatchConfiguration(spacing=32.0),
     ) as iterator:
         for patch, info in iterator:
-            print(patch[0][0].shape)
-            wsi_writer.write_tile(patch[0])
+            wsi_writer.write_tile(patch)
 
     wsi_writer.finishImage()
     wsi_new = WholeSlideImage(output_path, backend=AsapWholeSlideImageBackend)
@@ -61,7 +60,6 @@ def test_write_mask(wsi: WholeSlideImage):
         patch_configuration=PatchConfiguration(spacing=32.0),
     ) as iterator:
         for patch, info in iterator:
-            patch = patch[0][0]
             r, g, b = patch[:, :, 0], patch[:, :, 1], patch[:, :, 2]
             gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
             wsi_writer.write_tile(gray)
