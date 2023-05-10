@@ -12,6 +12,7 @@ from dicfg.reader import ConfigReader
 
 from wholeslidedata.buffer.batchcommander import BatchCommander
 from wholeslidedata.buffer.batchproducer import BatchProducer
+from wholeslidedata.buffer.context import DEFAULT_CONTEXT
 from wholeslidedata.configuration import MAIN_CONFIG_PATH
 from wholeslidedata.samplers.batchshape import BatchShape
 
@@ -131,7 +132,7 @@ def create_batch_iterator(
     search_paths=(),
     presets=(),
     cpus=1,
-    context="spawn" if os.name=="nt" else "fork",
+    context=DEFAULT_CONTEXT,
     determinstic=True,
     extras_shapes=(),
     buffer_dtype=np.uint16,

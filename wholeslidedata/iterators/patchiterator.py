@@ -9,7 +9,7 @@ from wholeslidedata.buffer.patchcommander import (
     PatchConfiguration,
 )
 from wholeslidedata.buffer.patchproducer import PatchProducer
-
+from wholeslidedata.buffer.context import DEFAULT_CONTEXT
 
 class PatchBufferIterator(BufferIterator):
     def __init__(self, buffer_factory, info_queue, size):
@@ -39,7 +39,7 @@ def create_patch_iterator(
     commander_class=SlidingPatchCommander,
     producer_class=PatchProducer,
     backend="asap",
-    context="spawn" if os.name=="nt" else "fork",
+    context=DEFAULT_CONTEXT,
     cpus=1,
     producer_hooks=(),
 ):
