@@ -2,6 +2,7 @@ from copy import deepcopy
 import math
 from multiprocessing import Queue
 from typing import Iterable
+import os
 
 import numpy as np
 from concurrentbuffer.factory import create_buffer_factory
@@ -130,7 +131,7 @@ def create_batch_iterator(
     search_paths=(),
     presets=(),
     cpus=1,
-    context="fork",
+    context="spawn" if os.name=="nt" else "fork",
     determinstic=True,
     extras_shapes=(),
     buffer_dtype=np.uint16,
