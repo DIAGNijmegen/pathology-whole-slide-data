@@ -1,4 +1,5 @@
 from multiprocessing import Queue
+import os
 
 import numpy as np
 from concurrentbuffer.iterator import BufferIterator, buffer_iterator_factory
@@ -38,7 +39,7 @@ def create_patch_iterator(
     commander_class=SlidingPatchCommander,
     producer_class=PatchProducer,
     backend="asap",
-    context="fork",
+    context="spawn" if os.name=="nt" else "fork",
     cpus=1,
     producer_hooks=(),
 ):
