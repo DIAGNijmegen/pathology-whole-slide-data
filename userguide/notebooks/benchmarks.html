@@ -348,59 +348,45 @@
             shape: [1024, 1024, 3]
  --><div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wholeslidedata.iterators</span> <span class="kn">import</span> <span class="n">create_batch_iterator</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.visualization.plotting</span> <span class="kn">import</span> <span class="n">plot_batch</span>
-<span class="kn">import</span> <span class="nn">gc</span>
-<span class="kn">from</span>  <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
-<span class="kn">from</span> <span class="nn">experimart.interoperability.torch.dataloader</span> <span class="kn">import</span> <span class="n">SegmentationDataLoader</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">statistics</span> <span class="kn">import</span> <span class="n">mean</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">timeit</span> <span class="kn">import</span> <span class="n">timeit</span>
+
+<span class="kn">from</span> <span class="nn">wholeslidedata.iterators</span> <span class="kn">import</span> <span class="n">create_patch_iterator</span><span class="p">,</span> <span class="n">PatchConfiguration</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">user_config</span> <span class="o">=</span> <span class="s1">&#39;/home/user/pathology-whole-slide-data/docs/source/userguide/notebooks/components/configs/user_config.yml&#39;</span>
-<span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;training&#39;</span>
-<span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">training_batch_generator</span> <span class="o">=</span> <span class="n">create_batch_iterator</span><span class="p">(</span><span class="n">user_config</span><span class="o">=</span><span class="n">user_config</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">cpus</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">buffer_dtype</span><span class="o">=</span><span class="s1">&#39;uint8&#39;</span><span class="p">)</span>
-<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">):</span>
-    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">training_batch_generator</span><span class="p">)</span>
-    <span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">times</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">cpus</span><span class="p">):</span>
+    
+    <span class="n">image_path</span> <span class="o">=</span> <span class="s1">&#39;/tmp/TCGA-21-5784-01Z-00-DX1.tif&#39;</span>
+    <span class="n">mask_path</span> <span class="o">=</span> <span class="s1">&#39;/tmp/TCGA-21-5784-01Z-00-DX1_tb_mask.tif&#39;</span>
+    <span class="n">patch_configuration</span> <span class="o">=</span> <span class="n">PatchConfiguration</span><span class="p">()</span>
+    
+    <span class="k">with</span> <span class="n">create_patch_iterator</span><span class="p">(</span><span class="n">image_path</span><span class="o">=</span><span class="n">image_path</span><span class="p">,</span> 
+                               <span class="n">mask_path</span><span class="o">=</span><span class="n">mask_path</span><span class="p">,</span> 
+                               <span class="n">patch_configuration</span><span class="o">=</span><span class="n">patch_configuration</span><span class="p">,</span> 
+                               <span class="n">cpus</span><span class="o">=</span><span class="n">cpus</span><span class="p">)</span> <span class="k">as</span> <span class="n">patch_iterator</span><span class="p">:</span>
+    
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">patch_iterator</span><span class="p">:</span> 
+            <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">powers</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="k">for</span> <span class="n">cpus</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">powers</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;time with </span><span class="si">{</span><span class="n">cpus</span><span class="si">}</span><span class="s2"> cpus = </span><span class="si">{</span><span class="n">timeit</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span><span class="w"> </span><span class="n">run</span><span class="p">(</span><span class="n">cpus</span><span class="p">),</span><span class="w"> </span><span class="n">number</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> 
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.07482558965682984
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainset</span> <span class="o">=</span> <span class="n">SegmentationDataLoader</span><span class="p">(</span><span class="s1">&#39;/home/user/data/training&#39;</span><span class="p">)</span>
-<span class="n">loader</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">trainset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">9</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">):</span>
-    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">loader</span><span class="p">)</span>
-    <span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">times</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.011541856527328491
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>time with 1 cpus = 12.589808709002682
+time with 2 cpus = 8.457286353994277
+time with 4 cpus = 6.162545195504208
+time with 8 cpus = 5.762532652493974
 </pre></div>
 </div>
 </div>

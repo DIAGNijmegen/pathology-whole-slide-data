@@ -29,87 +29,65 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 1,
+   "execution_count": 41,
    "id": "d46d80eb-8f4f-4d6d-9e63-9bb306d6ade3",
    "metadata": {},
    "outputs": [],
    "source": [
-    "from wholeslidedata.iterators import create_batch_iterator\n",
-    "from wholeslidedata.visualization.plotting import plot_batch\n",
-    "import gc\n",
-    "from  torch.utils.data import DataLoader\n",
-    "from experimart.interoperability.torch.dataloader import SegmentationDataLoader\n",
-    "import time\n",
-    "from statistics import mean\n"
+    "from timeit import timeit\n",
+    "\n",
+    "from wholeslidedata.iterators import create_patch_iterator, PatchConfiguration"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 2,
-   "id": "19472f7a-d411-41f5-8f67-46a7702d0bcf",
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "0.07482558965682984\n"
-     ]
-    }
-   ],
-   "source": [
-    "user_config = '/home/user/pathology-whole-slide-data/docs/source/userguide/notebooks/components/configs/user_config.yml'\n",
-    "mode = 'training'\n",
-    "times = []\n",
-    "training_batch_generator = create_batch_iterator(user_config=user_config, mode=mode, cpus=10, buffer_dtype='uint8')\n",
-    "time.sleep(10)\n",
-    "for i in range(200):\n",
-    "    t1 = time.time()\n",
-    "    data = next(training_batch_generator)\n",
-    "    times.append(time.time()-t1)\n",
-    "print(mean(times))"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 2,
-   "id": "523dfdc6-93b6-4ed9-a002-0cb75f171290",
+   "execution_count": 38,
+   "id": "e801c9f4-7959-48d2-b3dd-21c12bf03ad7",
    "metadata": {},
    "outputs": [],
    "source": [
-    "\n",
-    "trainset = SegmentationDataLoader('/home/user/data/training')\n",
-    "loader = iter(DataLoader(trainset, batch_size=1, shuffle=False, num_workers=9))\n",
-    "\n"
+    "def run(cpus):\n",
+    "    \n",
+    "    image_path = '/tmp/TCGA-21-5784-01Z-00-DX1.tif'\n",
+    "    mask_path = '/tmp/TCGA-21-5784-01Z-00-DX1_tb_mask.tif'\n",
+    "    patch_configuration = PatchConfiguration()\n",
+    "    \n",
+    "    with create_patch_iterator(image_path=image_path, \n",
+    "                               mask_path=mask_path, \n",
+    "                               patch_configuration=patch_configuration, \n",
+    "                               cpus=cpus) as patch_iterator:\n",
+    "    \n",
+    "        for _ in patch_iterator: \n",
+    "            pass"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 3,
-   "id": "1c243c46-1916-446f-aa64-06c7e2a450ea",
+   "execution_count": 42,
+   "id": "8659c1cf-0740-47ea-88e0-061d9f9ac9b5",
    "metadata": {},
    "outputs": [
     {
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "0.011541856527328491\n"
+      "time with 1 cpus = 12.589808709002682\n",
+      "time with 2 cpus = 8.457286353994277\n",
+      "time with 4 cpus = 6.162545195504208\n",
+      "time with 8 cpus = 5.762532652493974\n"
      ]
     }
    ],
    "source": [
-    "times = []\n",
-    "for i in range(200):\n",
-    "    t1 = time.time()\n",
-    "    data = next(loader)\n",
-    "    times.append(time.time()-t1)\n",
-    "print(mean(times))"
+    "powers = 4\n",
+    "for cpus in (2**p for p in range(0, powers)):\n",
+    "    print(f\"time with {cpus} cpus = {timeit(lambda: run(cpus), number=2)/2}\") "
    ]
   },
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "95e22171-fbcb-481b-b0d5-bce12b60df0d",
+   "id": "fc1d8067-79b7-4989-a244-d677c99c0f1c",
    "metadata": {},
    "outputs": [],
    "source": []
@@ -117,7 +95,7 @@
  ],
  "metadata": {
   "kernelspec": {
-   "display_name": "Python 3",
+   "display_name": "Python 3 (ipykernel)",
    "language": "python",
    "name": "python3"
   },
@@ -131,7 +109,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.8.10"
+   "version": "3.10.0"
   }
  },
  "nbformat": 4,
