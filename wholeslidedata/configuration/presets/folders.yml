@@ -16,3 +16,8 @@ default:
         filters: []
         excludes: []
         annotation_parser: ${annotation_parser}
+
+    associations@replace(true):
+        "*object": sourcelib.associations.associate_files
+        files1: ${image_sources}
+        files2: ${annotation_sources}
