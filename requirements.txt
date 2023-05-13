@@ -1,6 +1,6 @@
 concurrentbuffer>=0.0.8
 dicfg>=0.0.7
-sourcelib>=0.0.3
+sourcelib>=0.0.4
 numpy>=1.23.4
 opencv-python-headless>=4.6.0.66
 shapely>=1.7.1

@@ -15,8 +15,8 @@ setup(
     license="LICENSE.txt",
     install_requires=[
         "concurrentbuffer>=0.0.8",
-        "dicfg>=0.0.6",
-        "sourcelib>=0.0.3",
+        "dicfg>=0.0.7",
+        "sourcelib>=0.0.4",
         "numpy>=1.20.2",
         "opencv-python-headless>=4.4.0",
         "scipy>=1.5.2",
@@ -25,6 +25,7 @@ setup(
         "openslide-python>=1.1.1",
         "PyYAML>=5.4.1",
         "rtree>=1.0.0",
+        "lxml>=4.6.3",
         "matplotlib>=3.6.2",
     ],
     long_description="Package for working with whole slide images.",
