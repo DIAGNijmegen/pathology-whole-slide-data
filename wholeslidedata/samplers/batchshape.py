@@ -67,7 +67,7 @@ class BatchShape(UserDict):
         elif shapes_is_iterable and all(isinstance(s, Iterable) for s in self._shape):
             shapes = self._shape
         else:
-            ShapeTypeError(
+            raise ShapeTypeError(
                 f"Shapes :{self._shape} with type: {type(self._shape)} has invalid type "
             )
 
