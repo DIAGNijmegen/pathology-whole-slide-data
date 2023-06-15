@@ -29,7 +29,7 @@ class PatchCommander(Commander):
         self._mask_path = mask_path
         self._backend = backend
         self._patch_configuration = patch_configuration
-
+        self._mask = None
         if self._mask_path is not None:
             self._shapes = ((1, *self._patch_configuration.patch_shape), (1, *self._patch_configuration.patch_shape[:2]))
         else:
@@ -83,11 +83,13 @@ class SlidingPatchCommander(PatchCommander):
         step_col = int(self._patch_configuration.patch_shape[1] * self._ratio) - int(
             self._patch_configuration.overlap[1] * self._ratio
         )
-        for row in range(self._patch_configuration.offset[0], self._y_dims, step_row):
-            for col in range(self._patch_configuration.offset[1], self._x_dims, step_col):
-                if self._mask_path is not None:
-                    self._mask = WholeSlideImage(self._mask_path, backend=self._backend, auto_resample=True)
-
+        
+        if self._mask_path is not None:
+            self._mask = WholeSlideImage(self._mask_path, backend=self._backend, auto_resample=True)
+        
+        for row in range(self._patch_configuration.offset[1], self._y_dims, step_row):
+            for col in range(self._patch_configuration.offset[0], self._x_dims, step_col):
+                if self._mask is not None:
                     mask = self._mask.get_patch(
                         x=col,
                         y=row,
