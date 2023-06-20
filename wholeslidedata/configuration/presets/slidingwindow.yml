@@ -2,7 +2,7 @@
 default:
   seed: 123
 
-  annotation_parser: 
+  annotation_parser@replace(true): 
       "*object": wholeslidedata.annotation.parser.MaskAnnotationParser
       processing_spacing: 4.0
       
