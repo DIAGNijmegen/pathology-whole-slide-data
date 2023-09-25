@@ -28,8 +28,10 @@ def _get_geometry(
     if isinstance(coordinates, dict):
         holes = coordinates["holes"]
         coordinates = coordinates["coordinates"]
-    if len(coordinates) == 2 or (len(coordinates) == 1 and len(coordinates[0]) == 2):
+    if len(coordinates) == 2:
         return geometry.Point(coordinates)
+    if len(coordinates) == 1 and len(coordinates[0]) == 2:
+        return geometry.Point(coordinates[0])
     if len(coordinates) <= 1:
         raise InvalidCoordinatesError(f"Coordinates {coordinates} are not valid.")
     
