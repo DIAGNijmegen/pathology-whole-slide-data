@@ -11,7 +11,7 @@ from wholeslidedata.image.wholeslideimage import WholeSlideImage
 @dataclass
 class PatchConfiguration:
     patch_shape: tuple = (512, 512, 3)
-    spacing: float = 0.5
+    spacings: tuple = (0.5,)
     overlap: tuple = (0, 0)
     offset: tuple = (0, 0)
     center: bool = False
@@ -22,7 +22,7 @@ class PatchCommander(Commander):
         self,
         image_path,
         mask_path: Path = None,
-        backend: str = "asap",
+        backend: str = "openslide",
         patch_configuration: PatchConfiguration = PatchConfiguration(),
     ):
         self._image_path = image_path
@@ -30,13 +30,16 @@ class PatchCommander(Commander):
         self._backend = backend
         self._patch_configuration = patch_configuration
         self._mask = None
+
+        inputs = len(self._patch_configuration.spacings)
+        shape = self._patch_configuration.patch_shape
         if self._mask_path is not None:
-            self._shapes = ((1, *self._patch_configuration.patch_shape), (1, *self._patch_configuration.patch_shape[:2]))
+            self._shapes = ((1, inputs, *shape), (1, *shape[:2]))
         else:
-            self._shapes = ((1, *self._patch_configuration.patch_shape),)
+            self._shapes = ((1, inputs, *shape),)
        
         wsi = WholeSlideImage(image_path, backend=backend)
-        self._ratio = int(wsi.get_downsampling_from_spacing(self._patch_configuration.spacing))
+        self._ratio = int(wsi.get_downsampling_from_spacing(self._patch_configuration.spacings[0]))
         self._x_dims, self._y_dims = wsi.shapes[0][:2]
         self._level_0_spacing = wsi.spacings[0]
         wsi.close()
@@ -86,7 +89,6 @@ class SlidingPatchCommander(PatchCommander):
         
         if self._mask_path is not None:
             self._mask = WholeSlideImage(self._mask_path, backend=self._backend, auto_resample=True)
-        
         for row in range(self._patch_configuration.offset[1], self._y_dims, step_row):
             for col in range(self._patch_configuration.offset[0], self._x_dims, step_col):
                 if self._mask is not None:
@@ -95,7 +97,7 @@ class SlidingPatchCommander(PatchCommander):
                         y=row,
                         width=self._patch_configuration.patch_shape[1],
                         height=self._patch_configuration.patch_shape[0],
-                        spacing=self._patch_configuration.spacing,
+                        spacing=self._patch_configuration.spacings[0],
                         center=self._patch_configuration.center,
                         relative=self._level_0_spacing,
                     )
@@ -107,31 +109,9 @@ class SlidingPatchCommander(PatchCommander):
                     "x": col,
                     "y": row,
                     "tile_shape": self._patch_configuration.patch_shape,
-                    "spacing": self._patch_configuration.spacing,
+                    "spacings": self._patch_configuration.spacings,
                     "center": self._patch_configuration.center
                 }
                 self._info_queue.put(message)
                 messages.append(message)
         return messages
-
-
-# class RandomPatchCommander(Commander):
-#     def get_patch_messages(self):
-#         messages = []
-#         rows = self._rng.randint(
-#             0, self._y_dims - self._patch_shape[1] // self._ratio, self._number_of_tiles
-#         )
-#         cols = self._rng.randint(
-#             0, self._x_dims - self._patch_shape[0] // self._ratio, self._number_of_tiles
-#         )
-#         for row, col in zip(rows, cols):
-#             message = {
-#                 "x": col,
-#                 "y": row,
-#                 "tile_shape": self._patch_shape,
-#                 "spacing": self._spacing,
-#             }
-#             self._info_queue.put(message)
-#             messages.append(message)
-#         return messages
-
