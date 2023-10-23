@@ -34,7 +34,7 @@ class PatchCommander(Commander):
         inputs = len(self._patch_configuration.spacings)
         shape = self._patch_configuration.patch_shape
         if self._mask_path is not None:
-            self._shapes = ((1, inputs, *shape), (1, *shape[:2]))
+            self._shapes = ((1, inputs, *shape), (1, inputs, *shape[:2]))
         else:
             self._shapes = ((1, inputs, *shape),)
        
