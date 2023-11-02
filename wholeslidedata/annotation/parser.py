@@ -108,7 +108,6 @@ class AnnotationParser:
         annotations = []
         for index, annotation in enumerate(self._parse(path)):
             annotation["index"] = index
-            annotation["coordinates"] = np.array(annotation["coordinates"])
             annotation["label"] = self._rename_label(annotation["label"])
             if spacing is not None:
                 annotation["spacing"] = spacing
