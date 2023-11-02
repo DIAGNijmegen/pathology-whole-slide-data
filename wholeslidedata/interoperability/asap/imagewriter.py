@@ -144,13 +144,13 @@ class WholeSlideMonochromeMaskWriter(WholeSlideImageWriterBase):
 
 
 class WholeSlideMaskWriter(WholeSlideMonochromeMaskWriter):
-    def __init__(self, callbacks, suffix=".tif"):
+    def __init__(self, callbacks=(), suffix=".tif"):
         warnings.warn("WholeSlideMaskWriter will be deprecated, use WholeSlideMonochromeMaskWriter instead", DeprecationWarning)
         super().__init__(callbacks=callbacks, suffix=suffix)
 
 
 class WholeSlideImageWriter(WholeSlideImageWriterBase):
-    def __init__(self, callbacks, suffix=".tif"):
+    def __init__(self, callbacks=(), suffix=".tif"):
         super().__init__(callbacks=callbacks)
         self._suffix = suffix
 

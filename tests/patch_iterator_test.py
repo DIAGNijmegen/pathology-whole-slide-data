@@ -9,7 +9,7 @@ cleanup_on_sigterm()
 def test_patch_iterator():
     with create_patch_iterator(
         image_path="/tmp/TCGA-21-5784-01Z-00-DX1.tif",
-        patch_configuration=PatchConfiguration(spacing=32),
+        patch_configuration=PatchConfiguration(spacings=(32,)),
     ) as patch_iterator:
         for patch in patch_iterator:
             pass
