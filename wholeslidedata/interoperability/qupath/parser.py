@@ -8,7 +8,12 @@ from wholeslidedata.annotation.parser import AnnotationParser
 class QuPathAnnotationParser(AnnotationParser):
     @staticmethod
     def get_available_labels(opened_annotation: dict):
-        labels = set([annotation["properties"]["classification"]["name"] for annotation in opened_annotation])
+        labels = set(
+            [
+                annotation["properties"]["classification"]["name"]
+                for annotation in opened_annotation
+            ]
+        )
         labels = list(zip(labels, list(range(len(labels)))))
         labels = [Label.create(label[0], value=label[1]) for label in labels]
         return Labels.create(labels)
@@ -29,7 +34,7 @@ class QuPathAnnotationParser(AnnotationParser):
         for annotation in data:
             ann = dict()
             ann["label"] = dict()
-            ann["type"] = annotation["geometry"]["type"].lower()
+            geom_type = annotation["geometry"]["type"].lower()
             try:
                 label_name = annotation["properties"]["classification"]["name"].lower()
             except:
@@ -39,9 +44,41 @@ class QuPathAnnotationParser(AnnotationParser):
             label = labels.get_label_by_name(label_name)
 
             for key, value in label.todict().items():
-                if key == 'value' or key not in ann["label"] or ann["label"][key] is None:
+                if (
+                    key == "value"
+                    or key not in ann["label"]
+                    or ann["label"][key] is None
+                ):
                     ann["label"][key] = value
 
-            ann["coordinates"] = annotation["geometry"]["coordinates"]
+            _coords = annotation["geometry"]["coordinates"]
 
-            yield ann
+            if geom_type == "polygon":
+                if len(_coords) == 1:
+                    ann["coordinates"] = _coords[0]
+                else:
+                    ann["coordinates"] = {
+                        "coordinates": _coords[0],
+                        "holes": _coords[1:],
+                    }
+                yield ann
+            elif geom_type == "multipolygon":
+                for coordinates in _coords:
+                    if len(coordinates) == 1:
+                        yield {
+                            "label": ann["label"],
+                            "coordinates": coordinates[0],
+                        }
+                    else:
+                        yield {
+                            "label": ann["label"],
+                            "coordinates": {
+                                "coordinates": coordinates[0],
+                                "holes": coordinates[1:],
+                            },
+                        }
+            else:
+                raise ValueError(
+                    f"Annotation type {geom_type} is not supported yet."
+                    f"Only polygon and multipolygon are supported."
+                )

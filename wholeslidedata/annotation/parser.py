@@ -106,38 +106,13 @@ class AnnotationParser:
             return []
 
         annotations = []
-        index = 0
-        for annotation in self._parse(path):
-            if annotation["type"].lower() == "polygon":
-                annotation["index"] = index
-                _coords = annotation["coordinates"]
-                if len(_coords) == 1:
-                    annotation["coordinates"] = np.array(_coords[0])
-                else:
-                    annotation["coordinates"] = np.array(_coords[0])
-                    annotation["holes"] = np.array(_coords[1])
-                annotation["label"] = self._rename_label(annotation["label"])
-                if spacing is not None:
-                    annotation["spacing"] = spacing
-                annotation.update(self._kwargs)
-                annotations.append(Annotation.create(**annotation))
-                index += 1
-            elif annotation["type"].lower() == "multipolygon":
-                ann = dict()
-                ann["index"] = index
-                ann["type"] = "polygon"
-                for _coords in annotation["coordinates"]:
-                    if len(_coords) == 1:
-                        ann["coordinates"] = np.array(_coords[0])
-                    else:
-                        ann["coordinates"] = np.array(_coords[0])
-                        ann["holes"] = np.array(_coords[1])
-                    ann["label"] = self._rename_label(annotation["label"])
-                    if spacing is not None:
-                        ann["spacing"] = spacing
-                    ann.update(self._kwargs)
-                    annotations.append(Annotation.create(**ann))
-                    index += 1
+        for index, annotation in enumerate(self._parse(path)):
+            annotation["index"] = index
+            annotation["label"] = self._rename_label(annotation["label"])
+            if spacing is not None:
+                annotation["spacing"] = spacing
+            annotation.update(self._kwargs)
+            annotations.append(Annotation.create(**annotation))
 
         for callback in self._callbacks:
             annotations = callback(annotations)
