@@ -35,7 +35,7 @@ def test_write_image(wsi: WholeSlideImage):
 
     with create_patch_iterator(
         "/tmp/TCGA-21-5784-01Z-00-DX1.tif",
-        patch_configuration=PatchConfiguration(spacing=32.0),
+        patch_configuration=PatchConfiguration(spacings=(32.0,)),
     ) as iterator:
         for patch, info in iterator:
             wsi_writer.write_tile(patch)
