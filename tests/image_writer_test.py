@@ -38,7 +38,7 @@ def test_write_image(wsi: WholeSlideImage):
         patch_configuration=PatchConfiguration(spacings=(32.0,)),
     ) as iterator:
         for patch, info in iterator:
-            wsi_writer.write_tile(patch[0])
+            wsi_writer.write_tile(patch[0][0])
 
     wsi_writer.finishImage()
     wsi_new = WholeSlideImage(output_path, backend=AsapWholeSlideImageBackend)
