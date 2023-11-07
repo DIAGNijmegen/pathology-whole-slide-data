@@ -69,6 +69,9 @@ def plot_annotations(
             ax.scatter(*coordinates, color=color)
         elif isinstance(annotation, PolygonAnnotation):
             ax.plot(*list(zip(*coordinates)), color=color, linewidth=2)
+            holes = [np.array(hole) * scale for hole in annotation.holes]
+            for hole in holes:
+                ax.plot(*list(zip(*hole)), color=color, linewidth=2)
         else:
             raise ValueError(f"invalid annotation {type(annotation)}")
 
