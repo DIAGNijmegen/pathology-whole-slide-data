@@ -8,6 +8,7 @@ from sourcelib.associations import Associations
 
 from wholeslidedata.annotation import utils as annotation_utils
 from wholeslidedata.annotation.callbacks import OffsetAnnotationCallback
+from wholeslidedata.annotation.selector import AnnotationSelector
 from wholeslidedata.data.files import WholeSlideAnnotationFile, WholeSlideImageFile
 from wholeslidedata.annotation.labels import Labels
 from wholeslidedata.image.utils import get_offset
@@ -250,5 +251,6 @@ def fix_annotation_offsets(dataset):
         wsa = list(values[WholeSlideDataSet.ANNOTATIONS_KEY].values())[0]
         wsi = list(values[WholeSlideDataSet.IMAGES_KEY].values())[0]
         x_offset, y_offset = get_offset(wsi)
-        annotation_callback = OffsetAnnotationCallback(x_offset, y_offset )
+        annotation_callback = OffsetAnnotationCallback(x_offset, y_offset)
         annotation_callback(wsa.annotations)
+        wsa._annotation_selector = AnnotationSelector(wsa.annotations, sorters=wsa._parser.sorters)
