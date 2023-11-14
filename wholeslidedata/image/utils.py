@@ -4,6 +4,8 @@ import numpy as np
 from wholeslidedata.annotation.types import Annotation
 from wholeslidedata.samplers.utils import shift_coordinates
 
+class OffsetExtractionError(Exception):
+    ...
 
 def create_thumbnail(wsi, output_folder, spacing=8.0):
     slide = wsi.get_slide(spacing)
@@ -24,3 +26,15 @@ def mask_patch_with_annotation(
     cv2.fillPoly(mask, np.array([coordinates], dtype=np.int32), 1)
     masked_patch[mask == 0] = 0
     return masked_patch
+
+def get_offset(wsi):
+    try:
+        x_offset = wsi._backend._images[0].get('openslide.bounds-x')
+        y_offset = wsi._backend._images[0].get('openslide.bounds-y')
+    except:
+        try:
+            x_offset = wsi._backend.properties["openslide.bounds-x"]
+            y_offset = wsi._backend.properties["openslide.bounds-y"]       
+        except:
+            raise OffsetExtractionError(f"Cant extract offset from {wsi}")
+    return int(x_offset), int(y_offset)

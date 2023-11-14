@@ -32,8 +32,7 @@ class PyVipsImageBackend(WholeSlideImageBackend):
     def _init_shapes(self) -> List[Tuple[int, int]]:
         shapes= []
         for idx, image in enumerate(self._images):
-            shapes.append((image.get(f'openslide.level[{idx}].width'),image.get(f'openslide.level[{idx}].height')))
-        
+            shapes.append((int(image.get(f'openslide.level[{idx}].width')),int(image.get(f'openslide.level[{idx}].height'))))
         return shapes
             
     def _init_downsamplings(self) -> List[float]:

@@ -2,25 +2,22 @@
 default:
   seed: 123
 
-  annotation_parser@replace=true: 
-      module: wholeslidedata.annotation.parser
-      attribute: MaskAnnotationParser
+  annotation_parser@replace(true): 
+      "*object": wholeslidedata.annotation.parser.MaskAnnotationParser
       processing_spacing: 4.0
       
-  label_map: 
+  labels: 
       tissue: 1
       
-  annotation_sampler:
-      attribute: OrderedAnnotationSampler
+  annotation_sampler_name: OrderedAnnotationSampler
   
-  point_sampler:
-      attribute: TopLeftPointSampler
+  point_sampler_name: TopLeftPointSampler
 
   patch_sampler:
       center: False
-      
+
+  patch_label_sampler_name: MaskPatchLabelSampler
   patch_label_sampler:
-      attribute: MaskPatchLabelSampler
       image_backend: 'asap'
       ratio: 1.0
       center: False

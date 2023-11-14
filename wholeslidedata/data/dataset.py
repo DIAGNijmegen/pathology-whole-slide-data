@@ -7,8 +7,11 @@ from typing import Dict, Tuple
 from sourcelib.associations import Associations
 
 from wholeslidedata.annotation import utils as annotation_utils
+from wholeslidedata.annotation.callbacks import OffsetAnnotationCallback
+from wholeslidedata.annotation.selector import AnnotationSelector
 from wholeslidedata.data.files import WholeSlideAnnotationFile, WholeSlideImageFile
 from wholeslidedata.annotation.labels import Labels
+from wholeslidedata.image.utils import get_offset
 
 
 @dataclass(frozen=True)
@@ -240,3 +243,14 @@ class WholeSlideDataSet(UserDict):
                         counts_per_label_per_key_[file_key][label] = 0
                     counts_per_label_per_key_[file_key][label] += pixels
         return counts_per_label_per_key_
+
+
+
+def fix_annotation_offsets(dataset):
+    for values in dataset._data.values():
+        wsa = list(values[WholeSlideDataSet.ANNOTATIONS_KEY].values())[0]
+        wsi = list(values[WholeSlideDataSet.IMAGES_KEY].values())[0]
+        x_offset, y_offset = get_offset(wsi)
+        annotation_callback = OffsetAnnotationCallback(x_offset, y_offset)
+        annotation_callback(wsa.annotations)
+        wsa._annotation_selector = AnnotationSelector(wsa.annotations, sorters=wsa._parser.sorters)

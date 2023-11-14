@@ -1,3 +1,4 @@
+from copy import copy
 from pathlib import Path
 
 import numpy as np
@@ -30,31 +31,37 @@ class PatchProducer(Producer):
             )
 
     def create_data(self, message: dict) -> np.ndarray:
-        patch = self._image.get_patch(
-            x=message["x"],
-            y=message["y"],
-            width=message["tile_shape"][1],
-            height=message["tile_shape"][0],
-            spacing=message["spacing"],
-            center=message["center"],
-        )
-
-        mask = None
-        if self._mask is not None:
-            mask = self._mask.get_patch(
+        patches = [] 
+        masks = []
+        for spacing in message["spacings"]:
+            patch = np.array(self._image.get_patch(
                 x=message["x"],
                 y=message["y"],
                 width=message["tile_shape"][1],
                 height=message["tile_shape"][0],
-                spacing=message["spacing"],
-                center=message['center'],
-                relative=self._image.spacings[0],
-            ).squeeze()
+                spacing=spacing,
+                center=message["center"],
+            ))
+            patches.append(patch)
 
-        for callback in self._hooks:
-            patch, mask = callback(patch, mask)
+            mask = None
+            if self._mask is not None:
+                mask = self._mask.get_patch(
+                    x=message["x"],
+                    y=message["y"],
+                    width=message["tile_shape"][1],
+                    height=message["tile_shape"][0],
+                    spacing=spacing,
+                    center=message['center'],
+                    relative=self._image.spacings[0],
+                ).squeeze()
 
-        if mask is not None:
-            return np.array([patch]), np.array([mask])
+            for callback in self._hooks:
+                patch, mask = callback(patch, mask)
+            
+            if mask is not None:
+                masks.append(mask)
 
-        return np.array([patch])
+        if len(masks) > 0:
+            return [patches], [masks]
+        return [patches]

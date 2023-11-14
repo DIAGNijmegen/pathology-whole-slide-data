@@ -26,7 +26,7 @@ class PatchBufferIterator(BufferIterator):
             self._index = 0
             raise StopIteration()
         self._index += 1
-        return *tuple(map(np.squeeze, super().__next__())), self._info_queue.get()
+        return *super().__next__(), self._info_queue.get()
 
     def reset(self):
         self._buffer_factory._commander.reset()
@@ -38,7 +38,7 @@ def create_patch_iterator(
     patch_configuration=PatchConfiguration(),
     commander_class=SlidingPatchCommander,
     producer_class=PatchProducer,
-    backend="asap",
+    backend="openslide",
     context=DEFAULT_CONTEXT,
     cpus=1,
     producer_hooks=(),
