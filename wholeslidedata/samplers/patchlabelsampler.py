@@ -143,7 +143,7 @@ class SegmentationPatchLabelSampler(PatchLabelSampler):
                 mask[holemask != -1] = holemask[holemask != -1]
 
             elif isinstance(annotation, PointAnnotation):
-                mask[int(coordinates[1]), int(coordinates[0])] = annotation.label.value
+                mask[int(coordinates[0][1]), int(coordinates[0][0])] = annotation.label.value
 
         return mask.astype(np.uint8)
 
