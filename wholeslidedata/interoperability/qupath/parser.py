@@ -10,8 +10,9 @@ class QuPathAnnotationParser(AnnotationParser):
     def get_available_labels(opened_annotation: dict):
         labels = set(
             [
-                annotation["properties"]["classification"]["name"]
-                for annotation in opened_annotation
+        annotation.get("properties", {}).get("classification", {}).get("name")
+        for annotation in opened_annotation
+        if annotation.get("properties", {}).get("classification") and annotation.get("properties", {}).get("classification", {}).get("name")
             ]
         )
         labels = list(zip(labels, list(range(len(labels)))))
