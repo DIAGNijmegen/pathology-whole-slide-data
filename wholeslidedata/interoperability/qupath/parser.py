@@ -22,6 +22,8 @@ class QuPathAnnotationParser(AnnotationParser):
     def _open_annotation(self, path):
         with open(path) as json_file:
             data = json.load(json_file)
+            if isinstance(data, dict) and "features" in data:
+                data = data['features']
             if type(data) is not list:
                 data = [data]
             return data
