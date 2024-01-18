@@ -1,3 +1,4 @@
+import argparse
 from pathlib import Path
 from shapely import geometry
 from shapely.ops import unary_union
@@ -11,6 +12,7 @@ import numpy as np
 import cv2
 from wholeslidedata.annotation.utils import write_json_annotations
 from typing import List, Optional
+from ast import literal_eval
 
 def polygon_value_and_index_to_outer_inner(value, index, hierarchies_dict):
     """cv2_polygonize_with_hierarchy helper function: checks if poligon is outer (exterior) or inner (a hole) based on the hierarchy of the polygon"""
@@ -153,7 +155,7 @@ def labels_to_label_and_color_mapping(labels):
     }
     return label_mapping, color_mapping
 
-def main_new(
+def convert_mask_to_xml_or_json(
     mask_path: Path,
     output_folder: Path,
     processing_spacing: float,
@@ -253,6 +255,16 @@ def main_new(
             print('ret == True, quitting optional loop and returning: polygons, annotations')
             return polygons, annotations
 
+def parse_labels(arg):
+    try:
+        labels = literal_eval(arg)
+        if not isinstance(labels, dict):
+            raise ValueError("Labels must be a dictionary.")
+        return labels
+    except (ValueError, SyntaxError):
+        raise argparse.ArgumentTypeError("Invalid labels format. Please provide a valid dictionary.")
+
+
 def example_usage():
     # EXAMPLE specific settings
     mask_path = "" # can be a file or folder where it seached for alld .tif files
@@ -296,7 +308,7 @@ def example_usage():
 
     # RUN
     if ret == False:
-        polygons, annotations = main_new(
+        convert_mask_to_xml_or_json(
             mask_path=Path(mask_path),
             output_folder=Path(output_folder),
             processing_spacing=processing_spacing,
@@ -314,7 +326,7 @@ def example_usage():
         )
     
     if ret == True:
-        polygons, annotations = main_new(
+        polygons, annotations = convert_mask_to_xml_or_json(
             mask_path=Path(mask_path),
             output_folder=Path(str(output_folder)),
             processing_spacing=processing_spacing,
@@ -332,3 +344,50 @@ def example_usage():
             ret=True,
         )
         return polygons, annotations
+
+
+def main():
+    parser = argparse.ArgumentParser(description='Script that converts masks to xml (and optionally json) annotations. Ensures correct loading of holes in annotations using WholeSlideData, and reduces filesize')
+    
+    # IO related settings
+    parser.add_argument('--mask_path', type=str, help='Path to the mask file or folder where it will search for .tif files')
+    parser.add_argument('--output_folder', type=str, help='Output folder path')
+
+    # Data specific settings
+    parser.add_argument('--labels', type=parse_labels, help='Labels as a dictionary. For example: --labels \'"Background": 0, "Tumor": 1, "Stroma": 3\'')    
+    parser.add_argument('--wsi_spacing', type=float, help='Smallest spacing at which the WSI was scanned (for example 0.25). This together with the mask_spacing will make sure the coordnates of your output line up with the original WSI')
+    parser.add_argument('--mask_spacing', type=float, help='Spacing at which the input mask was made. Whis together with the wsi_spacing will make sure the coordnates of your output line up with the original WSI')
+    
+    # Preference settings
+    parser.add_argument('--processing_spacing', type=int, help='The spacing on which the mask will be read and processed. This decides largely the precision of the polygons and the filesize of the output')
+    parser.add_argument('--simplify', type=float, default=0.5, help='# This simplifies the polygons, decreasing the size of the output files, None means no simplification, advised is 0.5 (slight simplification) to 8 for courser masks')
+    parser.add_argument('--write_additional_json', action='store_true', default=True, help='Write additional JSON files. JSONs are faster during training')
+    parser.add_argument('--overwrite', action='store_true', help='Overwrite existing files')
+        
+    args = parser.parse_args()
+    
+    # Default settings
+    label_mapping, color_mapping = labels_to_label_and_color_mapping(args.labels)
+    mask_wsi_spacing_ratio = args.mask_spacing / args.wsi_spacing
+    filename_tail = f'_spacing{args.processing_spacing}_simplify{str(args.simplify).replace(".", "")}'
+
+    convert_mask_to_xml_or_json(
+        mask_path=Path(args.mask_path),
+        output_folder=Path(args.output_folder),
+        processing_spacing=args.processing_spacing,
+        label_mapping=label_mapping,
+        color_mapping=color_mapping,
+        dilation_iterations=0,
+        erose_iterations=0,
+        exclude_holes=True, 
+        mask_wsi_spacing_ratio=mask_wsi_spacing_ratio,
+        simplify=args.simplify,
+        union=False,
+        write_additional_json=args.write_additional_json,
+        filename_tail=filename_tail,
+        overwrite=args.overwrite,
+        ret=False,
+    )
+
+if __name__ == '__main__':
+    main()
