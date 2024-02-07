@@ -57,10 +57,7 @@ class AnnotationParser:
         if self._renamed_labels is not None:
             self._renamed_labels = Labels.create(self._renamed_labels)
 
-        self._sample_annotation_types = [
-            annotation_type
-            for annotation_type in sample_annotation_types
-        ]
+        self._sample_annotation_types = sample_annotation_types
 
         self._sample_label_names = sample_label_names
         self._callbacks = callbacks if callbacks is not None else []
@@ -106,6 +103,8 @@ class AnnotationParser:
             return []
 
         annotations = []
+        sample_annotations = []
+
         for index, annotation in enumerate(self._parse(path)):
             annotation["index"] = index
             annotation["label"] = self._rename_label(annotation["label"])
@@ -113,10 +112,17 @@ class AnnotationParser:
                 annotation["spacing"] = spacing
             annotation.update(self._kwargs)
             annotations.append(Annotation.create(**annotation))
+            
+            if len(self._callbacks)>0:
+                sample_annotations.append(Annotation.create(**annotation))
+        
+        if len(self._callbacks)>0:
+            for callback in self._callbacks:
+                sample_annotations = callback(sample_annotations)
+        else:
+            sample_annotations = annotations
 
-        for callback in self._callbacks:
-            annotations = callback(annotations)
-        return annotations
+        return annotations, sample_annotations
 
     def _get_labels(self, opened_annotation):
         if self._labels is None:

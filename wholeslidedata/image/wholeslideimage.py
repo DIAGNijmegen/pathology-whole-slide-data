@@ -11,9 +11,9 @@ from wholeslidedata.image.backends import get_backend
 from wholeslidedata.image.spacings import (
     calculate_ratios_and_spacings,
     take_closest_level,
+    QUANTIZED_SPACINGS,
 )
 from wholeslidedata.image.utils import mask_patch_with_annotation
-
 
 class WholeSlideImage:
     SPACING_MARGIN = 0.3
@@ -22,7 +22,7 @@ class WholeSlideImage:
         self,
         path: Union[Path, str],
         backend: Union[Type[WholeSlideImageBackend], str] = "openslide",
-        auto_resample: bool = False,
+        auto_resampler: bool = False,
     ) -> None:
         """WholeSlideImage that can open en sample from whole slide images
 
@@ -33,7 +33,7 @@ class WholeSlideImage:
 
         self._path = path
         self._backend = get_backend(backend)(path=self._path)
-        self._auto_resample = auto_resample
+        self._auto_resample = auto_resampler
         self._shapes = self._backend._init_shapes()
         self._downsamplings = self._backend._init_downsamplings()
         self._spacings = self._backend._init_spacings(self._downsamplings)
@@ -101,37 +101,6 @@ class WholeSlideImage:
         )
         return cv2.resize(patch, (width, height))
 
-    def _get_patch_auto_resampled(
-        self,
-        x: int,
-        y: int,
-        width: int,
-        height: int,
-        spacing: float,
-        center: bool = True,
-        relative: bool = False,
-    ):
-        (
-            coordinate_ratio,
-            sample_ratio,
-            quantize_ratio,
-            quantized_sample_spacing,
-        ) = calculate_ratios_and_spacings(self.spacings, spacing, relative)
-
-        level = self.get_level_from_spacing(quantized_sample_spacing)
-
-        x, y = x * coordinate_ratio, y * coordinate_ratio
-
-        if quantize_ratio != 1:
-            if center:
-                x, y = x - quantize_ratio * (width // 2), y - quantize_ratio * (
-                    height // 2
-                )
-            return self._get_resampled_patch(x, y, width, height, quantize_ratio, level)
-
-        if center:
-            x, y = x - sample_ratio * (width // 2), y - sample_ratio * (height // 2)
-        return self._backend.get_patch(x, y, width, height, level)
 
     def _get_patch(
         self,
@@ -242,3 +211,30 @@ class WholeSlideImage:
 
     def __repr__(self):
         return str(self.path)
+    
+# class _AutoReSampler:
+
+#     def __init__(self, wsi: WholeSlideImage):
+#         self._wsi = wsi
+        
+
+#     def resample(self, spacing):
+#         available_level = self._wsi.get_level_from_spacing(spacing)-1
+#         if available_level<0:
+#             raise ValueError(f"No level not available for resampling spacing {spacing}")
+        
+#         sample_spacing = self._wsi.spacings[available_level]
+
+#         closest_level_wsi = take_closest_level(QUANTIZED_SPACINGS, sample_spacing)
+#         closest_level_quantized = take_closest_level(QUANTIZED_SPACINGS, spacing)
+
+#         if closest_level_wsi == closest_level_quantized:
+#             pass
+#             # no resampling is needed
+        
+#         if closest_level_quantized > closest_level_wsi:
+#             raise ValueError("weird because of -1")
+
+#         downsampling = 2**(closest_level_quantized-closest_level_wsi) 
+
+

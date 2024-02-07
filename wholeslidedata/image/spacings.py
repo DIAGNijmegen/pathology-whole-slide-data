@@ -1,7 +1,7 @@
 from bisect import bisect_left
 
 
-_QUANTIZED_SPACINGS = [(0.125 / 8) * (2 * 2**i) for i in range(16)]
+QUANTIZED_SPACINGS = [(0.125 / 8) * (2 * 2**i) for i in range(16)]
 
 
 def take_closest_level(spacings, spacing):
@@ -21,11 +21,11 @@ def get_quantized_spacing(spacings, spacing):
 
 def get_coordinate_spacing(spacing_level_0, spacing, relative):
     if relative is False:
-        return get_quantized_spacing(_QUANTIZED_SPACINGS, spacing_level_0)
+        return get_quantized_spacing(QUANTIZED_SPACINGS, spacing_level_0)
     if relative is True:
-        return get_quantized_spacing(_QUANTIZED_SPACINGS, spacing)
+        return get_quantized_spacing(QUANTIZED_SPACINGS, spacing)
     if type(relative) in (float, int):
-        return get_quantized_spacing(_QUANTIZED_SPACINGS, relative)
+        return get_quantized_spacing(QUANTIZED_SPACINGS, relative)
     raise ValueError(f"relative {relative} is not a valid value")
 
 
