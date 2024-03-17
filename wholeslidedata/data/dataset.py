@@ -37,6 +37,7 @@ class WholeSlideDataSet(UserDict):
         spacing=None,
     ):
 
+        print(labels)
         self._mode = mode
         self._spacing = spacing
         self._load_images = load_images
@@ -45,8 +46,8 @@ class WholeSlideDataSet(UserDict):
         self._data = dict(sorted(self._open(self._associations, labels=labels).items()))
         self._labels = self._init_labels()
         self._sample_references = self._init_samples()
-        self._sample_labels = Labels.create([label for label in self._labels if label.name in list(self._sample_references.keys())])
-        
+        self._sample_labels = Labels.create(list(self._sample_references))
+  
         if len(self._sample_references) == 0:
             raise ValueError(
                 f"No samples found in {self.mode.name} DataSet: \n{pformat(self.annotation_counts_per_label_per_key)}"
@@ -81,9 +82,10 @@ class WholeSlideDataSet(UserDict):
     def get_annotation_from_reference(
         self, sample_reference: WholeSlideSampleReference
     ):
+            
         return self.get_wsa_from_reference(
             sample_reference=sample_reference
-        ).annotations[sample_reference.annotation_index]
+        ).sampling_annotations[sample_reference.annotation_index]
 
     def _open(self, associations, labels):
         data = dict()
@@ -155,17 +157,17 @@ class WholeSlideDataSet(UserDict):
         for values in self._data.values():
             for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
                 _counts.append(
-                    annotation_utils.get_counts_in_annotations(wsa.annotations)
+                    annotation_utils.get_counts_in_annotations(wsa.sampling_annotations)
                 )
         return sum(_counts)
 
     @property
     def annotation_counts_per_label(self) -> Dict[str, int]:
-        _counts_per_label_ = {label.name: 0 for label in self._labels}
+        _counts_per_label_ = {label.name: 0 for label in self._sample_labels}
         for values in self._data.values():
             for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
                 for label, count in annotation_utils.get_counts_in_annotations(
-                    wsa.annotations, labels=self._labels
+                    wsa.sampling_annotations, labels=self._sample_labels
                 ).items():
                     if label in _counts_per_label_:
                         _counts_per_label_[label] += count
@@ -178,7 +180,7 @@ class WholeSlideDataSet(UserDict):
             _counts_per_key[file_key] = 0
             for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
                 _counts_per_key[file_key] += annotation_utils.get_counts_in_annotations(
-                    wsa.annotations
+                    wsa.sampling_annotations
                 )
         return _counts_per_key
 
@@ -189,7 +191,7 @@ class WholeSlideDataSet(UserDict):
             _counts_per_label_per_key_[file_key] = {}
             for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
                 for label, count in annotation_utils.get_counts_in_annotations(
-                    wsa.annotations, labels=self._labels
+                    wsa.sampling_annotations, labels=self._sample_labels
                 ).items():
                     if label not in _counts_per_label_per_key_[file_key]:
                         _counts_per_label_per_key_[file_key][label] = 0
@@ -202,18 +204,18 @@ class WholeSlideDataSet(UserDict):
         for values in self._data.values():
             for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
                 _counts.append(
-                    annotation_utils.get_pixels_in_annotations(wsa.annotations)
+                    annotation_utils.get_pixels_in_annotations(wsa.sampling_annotations)
                 )
         return sum(_counts)
 
     @property
     def pixels_per_label(self) -> Dict[str, int]:
-        counts_per_label_ = {label.name: 0 for label in self._labels}
+        counts_per_label_ = {label.name: 0 for label in self._sample_labels}
 
         for values in self._data.values():
             for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
                 for label, count in annotation_utils.get_pixels_in_annotations(
-                    wsa.annotations, labels=self._labels
+                    wsa.sampling_annotations, labels=self._sample_labels
                 ).items():
                     if label in counts_per_label_:
                         counts_per_label_[label] += count
@@ -226,7 +228,7 @@ class WholeSlideDataSet(UserDict):
             _counts_per_key[file_key] = 0
             for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
                 _counts_per_key[file_key] += annotation_utils.get_pixels_in_annotations(
-                    wsa.annotations
+                    wsa.sampling_annotations
                 )
         return _counts_per_key
 
@@ -237,7 +239,7 @@ class WholeSlideDataSet(UserDict):
             counts_per_label_per_key_[file_key] = {}
             for wsa in values[self.__class__.ANNOTATIONS_KEY].values():
                 for label, pixels in annotation_utils.get_pixels_in_annotations(
-                    wsa.annotations, labels=self._labels
+                    wsa.sampling_annotations, labels=self._labels
                 ).items():
                     if label not in counts_per_label_per_key_[file_key]:
                         counts_per_label_per_key_[file_key][label] = 0

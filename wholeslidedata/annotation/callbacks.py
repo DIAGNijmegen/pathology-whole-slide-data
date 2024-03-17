@@ -59,7 +59,7 @@ class TiledAnnotationCallback(AnnotationCallback):
                         new_annotations.append(Annotation.create(
                             index=index,
                             coordinates=box_poly.exterior.coords,
-                            label=annotation.label.todict(),
+                            label={'name': 'tile', 'value': 0},
                                 ))
                         index += 1
 

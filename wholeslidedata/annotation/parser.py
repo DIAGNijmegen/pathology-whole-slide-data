@@ -37,7 +37,7 @@ class AnnotationParser:
         sample_label_names: Union[list, tuple] = (),
         sample_annotation_types: Union[list, tuple] = ("polygon",),
         callbacks=None,
-        sorters=(sort_by_label_value, ),
+        sorters=tuple(),
         **kwargs
     ):
         """Init

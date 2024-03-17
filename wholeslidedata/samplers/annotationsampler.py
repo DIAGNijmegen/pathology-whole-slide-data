@@ -23,6 +23,7 @@ class AnnotationSampler(Sampler, Iterator):
 
 class OrderedAnnotationSampler(AnnotationSampler):
     def __init__(self, counts_per_label, seed):
+        print(counts_per_label)
         super().__init__(counts_per_label=counts_per_label, seed=seed)
         self._counters = {label: 0 for label in self._counts_per_label.keys()}
         self.reset()

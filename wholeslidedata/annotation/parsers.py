@@ -14,6 +14,7 @@ DEFAULT_PARSERS = {
 
 
 PARSERS = {
+    'qupath': QuPathAnnotationParser,
     'wsa': WholeSlideAnnotationParser,
     'mask': MaskAnnotationParser,
     'asap': AsapAnnotationParser,
