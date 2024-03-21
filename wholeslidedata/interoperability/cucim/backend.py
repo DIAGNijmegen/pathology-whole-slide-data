@@ -4,11 +4,8 @@ import numpy as np
 from wholeslidedata.image.backend import WholeSlideImageBackend
 from cucim import CuImage
 
-class _MixedMeta(type(WholeSlideImageBackend), type(CuImage)):
-    pass
 
-
-class CucimWholeSlideImageBackend(CuImage, WholeSlideImageBackend, metaclass=_MixedMeta):
+class CucimWholeSlideImageBackend(CuImage, WholeSlideImageBackend):
     def __init__(self, path: str) -> None:
         CuImage.__init__(self, path)
         WholeSlideImageBackend.__init__(self, path)
