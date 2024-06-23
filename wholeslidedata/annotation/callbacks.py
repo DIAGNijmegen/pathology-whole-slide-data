@@ -55,7 +55,7 @@ class TiledAnnotationCallback(AnnotationCallback):
             for x in range(x1, x2, self._tile_size-self._overlap):
                 for y in range(y1, y2, self._tile_size-self._overlap):
                     box_poly = geometry.box(x, y, x+self._tile_size, y+self._tile_size)
-                    if not self._full_coverage or box_poly.within(annotation):
+                    if not self._full_coverage or box_poly.within(annotation.geometry):
                         new_annotations.append(Annotation.create(
                             index=index,
                             coordinates=box_poly.exterior.coords,
