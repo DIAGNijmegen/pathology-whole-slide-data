@@ -36,9 +36,12 @@ class OpenSlideWholeSlideImageBackend(OpenSlide, WholeSlideImageBackend):
             spacing = float(self.properties["openslide.mpp-x"])
         except KeyError as key_error:
             try:
-                unit = {"cm": 10000, "centimeter": 10000}[
-                    self.properties["tiff.ResolutionUnit"]
-                ]
+                unit = {
+                    "cm": 10000, 
+                    "centimeter": 10000, 
+                    "inch": 25400, 
+                    "inches": 25400  # 1 inch = 25400 micrometers
+                }[self.properties["tiff.ResolutionUnit"]]
                 res = float(self.properties["tiff.XResolution"])
                 spacing = unit / res
             except KeyError as key_error:
