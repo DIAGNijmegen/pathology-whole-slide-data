@@ -6,7 +6,7 @@ from wholeslidedata.iterators.patchiterator import (PatchConfiguration,
 cleanup_on_sigterm()
 
 
-def test_patch_iterator():
+def test_patch_iterator_spawn():
     with create_patch_iterator(
         image_path="/tmp/TCGA-21-5784-01Z-00-DX1.tif",
         mask_path="/tmp/TCGA-21-5784-01Z-00-DX1_tb_mask.tif",
