@@ -77,6 +77,7 @@ def write_image_at_spacing(image, spacing, output_path):
         pyramid=True,
         tile=True,
         compression="jpeg",
+        Q=98,
         xres=1000.0 / spacing[0],
         yres=1000.0 / spacing[1],
         bigtiff=True,

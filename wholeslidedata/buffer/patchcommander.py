@@ -1,4 +1,5 @@
 from abc import abstractmethod
+import math
 from multiprocessing import Queue
 from pathlib import Path
 from concurrentbuffer.commander import Commander
@@ -43,14 +44,28 @@ class PatchCommander(Commander):
         self._x_dims, self._y_dims = wsi.shapes[0][:2]
         self._level_0_spacing = wsi.spacings[0]
         wsi.close()
-       
+        wsi = None
+        del wsi
+
         self._info_queue = Queue()
-        self._n_messages = None
         self._messages = []
-        self.reset()
 
     def __len__(self):
-        return self._n_messages
+        offset_y = self._patch_configuration.offset[1]
+        offset_x = self._patch_configuration.offset[0]
+        y_dims = self._y_dims
+        x_dims = self._x_dims
+
+        step_row = int(self._patch_configuration.patch_shape[0] * self._ratio) - int(
+            self._patch_configuration.overlap[0] * self._ratio
+        )
+        step_col = int(self._patch_configuration.patch_shape[1] * self._ratio) - int(
+            self._patch_configuration.overlap[1] * self._ratio
+        )
+        num_outer_iterations = math.ceil((y_dims - offset_y) / step_row)
+        num_inner_iterations = math.ceil((x_dims - offset_x) / step_col)
+
+        return num_outer_iterations * num_inner_iterations
 
     @property
     def shapes(self):
@@ -60,13 +75,15 @@ class PatchCommander(Commander):
     def info_queue(self):
         return self._info_queue
 
+    def build(self):
+        self.reset()
+
     @abstractmethod
     def get_patch_messages() -> list:
         ...
 
     def reset(self):
         messages = self.get_patch_messages()
-        self._n_messages = len(messages)
         self._messages = iter(messages)
 
     def create_message(self) -> dict:
@@ -87,7 +104,7 @@ class SlidingPatchCommander(PatchCommander):
             self._patch_configuration.overlap[1] * self._ratio
         )
         
-        if self._mask_path is not None:
+        if self._mask_path is not None and self._mask is None:
             self._mask = WholeSlideImage(self._mask_path, backend=self._backend, auto_resample=True)
         for row in range(self._patch_configuration.offset[1], self._y_dims, step_row):
             for col in range(self._patch_configuration.offset[0], self._x_dims, step_col):
