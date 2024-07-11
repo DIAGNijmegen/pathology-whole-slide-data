@@ -2,7 +2,7 @@ from pathlib import Path
 import gdown
 import click
 
-WSI_DOWNLOAD_LINK = "https://drive.google.com/uc?id=1NefnQu3e0l4WR7Xb809gpVORXrKpJb0q"
+WSI_DOWNLOAD_LINK = "https://drive.google.com/uc?id=1a-77TNRlSoPbRlNI0VtlHG3d7xTSpcwB"
 WSI_NAME = Path("TCGA-21-5784-01Z-00-DX1.tif")
 
 WSA_DOWNLOAD_LINK = "https://drive.google.com/uc?id=1jkTp0IJHHpmLd1yDO1L3KRFJgm0STh0d"
