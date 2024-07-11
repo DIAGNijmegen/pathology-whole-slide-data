@@ -383,10 +383,12 @@
 <hr class="docutils" />
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>gdown
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># !pip install gdown</span>
 <span class="kn">import</span> <span class="nn">gdown</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span> <span class="nn">downloaddata</span> <span class="kn">import</span> <span class="n">WSA_DOWNLOAD_LINK</span><span class="p">,</span> <span class="n">WSA_NAME</span><span class="p">,</span> <span class="n">WSI_DOWNLOAD_LINK</span><span class="p">,</span> <span class="n">WSI_NAME</span><span class="p">,</span> <span class="n">WSM_DOWNLOAD_LINK</span><span class="p">,</span> <span class="n">WSM_NAME</span>
 
 <span class="k">def</span> <span class="nf">_download</span><span class="p">(</span><span class="n">output_folder</span><span class="p">,</span> <span class="n">download_link</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
     <span class="n">output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_folder</span><span class="p">)</span> <span class="o">/</span> <span class="n">name</span>
@@ -400,28 +402,12 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: gdown in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (4.6.0)
-Requirement already satisfied: six in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from gdown) (1.16.0)
-Requirement already satisfied: beautifulsoup4 in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from gdown) (4.11.1)
-Requirement already satisfied: tqdm in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from gdown) (4.64.1)
-Requirement already satisfied: filelock in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from gdown) (3.9.0)
-Requirement already satisfied: requests[socks] in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from gdown) (2.28.1)
-Requirement already satisfied: soupsieve&gt;1.2 in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from beautifulsoup4-&gt;gdown) (2.3.2.post1)
-Requirement already satisfied: certifi&gt;=2017.4.17 in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from requests[socks]-&gt;gdown) (2022.12.7)
-Requirement already satisfied: urllib3&lt;1.27,&gt;=1.21.1 in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from requests[socks]-&gt;gdown) (1.26.13)
-Requirement already satisfied: charset-normalizer&lt;3,&gt;=2 in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from requests[socks]-&gt;gdown) (2.1.1)
-Requirement already satisfied: idna&lt;4,&gt;=2.5 in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from requests[socks]-&gt;gdown) (3.4)
-Requirement already satisfied: PySocks!=1.5.7,&gt;=1.5.6 in /home/mart/miniconda3/envs/wholeslidedata/lib/python3.9/site-packages (from requests[socks]-&gt;gdown) (1.7.1)
-</pre></div>
-</div>
-</div>
 </div>
 <section id="download-segmentation-data">
 <h2>Download Segmentation Data<a class="headerlink" href="#download-segmentation-data" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">WSI_DOWNLOAD_LINK</span> <span class="o">=</span> <span class="s2">&quot;https://drive.google.com/uc?id=1NefnQu3e0l4WR7Xb809gpVORXrKpJb0q&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">WSI_DOWNLOAD_LINK</span> <span class="o">=</span> <span class="s2">&quot;https://drive.google.com/uc?id=1a-77TNRlSoPbRlNI0VtlHG3d7xTSpcwB&quot;</span>
 <span class="n">WSI_NAME</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;TCGA-21-5784-01Z-00-DX1.tif&quot;</span><span class="p">)</span>
 
 <span class="n">WSA_DOWNLOAD_LINK</span> <span class="o">=</span> <span class="s2">&quot;https://drive.google.com/uc?id=1jkTp0IJHHpmLd1yDO1L3KRFJgm0STh0d&quot;</span>
@@ -436,22 +422,6 @@ Requirement already satisfied: PySocks!=1.5.7,&gt;=1.5.6 in /home/mart/miniconda
     <span class="n">_download</span><span class="p">(</span><span class="n">output_folder</span><span class="p">,</span> <span class="n">WSM_DOWNLOAD_LINK</span><span class="p">,</span> <span class="n">WSM_NAME</span><span class="p">)</span>
     
 <span class="n">download_segmentation_data</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading...
-From: https://drive.google.com/uc?id=1noRtbC5fxBlnO7YnvktjIDhFI61PdOSB
-To: /tmp/TCGA-21-5784-01Z-00-DX1.tif
-100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 363M/363M [00:09&lt;00:00, 39.7MB/s]
-Downloading...
-From: https://drive.google.com/uc?id=1jkTp0IJHHpmLd1yDO1L3KRFJgm0STh0d
-To: /tmp/TCGA-21-5784-01Z-00-DX1.xml
-100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 9.67k/9.67k [00:00&lt;00:00, 11.7MB/s]
-Downloading...
-From: https://drive.google.com/uc?id=1nLdKzSLq79mon1RCevgEmG59E8Oq9JhZ
-To: /tmp/TCGA-21-5784-01Z-00-DX1_tb_mask.tif
-100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 318k/318k [00:00&lt;00:00, 10.6MB/s]
 </pre></div>
 </div>
 </div>
