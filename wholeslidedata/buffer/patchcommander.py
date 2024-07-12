@@ -30,7 +30,6 @@ class PatchCommander(Commander):
         self._mask_path = mask_path
         self._backend = backend
         self._patch_configuration = patch_configuration
-        self._mask = None
 
         inputs = len(self._patch_configuration.spacings)
         shape = self._patch_configuration.patch_shape
@@ -48,25 +47,13 @@ class PatchCommander(Commander):
         del wsi
 
         self._info_queue = Queue()
+        self._n_messages = None
         self._messages = []
+        self.reset()
 
     def __len__(self):
-        offset_y = self._patch_configuration.offset[1]
-        offset_x = self._patch_configuration.offset[0]
-        y_dims = self._y_dims
-        x_dims = self._x_dims
-
-        step_row = int(self._patch_configuration.patch_shape[0] * self._ratio) - int(
-            self._patch_configuration.overlap[0] * self._ratio
-        )
-        step_col = int(self._patch_configuration.patch_shape[1] * self._ratio) - int(
-            self._patch_configuration.overlap[1] * self._ratio
-        )
-        num_outer_iterations = math.ceil((y_dims - offset_y) / step_row)
-        num_inner_iterations = math.ceil((x_dims - offset_x) / step_col)
-
-        return num_outer_iterations * num_inner_iterations
-
+        return self._n_messages
+    
     @property
     def shapes(self):
         return self._shapes
@@ -75,15 +62,13 @@ class PatchCommander(Commander):
     def info_queue(self):
         return self._info_queue
 
-    def build(self):
-        self.reset()
-
     @abstractmethod
     def get_patch_messages() -> list:
         ...
 
     def reset(self):
         messages = self.get_patch_messages()
+        self._n_messages = len(messages)
         self._messages = iter(messages)
 
     def create_message(self) -> dict:
@@ -104,12 +89,14 @@ class SlidingPatchCommander(PatchCommander):
             self._patch_configuration.overlap[1] * self._ratio
         )
         
-        if self._mask_path is not None and self._mask is None:
-            self._mask = WholeSlideImage(self._mask_path, backend=self._backend, auto_resample=True)
+        mask = None
+        if self._mask_path is not None:
+            mask = WholeSlideImage(self._mask_path, backend=self._backend, auto_resample=True)
+            
         for row in range(self._patch_configuration.offset[1], self._y_dims, step_row):
             for col in range(self._patch_configuration.offset[0], self._x_dims, step_col):
-                if self._mask is not None:
-                    mask = self._mask.get_patch(
+                if mask is not None:
+                    mask = mask.get_patch(
                         x=col,
                         y=row,
                         width=self._patch_configuration.patch_shape[1],
@@ -131,4 +118,10 @@ class SlidingPatchCommander(PatchCommander):
                 }
                 self._info_queue.put(message)
                 messages.append(message)
+        
+        if mask is not None:
+            mask.close()
+            mask = None
+            del mask
+
         return messages
