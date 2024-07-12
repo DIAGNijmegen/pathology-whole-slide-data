@@ -89,14 +89,14 @@ class SlidingPatchCommander(PatchCommander):
             self._patch_configuration.overlap[1] * self._ratio
         )
         
-        mask = None
+        wsm = None
         if self._mask_path is not None:
-            mask = WholeSlideImage(self._mask_path, backend=self._backend, auto_resample=True)
-            
+            wsm = WholeSlideImage(self._mask_path, backend=self._backend, auto_resample=True)
+
         for row in range(self._patch_configuration.offset[1], self._y_dims, step_row):
             for col in range(self._patch_configuration.offset[0], self._x_dims, step_col):
-                if mask is not None:
-                    mask = mask.get_patch(
+                if wsm is not None:
+                    mask_patch = wsm.get_patch(
                         x=col,
                         y=row,
                         width=self._patch_configuration.patch_shape[1],
@@ -106,7 +106,7 @@ class SlidingPatchCommander(PatchCommander):
                         relative=self._level_0_spacing,
                     )
 
-                    if np.all(mask == 0):
+                    if np.all(mask_patch == 0):
                         continue
 
                 message = {
@@ -119,9 +119,9 @@ class SlidingPatchCommander(PatchCommander):
                 self._info_queue.put(message)
                 messages.append(message)
         
-        if mask is not None:
-            mask.close()
-            mask = None
-            del mask
+        if wsm is not None:
+            wsm.close()
+            wsm = None
+            del wsm
 
         return messages
