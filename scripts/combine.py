@@ -28,6 +28,10 @@ def main(tumor_mask, tissue_mask, mask_output, xml_output):
     for row in range(0, shape[1], tile_size):
         for col in range(0, shape[0], tile_size):
             tile = tissue_slide[row:row + tile_size, col: col + tile_size].squeeze()
+            if tile.shape != (tile_size, tile_size):
+                empty_tile = np.zeros((tile_size, tile_size), dtype='uint8')
+                empty_tile[:tile.shape[0], :tile.shape[1]] = tile
+                tile = empty_tile
             wsm_writer.write_tile(tile=tile.astype('uint8'), coordinates=(int(col), int(row)), mask=tile)
     wsm_writer.save()
     parser = MaskAnnotationParser(shape=(512,512), processing_spacing=4.0)
