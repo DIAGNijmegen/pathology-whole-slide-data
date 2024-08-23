@@ -300,7 +300,7 @@ def example_usage():
     
     # Preference settings
     processing_spacing = 8 # this decides on which spacing the mask is read, deciding largely the precision of the polygons and the filesize of the output
-    simplify=None # this simplifies the polygons, decreasing the size of the output files, None means no simplification, advised is 0.5 (slight simplification) to 8 for courser masks
+    simplify=None # this simplifies the polygons, decreasing the size of the output files, None means no simplification, advised is 0.5 (slight simplification) to 8 for courser masks; note that wholeslidedata.annotation.types.Annotation.create has simplify=2.0 hard-coded, so polygons are always simplified
     union=False # taking the union of the polygons, this is useful for merging the exteriors of overlapping polygons, but will also fill holes if the exteriours form a closed loop
 
     # Debugging settings
@@ -360,7 +360,7 @@ def main():
     
     # Preference settings
     parser.add_argument('--processing_spacing', type=int, help='The spacing on which the mask will be read and processed. This decides largely the precision of the polygons and the filesize of the output')
-    parser.add_argument('--simplify', type=float, default=0.5, help='# This simplifies the polygons, decreasing the size of the output files, None means no simplification, advised is 0.5 (slight simplification) to 8 for courser masks')
+    parser.add_argument('--simplify', type=float, default=0.5, help='# This simplifies the polygons, decreasing the size of the output files, None means no simplification, advised is 0.5 (slight simplification) to 8 for courser masks; note that wholeslidedata.annotation.types.Annotation.create has simplify=2.0 hard-coded, so polygons are always simplified')
     parser.add_argument('--write_additional_json', action='store_true', default=True, help='Write additional JSON files. JSONs are faster during training')
     parser.add_argument('--overwrite', action='store_true', help='Overwrite existing files')
         
