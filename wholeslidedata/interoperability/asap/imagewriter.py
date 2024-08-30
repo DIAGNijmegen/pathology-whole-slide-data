@@ -58,11 +58,51 @@ class WholeSlideImageWriterBase(Writer, MultiResolutionImageWriter):
         Writer.__init__(self, callbacks)
         MultiResolutionImageWriter.__init__(self)
 
+    def _tile_and_coordinate_checks_and_corrections(self, tile, coordinates):
+        # Check if tile shape == self._tile_shape
+        if tile.shape != self._tile_shape:
+            raise TileShapeError(
+                f"Tile shape {tile.shape} does not match expected shape {self._tile_shape}"
+            )
+
+        # Check if tile shape is 2 or 3
+        if len(tile.shape) != 2 and len(tile.shape) != 3:
+            raise TileShapeError(
+                f"Invalid tile shape provided: {tile.shape}, tile shape should contain at 2 or 3 dimensions"
+            )
+        if len(self._tile_shape) != 2 and len(self._tile_shape) != 3:
+            raise TileShapeError(
+                f"Invalid tile shape initialized: {self._tile_shape}, tile shape should contain at 2 or 3 dimensions"
+            )
+
+        # Check if coordinates are aligned with the predefined tile grid
+        if coordinates[0] % self._tile_shape[0] != 0 or coordinates[1] % self._tile_shape[1] != 0:
+            raise CoordinateError(
+                f"Coordinates {coordinates} are not multiples of the tile size {self._tile_shape[:2]}"
+            )
+
+        # Check if coordinates are within the dimensions
+        x, y = coordinates
+        if x >= self._dimensions[0] or y >= self._dimensions[1]:
+            print(f"Tile coordinates {coordinates} are completely outside the dimensions {self._dimensions}... Skipping tile...")
+            return None
+
+        x_end = x + self._tile_shape[0]
+        y_end = y + self._tile_shape[1]
+        if x_end > self._dimensions[0] or y_end > self._dimensions[1]:
+            print(f"Tile outer coordinates {x_end, y_end} are exeeding the dimensions {self._dimensions}... Cropping tile to fit inside the dimensions...")
+            tile_max_x = self._dimensions[0] - x
+            tile_max_y = self._dimensions[1] - y
+            tile = tile[:tile_max_x, :tile_max_y]
+        return tile
+
     def write_tile(self, tile, coordinates=None, mask=None):
         tile = self._apply_tile_callbacks(tile)
         tile = self._mask_tile(tile, mask)
         tile = self._crop_tile(tile)
-        self._write_tile_to_image(tile, coordinates)
+        tile = self._tile_and_coordinate_checks_and_corrections(tile, coordinates)
+        if tile is not None:
+            self._write_tile_to_image(tile, coordinates)
 
     def _write_tile_to_image(self, tile, coordinates):
         if coordinates:
