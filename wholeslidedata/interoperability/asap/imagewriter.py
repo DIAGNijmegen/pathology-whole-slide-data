@@ -75,25 +75,26 @@ class WholeSlideImageWriterBase(Writer, MultiResolutionImageWriter):
                 f"Invalid tile shape initialized: {self._tile_shape}, tile shape should contain at 2 or 3 dimensions"
             )
 
-        # Check if coordinates are aligned with the predefined tile grid
-        if coordinates[0] % self._tile_shape[0] != 0 or coordinates[1] % self._tile_shape[1] != 0:
-            raise CoordinateError(
-                f"Coordinates {coordinates} are not multiples of the tile size {self._tile_shape[:2]}"
-            )
+        if coordinates: 
+            x, y = coordinates
+            # Check if coordinates are aligned with the predefined tile grid
+            if x % self._tile_shape[0] != 0 or y % self._tile_shape[1] != 0:
+                raise CoordinateError(
+                    f"Coordinates {coordinates} are not multiples of the tile size {self._tile_shape[:2]}"
+                )
+    
+            # Check if coordinates are within the dimensions
+            if x >= self._dimensions[0] or y >= self._dimensions[1]:
+                print(f"Tile's upper left coordinates {coordinates} are completely outside the dimensions {self._dimensions}... Skipping tile...")
+                return None
 
-        # Check if coordinates are within the dimensions
-        x, y = coordinates
-        if x >= self._dimensions[0] or y >= self._dimensions[1]:
-            print(f"Tile coordinates {coordinates} are completely outside the dimensions {self._dimensions}... Skipping tile...")
-            return None
-
-        x_end = x + self._tile_shape[0]
-        y_end = y + self._tile_shape[1]
-        if x_end > self._dimensions[0] or y_end > self._dimensions[1]:
-            print(f"Tile outer coordinates {x_end, y_end} are exeeding the dimensions {self._dimensions}... Cropping tile to fit inside the dimensions...")
-            tile_max_x = self._dimensions[0] - x
-            tile_max_y = self._dimensions[1] - y
-            tile = tile[:tile_max_x, :tile_max_y]
+            x_end = x + self._tile_shape[0]
+            y_end = y + self._tile_shape[1]
+            if x_end > self._dimensions[0] or y_end > self._dimensions[1]:
+                print(f"Tile's lower right coordinates {x_end, y_end} are exeeding the dimensions {self._dimensions}... Cropping tile to fit inside the dimensions...")
+                tile_max_x = self._dimensions[0] - x
+                tile_max_y = self._dimensions[1] - y
+                tile = tile[:tile_max_x, :tile_max_y]
         return tile
 
     def write_tile(self, tile, coordinates=None, mask=None):
