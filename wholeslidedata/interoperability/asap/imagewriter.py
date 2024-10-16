@@ -87,14 +87,6 @@ class WholeSlideImageWriterBase(Writer, MultiResolutionImageWriter):
             if x >= self._dimensions[0] or y >= self._dimensions[1]:
                 print(f"Tile's upper left coordinates {coordinates} are completely outside the dimensions {self._dimensions}... Skipping tile...")
                 return None
-
-            x_end = x + self._tile_shape[0]
-            y_end = y + self._tile_shape[1]
-            if x_end > self._dimensions[0] or y_end > self._dimensions[1]:
-                print(f"Tile's lower right coordinates {x_end, y_end} are exeeding the dimensions {self._dimensions}... Cropping tile to fit inside the dimensions...")
-                tile_max_x = self._dimensions[0] - x
-                tile_max_y = self._dimensions[1] - y
-                tile = tile[:tile_max_x, :tile_max_y]
         return tile
 
     def write_tile(self, tile, coordinates=None, mask=None):
