@@ -100,13 +100,13 @@ class SlidingPatchCommander(PatchCommander):
 
         # Add one extra patch on all sides to avoid missing out on patches in more complex patch configurations (e.g. with overlap and offset)
         if any(self._patch_configuration.offset) or any(self._patch_configuration.overlap):
-            x_min_extra = x_min - step_row
-            y_min_extra = y_min - step_col
-            x_max_extra = x_max + step_row
-            y_max_extra = y_max + step_col
+            x_min = x_min - step_row
+            y_min = y_min - step_col
+            x_max = x_max + step_row
+            y_max = y_max + step_col
 
-        for row in range(y_min_extra, y_max_extra, step_row):
-            for col in range(x_min_extra, x_max_extra, step_col):
+        for row in range(y_min, y_max, step_row):
+            for col in range(x_min, x_max, step_col):
                 if wsm is not None:
                     mask = wsm.get_patch(
                         x=col,
