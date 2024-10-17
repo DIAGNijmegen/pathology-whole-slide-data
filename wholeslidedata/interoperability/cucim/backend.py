@@ -1,15 +1,16 @@
-from typing import List, Tuple
+from pathlib import PosixPath
+from typing import List, Tuple, Union
 
 import numpy as np
-from wholeslidedata.image.backend import WholeSlideImageBackend
 from cucim import CuImage
 
-class _MixedMeta(type(WholeSlideImageBackend), type(CuImage)):
-    pass
+from wholeslidedata.image.backend import WholeSlideImageBackend
 
 
-class CucimWholeSlideImageBackend(CuImage, WholeSlideImageBackend, metaclass=_MixedMeta):
-    def __init__(self, path: str) -> None:
+class CucimWholeSlideImageBackend(CuImage, WholeSlideImageBackend):
+    def __init__(self, path: Union[str, PosixPath]) -> None:
+        if isinstance(path, PosixPath):
+            path = str(path)
         CuImage.__init__(self, path)
         WholeSlideImageBackend.__init__(self, path)
 

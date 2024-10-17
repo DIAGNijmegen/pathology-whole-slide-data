@@ -4,7 +4,7 @@ import numpy as np
 from shapely.affinity import affine_transform
 from shapely.geometry import Point
 from wholeslidedata.samplers.sampler import Sampler
-
+from wholeslidedata.annotation.types import PointAnnotation
 
 class PointSampler(Sampler):
     @abc.abstractmethod
@@ -39,6 +39,9 @@ class RandomPointSampler(PointSampler):
         self._simplify = simplify
 
     def sample(self, annotation):
+        if isinstance(annotation, PointAnnotation):
+            return annotation.centroid
+            
         buffer = self._buffer
         if isinstance(self._buffer, dict):
             try:

@@ -1,4 +1,5 @@
 from abc import abstractmethod
+import math
 from multiprocessing import Queue
 from pathlib import Path
 from concurrentbuffer.commander import Commander
@@ -29,7 +30,6 @@ class PatchCommander(Commander):
         self._mask_path = mask_path
         self._backend = backend
         self._patch_configuration = patch_configuration
-        self._mask = None
 
         inputs = len(self._patch_configuration.spacings)
         shape = self._patch_configuration.patch_shape
@@ -43,7 +43,9 @@ class PatchCommander(Commander):
         self._x_dims, self._y_dims = wsi.shapes[0][:2]
         self._level_0_spacing = wsi.spacings[0]
         wsi.close()
-       
+        wsi = None
+        del wsi
+
         self._info_queue = Queue()
         self._n_messages = None
         self._messages = []
@@ -51,7 +53,7 @@ class PatchCommander(Commander):
 
     def __len__(self):
         return self._n_messages
-
+    
     @property
     def shapes(self):
         return self._shapes
@@ -87,8 +89,9 @@ class SlidingPatchCommander(PatchCommander):
             self._patch_configuration.overlap[1] * self._ratio
         )
         
+        wsm = None
         if self._mask_path is not None:
-            self._mask = WholeSlideImage(self._mask_path, backend=self._backend, auto_resample=True)
+            self.wsm = WholeSlideImage(self._mask_path, backend=self._backend, auto_resample=True)
 
         x_min = self._patch_configuration.offset[0]
         y_min = self._patch_configuration.offset[1]
@@ -103,8 +106,8 @@ class SlidingPatchCommander(PatchCommander):
 
         for row in range(y_min_extra, y_max_extra, step_row):
             for col in range(x_min_extra, x_max_extra, step_col):
-                if self._mask is not None:
-                    mask = self._mask.get_patch(
+                if self.wsm is not None:
+                    mask = self.wsm.get_patch(
                         x=col,
                         y=row,
                         width=self._patch_configuration.patch_shape[1],
@@ -130,4 +133,10 @@ class SlidingPatchCommander(PatchCommander):
                 }
                 self._info_queue.put(message)
                 messages.append(message)
+        
+        if wsm is not None:
+            wsm.close()
+            wsm = None
+            del wsm
+
         return messages

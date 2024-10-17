@@ -15,7 +15,7 @@ setup(
     license="LICENSE.txt",
     install_requires=[
         "concurrentbuffer>=0.0.8",
-        "dicfg>=0.0.10",
+        "dicfg==0.0.13",
         "sourcelib>=0.0.4",
         "numpy>=1.20.2",
         "opencv-python-headless>=4.4.0",
