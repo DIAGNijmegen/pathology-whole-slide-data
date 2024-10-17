@@ -91,7 +91,7 @@ class SlidingPatchCommander(PatchCommander):
         
         wsm = None
         if self._mask_path is not None:
-            self.wsm = WholeSlideImage(self._mask_path, backend=self._backend, auto_resample=True)
+            wsm = WholeSlideImage(self._mask_path, backend=self._backend, auto_resample=True)
 
         x_min = self._patch_configuration.offset[0]
         y_min = self._patch_configuration.offset[1]
@@ -106,8 +106,8 @@ class SlidingPatchCommander(PatchCommander):
 
         for row in range(y_min_extra, y_max_extra, step_row):
             for col in range(x_min_extra, x_max_extra, step_col):
-                if self.wsm is not None:
-                    mask = self.wsm.get_patch(
+                if wsm is not None:
+                    mask = wsm.get_patch(
                         x=col,
                         y=row,
                         width=self._patch_configuration.patch_shape[1],
