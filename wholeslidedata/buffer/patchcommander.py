@@ -7,7 +7,7 @@ from dataclasses import dataclass
 import numpy as np
 
 from wholeslidedata.image.wholeslideimage import WholeSlideImage
-
+from wholeslidedata.samplers.utils import crop_data
 
 @dataclass
 class PatchConfiguration:
@@ -16,7 +16,7 @@ class PatchConfiguration:
     overlap: tuple = (0, 0)
     offset: tuple = (0, 0)
     center: bool = False
-
+    write_shape: tuple = None # This can be used when you crop off (overlapping) borders of the patches, only patches with mask in the inner part will be sampled
 
 class PatchCommander(Commander):
     def __init__(
@@ -91,12 +91,23 @@ class SlidingPatchCommander(PatchCommander):
         
         wsm = None
         if self._mask_path is not None:
-            wsm = WholeSlideImage(self._mask_path, backend=self._backend, auto_resample=True)
+            self.wsm = WholeSlideImage(self._mask_path, backend=self._backend, auto_resample=True)
 
-        for row in range(self._patch_configuration.offset[1], self._y_dims, step_row):
-            for col in range(self._patch_configuration.offset[0], self._x_dims, step_col):
-                if wsm is not None:
-                    mask_patch = wsm.get_patch(
+        x_min = self._patch_configuration.offset[0]
+        y_min = self._patch_configuration.offset[1]
+        x_max = self._x_dims + self._patch_configuration.offset[0] + self._patch_configuration.patch_shape[0] // 2 if self._patch_configuration.center else self._x_dims + self._patch_configuration.offset[0]
+        y_max = self._y_dims + self._patch_configuration.offset[1] + self._patch_configuration.patch_shape[1] // 2 if self._patch_configuration.center else self._y_dims + self._patch_configuration.offset[1]
+
+        # Add one extra patch on all sides to avoid missing out on patches in more complex patch configurations (e.g. with overlap and offset)
+        x_min_extra = x_min - step_row
+        y_min_extra = y_min - step_col
+        x_max_extra = x_max + step_row
+        y_max_extra = y_max + step_col
+
+        for row in range(y_min_extra, y_max_extra, step_row):
+            for col in range(x_min_extra, x_max_extra, step_col):
+                if self.wsm is not None:
+                    mask = self.wsm.get_patch(
                         x=col,
                         y=row,
                         width=self._patch_configuration.patch_shape[1],
@@ -106,7 +117,11 @@ class SlidingPatchCommander(PatchCommander):
                         relative=self._level_0_spacing,
                     )
 
-                    if np.all(mask_patch == 0):
+                    if self._patch_configuration.write_shape is not None:
+                        mask = crop_data(mask, self._patch_configuration.write_shape)
+                        if np.all(mask == 0):
+                            continue
+                    if np.all(mask == 0):
                         continue
 
                 message = {
