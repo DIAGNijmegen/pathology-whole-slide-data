@@ -59,13 +59,10 @@ class WholeSlideImageWriterBase(Writer, MultiResolutionImageWriter):
         MultiResolutionImageWriter.__init__(self)
 
     def _tile_and_coordinate_checks_and_corrections(self, tile, coordinates):
-        # Check if tile shape == self._tile_shape
         if tile.shape != self._tile_shape:
             raise TileShapeError(
                 f"Tile shape {tile.shape} does not match expected shape {self._tile_shape}"
             )
-
-        # Check if tile shape is 2 or 3
         if len(tile.shape) != 2 and len(tile.shape) != 3:
             raise TileShapeError(
                 f"Invalid tile shape provided: {tile.shape}, tile shape should contain at 2 or 3 dimensions"
@@ -74,16 +71,12 @@ class WholeSlideImageWriterBase(Writer, MultiResolutionImageWriter):
             raise TileShapeError(
                 f"Invalid tile shape initialized: {self._tile_shape}, tile shape should contain at 2 or 3 dimensions"
             )
-
         if coordinates: 
             x, y = coordinates
-            # Check if coordinates are aligned with the predefined tile grid
             if x % self._tile_shape[0] != 0 or y % self._tile_shape[1] != 0:
                 raise CoordinateError(
                     f"Coordinates {coordinates} are not multiples of the tile size {self._tile_shape[:2]}"
                 )
-    
-            # Check if coordinates are within the dimensions
             if x >= self._dimensions[0] or y >= self._dimensions[1]:
                 print(f"Tile's upper left coordinates {coordinates} are completely outside the dimensions {self._dimensions}... Skipping tile...")
                 return None
