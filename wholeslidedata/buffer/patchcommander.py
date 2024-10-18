@@ -92,14 +92,14 @@ class SlidingPatchCommander(PatchCommander):
 
         if self._patch_configuration.center:
             first_coord = [
-            offset_scaled[0] - ((offset_scaled[0] + patch_shape_scaled[0] // 2) // step_shape_scaled[0]) * step_shape_scaled[0],
-            offset_scaled[1] - ((offset_scaled[1] + patch_shape_scaled[1] // 2) // step_shape_scaled[1]) * step_shape_scaled[1]
-        ]
+                offset_scaled[0] - ((offset_scaled[0] + patch_shape_scaled[0] // 2) // step_shape_scaled[0] - (1 if (offset_scaled[0] + patch_shape_scaled[0] // 2) % step_shape_scaled[0] == 0 else 0)) * step_shape_scaled[0],
+                offset_scaled[1] - ((offset_scaled[1] + patch_shape_scaled[1] // 2) // step_shape_scaled[1] - (1 if (offset_scaled[1] + patch_shape_scaled[1] // 2) % step_shape_scaled[1] == 0 else 0)) * step_shape_scaled[1]
+            ]
         else:
             first_coord = [
-            offset_scaled[0] - ((offset_scaled[0] + patch_shape_scaled[0]) // step_shape_scaled[0]) * step_shape_scaled[0],
-            offset_scaled[1] - ((offset_scaled[1] + patch_shape_scaled[1]) // step_shape_scaled[1]) * step_shape_scaled[1]
-        ]
+                offset_scaled[0] - ((offset_scaled[0] + patch_shape_scaled[0]) // step_shape_scaled[0] - (1 if (offset_scaled[0] + patch_shape_scaled[0]) % step_shape_scaled[0] == 0 else 0)) * step_shape_scaled[0],
+                offset_scaled[1] - ((offset_scaled[1] + patch_shape_scaled[1]) // step_shape_scaled[1] - (1 if (offset_scaled[1] + patch_shape_scaled[1]) % step_shape_scaled[1] == 0 else 0)) * step_shape_scaled[1]
+            ]
         
         max_i = int(self._x_dims + offset_scaled[0] + patch_shape_scaled[0] // 2) if self._patch_configuration.center else int(self._x_dims + offset_scaled[0])
         max_j = int(self._y_dims + offset_scaled[1] + patch_shape_scaled[0] // 2) if self._patch_configuration.center else int(self._y_dims + offset_scaled[1])
