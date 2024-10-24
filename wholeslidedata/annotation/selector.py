@@ -21,9 +21,10 @@ class AnnotationSelector:
     def __init__(self, annotations: List[Annotation], sorters):
         self._annotations = annotations
         self._sorters = sorters
-        self._tree = index.Index()
-        for pos, annotation in enumerate(annotations):
-            self._tree.insert(pos, annotation.bounds)
+        self._tree = index.Index(
+            (pos, annotation.bounds, None)
+            for pos, annotation in enumerate(self._annotations)
+        )
 
     def select_annotations(
         self, center_x: int, center_y: int, width: int, height: int
