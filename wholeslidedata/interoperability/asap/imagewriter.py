@@ -271,9 +271,12 @@ class WholeSlideImageWriter(WholeSlideImageWriterBase):
 
 
 def write_mask(
-    wsi, wsa, spacing, tile_size=1024, output_folder=None, suffix="_gt_mask.tif"
+    wsi, wsa, spacing, tile_size=1024, output_folder=None, suffix="_gt_mask.tif", wsa_mask=None, overwrite=False
 ):
-
+    if wsa_mask is not None:
+        if not all(val in [0, 1] for val in wsa_mask.labels.map.values()):
+            raise ValueError("Mask wsa label mapping should be binary. e.g. {'rois': 1}")
+        
     if len(wsa.annotations) == 0:
         ValueError(f"Annotations are empty for wsa: {wsa.path}")
 
@@ -288,7 +291,7 @@ def write_mask(
     else:
         mask_output_path = output_folder / (wsa.path.stem + suffix)
 
-    if mask_output_path.exists():
+    if mask_output_path.exists() and not overwrite:
         warning_text = f"Mask output path already exist: {mask_output_path}"
         warnings.warn(warning_text, UserWarning)
         return
@@ -304,7 +307,7 @@ def write_mask(
     label_sampler = SegmentationPatchLabelSampler()
     for y_pos in range(0, shape[1], tile_size):
         for x_pos in range(0, shape[0], tile_size):
-            mask = label_sampler.sample(
+            tile = label_sampler.sample(
                 wsa,
                 (
                     (x_pos + tile_size // 2) * ratio,
@@ -313,9 +316,21 @@ def write_mask(
                 (tile_size, tile_size),
                 ratio,
             )
-            if np.any(mask):
+            if wsa_mask is not None: 
+                mask_tile = label_sampler.sample(
+                    wsa_mask,
+                    (
+                        (x_pos + tile_size // 2) * ratio,
+                        (y_pos + tile_size // 2) * ratio,
+                    ),
+                    (tile_size, tile_size),
+                    ratio,
+                )
+                tile = tile * mask_tile
+
+            if np.any(tile):
                 written = True
-                wsm_writer.write_tile(tile=mask, coordinates=(int(x_pos), int(y_pos)))
+                wsm_writer.write_tile(tile=tile, coordinates=(int(x_pos), int(y_pos)))
 
     if not written:
         raise ValueError(f"No values have been written to {mask_output_path}")
