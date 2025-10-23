@@ -403,16 +403,16 @@
 <h2>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wholeslidedata</span> <span class="kn">import</span> <span class="n">WholeSlideImage</span><span class="p">,</span> <span class="n">WholeSlideAnnotation</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.interoperability.asap.backend</span> <span class="kn">import</span> <span class="n">AsapWholeSlideImageBackend</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.visualization.plotting</span> <span class="kn">import</span> <span class="n">plot_patch</span><span class="p">,</span> <span class="n">plot_annotations</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">cv2</span>
-<span class="kn">from</span> <span class="nn">colour</span> <span class="kn">import</span> <span class="n">Color</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata</span><span class="w"> </span><span class="kn">import</span> <span class="n">WholeSlideImage</span><span class="p">,</span> <span class="n">WholeSlideAnnotation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.interoperability.asap.backend</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsapWholeSlideImageBackend</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.visualization.plotting</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_patch</span><span class="p">,</span> <span class="n">plot_annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">colour</span><span class="w"> </span><span class="kn">import</span> <span class="n">Color</span>
 
 
-<span class="k">def</span> <span class="nf">plot_coordinates</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="n">border_rgb</span><span class="p">,</span> <span class="n">thickness</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fill_rgb</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_coordinates</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">coordinates</span><span class="p">,</span> <span class="n">border_rgb</span><span class="p">,</span> <span class="n">thickness</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fill_rgb</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="n">overlay</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">overlay</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">polylines</span><span class="p">(</span><span class="n">overlay</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)],</span> <span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">border_rgb</span><span class="p">,</span> <span class="n">thickness</span><span class="o">=</span><span class="n">thickness</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">fill_rgb</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -420,7 +420,7 @@
     <span class="k">return</span> <span class="n">cv2</span><span class="o">.</span><span class="n">addWeighted</span><span class="p">(</span><span class="n">overlay</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     
 
-<span class="k">def</span> <span class="nf">plot_annotations2</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">annotations</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">color_map</span><span class="p">,</span> <span class="n">boxes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_annotations2</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">annotations</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">color_map</span><span class="p">,</span> <span class="n">boxes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">annotations</span><span class="p">:</span>
         <span class="n">rgb_color</span> <span class="o">=</span> <span class="n">color_map</span><span class="p">[</span><span class="n">annotation</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
         <span class="n">coordinates</span> <span class="o">=</span> <span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">offset</span><span class="p">))</span> <span class="o">/</span><span class="n">ratio</span>
@@ -501,9 +501,9 @@
 <h2>Data Loading - Batch Iterator<a class="headerlink" href="#data-loading-batch-iterator" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wholeslidedata.iterators</span> <span class="kn">import</span> <span class="n">create_batch_iterator</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.visualization.plotting</span> <span class="kn">import</span> <span class="n">plot_batch</span>
-<span class="kn">import</span> <span class="nn">time</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.iterators</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_batch_iterator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.visualization.plotting</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_batch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 </pre></div>
 </div>
 </div>

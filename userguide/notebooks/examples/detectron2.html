@@ -358,24 +358,24 @@
 <h1>Detectron2<a class="headerlink" href="#detectron2" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wholeslidedata.interoperability.detectron2.iterator</span> <span class="kn">import</span> <span class="n">WholeSlideDetectron2Iterator</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.interoperability.detectron2.trainer</span> <span class="kn">import</span> <span class="n">WholeSlideDectectron2Trainer</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.interoperability.detectron2.predictor</span> <span class="kn">import</span> <span class="n">Detectron2DetectionPredictor</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.iterators</span> <span class="kn">import</span> <span class="n">create_batch_iterator</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.visualization.plotting</span> <span class="kn">import</span> <span class="n">plot_batch</span><span class="p">,</span> <span class="n">plot_batch_detection</span>
-<span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.interoperability.detectron2.iterator</span><span class="w"> </span><span class="kn">import</span> <span class="n">WholeSlideDetectron2Iterator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.interoperability.detectron2.trainer</span><span class="w"> </span><span class="kn">import</span> <span class="n">WholeSlideDectectron2Trainer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.interoperability.detectron2.predictor</span><span class="w"> </span><span class="kn">import</span> <span class="n">Detectron2DetectionPredictor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.iterators</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_batch_iterator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.visualization.plotting</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_batch</span><span class="p">,</span> <span class="n">plot_batch_detection</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 
-<span class="kn">from</span> <span class="nn">detectron2</span> <span class="kn">import</span> <span class="n">model_zoo</span>
-<span class="kn">from</span> <span class="nn">detectron2.config</span> <span class="kn">import</span> <span class="n">get_cfg</span>
-<span class="kn">from</span> <span class="nn">detectron2.modeling</span> <span class="kn">import</span> <span class="n">build_model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">detectron2</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_zoo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">detectron2.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_cfg</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">detectron2.modeling</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_model</span>
 
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.visualization.plotting</span> <span class="kn">import</span> <span class="n">plot_boxes</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.visualization.plotting</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_boxes</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 </pre></div>
 </div>
 </div>

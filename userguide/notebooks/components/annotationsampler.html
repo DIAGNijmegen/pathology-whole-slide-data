@@ -382,20 +382,20 @@
 <h1>AnnotationSampler<a class="headerlink" href="#annotationsampler" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wholeslidedata.samplers.annotationsampler</span> <span class="kn">import</span> <span class="n">OrderedAnnotationSampler</span><span class="p">,</span> <span class="n">BalancedAnnotationSampler</span><span class="p">,</span> <span class="n">AreaAnnotationSampler</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata</span> <span class="kn">import</span> <span class="n">WholeSlideAnnotation</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.visualization.plotting</span> <span class="kn">import</span> <span class="n">plot_annotations</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">from</span> <span class="nn">sourcelib.collect</span> <span class="kn">import</span> <span class="n">get_files_from_folder</span>
-<span class="kn">from</span> <span class="nn">sourcelib.associations</span> <span class="kn">import</span> <span class="n">associate_files</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.data.files</span> <span class="kn">import</span> <span class="n">WholeSlideImageFile</span><span class="p">,</span> <span class="n">WholeSlideAnnotationFile</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.data.mode</span> <span class="kn">import</span> <span class="n">WholeSlideMode</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.interoperability.asap.backend</span> <span class="kn">import</span> <span class="n">AsapWholeSlideImageBackend</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.interoperability.asap.parser</span> <span class="kn">import</span> <span class="n">AsapAnnotationParser</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.data.dataset</span> <span class="kn">import</span> <span class="n">WholeSlideDataSet</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.samplers.annotationsampler</span><span class="w"> </span><span class="kn">import</span> <span class="n">OrderedAnnotationSampler</span><span class="p">,</span> <span class="n">BalancedAnnotationSampler</span><span class="p">,</span> <span class="n">AreaAnnotationSampler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata</span><span class="w"> </span><span class="kn">import</span> <span class="n">WholeSlideAnnotation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.visualization.plotting</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sourcelib.collect</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_files_from_folder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sourcelib.associations</span><span class="w"> </span><span class="kn">import</span> <span class="n">associate_files</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.data.files</span><span class="w"> </span><span class="kn">import</span> <span class="n">WholeSlideImageFile</span><span class="p">,</span> <span class="n">WholeSlideAnnotationFile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.data.mode</span><span class="w"> </span><span class="kn">import</span> <span class="n">WholeSlideMode</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.interoperability.asap.backend</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsapWholeSlideImageBackend</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.interoperability.asap.parser</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsapAnnotationParser</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.data.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">WholeSlideDataSet</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 </pre></div>
 </div>
 </div>

@@ -360,7 +360,7 @@
 <h2>Pre-processing<a class="headerlink" href="#pre-processing" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="n">tumor_001_image</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/home/user/CAMELYON16/images/tumor_001.tif&quot;</span><span class="p">)</span>
 <span class="n">tumor_001_annotation</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/home/user/CAMELYON16/annotations/tumor_001.xml&quot;</span><span class="p">)</span>
 <span class="n">tumor_001_mask</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/home/user/CAMELYON16/masks/tumor_001_mask.tif&quot;</span><span class="p">)</span>
@@ -370,23 +370,23 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wholeslidedata.annotation.parser</span> <span class="kn">import</span> <span class="n">MaskAnnotationParser</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.image.wholeslideimage</span> <span class="kn">import</span> <span class="n">WholeSlideImage</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.annotation.wholeslideannotation</span> <span class="kn">import</span> <span class="n">WholeSlideAnnotation</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.interoperability.asap.parser</span> <span class="kn">import</span> <span class="n">AsapAnnotationParser</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.interoperability.asap.backend</span> <span class="kn">import</span> <span class="n">AsapWholeSlideImageBackend</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.annotation.callbacks</span> <span class="kn">import</span> <span class="n">TiledAnnotationCallback</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.visualization.plotting</span> <span class="kn">import</span> <span class="n">plot_annotations</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.interoperability.asap.annotationwriter</span> <span class="kn">import</span> <span class="n">write_asap_annotation</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.annotation.selector</span> <span class="kn">import</span> <span class="n">sort_by_label_value</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">from</span> <span class="nn">colour</span> <span class="kn">import</span> <span class="n">Color</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">cv2</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.visualization.plotting</span> <span class="kn">import</span> <span class="n">plot_batch</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.annotation.parser</span><span class="w"> </span><span class="kn">import</span> <span class="n">MaskAnnotationParser</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.image.wholeslideimage</span><span class="w"> </span><span class="kn">import</span> <span class="n">WholeSlideImage</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.annotation.wholeslideannotation</span><span class="w"> </span><span class="kn">import</span> <span class="n">WholeSlideAnnotation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.interoperability.asap.parser</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsapAnnotationParser</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.interoperability.asap.backend</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsapWholeSlideImageBackend</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.annotation.callbacks</span><span class="w"> </span><span class="kn">import</span> <span class="n">TiledAnnotationCallback</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.visualization.plotting</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.interoperability.asap.annotationwriter</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_asap_annotation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.annotation.selector</span><span class="w"> </span><span class="kn">import</span> <span class="n">sort_by_label_value</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">colour</span><span class="w"> </span><span class="kn">import</span> <span class="n">Color</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.visualization.plotting</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_batch</span>
 
 
-<span class="k">def</span> <span class="nf">is_in_color</span><span class="p">(</span><span class="n">patch</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_in_color</span><span class="p">(</span><span class="n">patch</span><span class="p">):</span>
     <span class="c1"># filter color</span>
     <span class="c1"># Convert the input image to the HSV color space</span>
     <span class="n">hsv</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">patch</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2HSV</span><span class="p">)</span>
@@ -403,7 +403,7 @@
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">return</span> <span class="kc">False</span>
 
-<span class="k">def</span> <span class="nf">filter_tissue_tiles</span><span class="p">(</span><span class="n">wsa_tumor</span><span class="p">,</span> <span class="n">wsa_tissue</span><span class="p">,</span> <span class="n">output_folder</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">filter_tissue_tiles</span><span class="p">(</span><span class="n">wsa_tumor</span><span class="p">,</span> <span class="n">wsa_tissue</span><span class="p">,</span> <span class="n">output_folder</span><span class="p">):</span>
     <span class="n">annotations</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">annotations</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">wsa_tumor</span><span class="o">.</span><span class="n">annotations</span><span class="p">)</span>
     <span class="n">mask_filterd_annotations</span> <span class="o">=</span> <span class="p">[]</span>
@@ -499,9 +499,9 @@
 <h2>Batch generation<a class="headerlink" href="#batch-generation" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wholeslidedata.iterators</span> <span class="kn">import</span> <span class="n">create_batch_iterator</span>
-<span class="kn">from</span> <span class="nn">wholeslidedata.visualization.plotting</span> <span class="kn">import</span> <span class="n">plot_batch</span><span class="p">,</span> <span class="n">plot_one_hot_batch</span>
-<span class="kn">from</span> <span class="nn">colour</span> <span class="kn">import</span> <span class="n">Color</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.iterators</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_batch_iterator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wholeslidedata.visualization.plotting</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_batch</span><span class="p">,</span> <span class="n">plot_one_hot_batch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">colour</span><span class="w"> </span><span class="kn">import</span> <span class="n">Color</span>
 </pre></div>
 </div>
 </div>

@@ -343,7 +343,7 @@
 <section id="openslide-dll-error-on-windows">
 <h3>Openslide DLL error on windows<a class="headerlink" href="#openslide-dll-error-on-windows" title="Permalink to this heading">#</a></h3>
 <p>If you’re encountering DLL-related errors while using the openslide module in Python, you can add the directory containing the required DLL file (libopenslide-0.dll) to the system’s PATH using the os.add_dll_directory function. Here’s an example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
 <span class="n">os</span><span class="o">.</span><span class="n">add_dll_directory</span><span class="p">(</span><span class="s1">&#39;C:/Program Files/OpenSlide/bin&#39;</span><span class="p">)</span>
 </pre></div>
