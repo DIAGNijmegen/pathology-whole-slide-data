@@ -9,7 +9,7 @@ from wholeslidedata.image.backend import WholeSlideImageBackend
 
 class CucimWholeSlideImageBackend(CuImage, WholeSlideImageBackend):
     def __init__(self, path: Union[str, PosixPath]) -> None:
-        if isinstance(path, PosixPath):
+        if not isinstance(path, str):
             path = str(path)
         CuImage.__init__(self, path)
         WholeSlideImageBackend.__init__(self, path)
