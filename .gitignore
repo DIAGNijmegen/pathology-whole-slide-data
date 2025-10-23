@@ -142,6 +142,3 @@ docs/source/userguide/notebooks/examples/stuff
 
 # Docker stuff
 .devcontainer/
-
-# Other stuff
-sync.sh
