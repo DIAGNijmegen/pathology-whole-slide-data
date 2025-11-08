@@ -36,8 +36,18 @@ WholeSlideData aims to provide the tools to work with whole slide images and ann
 
 -----
 ## Installation
+
+### GitHub
 ```bash
 pip install git+https://github.com/DIAGNijmegen/pathology-whole-slide-data@main
+```
+### Pip
+```bash
+pip install wholeslidedata
+```
+### Conda
+```bash
+conda install conda-forge::wholeslidedata
 ```
 
 Wholeslidedata supports various image backends. You will have to install at least one of these image backends.
